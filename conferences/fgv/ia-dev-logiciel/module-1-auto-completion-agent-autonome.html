@@ -48,6 +48,16 @@ body{
   box-shadow:0 0 40px rgba(11,37,69,.06); z-index:5;
 }
 .rail-head{padding:20px 18px 14px; border-bottom:1px solid var(--line)}
+.rail-back{
+  display:inline-flex; align-items:center; gap:6px;
+  margin-bottom:12px;
+  font-size:10.5px; font-weight:500; letter-spacing:.02em;
+  color:var(--ink-50); text-decoration:none;
+  transition:color .18s;
+}
+.rail-back:hover{color:var(--teal)}
+.rail-back:focus-visible{outline:2px solid var(--teal); outline-offset:3px; border-radius:3px}
+.rail-back svg{width:11px; height:11px; flex:0 0 11px}
 .rail-kicker{
   font-size:9.5px; letter-spacing:.18em; text-transform:uppercase;
   color:var(--teal); font-weight:700
@@ -354,6 +364,10 @@ h2{
   <!-- ================= COLONNE MINIATURES ================= -->
   <aside class="rail">
     <div class="rail-head">
+      <a class="rail-back" href="index.html">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18 9 12l6-6"/></svg>
+        Retour à la conférence
+      </a>
       <div class="rail-kicker">Module 1 · Conférence</div>
       <div class="rail-title">De l'auto-complétion à l'agent autonome</div>
       <div class="rail-meta">FGV — équipes IT · 09h00–09h40</div>
