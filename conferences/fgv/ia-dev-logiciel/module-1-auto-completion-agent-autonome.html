@@ -1,37 +1,52 @@
 <meta charset="utf-8">
 <title>Module 1 — De l'auto-complétion à l'agent autonome</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
+
+<!-- Métadonnées de publication -->
+<meta name="pedago:chemin"  content="conferences/fgv/ia-dev-logiciel">
+<meta name="pedago:famille" content="conference">
+<meta name="pedago:titre"   content="De l'auto-complétion à l'agent autonome">
+<meta name="pedago:rang"    content="1">
+<meta name="pedago:mode"    content="conference">
+<meta name="pedago:cartes"  content="11">
+<meta name="pedago:resume"  content="Trois générations d'assistants de code sur une même ligne de crête, la rupture entre complétion et délégation, puis l'écart entre le gain mesuré et le gain ressenti.">
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
 <style>
 /* ============================================================
-   CHARTE — fond clair, bleu marine / bleu, accent vert-sarcelle
+   CHARTE — bleu-sarcelle
    ============================================================ */
 :root{
-  --navy:#0B2545;
-  --navy-2:#13315C;
+  --ink:#0B2545;
+  --ink-2:#13315C;
   --blue:#1D4E89;
   --blue-soft:#6E9BD1;
-  --teal:#0E9594;
-  --teal-2:#17B3A3;
-  --teal-wash:rgba(14,149,148,.10);
+  --accent:#0E9594;
+  --accent-2:#17B3A3;
+  --accent-wash:rgba(14,149,148,.10);
+  --accent-glow:rgba(14,149,148,.22);
   --bg:#EEF3F8;
   --card:#FFFFFF;
   --paper:#F7FAFC;
   --line:rgba(11,37,69,.11);
   --ink-70:rgba(11,37,69,.72);
   --ink-50:rgba(11,37,69,.52);
-  --serif:'Fraunces', 'Iowan Old Style', Georgia, 'Times New Roman', serif;
-  --sans:'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+  --stage-bg:radial-gradient(1100px 620px at 50% 8%, #fff 0%, rgba(255,255,255,0) 62%), #EEF3F8;
+  --dark-bg:radial-gradient(900px 560px at 22% 12%, #1B4A7E 0%, rgba(27,74,126,0) 60%),
+            radial-gradient(700px 500px at 88% 92%, rgba(14,149,148,.34) 0%, rgba(14,149,148,0) 62%),
+            linear-gradient(150deg,#0B2545 0%,#0A1E3A 100%);
+  --serif:'Fraunces','Iowan Old Style',Georgia,'Times New Roman',serif;
+  --sans:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;
   --W:1280px; --H:720px;
 }
 
 *{box-sizing:border-box}
 html,body{height:100%}
 body{
-  margin:0; background:var(--bg); color:var(--navy);
+  margin:0; background:var(--bg); color:var(--ink);
   font-family:var(--sans); -webkit-font-smoothing:antialiased;
   overflow:hidden;
 }
@@ -45,7 +60,7 @@ body{
   width:250px; flex:0 0 250px; height:100vh;
   background:#fff; border-right:1px solid var(--line);
   display:flex; flex-direction:column;
-  box-shadow:0 0 40px rgba(11,37,69,.06); z-index:5;
+  box-shadow:0 0 40px rgba(0,0,0,.06); z-index:5;
 }
 .rail-head{padding:20px 18px 14px; border-bottom:1px solid var(--line)}
 .rail-back{
@@ -55,22 +70,22 @@ body{
   color:var(--ink-50); text-decoration:none;
   transition:color .18s;
 }
-.rail-back:hover{color:var(--teal)}
-.rail-back:focus-visible{outline:2px solid var(--teal); outline-offset:3px; border-radius:3px}
+.rail-back:hover{color:var(--accent)}
+.rail-back:focus-visible{outline:2px solid var(--accent); outline-offset:3px; border-radius:3px}
 .rail-back svg{width:11px; height:11px; flex:0 0 11px}
 .rail-kicker{
   font-size:9.5px; letter-spacing:.18em; text-transform:uppercase;
-  color:var(--teal); font-weight:700
+  color:var(--accent); font-weight:700
 }
 .rail-title{
   font-family:var(--serif); font-size:17px; line-height:1.25;
-  font-weight:500; margin-top:7px; color:var(--navy)
+  font-weight:500; margin-top:7px; color:var(--ink)
 }
 .rail-meta{font-size:11px; color:var(--ink-50); margin-top:6px}
 
 .thumbs{flex:1; overflow-y:auto; padding:14px 16px 18px; scrollbar-width:thin}
 .thumbs::-webkit-scrollbar{width:6px}
-.thumbs::-webkit-scrollbar-thumb{background:rgba(11,37,69,.16); border-radius:3px}
+.thumbs::-webkit-scrollbar-thumb{background:rgba(0,0,0,.16); border-radius:3px}
 
 .thumb{
   position:relative; margin-bottom:13px; cursor:pointer;
@@ -87,16 +102,16 @@ body{
   position:relative; width:212px; height:119.25px; overflow:hidden;
   border-radius:7px; background:#fff;
   border:1px solid var(--line);
-  box-shadow:0 2px 8px rgba(11,37,69,.07);
+  box-shadow:0 2px 8px rgba(0,0,0,.07);
   transition:box-shadow .25s, border-color .25s;
 }
 .thumb-box::after{
   content:''; position:absolute; inset:0; border-radius:7px;
   box-shadow:inset 0 0 0 2px transparent; transition:box-shadow .25s
 }
-.thumb.on .thumb-box::after{box-shadow:inset 0 0 0 2px var(--teal)}
-.thumb.on .thumb-box{box-shadow:0 6px 20px rgba(14,149,148,.22)}
-.thumb.on .thumb-no{color:var(--teal); font-weight:700}
+.thumb.on .thumb-box::after{box-shadow:inset 0 0 0 2px var(--accent)}
+.thumb.on .thumb-box{box-shadow:0 6px 20px var(--accent-glow)}
+.thumb.on .thumb-no{color:var(--accent); font-weight:700}
 .thumb-scale{
   position:absolute; top:0; left:0; width:var(--W); height:var(--H);
   transform:scale(.16563); transform-origin:0 0; pointer-events:none;
@@ -105,35 +120,33 @@ body{
   font-size:10.5px; color:var(--ink-50); margin-top:5px;
   letter-spacing:.01em; white-space:nowrap; overflow:hidden; text-overflow:ellipsis
 }
-.thumb.on .thumb-label{color:var(--navy-2); font-weight:500}
+.thumb.on .thumb-label{color:var(--ink-70); font-weight:500}
 
 .rail-foot{padding:13px 16px 16px; border-top:1px solid var(--line); display:grid; gap:8px}
 .btn{
   display:flex; align-items:center; gap:9px; width:100%;
   padding:9px 12px; border-radius:8px; border:1px solid var(--line);
-  background:var(--paper); color:var(--navy-2);
+  background:var(--paper); color:var(--ink-70);
   font-family:var(--sans); font-size:12px; font-weight:500;
   cursor:pointer; transition:all .18s;
 }
-.btn:hover{background:var(--navy); color:#fff; border-color:var(--navy)}
+.btn:hover{background:var(--ink); color:#fff; border-color:var(--ink)}
 .btn svg{width:14px; height:14px; flex:0 0 14px}
 .btn .k{margin-left:auto; font-size:9.5px; opacity:.5; letter-spacing:.06em}
 
 /* ---- Scène ---- */
 .stage{
   flex:1; position:relative; display:flex; align-items:center; justify-content:center;
-  background:
-    radial-gradient(1100px 620px at 50% 8%, #ffffff 0%, rgba(255,255,255,0) 62%),
-    var(--bg);
+  background:var(--stage-bg);
   overflow:hidden;
 }
 .deck{
   position:relative; width:var(--W); height:var(--H);
   transform-origin:center center;
   border-radius:14px; overflow:hidden;
-  box-shadow:0 26px 70px rgba(11,37,69,.20), 0 2px 6px rgba(11,37,69,.08);
+  box-shadow:0 26px 70px rgba(0,0,0,.20), 0 2px 6px rgba(0,0,0,.08);
 }
-.stage:fullscreen{background:#0B2545}
+.stage:fullscreen{background:var(--ink)}
 .stage:fullscreen .deck{border-radius:0; box-shadow:none}
 
 .nav{
@@ -141,17 +154,17 @@ body{
   display:flex; align-items:center; gap:6px; z-index:10;
   background:rgba(255,255,255,.86); backdrop-filter:blur(14px);
   border:1px solid var(--line); border-radius:999px; padding:5px 6px;
-  box-shadow:0 6px 22px rgba(11,37,69,.14);
+  box-shadow:0 6px 22px rgba(0,0,0,.14);
   transition:opacity .4s;
 }
 .nav button{
   width:30px; height:30px; border-radius:50%; border:0; background:transparent;
-  color:var(--navy-2); cursor:pointer; display:grid; place-items:center; transition:.16s
+  color:var(--ink-70); cursor:pointer; display:grid; place-items:center; transition:.16s
 }
-.nav button:hover{background:var(--navy); color:#fff}
-.nav button:disabled{opacity:.25; cursor:default; background:transparent; color:var(--navy-2)}
+.nav button:hover{background:var(--ink); color:#fff}
+.nav button:disabled{opacity:.25; cursor:default; background:transparent; color:var(--ink-70)}
 .nav .count{
-  font-size:11.5px; font-weight:600; color:var(--navy-2);
+  font-size:11.5px; font-weight:600; color:var(--ink-70);
   font-variant-numeric:tabular-nums; padding:0 9px; letter-spacing:.04em
 }
 .stage.idle .nav{opacity:0}
@@ -166,11 +179,11 @@ body{
 .stage.idle .hint{opacity:0}
 
 /* ============================================================
-   DIAPOSITIVES
+   DIAPOSITIVES — socle structurel
    ============================================================ */
 .slide{
   position:absolute; inset:0; width:var(--W); height:var(--H);
-  padding:62px 74px; background:var(--card);
+  padding:58px 74px; background:var(--card);
   opacity:0; visibility:hidden; z-index:1;
   transition:opacity .5s ease;
 }
@@ -179,55 +192,21 @@ body{
 .thumb-scale .slide.tvis{opacity:1; visibility:visible}
 
 .slide.dark{
-  background:
-    radial-gradient(900px 560px at 22% 12%, #1B4A7E 0%, rgba(27,74,126,0) 60%),
-    radial-gradient(700px 500px at 88% 92%, rgba(14,149,148,.34) 0%, rgba(14,149,148,0) 62%),
-    linear-gradient(150deg,#0B2545 0%,#0A1E3A 100%);
+  background:var(--dark-bg);
   color:#fff;
   display:flex; flex-direction:column; align-items:center; justify-content:center;
   text-align:center;
 }
 
-/* numéro — uniquement sur fond clair */
 .pageno{
-  position:absolute; right:40px; bottom:30px;
+  position:absolute; right:40px; bottom:28px;
   font-size:11.5px; font-weight:600; letter-spacing:.1em;
   color:var(--ink-50); font-variant-numeric:tabular-nums;
 }
-.pageno b{color:var(--teal); font-weight:700}
-
-/* ---- typographie ---- */
-.kicker{
-  font-size:11px; font-weight:700; letter-spacing:.24em; text-transform:uppercase;
-  color:var(--teal); display:flex; align-items:center; gap:11px
-}
-.kicker::after{content:''; height:1px; width:52px; background:linear-gradient(90deg,var(--teal),transparent)}
-.dark .kicker{color:var(--teal-2); justify-content:center}
-.dark .kicker::before{content:''; height:1px; width:52px; background:linear-gradient(270deg,var(--teal-2),transparent)}
-
-h1{
-  font-family:var(--serif); font-weight:400; font-size:64px; line-height:1.04;
-  letter-spacing:-.022em; margin:26px 0 0; max-width:960px
-}
-h2{
-  font-family:var(--serif); font-weight:400; font-size:41px; line-height:1.1;
-  letter-spacing:-.018em; margin:17px 0 0; color:var(--navy); max-width:1010px
-}
-.assert{
-  font-family:var(--serif); font-size:21px; line-height:1.36; font-weight:400;
-  color:var(--blue); margin-top:14px; max-width:900px; font-style:italic;
-}
-.body{
-  font-size:15.6px; line-height:1.66; color:var(--ink-70);
-  max-width:530px; font-weight:400;
-}
-.body strong{color:var(--navy); font-weight:600}
-.src{font-size:12.2px; color:var(--ink-50); font-style:italic}
-
-.rule{height:2px; width:66px; background:linear-gradient(90deg,var(--teal),var(--blue-soft)); margin-top:22px; border-radius:2px}
+.pageno b{color:var(--accent); font-weight:700}
 
 /* ============================================================
-   ANIMATIONS CINÉMATIQUES (rejouées à chaque arrivée)
+   ANIMATIONS — rejouées à chaque arrivée sur la carte
    ============================================================ */
 @keyframes rise{from{opacity:0; transform:translateY(26px)}}
 @keyframes fade{from{opacity:0}}
@@ -239,100 +218,250 @@ h2{
 @keyframes pop{from{opacity:0; transform:scale(.3)}}
 @keyframes sweep{from{opacity:0; clip-path:inset(0 100% 0 0)}}
 
-.slide.active .a-rise{animation:rise .82s var(--d,0s) both cubic-bezier(.18,.75,.25,1)}
-.slide.active .a-fade{animation:fade 1.05s var(--d,0s) both ease}
+.slide.active .a-rise {animation:rise .82s var(--d,0s) both cubic-bezier(.18,.75,.25,1)}
+.slide.active .a-fade {animation:fade 1.05s var(--d,0s) both ease}
 .slide.active .a-slide{animation:slideIn .8s var(--d,0s) both cubic-bezier(.18,.75,.25,1)}
-.slide.active .a-zoom{animation:zoomIn .85s var(--d,0s) both cubic-bezier(.18,.8,.25,1)}
-.slide.active .a-grow{animation:grow 1.05s var(--d,0s) both cubic-bezier(.2,.75,.25,1); transform-origin:left center}
+.slide.active .a-zoom {animation:zoomIn .85s var(--d,0s) both cubic-bezier(.18,.8,.25,1)}
+.slide.active .a-grow {animation:grow 1.05s var(--d,0s) both cubic-bezier(.2,.75,.25,1); transform-origin:left center}
 .slide.active .a-growy{animation:growY .95s var(--d,0s) both cubic-bezier(.2,.75,.25,1); transform-origin:bottom center}
-.slide.active .a-draw{animation:draw 1.5s var(--d,0s) both cubic-bezier(.35,.6,.25,1)}
-.slide.active .a-pop{animation:pop .62s var(--d,0s) both cubic-bezier(.2,1.5,.4,1)}
-.slide.active .a-sweep{animation:sweep 1s var(--d,0s) both cubic-bezier(.2,.75,.25,1)}
+.slide.active .a-draw {animation:draw 1.5s var(--d,0s) both cubic-bezier(.3,.7,.3,1)}
+.slide.active .a-pop  {animation:pop .6s var(--d,0s) both cubic-bezier(.2,1.5,.4,1)}
+.slide.active .a-sweep{animation:sweep 1.1s var(--d,0s) both cubic-bezier(.2,.75,.25,1)}
 .a-draw{stroke-dasharray:var(--len); stroke-dashoffset:0}
 
 /* ============================================================
-   BLOCS GRAPHIQUES
+   MAQUETTE — propre à ce diaporama
    ============================================================ */
-.two{display:grid; grid-template-columns:1fr 1.02fr; gap:52px; align-items:start; margin-top:26px}
 
-/* — Programme : trois questions — */
-.qlist{display:grid; gap:13px}
-.q{
-  display:flex; gap:16px; align-items:flex-start;
-  background:linear-gradient(100deg,var(--paper),#fff);
-  border:1px solid var(--line); border-left:3px solid var(--teal);
-  border-radius:10px; padding:15px 18px;
+/* — Surtitre à filet — */
+.eyebrow{
+  font-size:10.5px; font-weight:700; letter-spacing:.24em; text-transform:uppercase;
+  color:var(--accent); display:flex; align-items:center; gap:12px;
 }
-.q .n{
-  font-family:var(--serif); font-size:27px; line-height:1; color:var(--blue-soft);
-  font-variant-numeric:tabular-nums; min-width:38px
+.eyebrow::after{content:''; flex:1; height:1px; background:linear-gradient(90deg,var(--accent),rgba(14,149,148,0))}
+.dark .eyebrow{color:var(--accent-2); justify-content:center}
+.dark .eyebrow::after{flex:0 0 56px}
+.dark .eyebrow::before{content:''; flex:0 0 56px; height:1px; background:linear-gradient(270deg,var(--accent-2),rgba(23,179,163,0))}
+
+/* — Titres — */
+h1{
+  font-family:var(--serif); font-weight:400; font-size:66px; line-height:1.05;
+  letter-spacing:-.022em; margin:28px 0 0; max-width:980px
 }
-.q .t{font-size:14.6px; font-weight:600; color:var(--navy); line-height:1.35}
-.q .s{font-size:12.6px; color:var(--ink-50); margin-top:4px; line-height:1.45}
-
-.pharma{
-  margin-top:16px; display:flex; align-items:center; gap:14px;
-  background:var(--teal-wash); border-radius:10px; padding:13px 17px;
+h2{
+  font-family:var(--serif); font-weight:400; font-size:40px; line-height:1.12;
+  letter-spacing:-.018em; margin:16px 0 0; color:var(--ink); max-width:1060px
 }
-.pharma .w{font-family:var(--serif); font-style:italic; font-size:20px; color:var(--teal)}
-.pharma .d{font-size:12.6px; color:var(--navy-2); line-height:1.45}
-
-/* — Frise — */
-.frise{margin-top:6px}
-.gen{
-  position:absolute; text-align:center; width:150px;
+.lede{
+  font-size:16.5px; line-height:1.62; font-weight:300; color:var(--ink-70);
+  margin:16px 0 0; max-width:990px
 }
-.gen .lab{font-size:13.6px; font-weight:700; color:var(--navy); margin-top:9px}
-.gen .yr{font-size:10.6px; color:var(--teal); font-weight:700; letter-spacing:.1em}
-.gen .ex{font-size:11px; color:var(--ink-50); margin-top:3px; line-height:1.4}
+.lede b{font-weight:600; color:var(--ink)}
+.lede em{font-style:italic; color:var(--ink)}
 
-/* — Contraste synchrone / asynchrone — */
-.contrast{display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:20px}
-.cbox{border-radius:10px; padding:14px 16px; border:1px solid var(--line); background:var(--paper)}
-.cbox.hi{background:linear-gradient(140deg,rgba(14,149,148,.11),rgba(14,149,148,.03)); border-color:rgba(14,149,148,.3)}
-.cbox .h{font-size:11px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:var(--blue)}
-.cbox.hi .h{color:var(--teal)}
-.cbox .b{font-size:13px; color:var(--navy-2); margin-top:7px; line-height:1.45}
-.cbox .m{font-size:11.4px; color:var(--ink-50); margin-top:6px}
-
-/* — Chiffres / barres — */
-.figs{display:grid; grid-template-columns:1fr 1fr; gap:13px; margin-top:4px}
-.fig{border:1px solid var(--line); border-radius:11px; padding:14px 16px 15px; background:var(--paper); position:relative; overflow:hidden}
-.fig .ft{font-size:10.4px; font-weight:700; letter-spacing:.13em; text-transform:uppercase; color:var(--blue); display:flex; justify-content:space-between; align-items:baseline}
-.fig .ft em{font-style:normal; font-size:9.4px; color:var(--ink-50); letter-spacing:.04em; text-transform:none}
-.fig .fv{font-family:var(--serif); font-size:34px; line-height:1; margin-top:9px; color:var(--navy); font-variant-numeric:tabular-nums}
-.fig .fv.teal{color:var(--teal)}
-.fig .fv small{font-size:14px; font-family:var(--sans); font-weight:600; color:var(--ink-50); margin-left:5px}
-.fig .fd{font-size:11.4px; color:var(--ink-50); margin-top:6px; line-height:1.4}
-
-.bars{margin-top:9px; display:grid; gap:7px}
-.bar{display:flex; align-items:center; gap:9px; font-size:10.6px; color:var(--ink-50)}
-.bar .lb{width:74px; flex:0 0 74px; font-weight:600; color:var(--navy-2)}
-.bar .tr{flex:1; height:9px; border-radius:5px; background:rgba(11,37,69,.08); overflow:hidden}
-.bar .fl{height:100%; border-radius:5px; width:var(--w); background:linear-gradient(90deg,var(--blue),var(--blue-soft))}
-.bar .fl.t{background:linear-gradient(90deg,var(--teal),var(--teal-2))}
-.bar .vl{width:52px; text-align:right; font-variant-numeric:tabular-nums; font-weight:600; color:var(--navy-2)}
-
-/* — Références — */
-.refgrid{display:grid; grid-template-columns:1fr 1fr; gap:34px; margin-top:22px}
-.refh{
-  font-size:10.6px; font-weight:700; letter-spacing:.17em; text-transform:uppercase;
-  color:var(--teal); padding-bottom:8px; border-bottom:1px solid var(--line); margin-bottom:13px
+/* — Couverture / clôture — */
+.dark h1{font-size:70px; max-width:1010px}
+.dark .sub{
+  font-size:18.5px; color:rgba(255,255,255,.74); margin-top:24px;
+  font-weight:300; letter-spacing:.01em; max-width:830px; line-height:1.55
 }
-.refh.b{color:var(--blue)}
-.ref{font-size:11.9px; line-height:1.5; color:var(--ink-70); margin-bottom:9px; padding-left:13px; position:relative}
-.ref::before{content:''; position:absolute; left:0; top:7px; width:5px; height:5px; border-radius:50%; background:var(--blue-soft)}
-.refgrid .b-col .ref::before{background:rgba(11,37,69,.22)}
-.ref b{color:var(--navy); font-weight:600}
-
-/* Couverture */
-.dark h1{font-size:70px; max-width:1000px}
-.dark .sub{font-size:19px; color:rgba(255,255,255,.72); margin-top:24px; font-weight:300; letter-spacing:.01em}
 .dark .who{
-  margin-top:44px; padding-top:22px; border-top:1px solid rgba(255,255,255,.16);
+  margin-top:42px; padding-top:22px; border-top:1px solid rgba(255,255,255,.16);
   font-size:13.4px; color:rgba(255,255,255,.62); letter-spacing:.04em
 }
 .dark .who b{color:#fff; font-weight:600}
+.dark .closer{
+  margin-top:34px; font-family:var(--serif); font-size:23px; font-weight:300;
+  font-style:italic; color:var(--accent-2); max-width:800px; line-height:1.4
+}
+
+/* — Trois questions — */
+.qrow{display:grid; grid-template-columns:repeat(3,1fr); gap:20px; margin-top:26px}
+.q{
+  border-top:2px solid var(--accent); padding-top:14px;
+}
+.q .qn{
+  font-size:10.5px; font-weight:700; letter-spacing:.16em; color:var(--accent);
+  font-variant-numeric:tabular-nums
+}
+.q .qt{font-size:14.5px; line-height:1.45; color:var(--ink-2); margin-top:7px; font-weight:500}
+
+.foot-note{
+  position:absolute; left:74px; right:74px; bottom:56px;
+  font-size:12.5px; color:var(--ink-50); font-weight:300; font-style:italic;
+  border-left:2px solid var(--accent-wash); padding-left:14px;
+}
+
+/* — Frise des trois générations — */
+.frise{position:relative; margin-top:30px; padding-top:34px}
+.frise-rail{
+  position:absolute; top:9px; left:0; right:0; height:2px;
+  background:linear-gradient(90deg,var(--blue-soft),var(--accent));
+  border-radius:2px;
+}
+.gens{display:grid; grid-template-columns:repeat(3,1fr); gap:24px}
+.gen{position:relative}
+.gen::before{
+  content:''; position:absolute; top:-33px; left:0;
+  width:13px; height:13px; border-radius:50%;
+  background:#fff; border:3px solid var(--accent);
+  box-shadow:0 0 0 4px rgba(14,149,148,.12);
+}
+.gen .gy{
+  font-size:11px; font-weight:700; letter-spacing:.13em; color:var(--accent);
+  font-variant-numeric:tabular-nums
+}
+.gen .gn{
+  font-family:var(--serif); font-size:25px; font-weight:500; color:var(--ink);
+  margin-top:5px; line-height:1.15
+}
+.gen .gd{font-size:12.8px; line-height:1.5; color:var(--ink-70); margin-top:9px; font-weight:300}
+.gen .gv{
+  display:inline-block; margin-top:11px; padding:4px 11px; border-radius:999px;
+  background:var(--accent-wash); color:var(--accent);
+  font-size:11px; font-weight:600; letter-spacing:.05em
+}
+
+/* — Duo comparatif — */
+.duo{display:grid; grid-template-columns:1fr 1fr; gap:0; margin-top:26px}
+.duo > div{padding:22px 30px}
+.duo > div:first-child{border-right:1px solid var(--line); padding-left:0}
+.duo .dh{
+  font-size:11px; font-weight:700; letter-spacing:.17em; text-transform:uppercase;
+  color:var(--blue)
+}
+.duo .dh.t{color:var(--accent)}
+.duo .dt{
+  font-family:var(--serif); font-size:22px; font-weight:500; margin-top:9px;
+  color:var(--ink); line-height:1.2
+}
+.duo .dp{font-size:13.6px; line-height:1.58; color:var(--ink-70); margin-top:11px; font-weight:300}
+.duo .dp b{color:var(--ink); font-weight:600}
+.duo .dtag{
+  display:inline-block; margin-top:14px; font-size:11.5px; font-weight:600;
+  letter-spacing:.06em; padding:5px 12px; border-radius:6px;
+  background:rgba(29,78,137,.08); color:var(--blue)
+}
+.duo .dtag.t{background:var(--accent-wash); color:var(--accent)}
+
+/* — Citation détachée — */
+.quote{
+  margin-top:30px; padding:26px 34px; border-radius:13px;
+  background:linear-gradient(120deg,rgba(14,149,148,.09),rgba(29,78,137,.05));
+  border-left:3px solid var(--accent);
+}
+.quote p{
+  margin:0; font-family:var(--serif); font-size:29px; font-weight:400;
+  line-height:1.3; color:var(--ink); letter-spacing:-.01em
+}
+.quote .qs{margin-top:13px; font-size:13.5px; color:var(--ink-70); font-weight:300; font-family:var(--sans)}
+
+/* — Flux : produire → spécifier / vérifier — */
+.flow{display:flex; align-items:stretch; gap:22px; margin-top:28px}
+.fbox{
+  flex:1; border:1px solid var(--line); border-radius:12px; padding:20px 24px;
+  background:var(--paper);
+}
+.fbox.was{opacity:.62}
+.fbox .fk{
+  font-size:10.5px; font-weight:700; letter-spacing:.15em; text-transform:uppercase;
+  color:var(--ink-50)
+}
+.fbox.now .fk{color:var(--accent)}
+.fbox .fw{
+  font-family:var(--serif); font-size:27px; font-weight:500; color:var(--ink); margin-top:8px
+}
+.fbox .fs{font-size:12.6px; color:var(--ink-70); margin-top:8px; font-weight:300; line-height:1.5}
+.farrow{
+  display:grid; place-items:center; color:var(--accent); flex:0 0 40px
+}
+.farrow svg{width:34px; height:34px}
+
+/* — Figures chiffrées — */
+.stats{display:grid; grid-template-columns:1fr 1fr; gap:22px; margin-top:24px}
+.stat{
+  border:1px solid var(--line); border-radius:12px; padding:19px 22px; background:var(--paper);
+  position:relative; overflow:hidden
+}
+.stat::before{
+  content:''; position:absolute; left:0; top:0; bottom:0; width:3px; background:var(--blue)
+}
+.stat.t::before{background:var(--accent)}
+.stat .sv{
+  font-family:var(--serif); font-size:44px; line-height:1; color:var(--blue);
+  font-variant-numeric:tabular-nums
+}
+.stat.t .sv{color:var(--accent)}
+.stat .sl{font-size:13.2px; font-weight:600; color:var(--ink); margin-top:9px}
+.stat .sd{font-size:11.8px; color:var(--ink-50); margin-top:6px; line-height:1.45; font-weight:300}
+
+/* — Jauge de perception — */
+.gauge{margin-top:22px; display:grid; gap:9px}
+.grow{display:flex; align-items:center; gap:13px; font-size:12.2px}
+.grow .gl{width:150px; flex:0 0 150px; color:var(--ink-70); font-weight:500}
+.grow .gt{flex:1; height:10px; border-radius:5px; background:rgba(11,37,69,.07); overflow:hidden}
+.grow .gf{height:100%; border-radius:5px; width:var(--w); background:linear-gradient(90deg,var(--blue-soft),var(--blue))}
+.grow .gf.neg{background:linear-gradient(90deg,var(--accent),var(--accent-2))}
+.grow .gv{width:62px; text-align:right; font-weight:700; color:var(--ink-2); font-variant-numeric:tabular-nums}
+
+/* — Barres d'évolution — */
+.brows{margin-top:22px; display:grid; gap:18px}
+.brow .bl{font-size:13px; font-weight:600; color:var(--ink); margin-bottom:9px; display:flex; justify-content:space-between}
+.brow .bl span{font-weight:300; color:var(--ink-50); font-size:12px}
+/* Deux barres distinctes par indicateur, à échelle commune (100 % = 25 points) :
+   les superposer au même point de départ ferait mentir la comparaison. */
+.byear{display:flex; align-items:center; gap:13px; margin-bottom:7px}
+.byear .yl{
+  width:36px; flex:0 0 36px; font-size:11.5px; font-weight:600; color:var(--ink-50);
+  font-variant-numeric:tabular-nums
+}
+.btrack{position:relative; flex:1; height:26px; border-radius:6px; background:rgba(11,37,69,.055); overflow:hidden}
+.bseg{
+  position:absolute; top:0; bottom:0; left:0; border-radius:6px; width:var(--w);
+  display:flex; align-items:center; padding-left:12px;
+  font-size:11.8px; font-weight:700; color:#fff; letter-spacing:.03em
+}
+.bseg.a{background:linear-gradient(90deg,rgba(29,78,137,.34),rgba(110,155,209,.34)); color:var(--ink-2)}
+.bseg.b{background:linear-gradient(90deg,var(--accent),var(--accent-2))}
+.bseg.d{background:linear-gradient(90deg,var(--blue),var(--blue-soft))}
+
+/* — Anneau de proportion — */
+.donut{
+  width:118px; height:118px; border-radius:50%; flex:0 0 118px;
+  background:conic-gradient(var(--accent) 0 19.7%, rgba(11,37,69,.09) 19.7% 100%);
+  display:grid; place-items:center; position:relative;
+}
+.donut::after{content:''; position:absolute; inset:13px; border-radius:50%; background:var(--paper)}
+.donut span{
+  position:relative; z-index:1; font-family:var(--serif); font-size:25px;
+  color:var(--accent); font-variant-numeric:tabular-nums
+}
+.dep{display:flex; align-items:center; gap:20px; margin-top:14px}
+.dep .dl{font-size:12.4px; line-height:1.5; color:var(--ink-70); font-weight:300}
+.dep .dl b{color:var(--ink); font-weight:600}
+
+.src{
+  font-size:11.4px; color:var(--ink-50); margin-top:14px; font-weight:300;
+  padding-left:12px; border-left:2px solid var(--line)
+}
+
+/* — Références — */
+.refgrid{display:grid; grid-template-columns:1fr 1fr; gap:38px; margin-top:22px}
+.refh{
+  font-size:10.6px; font-weight:700; letter-spacing:.17em; text-transform:uppercase;
+  color:var(--accent); padding-bottom:8px; border-bottom:1px solid var(--line); margin-bottom:13px
+}
+.refh.b{color:var(--blue)}
+.ref{
+  font-size:11.6px; line-height:1.48; color:var(--ink-70); margin-bottom:9px;
+  padding-left:13px; position:relative; font-weight:300
+}
+.ref::before{
+  content:''; position:absolute; left:0; top:6px; width:5px; height:5px;
+  border-radius:50%; background:var(--accent)
+}
+.b-col .ref::before{background:rgba(11,37,69,.24)}
+.ref b{color:var(--ink); font-weight:600}
 
 /* ============================================================
    IMPRESSION / EXPORT PDF
@@ -390,212 +519,265 @@ h2{
     <div class="hint">Échap pour quitter le plein écran</div>
     <div class="deck" id="deck">
 
-      <!-- ========== 1 · COUVERTURE (fond foncé — sans numéro) ========== -->
+      <!-- ========== 1 · COUVERTURE ========== -->
       <section class="slide dark" data-label="Couverture">
-        <div class="kicker a-fade" style="--d:.15s">L'IA générative au cœur du développement logiciel</div>
+        <div class="eyebrow a-fade" style="--d:.15s">L'IA générative au cœur du développement logiciel</div>
         <h1 class="a-rise" style="--d:.3s">De l'auto-complétion<br>à l'agent autonome</h1>
         <div class="sub a-rise" style="--d:.62s">Module 1 — Souffleur, interlocuteur, mandataire :<br>quatre ans, trois régimes de collaboration</div>
-        <div class="who a-fade" style="--d:.95s"><b>Robert Voyer</b> — Maître de conférences, IA &amp; Éthique, IMT-BS</div>
+        <div class="who a-fade" style="--d:.95s"><b>Robert Voyer</b> — Maître de conférences, IA &amp; Éthique, IMT-BS · FGV, équipes IT</div>
       </section>
 
-      <!-- ========== 2 · OUVERTURE « PROGRAMME » ========== -->
+      <!-- ========== 2 · OUVERTURE — PROGRAMME ========== -->
       <section class="slide" data-label="Ouverture — Programme">
-        <div class="kicker a-fade" style="--d:.1s">Ouverture · Programme</div>
-        <h2 class="a-rise" style="--d:.2s">Une question de vocabulaire —<br>et le vocabulaire, ici, n'est pas anodin</h2>
-        <div class="two">
-          <div>
-            <div class="assert a-rise" style="--d:.36s">« Trois mots, trois régimes de collaboration : et c'est le passage du deuxième au troisième qui fait rupture. »</div>
-            <div class="rule a-grow" style="--d:.5s"></div>
-            <p class="body a-rise" style="--d:.6s; margin-top:20px">
-              En quatre ans, l'outil qui vous « aide à coder » a changé de nature trois fois. Ce module
-              pose le socle de la journée. Nous ne trancherons pas s'il faut louer ou craindre ces outils :
-              nous poserons qu'ils sont l'un <em>et</em> l'autre. Il s'achève donc sur les risques réels —
-              non pour effrayer, mais parce qu'<strong>on ne pilote bien que ce dont on connaît les revers</strong>.
-            </p>
-            <div class="pharma a-zoom" style="--d:.95s">
-              <div class="w">phármakon</div>
-              <div class="d">Le remède <b>et</b> le poison, selon la dose et l'usage.<br>Cadre dialectique de toute la conférence.</div>
-            </div>
-          </div>
+        <div class="eyebrow a-fade" style="--d:.1s">Ouverture · Programme</div>
+        <h2 class="a-rise" style="--d:.2s">Une question de vocabulaire — et le vocabulaire,<br>ici, n'est pas anodin</h2>
+        <p class="lede a-rise" style="--d:.36s">En quatre ans, l'outil qui vous « aide à coder » a changé de nature trois fois. Il fut d'abord un <b>souffleur</b>, qui terminait vos phrases. Il est devenu un <b>interlocuteur</b>, à qui l'on demande. Il se présente aujourd'hui comme un <b>mandataire</b>, à qui l'on délègue. Trois mots, trois régimes de collaboration — et c'est le passage du deuxième au troisième qui fait rupture.</p>
 
-          <div class="qlist">
-            <div class="q a-slide" style="--d:.52s">
-              <div class="n">01</div>
-              <div><div class="t">D'où venons-nous ?</div>
-              <div class="s">La trajectoire des outils, de 2021 à 2026 — plus courte qu'on ne le croit.</div></div>
-            </div>
-            <div class="q a-slide" style="--d:.68s">
-              <div class="n">02</div>
-              <div><div class="t">Qu'est-ce qui, exactement, a basculé ?</div>
-              <div class="s">De la complétion à la délégation : différence de degré, ou de nature ?</div></div>
-            </div>
-            <div class="q a-slide" style="--d:.84s">
-              <div class="n">03</div>
-              <div><div class="t">Que devient le métier de développeur ?</div>
-              <div class="s">Quand la machine ne propose plus seulement, mais agit.</div></div>
-            </div>
-            <div class="q a-slide" style="--d:1s; border-left-color:var(--blue)">
-              <div class="n" style="color:var(--blue)">04</div>
-              <div><div class="t">Les revers documentés</div>
-              <div class="s">Qualité du code, sécurité, dépendances — techniques et organisationnelles.</div></div>
-            </div>
+        <div class="qrow">
+          <div class="q a-rise" style="--d:.56s">
+            <div class="qn">01</div>
+            <div class="qt">D'où venons-nous ? Quelle trajectoire depuis 2021 ?</div>
+          </div>
+          <div class="q a-rise" style="--d:.68s">
+            <div class="qn">02</div>
+            <div class="qt">Qu'est-ce qui a basculé de la complétion à la délégation ?</div>
+          </div>
+          <div class="q a-rise" style="--d:.8s">
+            <div class="qn">03</div>
+            <div class="qt">Que devient le métier quand la machine agit ?</div>
           </div>
         </div>
-        <div class="pageno">2<b>/5</b></div>
+
+        <div class="foot-note a-fade" style="--d:.98s">Nous ne trancherons pas si ces outils sont bons ou mauvais : ils sont l'un <em>et</em> l'autre — un <em>pharmakon</em>, remède et poison selon la dose et l'usage.</div>
+        <div class="pageno">2<b>/11</b></div>
       </section>
 
-      <!-- ========== 3 · TROIS GÉNÉRATIONS + RUPTURE ========== -->
-      <section class="slide" data-label="Trois générations · la rupture">
-        <div class="kicker a-fade" style="--d:.1s">1 &amp; 2 · Historique et rupture paradigmatique</div>
+      <!-- ========== 3 · TROIS GÉNÉRATIONS ========== -->
+      <section class="slide" data-label="Trois générations · 2021→2026">
+        <div class="eyebrow a-fade" style="--d:.1s">Bref historique · 2021 → 2026</div>
         <h2 class="a-rise" style="--d:.2s">Trois générations, une seule ligne de crête</h2>
-        <div class="assert a-rise" style="--d:.34s">« La rupture n'est pas de puissance, elle est de nature : c'est un transfert d'initiative. »</div>
+        <p class="lede a-rise" style="--d:.36s">L'outillage d'IA pour le développement n'a pas quatre décennies : il a quatre ans. Non pas trois versions d'un même produit, mais trois manières différentes de tenir la main du développeur.</p>
 
-        <!-- FRISE CINÉMATIQUE -->
-        <div class="frise" style="position:relative; height:172px; margin-top:24px">
-          <svg viewBox="0 0 1132 96" style="position:absolute; top:26px; left:0; width:1132px; height:96px; overflow:visible">
-            <defs>
-              <linearGradient id="gline" x1="0" x2="1">
-                <stop offset="0%" stop-color="#6E9BD1"/><stop offset="55%" stop-color="#1D4E89"/><stop offset="100%" stop-color="#0E9594"/>
-              </linearGradient>
-            </defs>
-            <line x1="70" y1="24" x2="1062" y2="24" stroke="rgba(11,37,69,.10)" stroke-width="2"/>
-            <line class="a-draw" style="--len:992; --d:.5s" x1="70" y1="24" x2="1062" y2="24"
-                  stroke="url(#gline)" stroke-width="3" stroke-linecap="round"/>
-            <g class="a-pop" style="--d:.85s"><circle cx="70" cy="24" r="11" fill="#fff" stroke="#6E9BD1" stroke-width="3"/><circle cx="70" cy="24" r="4" fill="#6E9BD1"/></g>
-            <g class="a-pop" style="--d:1.15s"><circle cx="566" cy="24" r="11" fill="#fff" stroke="#1D4E89" stroke-width="3"/><circle cx="566" cy="24" r="4" fill="#1D4E89"/></g>
-            <g class="a-pop" style="--d:1.45s"><circle cx="1062" cy="24" r="14" fill="#0E9594"/><circle cx="1062" cy="24" r="24" fill="none" stroke="rgba(14,149,148,.28)" stroke-width="2"/></g>
-          </svg>
-          <div class="gen a-rise" style="--d:.95s; left:-5px; top:64px">
-            <div class="yr">2021 — 2022</div>
-            <div class="lab">Le souffleur</div>
-            <div class="ex">Copilot complète vos lignes.<br>Vous validez, touche après touche.</div>
-          </div>
-          <div class="gen a-rise" style="--d:1.25s; left:491px; top:64px">
-            <div class="yr">2022 — 2024</div>
-            <div class="lab">L'interlocuteur</div>
-            <div class="ex">ChatGPT, puis Cursor.<br>On demande, la machine répond.</div>
-          </div>
-          <div class="gen a-rise" style="--d:1.55s; left:987px; top:64px">
-            <div class="yr">2024 — 2026</div>
-            <div class="lab" style="color:var(--teal)">Le mandataire</div>
-            <div class="ex">Devin, Claude Code.<br>On délègue un objectif, il agit.</div>
-          </div>
-        </div>
-
-        <div class="two" style="grid-template-columns:1fr 1.15fr; gap:44px; margin-top:2px">
-          <p class="body a-rise" style="--d:1.7s; max-width:100%">
-            Le point d'origine est daté : <strong>29 juin 2021</strong>, préversion de Copilot. Devin est présenté en
-            mars 2024 comme « premier ingénieur logiciel IA » <span class="src">(Cognition)</span>, Claude Code en février 2025.
-            Le glissement tient en un mot : <strong>l'initiative se déplace</strong>. Et qui décide du chemin en porte
-            une part de responsabilité.
-          </p>
-          <div class="contrast" style="margin-top:0">
-            <div class="cbox a-zoom" style="--d:1.85s">
-              <div class="h">Complétion</div>
-              <div class="b">L'outil propose, l'humain dispose — à chaque instant.</div>
-              <div class="m">Contrôle <b>synchrone</b> : rien ne s'inscrit sans validation au fil de l'écriture.</div>
+        <div class="frise">
+          <div class="frise-rail a-grow" style="--d:.5s"></div>
+          <div class="gens">
+            <div class="gen a-rise" style="--d:.62s">
+              <div class="gy">2021 — 2022</div>
+              <div class="gn">Le souffleur</div>
+              <div class="gd">GitHub Copilot, préversion le 29 juin 2021, ouvert à tous le 21 juin 2022. Vous tapez le début d'une ligne, il propose la suite. La main reste au développeur, touche après touche.</div>
+              <div class="gv">Il complète</div>
             </div>
-            <div class="cbox hi a-zoom" style="--d:2s">
-              <div class="h">Délégation</div>
-              <div class="b">L'agent décide des étapes : quels fichiers, quel ordre, quels tests.</div>
-              <div class="m">Contrôle <b>asynchrone</b> : vous ne le découvrez qu'après coup, en relisant.</div>
+            <div class="gen a-rise" style="--d:.76s">
+              <div class="gy">2022 — 2024</div>
+              <div class="gn">L'interlocuteur</div>
+              <div class="gd">ChatGPT le 30 novembre 2022, GPT-4 en mars 2023, Cursor en 2023. L'assistance quitte la marge de l'éditeur et devient conversation : on demande, on explique, on traduit.</div>
+              <div class="gv">Il répond</div>
+            </div>
+            <div class="gen a-rise" style="--d:.9s">
+              <div class="gy">2024 — 2026</div>
+              <div class="gn">Le mandataire</div>
+              <div class="gd">Devin, « premier ingénieur logiciel IA » (Cognition, mars 2024) ; Claude Code dans le terminal (Anthropic, février 2025). Recevoir un objectif et l'accomplir de bout en bout.</div>
+              <div class="gv">Il agit</div>
             </div>
           </div>
         </div>
-        <div class="pageno">3<b>/5</b></div>
+        <div class="pageno">3<b>/11</b></div>
       </section>
 
-      <!-- ========== 4 · MÉTIER + RISQUES (données chiffrées) ========== -->
-      <section class="slide" data-label="Métier &amp; risques · les mesures">
-        <div class="kicker a-fade" style="--d:.1s">3 &amp; 4 · Transformation du métier et risques réels</div>
+      <!-- ========== 4 · RUPTURE ========== -->
+      <section class="slide" data-label="Rupture · complétion / délégation">
+        <div class="eyebrow a-fade" style="--d:.1s">Rupture paradigmatique</div>
+        <h2 class="a-rise" style="--d:.2s">Complétion, délégation :<br>une différence de nature, non de degré</h2>
+        <p class="lede a-rise" style="--d:.36s">Passer de Copilot 2022 à un agent 2025, est-ce seulement disposer d'un assistant « plus puissant » ? Notre position est que non : on confond souvent une différence de degré avec un changement de paradigme.</p>
+
+        <div class="duo">
+          <div class="a-rise" style="--d:.54s">
+            <div class="dh">Régime de la complétion</div>
+            <div class="dt">L'outil propose,<br>l'humain dispose</div>
+            <div class="dp">L'initiative reste au développeur, et il dispose <b>en continu</b>. Vous voyez la suggestion avant qu'elle n'entre dans le fichier ; vous l'acceptez d'un geste ou vous l'écartez.</div>
+            <div class="dtag">Contrôle synchrone — ligne à ligne</div>
+          </div>
+          <div class="a-rise" style="--d:.7s">
+            <div class="dh t">Régime de la délégation</div>
+            <div class="dt">Vous fournissez un but,<br>l'agent choisit le chemin</div>
+            <div class="dp">Quels fichiers ouvrir, quoi modifier, dans quel ordre, quels tests lancer : <b>l'agent décide</b> des étapes intermédiaires. Vous ne les découvrez qu'en relisant.</div>
+            <div class="dtag t">Contrôle asynchrone — après coup</div>
+          </div>
+        </div>
+        <div class="pageno">4<b>/11</b></div>
+      </section>
+
+      <!-- ========== 5 · TRANSFERT D'INITIATIVE ========== -->
+      <section class="slide" data-label="Le transfert d'initiative">
+        <div class="eyebrow a-fade" style="--d:.1s">Le cœur du module</div>
+        <h2 class="a-rise" style="--d:.2s">Un transfert d'initiative</h2>
+        <p class="lede a-rise" style="--d:.36s">La rupture tient en un mot. Non pas « la machine écrit plus de code », mais <b>« la machine décide d'une part du chemin »</b>. Entre votre intention et le résultat s'intercale désormais une chaîne de décisions que vous n'avez pas prises.</p>
+
+        <div class="quote a-zoom" style="--d:.56s">
+          <p>Qui décide du chemin en porte<br>une part de responsabilité.</p>
+          <div class="qs">Le cadre de confiance fera l'objet du module suivant. Retenons pour l'instant que déléguer n'est jamais seulement gagner du temps : c'est aussi confier un pouvoir.</div>
+        </div>
+        <div class="pageno">5<b>/11</b></div>
+      </section>
+
+      <!-- ========== 6 · LE MÉTIER ========== -->
+      <section class="slide" data-label="Le métier se retourne">
+        <div class="eyebrow a-fade" style="--d:.1s">Transformation du métier</div>
+        <h2 class="a-rise" style="--d:.2s">Le geste central se retourne</h2>
+
+        <div class="flow">
+          <div class="fbox was a-rise" style="--d:.4s">
+            <div class="fk">Historiquement</div>
+            <div class="fw">Produire</div>
+            <div class="fs">Écrire le code, ligne après ligne.</div>
+          </div>
+          <div class="farrow a-pop" style="--d:.6s">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15m0 0-6-6m6 6-6 6"/></svg>
+          </div>
+          <div class="fbox now a-rise" style="--d:.74s">
+            <div class="fk">De plus en plus</div>
+            <div class="fw">Spécifier &amp; vérifier</div>
+            <div class="fs">Formuler l'objectif en amont ; relire, éprouver, valider en aval.</div>
+          </div>
+        </div>
+
+        <p class="lede a-rise" style="--d:.92s">Le goulet d'étranglement se déplace de l'écriture vers <b>la lecture</b>. On écrit moins, on relit davantage — et relire du code que l'on n'a pas conçu est une compétence exigeante, souvent plus difficile que de l'écrire. D'où deux vigilances : le risque d'<em>atrophie</em> chez les juniors, qui se forment précisément en produisant ; et une expertise qui tiendra moins à la vélocité de frappe qu'à la capacité de jugement.</p>
+        <div class="pageno">6<b>/11</b></div>
+      </section>
+
+      <!-- ========== 7 · LE GAIN MESURÉ / RESSENTI ========== -->
+      <section class="slide" data-label="Le gain mesuré, le gain ressenti">
+        <div class="eyebrow a-fade" style="--d:.1s">Mesure · deux études, deux contextes</div>
         <h2 class="a-rise" style="--d:.2s">Le gain mesuré, le gain ressenti</h2>
-        <div class="assert a-rise" style="--d:.34s">« Le sentiment de vitesse n'est pas la vitesse. »</div>
 
-        <div class="two" style="grid-template-columns:.82fr 1.18fr; gap:40px; margin-top:20px">
-          <div>
-            <p class="body a-rise" style="--d:.5s; max-width:100%">
-              Le geste central se retourne : on écrit moins, on relit davantage — et relire un code
-              que l'on n'a pas conçu est plus exigeant que l'écrire. Le gain n'est pas imaginaire, mais
-              il n'est pas universel : les deux études ne mesurent pas la même chose — tâche neuve
-              circonscrite d'un côté, code mature et volumineux de l'autre. La leçon commune demeure :
-              <strong>l'outil qui nous fait sentir plus rapides peut nous ralentir sans que nous le sachions</strong>.
-            </p>
-            <div class="rule a-grow" style="--d:.7s"></div>
-            <div class="pharma a-zoom" style="--d:1.5s; margin-top:16px; background:rgba(29,78,137,.07)">
-              <div class="w" style="color:var(--blue)">Vigilance</div>
-              <div class="d">Atrophie des savoir-faire chez les juniors ;<br>dépendance à un fournisseur, à un service, à une compétence qui s'émousse.</div>
+        <div class="stats">
+          <div class="stat a-rise" style="--d:.38s">
+            <div class="sv">− 55 %</div>
+            <div class="sl">de temps sur la tâche · GitHub, 2022</div>
+            <div class="sd">Étude contrôlée, ≈ 95 développeurs, tâche neuve et circonscrite. Conduite par le fournisseur de l'outil.</div>
+          </div>
+          <div class="stat t a-rise" style="--d:.52s">
+            <div class="sv">+ 19 %</div>
+            <div class="sl">de temps en plus · METR, juillet 2025</div>
+            <div class="sd">Essai randomisé, 16 développeurs expérimentés, 246 tâches réelles sur leurs propres projets, matures et volumineux.</div>
+          </div>
+        </div>
+
+        <div class="gauge">
+          <div class="grow a-fade" style="--d:.7s">
+            <div class="gl">Gain attendu</div>
+            <div class="gt"><div class="gf a-grow" style="--w:24%;--d:.78s"></div></div>
+            <div class="gv">+ 24 %</div>
+          </div>
+          <div class="grow a-fade" style="--d:.8s">
+            <div class="gl">Gain perçu après coup</div>
+            <div class="gt"><div class="gf a-grow" style="--w:20%;--d:.88s"></div></div>
+            <div class="gv">+ 20 %</div>
+          </div>
+          <div class="grow a-fade" style="--d:.9s">
+            <div class="gl">Gain réellement mesuré</div>
+            <div class="gt"><div class="gf neg a-grow" style="--w:19%;--d:.98s"></div></div>
+            <div class="gv">− 19 %</div>
+          </div>
+        </div>
+
+        <div class="foot-note a-fade" style="--d:1.1s">Ces études ne se contredisent pas : elles ne mesurent pas la même chose. Leçon commune — <em>le sentiment de vitesse n'est pas la vitesse.</em></div>
+        <div class="pageno">7<b>/11</b></div>
+      </section>
+
+      <!-- ========== 8 · RISQUE QUALITÉ ========== -->
+      <section class="slide" data-label="Risque 1 · qualité du code">
+        <div class="eyebrow a-fade" style="--d:.1s">Risque 1 · Qualité du code</div>
+        <h2 class="a-rise" style="--d:.2s">Le copier-coller dépasse le réagencement</h2>
+        <p class="lede a-rise" style="--d:.36s">Il est plus rapide de faire regénérer un bloc voisin que de refactoriser proprement l'existant. On produit vite, mais on accumule de la redondance — c'est-à-dire de la <b>dette technique</b>, ce coût différé qu'une équipe paiera plus tard en maintenance.</p>
+
+        <div class="brows">
+          <div class="brow a-fade" style="--d:.5s">
+            <div class="bl">Part de code purement copié-collé <span>il progresse</span></div>
+            <div class="byear">
+              <span class="yl">2021</span>
+              <div class="btrack"><div class="bseg a a-grow" style="--w:33.2%;--d:.6s">8,3 %</div></div>
+            </div>
+            <div class="byear">
+              <span class="yl">2024</span>
+              <div class="btrack"><div class="bseg b a-grow" style="--w:49.2%;--d:.72s">12,3 %</div></div>
             </div>
           </div>
-
-          <div class="figs">
-            <div class="fig a-zoom" style="--d:.62s">
-              <div class="ft">Productivité <em>GitHub, 2022</em></div>
-              <div class="fv teal">−55 %<small>de temps</small></div>
-              <div class="fd">Tâche accomplie ~55 % plus vite avec Copilot (≈ 95 développeurs). Étude conduite par le fournisseur.</div>
+          <div class="brow a-fade" style="--d:.84s">
+            <div class="bl">Part de code « déplacé », signe de réorganisation <span>il s'effondre</span></div>
+            <div class="byear">
+              <span class="yl">2021</span>
+              <div class="btrack"><div class="bseg d a-grow" style="--w:100%;--d:.94s">25 %</div></div>
             </div>
-            <div class="fig a-zoom" style="--d:.78s">
-              <div class="ft">Contre-mesure <em>METR, juillet 2025</em></div>
-              <div class="fv">+19 %<small>de temps</small></div>
-              <div class="bars" style="margin-top:8px">
-                <div class="bar"><span class="lb">Attendu</span><span class="tr"><span class="fl a-grow" style="--w:60%; --d:1.05s"></span></span><span class="vl">−24 %</span></div>
-                <div class="bar"><span class="lb">Perçu</span><span class="tr"><span class="fl a-grow" style="--w:50%; --d:1.18s"></span></span><span class="vl">−20 %</span></div>
-                <div class="bar"><span class="lb">Mesuré</span><span class="tr"><span class="fl t a-grow" style="--w:48%; --d:1.31s"></span></span><span class="vl">+19 %</span></div>
-              </div>
-            </div>
-            <div class="fig a-zoom" style="--d:.94s">
-              <div class="ft">Qualité <em>GitClear · 211 M lignes</em></div>
-              <div class="bars" style="margin-top:11px">
-                <div class="bar"><span class="lb">Copié-collé</span><span class="tr"><span class="fl a-grow" style="--w:34%; --d:1.4s"></span></span><span class="vl">8,3 %</span></div>
-                <div class="bar"><span class="lb">↳ 2024</span><span class="tr"><span class="fl t a-grow" style="--w:51%; --d:1.52s"></span></span><span class="vl">12,3 %</span></div>
-                <div class="bar"><span class="lb">Réagencé</span><span class="tr"><span class="fl a-grow" style="--w:100%; --d:1.64s"></span></span><span class="vl">25 %</span></div>
-                <div class="bar"><span class="lb">↳ 2024</span><span class="tr"><span class="fl a-grow" style="--w:39%; --d:1.76s; background:linear-gradient(90deg,#C0512F,#E08A6B)"></span></span><span class="vl">&lt; 10 %</span></div>
-              </div>
-              <div class="fd" style="margin-top:8px">Pour la première fois, le copier-coller dépasse le réagencement : de la dette technique.</div>
-            </div>
-            <div class="fig a-zoom" style="--d:1.1s">
-              <div class="ft">Dépendances <em>Spracklen et al., 2024</em></div>
-              <div class="fv">19,7 %<small>de paquets inventés</small></div>
-              <div class="bars" style="margin-top:8px">
-                <div class="bar"><span class="lb">Commerciaux</span><span class="tr"><span class="fl a-grow" style="--w:24%; --d:1.86s"></span></span><span class="vl">5,2 %</span></div>
-                <div class="bar"><span class="lb">Ouverts</span><span class="tr"><span class="fl a-grow" style="--w:100%; --d:1.98s; background:linear-gradient(90deg,#C0512F,#E08A6B)"></span></span><span class="vl">21,7 %</span></div>
-              </div>
-              <div class="fd" style="margin-top:8px">D'où le <b>slopsquatting</b>. Et, côté sécurité : code moins sûr <em>et</em> surconfiance accrue <span class="src">(Stanford, 2023)</span>.</div>
+            <div class="byear">
+              <span class="yl">2024</span>
+              <div class="btrack"><div class="bseg a a-grow" style="--w:40%;--d:1.06s">&lt; 10 %</div></div>
             </div>
           </div>
         </div>
-        <div class="pageno">4<b>/5</b></div>
+
+        <div class="src a-fade" style="--d:1.15s">GitClear, 2025 — analyse de 211 millions de lignes de code modifiées entre 2020 et 2024. Pour la première fois, le copier-coller dépasse le réagencement.</div>
+        <div class="pageno">8<b>/11</b></div>
       </section>
 
-      <!-- ========== 5 · RÉFÉRENCES ========== -->
+      <!-- ========== 9 · SÉCURITÉ & DÉPENDANCES ========== -->
+      <section class="slide" data-label="Risques 2 & 3 · sécurité, dépendances">
+        <div class="eyebrow a-fade" style="--d:.1s">Risques 2 &amp; 3 · Sécurité, dépendances</div>
+        <h2 class="a-rise" style="--d:.2s">Moins sûr — et plus confiant</h2>
+
+        <div class="duo">
+          <div class="a-rise" style="--d:.42s">
+            <div class="dh">Sécurité · Stanford, 2023</div>
+            <div class="dp">Les participants disposant d'un assistant IA ont produit un code <b>significativement moins sûr</b> que ceux qui s'en passaient. Et ils étaient <b>davantage convaincus</b> d'avoir écrit un code sûr.</div>
+            <div class="dtag">Une vulnérabilité que l'on croit absente ne se cherche pas</div>
+          </div>
+          <div class="a-rise" style="--d:.58s">
+            <div class="dh t">Dépendances · Spracklen et al., 2024</div>
+            <div class="dep">
+              <div class="donut a-pop" style="--d:.72s"><span>19,7 %</span></div>
+              <div class="dl">des paquets suggérés par les modèles <b>n'existent pas</b> : le modèle en invente le nom.<br><br>≈ 5,2 % pour les modèles commerciaux, ≈ 21,7 % pour les modèles ouverts.</div>
+            </div>
+            <div class="dtag t">Slopsquatting : publier du code malveillant sous un nom halluciné</div>
+          </div>
+        </div>
+
+        <div class="foot-note a-fade" style="--d:.95s">La dépendance a un second sens, organisationnel : le remède crée son propre besoin. Ce qui nous augmente aujourd'hui peut nous diminuer demain, si nous cessons de comprendre ce que nous déléguons.</div>
+        <div class="pageno">9<b>/11</b></div>
+      </section>
+
+      <!-- ========== 10 · CLÔTURE ========== -->
+      <section class="slide dark" data-label="Clôture — des amplificateurs">
+        <div class="eyebrow a-fade" style="--d:.12s">Ce fil portera toute la journée</div>
+        <h1 class="a-rise" style="--d:.28s">De formidables<br>amplificateurs</h1>
+        <div class="sub a-rise" style="--d:.6s">Ils amplifient la compétence d'une équipe qui garde la main, la lucidité et le jugement ; ils amplifient tout autant l'imprudence de celle qui s'en remet à eux les yeux fermés.</div>
+        <div class="closer a-fade" style="--d:.92s">La question n'est donc pas « faut-il les adopter ? »,<br>mais « à quelles conditions ? »</div>
+      </section>
+
+      <!-- ========== 11 · RÉFÉRENCES ========== -->
       <section class="slide" data-label="Références">
-        <div class="kicker a-fade" style="--d:.1s">Module 1 · Appareil de sourçage</div>
+        <div class="eyebrow a-fade" style="--d:.1s">Pour aller vérifier</div>
         <h2 class="a-rise" style="--d:.2s">Références</h2>
-        <div class="assert a-rise" style="--d:.32s">« Ni sauveurs ni menaces : de formidables amplificateurs. La question n'est pas “faut-il les adopter ?”, mais “à quelles conditions ?”. »</div>
 
         <div class="refgrid">
-          <div>
-            <div class="refh a-slide" style="--d:.5s">Sources primaires — une donnée peut y être contestée</div>
-            <div class="ref a-rise" style="--d:.6s"><b>GitHub (Kalliamvakou et al.), 2022</b> — « Quantifying GitHub Copilot's impact on developer productivity and happiness » ; étude contrôlée, ≈ 95 développeurs. arXiv 2302.06590.</div>
-            <div class="ref a-rise" style="--d:.7s"><b>METR (Becker, Rush, Barnes, Rein), 10 juillet 2025</b> — « Measuring the Impact of Early-2025 AI on Experienced Open-Source Developer Productivity » ; essai randomisé, 16 développeurs, 246 tâches. arXiv 2507.09089.</div>
-            <div class="ref a-rise" style="--d:.8s"><b>GitClear, 2025</b> — « AI Copilot Code Quality » ; 211 millions de lignes modifiées, 2020–2024.</div>
-            <div class="ref a-rise" style="--d:.9s"><b>Perry, Srivastava, Kumar, Boneh (Stanford), 2023</b> — « Do Users Write More Insecure Code with AI Assistants? », ACM CCS 2023. arXiv 2211.03622.</div>
-            <div class="ref a-rise" style="--d:1s"><b>Spracklen et al., 2024</b> — « We Have a Package for You! » ; 16 modèles, 2,23 M de recommandations. arXiv 2406.10279 · USENIX Security 2025.</div>
-            <div class="ref a-rise" style="--d:1.1s"><b>Cognition (Scott Wu), 12 mars 2024</b> — « Introducing Devin, the first AI software engineer » ; SWE-bench : 13,86 % contre 1,96 % pour l'état de l'art antérieur.</div>
+          <div class="a-rise" style="--d:.36s">
+            <div class="refh">Sources primaires — une donnée peut y être contestée</div>
+            <div class="ref"><b>GitHub (Kalliamvakou et al.), 2022</b> — « Research: quantifying GitHub Copilot's impact on developer productivity and happiness ». Étude contrôlée, ≈ 95 développeurs ; tâche ~55 % plus rapide. Conduite par le fournisseur. arXiv 2302.06590.</div>
+            <div class="ref"><b>METR (Becker, Rush, Barnes, Rein), 10 juillet 2025</b> — « Measuring the Impact of Early-2025 AI on Experienced Open-Source Developer Productivity ». Essai randomisé, 16 développeurs, 246 tâches ; +19 % de temps. arXiv 2507.09089.</div>
+            <div class="ref"><b>GitClear, 2025</b> — « AI Copilot Code Quality » ; 211 M de lignes modifiées (2020–2024) ; copié-collé 8,3 % → 12,3 % ; code déplacé 25 % → &lt; 10 %.</div>
+            <div class="ref"><b>Perry, Srivastava, Kumar, Boneh (Stanford), 2023</b> — « Do Users Write More Insecure Code with AI Assistants? », ACM CCS 2023. arXiv 2211.03622.</div>
+            <div class="ref"><b>Spracklen et al., 2024</b> — « We Have a Package for You! » ; 19,7 % de paquets hallucinés, 16 modèles. arXiv 2406.10279, USENIX Security 2025.</div>
+            <div class="ref"><b>Cognition (Scott Wu), 12 mars 2024</b> — « Introducing Devin, the first AI software engineer » ; SWE-bench : 13,86 % contre 1,96 % pour l'état de l'art antérieur.</div>
           </div>
-          <div class="b-col">
-            <div class="refh b a-slide" style="--d:.56s">Repères de contexte — situent sans mesurer</div>
-            <div class="ref a-rise" style="--d:.66s"><b>GitHub Copilot</b> — préversion technique le 29 juin 2021 (VS Code), propulsée par OpenAI Codex ; disponibilité générale sur abonnement le 21 juin 2022.</div>
-            <div class="ref a-rise" style="--d:.76s"><b>ChatGPT</b> — mise en ligne le 30 novembre 2022 (OpenAI) ; <b>GPT-4</b> en mars 2023 : bascule vers l'assistance conversationnelle.</div>
-            <div class="ref a-rise" style="--d:.86s"><b>Cursor (Anysphere)</b> — éditeur pensé autour de l'IA, lancé en 2023 : la conversation entre au poste de travail.</div>
-            <div class="ref a-rise" style="--d:.96s"><b>Claude Code (Anthropic)</b> — préversion de recherche annoncée le 24 février 2025 : agent de codage dans le terminal.</div>
-            <div class="ref a-rise" style="--d:1.06s"><b>Notions du glossaire</b> — dette technique, <i>slopsquatting</i>, <i>pharmakon</i> comme cadre dialectique : reprises ici au niveau des principes.</div>
-            <div class="pharma a-zoom" style="--d:1.25s; margin-top:18px">
-              <div class="w">→</div>
-              <div class="d">Module 2 — Le cadre de confiance :<br>à quelles conditions déléguer ?</div>
-            </div>
+          <div class="b-col a-rise" style="--d:.52s">
+            <div class="refh b">Repères de contexte — situent sans mesurer</div>
+            <div class="ref"><b>GitHub Copilot</b> — préversion technique le 29 juin 2021 dans VS Code, propulsée par OpenAI Codex ; disponibilité générale sur abonnement le 21 juin 2022.</div>
+            <div class="ref"><b>ChatGPT</b> — mise en ligne le 30 novembre 2022 (OpenAI) ; <b>GPT-4</b> en mars 2023 : bascule vers l'assistance conversationnelle.</div>
+            <div class="ref"><b>Cursor (Anysphere)</b> — éditeur pensé autour de l'IA, lancé en 2023 : intégration de la conversation au poste de travail.</div>
+            <div class="ref"><b>Claude Code (Anthropic)</b> — préversion de recherche annoncée le 24 février 2025 : agent de codage dans le terminal.</div>
+            <div class="ref">Notions définies dans le glossaire du programme — dette technique, <em>slopsquatting</em>, <em>pharmakon</em> comme cadre dialectique — reprises ici au niveau des principes.</div>
           </div>
         </div>
-        <div class="pageno">5<b>/5</b></div>
+        <div class="pageno">11<b>/11</b></div>
       </section>
 
     </div>
@@ -604,7 +786,7 @@ h2{
       <button id="prev" title="Précédent (←)">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
       </button>
-      <span class="count" id="count">1 / 5</span>
+      <span class="count" id="count">1 / 11</span>
       <button id="next" title="Suivant (→)">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
       </button>
