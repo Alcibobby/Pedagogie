@@ -197,8 +197,9 @@ body{
 .slide > .flow,
 .slide > .stats,
 .slide > .gauge,
-.slide > .brows,
-.slide > .refgrid{flex:1 1 auto}
+.slide > .brows{flex:1 1 auto}
+/* la grille de références garde sa hauteur naturelle et se centre : avec peu
+   d'entrées, un bloc dense et centré vaut mieux qu'une grille distendue */
 /* une citation ne s'étire pas : elle se centre dans l'espace disponible */
 .slide > .quote{flex:1 1 auto; display:flex; flex-direction:column; justify-content:center}
 /* Les boîtes étirées répartissent l'espace entre tous leurs éléments plutôt
@@ -469,7 +470,20 @@ h2{
 }
 
 /* — Références — */
-.refgrid{display:grid; grid-template-columns:1fr 1fr; gap:38px; margin-top:22px}
+/* Colonnes de largeurs inégales pour rapprocher les hauteurs naturelles, et
+   chaque colonne en panneau de même hauteur : l'inégalité du nombre
+   d'entrées se lit comme de la respiration, non comme une colonne tronquée.
+   La grille garde sa hauteur naturelle et se centre. */
+.refgrid{
+  display:grid; grid-template-columns:1.7fr 1fr; gap:16px;
+  align-items:stretch; margin:auto 0;
+}
+.refgrid > div{
+  background:var(--paper); border:1px solid var(--line); border-radius:11px;
+  padding:17px 21px 18px;
+  display:flex; flex-direction:column; justify-content:space-between;
+}
+.ref:last-child{margin-bottom:0}
 .refh{
   font-size:10.6px; font-weight:700; letter-spacing:.17em; text-transform:uppercase;
   color:var(--accent); padding-bottom:8px; border-bottom:1px solid var(--line); margin-bottom:13px
