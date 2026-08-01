@@ -181,12 +181,34 @@ body{
 /* ============================================================
    DIAPOSITIVES — socle structurel
    ============================================================ */
+/* La carte est une colonne : le titre reste en haut, le bloc principal
+   absorbe la hauteur restante. Sans cela le contenu s'arrête où il s'arrête
+   et laisse une bande morte en bas, qui déséquilibre la vue. */
 .slide{
   position:absolute; inset:0; width:var(--W); height:var(--H);
-  padding:58px 74px; background:var(--card);
+  padding:58px 74px 50px; background:var(--card);
   opacity:0; visibility:hidden; z-index:1;
   transition:opacity .5s ease;
+  display:flex; flex-direction:column;
 }
+.slide > .qrow,
+.slide > .frise,
+.slide > .duo,
+.slide > .flow,
+.slide > .stats,
+.slide > .gauge,
+.slide > .brows,
+.slide > .refgrid{flex:1 1 auto}
+/* une citation ne s'étire pas : elle se centre dans l'espace disponible */
+.slide > .quote{flex:1 1 auto; display:flex; flex-direction:column; justify-content:center}
+/* Les boîtes étirées répartissent l'espace entre tous leurs éléments plutôt
+   que de le concentrer avant leur dernière ligne. Réservé aux boîtes d'au
+   moins trois éléments : à deux, la répartition écarte le titre du corps au
+   lieu d'aérer. */
+.stat, .fbox, .gen, .duo > div{display:flex; flex-direction:column; justify-content:space-between}
+/* Les boîtes pauvres en éléments se centrent dans la hauteur au lieu de
+   s'étirer : le vide se partage alors au-dessus et au-dessous. */
+.slide > .qrow{align-items:center}
 .slide.active{opacity:1; visibility:visible; z-index:2}
 .thumb-scale .slide{opacity:0; visibility:hidden}
 .thumb-scale .slide.tvis{opacity:1; visibility:visible}
@@ -287,13 +309,14 @@ h2{
 .q .qt{font-size:14.5px; line-height:1.45; color:var(--ink-2); margin-top:7px; font-weight:500}
 
 .foot-note{
-  position:absolute; left:74px; right:74px; bottom:56px;
+  margin-top:18px;
   font-size:12.5px; color:var(--ink-50); font-weight:300; font-style:italic;
   border-left:2px solid var(--accent-wash); padding-left:14px;
 }
 
 /* — Frise des trois générations — */
-.frise{position:relative; margin-top:30px; padding-top:34px}
+.frise{position:relative; margin-top:30px; padding-top:34px; display:flex; flex-direction:column}
+.frise .gens{flex:1 1 auto}
 .frise-rail{
   position:absolute; top:9px; left:0; right:0; height:2px;
   background:linear-gradient(90deg,var(--blue-soft),var(--accent));

@@ -8,7 +8,7 @@
 <meta name="pedago:titre"   content="De l'auto-complétion à l'agent autonome">
 <meta name="pedago:rang"    content="1">
 <meta name="pedago:mode"    content="formation">
-<meta name="pedago:cartes"  content="15">
+<meta name="pedago:cartes"  content="12">
 <meta name="pedago:resume"  content="Trois générations d'outils, la rupture de la complétion vers la délégation mise à l'épreuve, le déplacement du métier vers le jugement, et les trois lieux de risque du code généré comme pharmakon.">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -178,16 +178,35 @@ body{
 
 /* ============================================================
    DIAPOSITIVES — socle structurel
-   ============================================================ */
+   ============================================================
+   La carte est une colonne : une tête fixée en haut, un corps qui
+   occupe toute la hauteur restante et y répartit ses blocs. C'est
+   ce qui évite la bande morte en bas de carte. */
 .slide{
   position:absolute; inset:0; width:var(--W); height:var(--H);
-  padding:50px 64px; background:var(--card);
+  padding:48px 62px 46px; background:var(--card);
   opacity:0; visibility:hidden; z-index:1;
   transition:opacity .5s ease;
+  display:flex; flex-direction:column;
 }
 .slide.active{opacity:1; visibility:visible; z-index:2}
 .thumb-scale .slide{opacity:0; visibility:hidden}
 .thumb-scale .slide.tvis{opacity:1; visibility:visible}
+
+.top{flex:0 0 auto}
+.body{
+  flex:1 1 auto; min-height:0;
+  display:flex; flex-direction:column;
+  gap:15px; padding-top:17px;
+}
+/* C'est le bloc principal qui absorbe la hauteur disponible, jamais les
+   écarts entre blocs : écarter les blocs ne ferait que déplacer le vide au
+   milieu de la carte. Les boîtes s'étirent, et répartissent à leur tour
+   l'espace entre tous leurs éléments (voir .mod, .fig, .side). */
+.body > .mods,
+.body > .figs,
+.body > .split,
+.body > .evol{flex:1 1 auto}
 
 .slide.dark{
   background:var(--dark-bg);
@@ -197,7 +216,7 @@ body{
 }
 
 .pageno{
-  position:absolute; right:36px; bottom:26px;
+  position:absolute; right:34px; bottom:22px;
   font-family:var(--sans); font-size:11px; font-weight:600; letter-spacing:.1em;
   color:var(--ink-50); font-variant-numeric:tabular-nums;
 }
@@ -246,12 +265,12 @@ h1{
   letter-spacing:-.032em; margin:26px 0 0; max-width:980px
 }
 h2{
-  font-family:var(--sans); font-weight:500; font-size:37px; line-height:1.13;
-  letter-spacing:-.024em; margin:13px 0 0; color:var(--ink); max-width:1080px
+  font-family:var(--sans); font-weight:500; font-size:36px; line-height:1.13;
+  letter-spacing:-.024em; margin:12px 0 0; color:var(--ink); max-width:1090px
 }
 .lede{
-  font-family:var(--serif); font-size:15.6px; line-height:1.62; font-weight:400;
-  color:var(--ink-70); margin:14px 0 0; max-width:1010px
+  font-family:var(--serif); font-size:15.8px; line-height:1.6; font-weight:400;
+  color:var(--ink-70); margin:12px 0 0; max-width:1090px
 }
 .lede b{font-weight:700; color:var(--ink)}
 .lede em{font-style:italic; color:var(--ink)}
@@ -259,27 +278,35 @@ h2{
 /* — Couverture / clôture — */
 .dark h1{font-size:62px; max-width:1000px}
 .dark .sub{
-  font-family:var(--serif); font-size:18px; color:rgba(255,255,255,.76); margin-top:22px;
-  font-weight:300; max-width:840px; line-height:1.56
+  font-family:var(--serif); font-size:17.5px; color:rgba(255,255,255,.76); margin-top:22px;
+  font-weight:300; max-width:900px; line-height:1.58
 }
+.dark .sub b{color:#fff; font-weight:600}
 .dark .who{
-  margin-top:38px; padding-top:20px; border-top:1px solid rgba(255,255,255,.17);
+  margin-top:34px; padding-top:20px; border-top:1px solid rgba(255,255,255,.17);
   font-size:12.8px; color:rgba(255,255,255,.6); letter-spacing:.05em
 }
 .dark .who b{color:#fff; font-weight:600}
 .dark .closer{
-  margin-top:30px; font-family:var(--serif); font-size:21px; font-weight:400;
-  font-style:italic; color:var(--accent-2); max-width:820px; line-height:1.45
+  margin-top:28px; font-family:var(--serif); font-size:21px; font-weight:400;
+  font-style:italic; color:var(--accent-2); max-width:840px; line-height:1.45
 }
 
-/* — Modules encadrés — */
-.mods{display:grid; gap:15px; margin-top:22px}
-.mods.c3{grid-template-columns:repeat(3,1fr)}
+/* — Modules encadrés —
+   Les boîtes s'étirent à la hauteur disponible ; leur ligne de clé
+   est ancrée en bas pour que le vide ne se recrée pas à l'intérieur. */
+.mods{display:grid; gap:14px}
 .mods.c2{grid-template-columns:1fr 1fr}
+.mods.c3{grid-template-columns:repeat(3,1fr)}
 .mods.c4{grid-template-columns:repeat(4,1fr)}
+/* Une boîte étirée répartit l'espace entre TOUS ses éléments plutôt que de
+   le concentrer devant sa dernière ligne : 140 px répartis sur cinq
+   intervalles se lisent comme de l'aération, au même endroit ils feraient
+   un trou. */
 .mod{
   background:var(--paper); border:1px solid var(--line); border-radius:4px;
-  padding:17px 19px 18px; position:relative
+  padding:16px 18px 17px; position:relative;
+  display:flex; flex-direction:column; justify-content:space-between;
 }
 .mod::before{
   content:''; position:absolute; top:0; left:0; right:0; height:3px;
@@ -287,67 +314,80 @@ h2{
 }
 .mod.alt::before{background:var(--ink-2)}
 .mod .mk{
-  font-family:var(--sans); font-size:10.5px; font-weight:700; letter-spacing:.14em;
+  font-family:var(--sans); font-size:10.2px; font-weight:700; letter-spacing:.14em;
   color:var(--accent); text-transform:uppercase
 }
 .mod.alt .mk{color:var(--ink-50)}
 .mod .mt{
-  font-family:var(--sans); font-size:18.5px; font-weight:600; margin-top:7px;
+  font-family:var(--sans); font-size:18px; font-weight:600; margin-top:6px;
   line-height:1.2; color:var(--ink); letter-spacing:-.015em
 }
-.mod .my{font-family:var(--sans); font-size:10.8px; color:var(--ink-50); margin-top:5px; font-weight:500}
-.mod .mb{font-family:var(--serif); font-size:12.9px; line-height:1.56; color:var(--ink-70); margin-top:10px}
+.mod .my{font-family:var(--sans); font-size:10.6px; color:var(--ink-50); margin-top:4px; font-weight:500}
+.mod .mb{font-family:var(--serif); font-size:13.1px; line-height:1.55; color:var(--ink-70); margin-top:9px}
 .mod .mb b{font-weight:700; color:var(--ink)}
+.mod .mb + .mb{margin-top:7px}
 .mod .mkey{
-  margin-top:11px; font-family:var(--sans); font-size:11.2px; line-height:1.4;
-  color:var(--ink); background:var(--accent-wash); padding:7px 10px; border-radius:3px;
-  font-weight:500
+  padding-top:11px;
+  font-family:var(--sans); font-size:11.2px; line-height:1.38;
+  color:var(--ink); font-weight:500;
 }
+.mod .mkey span{background:var(--accent-wash); padding:6px 9px; border-radius:3px; display:block}
 
 /* — Thèse / antithèse — */
-.split{display:grid; grid-template-columns:1fr 1fr; gap:18px; margin-top:20px}
-.side{border:1px solid var(--line); border-radius:4px; padding:18px 21px; background:var(--paper)}
+.split{display:grid; grid-template-columns:1fr 1fr; gap:16px}
+.split.uneven{grid-template-columns:1fr 1.12fr}
+.side{
+  border:1px solid var(--line); border-radius:4px; padding:17px 20px; background:var(--paper);
+  display:flex; flex-direction:column; justify-content:space-between;
+}
 .side.pro{border-left:3px solid var(--ink-2)}
 .side.con{border-left:3px solid var(--accent)}
 .side .sh{
-  font-family:var(--sans); font-size:10.5px; font-weight:700; letter-spacing:.15em;
+  font-family:var(--sans); font-size:10.2px; font-weight:700; letter-spacing:.15em;
   text-transform:uppercase; color:var(--ink-50)
 }
 .side.con .sh{color:var(--accent)}
-.side .st{font-family:var(--sans); font-size:17px; font-weight:600; margin-top:7px; color:var(--ink); letter-spacing:-.012em}
-.side .sb{font-family:var(--serif); font-size:13px; line-height:1.58; color:var(--ink-70); margin-top:9px}
+.side .st{font-family:var(--sans); font-size:16.5px; font-weight:600; margin-top:6px; color:var(--ink); letter-spacing:-.012em; line-height:1.2}
+.side .sb{font-family:var(--serif); font-size:13.1px; line-height:1.56; color:var(--ink-70); margin-top:9px}
 .side .sb b{font-weight:700; color:var(--ink)}
-.side ol{margin:9px 0 0; padding-left:17px; font-family:var(--serif); font-size:12.8px; line-height:1.52; color:var(--ink-70)}
-.side ol li{margin-bottom:5px}
+.side .sb + .sb{margin-top:7px}
+.side ol{margin:8px 0 0; padding-left:16px; font-family:var(--serif); font-size:12.9px; line-height:1.5; color:var(--ink-70)}
+.side ol li{margin-bottom:6px}
 .side ol b{font-weight:700; color:var(--ink)}
+.side .foot{padding-top:10px; font-family:var(--sans); font-size:11.2px; font-weight:500; color:var(--ink)}
 
 /* — Chiffres — */
-.figs{display:grid; gap:15px; margin-top:20px}
-.figs.c3{grid-template-columns:repeat(3,1fr)}
+.figs{display:grid; gap:14px}
 .figs.c2{grid-template-columns:1fr 1fr}
-.fig{border:1px solid var(--line); border-radius:4px; padding:16px 19px; background:#fff}
+.figs.c3{grid-template-columns:repeat(3,1fr)}
+.fig{
+  border:1px solid var(--line); border-radius:4px; padding:15px 18px 16px; background:#fff;
+  display:flex; flex-direction:column; justify-content:space-between;
+}
 .fig .fv{
-  font-family:var(--sans); font-size:38px; font-weight:600; line-height:1;
+  font-family:var(--sans); font-size:37px; font-weight:600; line-height:1;
   color:var(--accent); font-variant-numeric:tabular-nums; letter-spacing:-.03em
 }
 .fig .fv.slate{color:var(--ink)}
 .fig .fv small{font-size:15px; font-weight:500; color:var(--ink-50); margin-left:4px}
-.fig .fl{font-family:var(--sans); font-size:12.4px; font-weight:600; color:var(--ink); margin-top:8px; line-height:1.3}
-.fig .fd{font-family:var(--serif); font-size:11.9px; color:var(--ink-50); margin-top:6px; line-height:1.45}
+.fig .fl{font-family:var(--sans); font-size:12.4px; font-weight:600; color:var(--ink); margin-top:7px; line-height:1.3}
+.fig .fd{font-family:var(--serif); font-size:12.2px; color:var(--ink-70); margin-top:8px; line-height:1.5}
+.fig .fd b{font-weight:700; color:var(--ink)}
+.fig .fend{padding-top:9px; font-family:var(--sans); font-size:11px; color:var(--ink-50); font-weight:500}
 
 /* — Barres d'évolution (échelle commune) — */
-.evol{margin-top:18px; display:grid; gap:13px}
+.evol{display:flex; flex-direction:column; justify-content:space-between; gap:11px}
 .ev .el{
   font-family:var(--sans); font-size:12.3px; font-weight:600; color:var(--ink);
-  margin-bottom:7px; display:flex; justify-content:space-between
+  margin-bottom:6px; display:flex; justify-content:space-between; gap:16px
 }
-.ev .el span{font-weight:400; color:var(--ink-50); font-size:11.5px; font-family:var(--serif)}
+.ev .el span{font-weight:400; color:var(--ink-50); font-size:11.6px; font-family:var(--serif); text-align:right}
 .eyr{display:flex; align-items:center; gap:11px; margin-bottom:5px}
 .eyr .yl{
   width:34px; flex:0 0 34px; font-family:var(--sans); font-size:11px; font-weight:600;
   color:var(--ink-50); font-variant-numeric:tabular-nums
 }
-.etr{position:relative; flex:1; height:22px; border-radius:3px; background:rgba(31,41,51,.06); overflow:hidden}
+.etr{position:relative; flex:1; height:21px; border-radius:3px; background:rgba(31,41,51,.06); overflow:hidden}
 .eseg{
   position:absolute; top:0; bottom:0; left:0; border-radius:3px; width:var(--w);
   display:flex; align-items:center; padding-left:10px;
@@ -359,51 +399,58 @@ h2{
 
 /* — Encart de réserve — */
 .caveat{
-  margin-top:16px; font-family:var(--serif); font-size:12.4px; line-height:1.55;
+  font-family:var(--serif); font-size:12.5px; line-height:1.54;
   color:var(--ink-70); background:rgba(31,41,51,.045); border-left:3px solid var(--ink-50);
   padding:11px 15px; border-radius:0 3px 3px 0
 }
-.caveat b{font-family:var(--sans); font-weight:600; color:var(--ink); font-size:11.5px;
+.caveat b{font-family:var(--sans); font-weight:600; color:var(--ink); font-size:11.2px;
   letter-spacing:.06em; text-transform:uppercase; display:block; margin-bottom:4px}
 
 /* — Question ouverte — */
 .open{
-  margin-top:18px; padding:18px 22px; border:1px dashed rgba(194,112,61,.45);
+  padding:16px 20px; border:1px dashed rgba(194,112,61,.45);
   border-radius:4px; background:rgba(194,112,61,.05)
 }
 .open .oh{
-  font-family:var(--sans); font-size:10.5px; font-weight:700; letter-spacing:.15em;
-  text-transform:uppercase; color:var(--accent); margin-bottom:7px
+  font-family:var(--sans); font-size:10.2px; font-weight:700; letter-spacing:.15em;
+  text-transform:uppercase; color:var(--accent); margin-bottom:6px
 }
-.open p{margin:0; font-family:var(--serif); font-size:14px; line-height:1.58; color:var(--ink)}
+.open p{margin:0; font-family:var(--serif); font-size:13.6px; line-height:1.56; color:var(--ink)}
 .open p em{font-style:italic}
 
 /* — Formule détachée — */
-.pull{
-  margin-top:20px; padding:20px 26px; border-radius:4px;
-  background:var(--ink); color:#fff
-}
+.pull{padding:18px 24px; border-radius:4px; background:var(--ink); color:#fff}
 .pull p{
-  margin:0; font-family:var(--serif); font-size:22px; font-weight:400; line-height:1.36;
+  margin:0; font-family:var(--serif); font-size:20.5px; font-weight:400; line-height:1.38;
   letter-spacing:-.005em
 }
 .pull p b{color:var(--accent-2); font-weight:600}
+.pull.small p{font-size:17px; line-height:1.5}
 
 .src{
-  font-family:var(--serif); font-size:11.5px; color:var(--ink-50); margin-top:13px;
+  font-family:var(--serif); font-size:11.6px; color:var(--ink-50);
   padding-left:11px; border-left:2px solid var(--line); line-height:1.45
 }
 
+/* — Bande d'acquis — */
+.acq{display:grid; grid-template-columns:repeat(3,1fr); gap:0; border-top:1px solid var(--line); padding-top:13px}
+.acq div{padding:0 22px; border-left:1px solid var(--line)}
+.acq div:first-child{padding-left:0; border-left:0}
+.acq div:last-child{padding-right:0}
+.acq .ah{font-family:var(--sans); font-size:10.2px; font-weight:700; letter-spacing:.13em; text-transform:uppercase; color:var(--accent)}
+.acq .ab{font-family:var(--serif); font-size:12.6px; line-height:1.5; color:var(--ink-70); margin-top:5px}
+.acq .ab b{font-weight:700; color:var(--ink)}
+
 /* — Références — */
-.refgrid{display:grid; grid-template-columns:1fr 1fr; gap:34px; margin-top:18px}
+.refgrid{display:grid; grid-template-columns:1fr 1fr; gap:32px}
 .refh{
-  font-family:var(--sans); font-size:10.5px; font-weight:700; letter-spacing:.16em;
+  font-family:var(--sans); font-size:10.4px; font-weight:700; letter-spacing:.16em;
   text-transform:uppercase; color:var(--accent); padding-bottom:7px;
-  border-bottom:1px solid var(--line); margin-bottom:12px
+  border-bottom:1px solid var(--line); margin-bottom:11px
 }
 .refh.b{color:var(--ink-50)}
 .ref{
-  font-family:var(--serif); font-size:11.6px; line-height:1.46; color:var(--ink-70);
+  font-family:var(--serif); font-size:11.9px; line-height:1.46; color:var(--ink-70);
   margin-bottom:9px; padding-left:12px; position:relative
 }
 .ref::before{
@@ -427,12 +474,11 @@ h2{
     box-shadow:none; border-radius:0; position:static
   }
   .slide{
-    position:relative; inset:auto; display:block;
+    position:relative; inset:auto; display:flex;
     width:1280px; height:720px; opacity:1 !important; visibility:visible !important;
     page-break-after:always; break-after:page; overflow:hidden;
     -webkit-print-color-adjust:exact; print-color-adjust:exact;
   }
-  .slide.dark{display:flex}
   .slide:last-child{page-break-after:auto; break-after:auto}
   .slide *{animation:none !important; transition:none !important}
 }
@@ -477,349 +523,333 @@ h2{
         <div class="who a-fade" style="--d:.95s"><b>Robert Voyer</b> — Maître de conférences, IA &amp; Éthique, IMT-BS · Formation, 40 min</div>
       </section>
 
-      <!-- ========== 2 · OUVERTURE — LA QUESTION ========== -->
-      <section class="slide" data-label="Ouverture — la question">
-        <div class="ey a-fade" style="--d:.1s">Ouverture · Programme</div>
-        <h2 class="a-rise" style="--d:.2s">La réponse a changé trois fois</h2>
-        <p class="lede a-rise" style="--d:.34s">En 2021, on demandait à la machine de <b>terminer nos phrases</b>. En 2023, de <b>rédiger sous notre dictée</b>. En 2026, on lui confie <b>une tâche entière et on la laisse s'y prendre seule</b>. Entre ces trois moments, ce n'est pas la même quantité d'aide qui a augmenté : c'est la <em>nature du geste</em> qui s'est déplacée. C'est ce déplacement — et lui seul — que ce premier module a pour objet d'installer.</p>
+      <!-- ========== 2 · OUVERTURE — PROGRAMME ========== -->
+      <section class="slide" data-label="Ouverture — Programme">
+        <div class="top">
+          <div class="ey a-fade" style="--d:.1s">Ouverture · Programme</div>
+          <h2 class="a-rise" style="--d:.2s">La réponse a changé trois fois</h2>
+          <p class="lede a-rise" style="--d:.32s">En 2021, on demandait à la machine de <b>terminer nos phrases</b> ; en 2023, de <b>rédiger sous notre dictée</b> ; en 2026, on lui confie <b>une tâche entière et on la laisse s'y prendre seule</b>. Entre ces trois moments, ce n'est pas la même quantité d'aide qui a augmenté : c'est la <em>nature du geste</em> qui s'est déplacée. Nous procéderons en quatre temps, chacun formulé comme une question à instruire plutôt que comme une réponse à retenir.</p>
+        </div>
 
-        <div class="mods c4">
-          <div class="mod a-rise" style="--d:.5s">
-            <div class="mk">Temps 1</div>
-            <div class="mt">Chronologie raisonnée</div>
-            <div class="mb">Trois générations, 2021 → 2026. Non pour mémoriser des dates, mais pour comprendre pourquoi chaque génération a rendu la précédente insuffisante.</div>
+        <div class="body">
+          <div class="mods c4">
+            <div class="mod a-rise" style="--d:.48s">
+              <div class="mk">Temps 1</div>
+              <div class="mt">Chronologie raisonnée</div>
+              <div class="mb">Trois générations d'outils, de 2021 à 2026. L'enjeu n'est pas de mémoriser des dates de sortie, mais de comprendre pourquoi chaque génération a rendu la précédente insuffisante — ce qui, à chaque fois, restait frustrant et appelait la suite.</div>
+            </div>
+            <div class="mod a-rise" style="--d:.58s">
+              <div class="mk">Temps 2</div>
+              <div class="mt">Le point de bascule</div>
+              <div class="mb">Nommer précisément la rupture qui sépare <b>compléter</b> de <b>déléguer</b>. Nous soutiendrons qu'il s'agit d'un changement de paradigme, non d'une simple amélioration de performance — et nous mettrons cette thèse à l'épreuve plutôt que de la poser d'autorité.</div>
+            </div>
+            <div class="mod a-rise" style="--d:.68s">
+              <div class="mk">Temps 3</div>
+              <div class="mt">Le métier déplacé</div>
+              <div class="mb">Si la machine rédige, que fait désormais celui qui, hier, rédigeait ? Le centre de gravité du travail glisse de la production vers la <b>spécification, la revue et le jugement</b> — un déplacement que les enquêtes de terrain documentent déjà, sans en fixer le terme.</div>
+            </div>
+            <div class="mod a-rise" style="--d:.78s">
+              <div class="mk">Temps 4</div>
+              <div class="mt">Les risques réels</div>
+              <div class="mb">Nous refuserons les deux récits faciles — l'outil miracle et le péril absolu — au profit de la figure du <em>pharmakon</em>, ce remède qui est aussi poison selon la dose. Trois lieux de risque, tous trois désormais mesurés.</div>
+            </div>
           </div>
-          <div class="mod a-rise" style="--d:.6s">
-            <div class="mk">Temps 2</div>
-            <div class="mt">Le point de bascule</div>
-            <div class="mb">Ce qui sépare <b>compléter</b> de <b>déléguer</b>. Nous soutiendrons qu'il s'agit d'un changement de paradigme — et nous mettrons cette thèse à l'épreuve.</div>
-          </div>
-          <div class="mod a-rise" style="--d:.7s">
-            <div class="mk">Temps 3</div>
-            <div class="mt">Le métier déplacé</div>
-            <div class="mb">Si la machine rédige, que fait celui qui rédigeait ? Le centre de gravité glisse vers la spécification, la revue et le jugement.</div>
-          </div>
-          <div class="mod a-rise" style="--d:.8s">
-            <div class="mk">Temps 4</div>
-            <div class="mt">Les risques réels</div>
-            <div class="mb">Ni l'outil miracle ni le péril absolu : la figure du <em>pharmakon</em>. Trois lieux mesurés — qualité, sécurité, dépendances.</div>
+
+          <div class="acq a-fade" style="--d:.92s">
+            <div><div class="ah">À l'issue · Situer</div><div class="ab">Distinguer les trois générations et reconnaître à laquelle appartient un outil qu'on vous présente.</div></div>
+            <div><div class="ah">À l'issue · Nommer</div><div class="ab">Énoncer la rupture et ce qui bascule avec elle : <b>l'unité de travail, le moment du contrôle, la position de l'humain</b>.</div></div>
+            <div><div class="ah">À l'issue · Identifier</div><div class="ab">Repérer les effets sur le métier et les trois lieux de risque, avec les ordres de grandeur qui les accompagnent.</div></div>
           </div>
         </div>
-        <div class="pageno">2<b>/15</b></div>
+        <div class="pageno">2<b>/12</b></div>
       </section>
 
-      <!-- ========== 3 · OUVERTURE — OBJECTIFS ========== -->
-      <section class="slide" data-label="Ouverture — objectifs">
-        <div class="ey a-fade" style="--d:.1s">Ouverture · Ce que vous saurez faire</div>
-        <h2 class="a-rise" style="--d:.2s">Trois acquis, et ce qu'ils commandent</h2>
-
-        <div class="mods c3">
-          <div class="mod a-rise" style="--d:.36s">
-            <div class="mk">Acquis 1</div>
-            <div class="mt">Situer</div>
-            <div class="mb">Distinguer les trois générations d'outils et reconnaître à quelle génération appartient un outil que l'on vous présente.</div>
-          </div>
-          <div class="mod a-rise" style="--d:.46s">
-            <div class="mk">Acquis 2</div>
-            <div class="mt">Nommer</div>
-            <div class="mb">Énoncer précisément la rupture de la complétion vers la délégation, et ce qui bascule avec elle : l'unité de travail, le moment du contrôle, la position de l'humain.</div>
-          </div>
-          <div class="mod a-rise" style="--d:.56s">
-            <div class="mk">Acquis 3</div>
-            <div class="mt">Identifier</div>
-            <div class="mb">Repérer les premiers effets sur le métier comme les trois lieux de risque documentés, avec les ordres de grandeur qui les accompagnent.</div>
-          </div>
-        </div>
-
-        <div class="pull a-zoom" style="--d:.72s">
-          <p>Ce socle conceptuel commande tout le reste de la journée : le <b>Module 2</b> en tirera les questions de confiance propres au service public, et les suivants en montreront les réalisations concrètes.</p>
-        </div>
-        <div class="pageno">3<b>/15</b></div>
-      </section>
-
-      <!-- ========== 4 · TROIS GÉNÉRATIONS ========== -->
+      <!-- ========== 3 · TROIS GÉNÉRATIONS ========== -->
       <section class="slide" data-label="Trois générations d'outils">
-        <div class="ey a-fade" style="--d:.1s">1 · Chronologie raisonnée</div>
-        <h2 class="a-rise" style="--d:.2s">Trois générations d'outils, 2021 → 2026</h2>
-        <p class="lede a-rise" style="--d:.32s">Vu de loin, l'histoire récente ressemble à une courbe unique : les outils seraient devenus « de plus en plus puissants ». Ce récit masque l'essentiel — à trois reprises, l'outil a changé de <b>fonction</b>. Non pas <em>plus de la même chose</em>, mais <em>autre chose</em>.</p>
-
-        <div class="mods c3">
-          <div class="mod a-rise" style="--d:.5s">
-            <div class="mk">01</div>
-            <div class="mt">L'auto-complétion</div>
-            <div class="my">2021 – 2022 · GitHub Copilot</div>
-            <div class="mb">Préversion le 29 juin 2021, ouverture à tous en juin 2022. L'outil <b>complète</b> : vous écrivez le début d'une ligne, il propose la suite en grisé, dans le fil même de la frappe. L'humain reste au clavier, en continu.</div>
-            <div class="mkey">Unité de travail : le fragment</div>
-          </div>
-          <div class="mod a-rise" style="--d:.62s">
-            <div class="mk">02</div>
-            <div class="mt">La conversation</div>
-            <div class="my">2022 – 2024 · ChatGPT</div>
-            <div class="mb">Le 30 novembre 2022, l'interaction devient <b>dialogue</b> : on demande en langue naturelle, la machine produit une fonction, une explication, un test. Le développeur fait la navette entre la conversation et son projet.</div>
-            <div class="mkey">Unité de travail : le bloc</div>
-          </div>
-          <div class="mod a-rise" style="--d:.74s">
-            <div class="mk">03</div>
-            <div class="mt">L'agent</div>
-            <div class="my">2024 – 2026 · Devin, Claude Code</div>
-            <div class="mb">L'agent reçoit <b>une tâche</b> et s'en charge : il lit les fichiers, décide des modifications, les applique, exécute les tests, lit les erreurs, recommence. L'humain fournit l'intention et le critère de réussite.</div>
-            <div class="mkey">Unité de travail : la tâche</div>
-          </div>
+        <div class="top">
+          <div class="ey a-fade" style="--d:.1s">1 · Chronologie raisonnée</div>
+          <h2 class="a-rise" style="--d:.2s">Trois générations d'outils, 2021 → 2026</h2>
+          <p class="lede a-rise" style="--d:.32s">Vu de loin, l'histoire récente ressemble à une courbe unique, régulièrement croissante : les outils seraient devenus « de plus en plus puissants ». Ce récit est commode, mais il masque l'essentiel — à trois reprises, l'outil a changé de <b>fonction</b>. Non pas <em>plus de la même chose</em>, mais <em>autre chose</em>.</p>
         </div>
 
-        <div class="caveat a-fade" style="--d:.92s"><b>Portée du découpage</b>Cette tripartition est un cadre d'analyse proposé pour ce module, non une catégorisation attestée par une source unique. Les frontières sont poreuses et les bornes indicatives ; d'autres découpages seraient défendables.</div>
-        <div class="pageno">4<b>/15</b></div>
+        <div class="body">
+          <div class="mods c3">
+            <div class="mod a-rise" style="--d:.48s">
+              <div class="mk">01</div>
+              <div class="mt">L'auto-complétion dans l'éditeur</div>
+              <div class="my">2021 – 2022 · GitHub Copilot</div>
+              <div class="mb">Préversion technique le 29 juin 2021, ouverture à tous les développeurs en juin 2022. L'outil <b>complète</b> : vous écrivez le début d'une ligne, d'une fonction, d'un commentaire ; il propose la suite en grisé, dans le fil même de la frappe.</div>
+              <div class="mb">La métaphore juste est celle de la saisie prédictive du téléphone, portée à l'échelle du code. L'humain reste au clavier, en continu : il conduit, l'outil anticipe le prochain virage.</div>
+              <div class="mkey"><span>Unité de travail : le fragment. Jamais une intention entière.</span></div>
+            </div>
+            <div class="mod a-rise" style="--d:.6s">
+              <div class="mk">02</div>
+              <div class="mt">La conversation</div>
+              <div class="my">2022 – 2024 · ChatGPT</div>
+              <div class="mb">Le 30 novembre 2022, le mode d'interaction devient le <b>dialogue</b> : on demande en langue naturelle, et la machine produit — une fonction complète, une explication, un test, une traduction d'un langage vers un autre.</div>
+              <div class="mb">Le gain n'est plus la vitesse de frappe : c'est la capacité à <em>obtenir sur demande</em> un artefact qu'on aurait mis du temps à écrire. Mais l'humain reste le <b>presse-papiers vivant</b> du dispositif — c'est lui qui fait la navette.</div>
+              <div class="mkey"><span>Unité de travail : le bloc. L'outil produit ; il n'agit pas.</span></div>
+            </div>
+            <div class="mod a-rise" style="--d:.72s">
+              <div class="mk">03</div>
+              <div class="mt">L'agent</div>
+              <div class="my">2024 – 2026 · Devin, Claude Code</div>
+              <div class="mb">L'agent n'attend plus qu'on lui dicte un fragment ni même qu'on lui commande un bloc : il reçoit <b>une tâche</b> — « corrige ce bogue », « migre ce module » — et il s'en charge.</div>
+              <div class="mb">Il lit les fichiers concernés, décide des modifications, les applique à travers plusieurs fichiers, exécute les tests, lit les erreurs, recommence. Le développeur fournit <b>l'intention</b> et <b>le critère de réussite</b>, puis supervise.</div>
+              <div class="mkey"><span>Unité de travail : la tâche. Ce ne sont plus des lignes qui transitent, mais des décisions.</span></div>
+            </div>
+          </div>
+
+          <div class="caveat a-fade" style="--d:.9s"><b>Portée du découpage</b>Cette tripartition est un cadre d'analyse proposé pour ce module, non une catégorisation attestée par une source unique. Les frontières y sont poreuses, les bornes indicatives, et d'autres découpages seraient défendables. Sa vertu est de faire apparaître les ruptures là où la courbe unique ne montrait qu'une pente.</div>
+        </div>
+        <div class="pageno">3<b>/12</b></div>
       </section>
 
-      <!-- ========== 5 · QUI TIENT L'INITIATIVE ========== -->
-      <section class="slide" data-label="Qui tient l'initiative ?">
-        <div class="ey a-fade" style="--d:.1s">1 · La question qui traverse les trois générations</div>
-        <h2 class="a-rise" style="--d:.2s">Qui tient l'initiative du prochain geste ?</h2>
-        <p class="lede a-rise" style="--d:.32s">Une seule question, posée à chaque génération, suffit à faire apparaître la progression que la courbe de puissance dissimulait.</p>
-
-        <div class="mods c3">
-          <div class="mod alt a-rise" style="--d:.48s">
-            <div class="mk">Première génération</div>
-            <div class="mt">L'humain</div>
-            <div class="mb">L'outil ne fait qu'<b>anticiper</b>. Il propose la suite d'un geste que l'humain a commencé et continue de tenir, touche après touche.</div>
-          </div>
-          <div class="mod alt a-rise" style="--d:.58s">
-            <div class="mk">Deuxième génération</div>
-            <div class="mt">L'humain, encore</div>
-            <div class="mb">L'outil ne fait que <b>répondre</b>. Il produit sur demande, mais c'est l'humain qui décide de demander, qui rapporte et qui intègre.</div>
-          </div>
-          <div class="mod a-rise" style="--d:.68s">
-            <div class="mk">Troisième génération</div>
-            <div class="mt">L'outil</div>
-            <div class="mb">L'outil <b>agit</b>, à l'intérieur d'un cadre que l'humain a fixé. Ce ne sont plus des lignes qui transitent, mais des <b>décisions</b>.</div>
-          </div>
-        </div>
-
-        <div class="pull a-zoom" style="--d:.84s">
-          <p>C'est ce <b>transfert d'initiative</b>, et non l'accroissement d'une puissance,<br>qui fait l'objet de tout ce qui suit.</p>
-        </div>
-        <div class="pageno">5<b>/15</b></div>
-      </section>
-
-      <!-- ========== 6 · COMPLÉTER / DÉLÉGUER ========== -->
+      <!-- ========== 4 · COMPLÉTER / DÉLÉGUER ========== -->
       <section class="slide" data-label="Compléter / déléguer">
-        <div class="ey a-fade" style="--d:.1s">2 · Le point de bascule</div>
-        <h2 class="a-rise" style="--d:.2s">Compléter, déléguer : deux gestes distincts</h2>
-
-        <div class="split">
-          <div class="side pro a-rise" style="--d:.36s">
-            <div class="sh">Compléter</div>
-            <div class="st">Prolonger un geste<br>que l'humain tient</div>
-            <div class="sb">L'humain a commencé et continue de tenir le geste. L'outil le prolonge. Rien n'entre dans le code sans un acquiescement, <b>geste après geste</b> — la complétion garantit le contrôle continu par construction.</div>
-          </div>
-          <div class="side con a-rise" style="--d:.5s">
-            <div class="sh">Déléguer</div>
-            <div class="st">Confier un geste entier<br>à un tiers</div>
-            <div class="sb">Le tiers exécutera <b>à sa manière</b>, sous une contrainte de résultat. On gagne en portée — l'agent tient des tâches qu'aucune complétion n'atteignait — mais on abandonne le contrôle continu.</div>
-          </div>
+        <div class="top">
+          <div class="ey a-fade" style="--d:.1s">2 · Le point de bascule</div>
+          <h2 class="a-rise" style="--d:.2s">Qui tient l'initiative du prochain geste ?</h2>
+          <p class="lede a-rise" style="--d:.32s">Une seule question, posée à chaque génération, résume la progression. En première génération, l'humain — l'outil ne fait qu'<em>anticiper</em>. En deuxième, l'humain encore — l'outil ne fait que <em>répondre</em>. En troisième, <b>l'outil</b>, à l'intérieur d'un cadre que l'humain a fixé. C'est ce transfert d'initiative, et non l'accroissement d'une puissance, qui nous occupe.</p>
         </div>
 
-        <div class="pull a-zoom" style="--d:.68s">
-          <p>On ne demande plus à la machine de nous aider à écrire ;<br>on lui demande d'<b>écrire à notre place</b>, et de nous <b>rendre des comptes</b>.</p>
+        <div class="body">
+          <div class="split">
+            <div class="side pro a-rise" style="--d:.46s">
+              <div class="sh">Compléter</div>
+              <div class="st">Prolonger un geste que l'humain a commencé et continue de tenir</div>
+              <div class="sb">L'outil prolonge ; l'humain garde la main. Vous voyez la suggestion <b>avant</b> qu'elle n'entre dans le fichier, et rien n'y entre sans un acquiescement, geste après geste.</div>
+              <div class="sb">La complétion garantit le contrôle continu <em>par construction</em> — non par discipline de l'équipe, mais par la forme même de l'interaction. Aucune procédure n'est nécessaire pour l'imposer : l'outil ne peut pas faire autrement.</div>
+              <div class="sb">La contrepartie est la portée. L'unité reste le fragment ; l'outil ne franchit jamais le seuil de la tâche, et ce qui excède la ligne en cours demeure entièrement à la charge de l'humain.</div>
+              <div class="foot">Contrôle avant l'écriture</div>
+            </div>
+            <div class="side con a-rise" style="--d:.6s">
+              <div class="sh">Déléguer</div>
+              <div class="st">Confier un geste entier à un tiers qui l'exécutera à sa manière</div>
+              <div class="sb">Le tiers travaille <b>sous contrainte de résultat</b>, non sous contrôle de méthode. On gagne en portée : l'agent tient des tâches qu'aucune complétion n'atteignait.</div>
+              <div class="sb">Mais on <b>abandonne le contrôle continu</b> que la complétion garantissait par construction. Entre l'intention et le résultat s'intercale une chaîne de décisions intermédiaires — quels fichiers ouvrir, dans quel ordre, quels tests lancer — que l'humain n'a pas prises et ne découvre qu'en relisant.</div>
+              <div class="sb">Le diagnostic coupe donc dans les deux sens. Nous ne le refermons pas ici : c'est lui qui commande à la fois la transformation du métier et les risques.</div>
+              <div class="foot">Contrôle après l'écriture</div>
+            </div>
+          </div>
+
+          <div class="pull a-zoom" style="--d:.76s">
+            <p>On ne demande plus à la machine de nous aider à écrire ;<br>on lui demande d'<b>écrire à notre place</b>, et de nous <b>rendre des comptes</b>.</p>
+          </div>
         </div>
-        <div class="pageno">6<b>/15</b></div>
+        <div class="pageno">4<b>/12</b></div>
       </section>
 
-      <!-- ========== 7 · CONTINUITÉ OU RUPTURE ========== -->
+      <!-- ========== 5 · CONTINUITÉ OU RUPTURE ========== -->
       <section class="slide" data-label="Continuité ou rupture ?">
-        <div class="ey a-fade" style="--d:.1s">2 · L'épreuve — deux réponses soutenables</div>
-        <h2 class="a-rise" style="--d:.2s">Une marche de plus, ou un autre escalier ?</h2>
-        <p class="lede a-rise" style="--d:.3s">Il faut tenir les deux thèses ensemble avant de trancher : c'est la seule manière de ne pas poser d'autorité ce qu'on prétend démontrer.</p>
-
-        <div class="split">
-          <div class="side pro a-rise" style="--d:.44s">
-            <div class="sh">En faveur de la continuité</div>
-            <div class="sb">L'agent repose sur <b>les mêmes modèles de langue</b> que l'assistant conversationnel. Ses productions restent faillibles de la même façon. Et après tout, « demander une fonction » et « confier une tâche » se ressemblent. À suivre ce fil, l'agent n'est qu'un assistant mieux outillé — doté d'un accès aux fichiers et à un terminal. Un progrès quantitatif.</div>
-          </div>
-          <div class="side con a-rise" style="--d:.58s">
-            <div class="sh">En faveur de la rupture</div>
-            <div class="sb">Trois choses basculent <b>en même temps</b>, et non une seule :</div>
-            <ol>
-              <li>L'<b>unité de travail</b> passe du fragment ou du bloc à la tâche pluri-étapes.</li>
-              <li>La <b>boucle de contrôle</b> se déplace : on validait avant, on contrôle après.</li>
-              <li>La <b>position de l'humain</b> change : de rédacteur assisté à donneur d'ordre et réviseur.</li>
-            </ol>
-          </div>
+        <div class="top">
+          <div class="ey a-fade" style="--d:.1s">2 · L'épreuve — deux réponses soutenables</div>
+          <h2 class="a-rise" style="--d:.2s">Une marche de plus, ou un autre escalier ?</h2>
+          <p class="lede a-rise" style="--d:.3s">Il faut tenir les deux thèses ensemble avant de trancher : c'est la seule manière de ne pas poser d'autorité ce qu'on prétend démontrer.</p>
         </div>
 
-        <div class="caveat a-fade" style="--d:.76s"><b>Ce que nous retenons</b>Lorsque l'unité de travail, le moment du contrôle et le rôle de l'humain se déplacent simultanément, il n'est plus rigoureux de parler d'amélioration : c'est bien de paradigme qu'il s'agit. Mais le diagnostic coupe dans les deux sens — nous ne refermons pas la question, nous la déposons.</div>
-        <div class="pageno">7<b>/15</b></div>
+        <div class="body">
+          <div class="split uneven">
+            <div class="side pro a-rise" style="--d:.44s">
+              <div class="sh">En faveur de la continuité</div>
+              <div class="sb">L'agent repose sur <b>les mêmes modèles de langue</b> que l'assistant conversationnel. Ses productions restent faillibles exactement de la même façon, et pour les mêmes raisons.</div>
+              <div class="sb">Après tout, « demander une fonction » et « confier une tâche » se ressemblent beaucoup : dans les deux cas on formule en langue naturelle, dans les deux cas on récupère du code à relire.</div>
+              <div class="sb">À suivre ce fil, l'agent ne serait qu'un assistant <em>mieux outillé</em> — doté d'un accès aux fichiers et à un terminal. L'outillage aurait changé, pas la relation de travail ; et l'on aurait tort de dramatiser une différence d'équipement.</div>
+              <div class="foot">Un progrès quantitatif</div>
+            </div>
+            <div class="side con a-rise" style="--d:.58s">
+              <div class="sh">En faveur de la rupture</div>
+              <div class="sb">Trois choses basculent <b>en même temps</b>, et non une seule :</div>
+              <ol>
+                <li>L'<b>unité de travail</b> passe du fragment ou du bloc à la tâche pluri-étapes — un tout qui a un début, des décisions intermédiaires et une fin.</li>
+                <li>La <b>boucle de contrôle</b> se déplace : on validait chaque suggestion avant qu'elle n'entre dans le code ; on contrôle désormais après, sur un résultat déjà constitué.</li>
+                <li>La <b>position de l'humain</b> change : de rédacteur assisté, il devient donneur d'ordre et réviseur.</li>
+              </ol>
+              <div class="foot">Un changement de paradigme</div>
+            </div>
+          </div>
+
+          <div class="caveat a-fade" style="--d:.76s"><b>Ce que nous retenons</b>Lorsque l'unité de travail, le moment du contrôle et le rôle de l'humain se déplacent simultanément, il n'est plus rigoureux de parler d'amélioration : c'est bien de paradigme qu'il s'agit — d'un changement dans ce que l'on attend de l'outil et dans la manière dont on travaille avec lui. Mais énonçons-le sans triomphalisme : nous ne refermons pas la question, nous la déposons, car c'est elle qui commande la suite.</div>
+        </div>
+        <div class="pageno">5<b>/12</b></div>
       </section>
 
-      <!-- ========== 8 · LE MÉTIER SE DÉPLACE ========== -->
+      <!-- ========== 6 · LE MÉTIER SE DÉPLACE ========== -->
       <section class="slide" data-label="Le métier se déplace">
-        <div class="ey a-fade" style="--d:.1s">3 · Transformation du métier</div>
-        <h2 class="a-rise" style="--d:.2s">Le centre de gravité se déplace</h2>
-        <p class="lede a-rise" style="--d:.3s">Si la machine rédige, que fait celui qui rédigeait ? La question mérite mieux que les deux réponses réflexes — « il est remplacé » et « rien ne change ». Le métier ne disparaît pas : son centre de gravité se déplace vers l'amont et l'aval de la rédaction, aux dépens de la rédaction elle-même.</p>
-
-        <div class="figs c3">
-          <div class="fig a-rise" style="--d:.46s">
-            <div class="fv">84 <small>%</small></div>
-            <div class="fl">des développeurs utilisent ou envisagent d'utiliser l'IA</div>
-            <div class="fd">Contre 76 % l'année précédente. Stack Overflow 2025, plus de 40 000 répondants. L'outil est dans le flux quotidien : c'est le socle factuel du déplacement.</div>
-          </div>
-          <div class="fig a-rise" style="--d:.58s">
-            <div class="fv slate">Amont</div>
-            <div class="fl">La spécification</div>
-            <div class="fd">Formuler l'intention avec assez de précision pour qu'un agent l'exécute : résultat attendu, contraintes, critères de réussite. Un travail de pensée et de langage, non de frappe.</div>
-          </div>
-          <div class="fig a-rise" style="--d:.7s">
-            <div class="fv slate">Aval</div>
-            <div class="fl">La revue</div>
-            <div class="fd">Lire, comprendre et juger un code que l'on n'a pas écrit soi-même, pour décider s'il entre en production. Entre les deux, la production de lignes se trouve en partie déléguée.</div>
-          </div>
+        <div class="top">
+          <div class="ey a-fade" style="--d:.1s">3 · Transformation du métier</div>
+          <h2 class="a-rise" style="--d:.2s">Le centre de gravité se déplace</h2>
+          <p class="lede a-rise" style="--d:.3s">Si la machine rédige, que fait celui qui, hier, rédigeait ? La question mérite mieux que les deux réponses réflexes — « rien, il est remplacé » et « rien ne change, c'est un outil de plus ». Le métier ne disparaît pas : son centre de gravité se déplace vers l'amont et l'aval de la rédaction, <b>aux dépens de la rédaction elle-même</b>.</p>
         </div>
 
-        <div class="src a-fade" style="--d:.86s">Stack Overflow, <em>Developer Survey 2025</em> — section IA.</div>
-        <div class="pageno">8<b>/15</b></div>
+        <div class="body">
+          <div class="figs c3">
+            <div class="fig a-rise" style="--d:.46s">
+              <div class="fv">84 <small>%</small></div>
+              <div class="fl">utilisent ou envisagent d'utiliser des outils d'IA</div>
+              <div class="fd">Contre <b>76 %</b> l'année précédente. Enquête annuelle Stack Overflow, édition 2025, plus de quarante mille répondants.</div>
+              <div class="fd">Un déplacement suppose d'abord une diffusion massive : l'outil n'est plus marginal ni expérimental, il est pour une large majorité <b>dans le flux quotidien</b>. C'est le socle factuel de tout le reste — on ne transforme un métier qu'à cette échelle-là, et c'est pourquoi la question n'est plus de savoir si l'adoption aura lieu.</div>
+              <div class="fend">L'échelle qui rend la transformation possible</div>
+            </div>
+            <div class="fig a-rise" style="--d:.58s">
+              <div class="fv slate">Amont</div>
+              <div class="fl">La spécification</div>
+              <div class="fd">Formuler l'intention avec assez de précision pour qu'un agent puisse l'exécuter : définir le <b>résultat attendu</b>, les <b>contraintes</b>, les <b>critères de réussite</b>.</div>
+              <div class="fd">C'est un travail de pensée et de langage, non de frappe. Ce qui limite désormais le résultat n'est plus la vitesse d'écriture mais la clarté de la commande : une intention floue produit un code plausible et hors sujet, que rien ne signalera comme tel.</div>
+              <div class="fend">On ne délègue bien que ce qu'on a su énoncer</div>
+            </div>
+            <div class="fig a-rise" style="--d:.7s">
+              <div class="fv slate">Aval</div>
+              <div class="fl">La revue</div>
+              <div class="fd">Lire, comprendre et juger un code que l'on n'a pas écrit soi-même, pour décider s'il entre en production.</div>
+              <div class="fd">Entre l'amont et l'aval, la production de lignes — le geste qui définissait naguère le métier — se trouve en partie déléguée. Or relire du code que l'on n'a pas conçu est une compétence exigeante, souvent <b>plus difficile que de l'écrire</b> : il faut reconstituer une intention qui n'est pas la sienne.</div>
+              <div class="fend">Le goulet se déplace de l'écriture vers la lecture</div>
+            </div>
+          </div>
+
+          <div class="src a-fade" style="--d:.86s">Stack Overflow, <em>Developer Survey 2025</em> — section IA. On ne transforme un métier qu'à cette échelle d'adoption.</div>
+        </div>
+        <div class="pageno">6<b>/12</b></div>
       </section>
 
-      <!-- ========== 9 · LE PARADOXE DE LA CONFIANCE ========== -->
+      <!-- ========== 7 · LE PARADOXE DE LA CONFIANCE ========== -->
       <section class="slide" data-label="Le paradoxe de la confiance">
-        <div class="ey a-fade" style="--d:.1s">3 · Le coût du déplacement</div>
-        <h2 class="a-rise" style="--d:.2s">L'usage progresse, la confiance recule</h2>
-
-        <div class="figs c2">
-          <div class="fig a-rise" style="--d:.34s">
-            <div class="fv">29 <small>%</small></div>
-            <div class="fl">déclarent faire confiance à l'IA</div>
-            <div class="fd">En baisse de <b>onze points</b> sur un an, alors même que l'adoption progressait de 76 % à 84 %. L'usage augmente et la confiance diminue : ce n'est pas une contradiction, c'est le signe d'un usage devenu lucide.</div>
-          </div>
-          <div class="fig a-rise" style="--d:.48s">
-            <div class="fv">66 <small>%</small></div>
-            <div class="fl">citent les solutions « presque justes, mais pas tout à fait »</div>
-            <div class="fd">C'est la frustration la plus citée — et la plus coûteuse à débusquer. L'erreur y est discrète, plausible, camouflée sous une apparence de justesse.</div>
-          </div>
+        <div class="top">
+          <div class="ey a-fade" style="--d:.1s">3 · Le coût du déplacement</div>
+          <h2 class="a-rise" style="--d:.2s">L'usage progresse, la confiance recule</h2>
+          <p class="lede a-rise" style="--d:.3s">Ce déplacement a un coût, et l'honnêteté oblige à le nommer aussitôt. La même enquête révèle un paradoxe frappant : à mesure que l'usage progresse, la confiance décroît.</p>
         </div>
 
-        <p class="lede a-rise" style="--d:.62s">Voilà qui éclaire la nature du nouveau travail : réviser un code <em>presque</em> correct est cognitivement plus exigeant que réviser un code franchement faux. <b>Le métier ne devient pas plus facile parce qu'il devient plus rapide. Il devient plus vigilant.</b></p>
+        <div class="body">
+          <div class="figs c2">
+            <div class="fig a-rise" style="--d:.36s">
+              <div class="fv">29 <small>%</small></div>
+              <div class="fl">déclarent faire confiance à l'IA</div>
+              <div class="fd">En baisse de <b>onze points</b> sur un an, alors même que l'adoption passait de 76 % à 84 %. L'usage augmente et la confiance diminue : ce n'est pas une contradiction, c'est le signe d'un usage devenu lucide.</div>
+            </div>
+            <div class="fig a-rise" style="--d:.48s">
+              <div class="fv">66 <small>%</small></div>
+              <div class="fl">citent les solutions « presque justes, mais pas tout à fait »</div>
+              <div class="fd">C'est la frustration la plus citée — et précisément celle qui coûte le plus cher à débusquer. L'erreur y est discrète, plausible, camouflée sous une apparence de justesse.</div>
+            </div>
+          </div>
 
-        <div class="open a-fade" style="--d:.8s">
-          <div class="oh">Question laissée ouverte</div>
-          <p>Ce déplacement du faire vers le juger est-il une <em>montée en compétence</em> — le développeur libéré des tâches ingrates — ou une <em>dépossession</em> — l'expertise du geste s'atrophiant faute d'être exercée ? Les deux lectures ont leurs tenants ; nous n'avons pas, en 2026, le recul pour trancher.</p>
+          <div class="pull small a-zoom" style="--d:.62s">
+            <p>Réviser un code <b>presque</b> correct est cognitivement plus exigeant que réviser un code franchement faux. Le métier ne devient pas plus facile parce qu'il devient plus rapide : <b>il devient plus vigilant.</b></p>
+          </div>
+
+          <div class="open a-fade" style="--d:.78s">
+            <div class="oh">Question laissée ouverte</div>
+            <p>Ce déplacement du faire vers le juger est-il une <em>montée en compétence</em> — le développeur libéré des tâches ingrates pour se consacrer à la conception — ou une <em>dépossession</em> — l'expertise du geste s'atrophiant faute d'être exercée ? Les deux lectures ont leurs tenants ; nous n'avons pas, en 2026, le recul pour trancher. Nous avons seulement de quoi affirmer que le métier se recompose, et que cette recomposition demande une compétence nouvelle : non plus seulement écrire du bon code, mais <b>reconnaître du bon code parmi du code plausible</b>.</p>
+          </div>
         </div>
-        <div class="pageno">9<b>/15</b></div>
+        <div class="pageno">7<b>/12</b></div>
       </section>
 
-      <!-- ========== 10 · LE PHARMAKON ========== -->
-      <section class="slide" data-label="Le pharmakon">
-        <div class="ey a-fade" style="--d:.1s">4 · Les risques réels</div>
-        <h2 class="a-rise" style="--d:.2s">Le code généré comme <em>pharmakon</em></h2>
-        <p class="lede a-rise" style="--d:.32s">Refusons les deux récits faciles : ni l'outil miraculeux qui n'aurait que des vertus, ni le péril qui n'aurait que des méfaits. Empruntons aux Grecs la figure du <em>pharmakon</em> — le même remède qui guérit à une dose empoisonne à une autre.</p>
-
-        <div class="pull a-zoom" style="--d:.5s">
-          <p>Le code généré est bénéfique et risqué <b>par les mêmes propriétés</b>, non malgré elles. Sa <b>rapidité</b> est un remède pour la productivité et un poison pour la vigilance ; sa <b>fluidité</b> est un remède pour l'adoption et un poison pour la revue.</p>
-        </div>
-
-        <div class="mods c3">
-          <div class="mod a-rise" style="--d:.68s">
-            <div class="mk">Premier lieu</div>
-            <div class="mt">La qualité</div>
-            <div class="mb">On produit plus vite, mais on duplique davantage et l'on réorganise moins.</div>
-          </div>
-          <div class="mod a-rise" style="--d:.78s">
-            <div class="mk">Deuxième lieu</div>
-            <div class="mt">La sécurité</div>
-            <div class="mb">Le remède anesthésie la vigilance qu'il rendrait pourtant plus nécessaire.</div>
-          </div>
-          <div class="mod a-rise" style="--d:.88s">
-            <div class="mk">Troisième lieu</div>
-            <div class="mt">Les dépendances</div>
-            <div class="mb">Un risque qui n'existait pas avant l'IA générative.</div>
-          </div>
-        </div>
-        <div class="pageno">10<b>/15</b></div>
-      </section>
-
-      <!-- ========== 11 · RISQUE QUALITÉ ========== -->
+      <!-- ========== 8 · PHARMAKON + QUALITÉ ========== -->
       <section class="slide" data-label="Risque 1 · la qualité">
-        <div class="ey a-fade" style="--d:.1s">4 · Premier lieu — la qualité du code</div>
-        <h2 class="a-rise" style="--d:.2s">Trois évolutions concomitantes</h2>
-        <p class="lede a-rise" style="--d:.3s">L'analyse GitClear porte sur <b>211 millions de lignes modifiées entre 2020 et 2024</b>. Trois indicateurs bougent ensemble, et le tableau qui s'en dégage est cohérent.</p>
-
-        <div class="evol">
-          <div class="ev a-fade" style="--d:.42s">
-            <div class="el">Taux de reprise à chaud <span>lignes réécrites ou annulées dans les deux semaines — indice de code hâtif</span></div>
-            <div class="eyr"><span class="yl">2020</span><div class="etr"><div class="eseg pale a-grow" style="--w:12.4%;--d:.5s">3,1 %</div></div></div>
-            <div class="eyr"><span class="yl">2024</span><div class="etr"><div class="eseg cu a-grow" style="--w:22.8%;--d:.6s">5,7 %</div></div></div>
-          </div>
-          <div class="ev a-fade" style="--d:.64s">
-            <div class="el">Part de lignes copiées-collées <span>2024 : première année où le code dupliqué dépasse le code déplacé</span></div>
-            <div class="eyr"><span class="yl">2021</span><div class="etr"><div class="eseg pale a-grow" style="--w:33.2%;--d:.72s">8,3 %</div></div></div>
-            <div class="eyr"><span class="yl">2024</span><div class="etr"><div class="eseg cu a-grow" style="--w:49.2%;--d:.82s">12,3 %</div></div></div>
-          </div>
-          <div class="ev a-fade" style="--d:.86s">
-            <div class="el">Part de lignes de remaniement <span>refactoring — signe d'une factorisation entretenue</span></div>
-            <div class="eyr"><span class="yl">2021</span><div class="etr"><div class="eseg sl a-grow" style="--w:100%;--d:.94s">25 %</div></div></div>
-            <div class="eyr"><span class="yl">2024</span><div class="etr"><div class="eseg pale a-grow" style="--w:40%;--d:1.04s">&lt; 10 %</div></div></div>
-          </div>
+        <div class="top">
+          <div class="ey a-fade" style="--d:.1s">4 · Les risques réels — premier lieu</div>
+          <h2 class="a-rise" style="--d:.2s">Le <em>pharmakon</em>, et l'érosion de la qualité</h2>
+          <p class="lede a-rise" style="--d:.3s">Le code généré est bénéfique et risqué <b>par les mêmes propriétés</b>, non malgré elles : sa rapidité est un remède pour la productivité et un poison pour la vigilance. Premier lieu où le poison se loge — l'analyse GitClear sur <b>211 millions de lignes modifiées entre 2020 et 2024</b> relève trois évolutions concomitantes de la diffusion des assistants.</p>
         </div>
 
-        <div class="caveat a-fade" style="--d:1.15s"><b>Prudence sur la portée</b>Ces chiffres établissent une <em>corrélation</em> temporelle avec l'essor de l'IA, non une causalité démontrée ; d'autres facteurs y contribuent. À retenir comme un signal sérieux, non comme une preuve close.</div>
-        <div class="pageno">11<b>/15</b></div>
+        <div class="body">
+          <div class="evol">
+            <div class="ev a-fade" style="--d:.44s">
+              <div class="el">Taux de reprise à chaud <span>lignes réécrites ou annulées dans les deux semaines — indice de code hâtif</span></div>
+              <div class="eyr"><span class="yl">2020</span><div class="etr"><div class="eseg pale a-grow" style="--w:12.4%;--d:.52s">3,1 %</div></div></div>
+              <div class="eyr"><span class="yl">2024</span><div class="etr"><div class="eseg cu a-grow" style="--w:22.8%;--d:.62s">5,7 %</div></div></div>
+            </div>
+            <div class="ev a-fade" style="--d:.66s">
+              <div class="el">Part de lignes copiées-collées <span>2024 : première année où le code dupliqué dépasse le code déplacé</span></div>
+              <div class="eyr"><span class="yl">2021</span><div class="etr"><div class="eseg pale a-grow" style="--w:33.2%;--d:.74s">8,3 %</div></div></div>
+              <div class="eyr"><span class="yl">2024</span><div class="etr"><div class="eseg cu a-grow" style="--w:49.2%;--d:.84s">12,3 %</div></div></div>
+            </div>
+            <div class="ev a-fade" style="--d:.88s">
+              <div class="el">Part de lignes de remaniement <span>refactoring — signe d'une factorisation entretenue</span></div>
+              <div class="eyr"><span class="yl">2021</span><div class="etr"><div class="eseg sl a-grow" style="--w:100%;--d:.96s">25 %</div></div></div>
+              <div class="eyr"><span class="yl">2024</span><div class="etr"><div class="eseg pale a-grow" style="--w:40%;--d:1.06s">&lt; 10 %</div></div></div>
+            </div>
+          </div>
+
+          <div class="caveat a-fade" style="--d:1.16s"><b>Le tableau, et sa portée</b>On produit plus vite, mais on duplique davantage et l'on réorganise moins — c'est-à-dire qu'on accumule de la <em>dette technique</em>. Prudence toutefois : ces chiffres établissent une <b>corrélation</b> temporelle avec l'essor de l'IA, non une causalité démontrée ; d'autres facteurs y contribuent. À retenir comme un signal sérieux, non comme une preuve close.</div>
+        </div>
+        <div class="pageno">8<b>/12</b></div>
       </section>
 
-      <!-- ========== 12 · RISQUE SÉCURITÉ ========== -->
+      <!-- ========== 9 · SÉCURITÉ ========== -->
       <section class="slide" data-label="Risque 2 · la sécurité">
-        <div class="ey a-fade" style="--d:.1s">4 · Deuxième lieu — la sécurité</div>
-        <h2 class="a-rise" style="--d:.2s">Le faux sentiment de sécurité</h2>
-        <p class="lede a-rise" style="--d:.3s">L'étude expérimentale de référence est celle de Perry et ses collègues (Stanford), présentée à la conférence <b>ACM CCS 2023</b> : 47 participants, cinq tâches de programmation à teneur sécuritaire, trois langages. Deux résultats — et c'est leur <em>conjonction</em> qui inquiète.</p>
-
-        <div class="split">
-          <div class="side con a-rise" style="--d:.46s">
-            <div class="sh">Résultat 1</div>
-            <div class="st">Un code moins sûr</div>
-            <div class="sb">Les participants disposant d'un assistant d'IA ont écrit un code <b>moins sûr</b> que le groupe témoin.</div>
-          </div>
-          <div class="side con a-rise" style="--d:.58s">
-            <div class="sh">Résultat 2</div>
-            <div class="st">Une confiance accrue</div>
-            <div class="sb">Simultanément, ces mêmes participants se sont déclarés <b>plus confiants</b> dans la sécurité de leur code.</div>
-          </div>
+        <div class="top">
+          <div class="ey a-fade" style="--d:.1s">4 · Deuxième lieu — la sécurité</div>
+          <h2 class="a-rise" style="--d:.2s">Le faux sentiment de sécurité</h2>
+          <p class="lede a-rise" style="--d:.3s">L'étude expérimentale de référence est celle de Perry et ses collègues (Stanford), présentée à la conférence <b>ACM CCS 2023</b> : 47 participants, cinq tâches de programmation à teneur sécuritaire, trois langages. Deux résultats — et c'est leur <em>conjonction</em> qui inquiète, bien plus que chacun pris isolément.</p>
         </div>
 
-        <div class="pull a-zoom" style="--d:.74s">
-          <p>Voilà le poison sous sa forme la plus pure : <b>le remède anesthésie la vigilance</b> qu'il rendrait pourtant plus nécessaire. Un développeur qui se croit d'autant plus protégé qu'il l'est moins n'est pas dans une erreur ordinaire — il est là où l'erreur se dissimule à ses propres yeux.</p>
-        </div>
+        <div class="body">
+          <div class="split">
+            <div class="side con a-rise" style="--d:.46s">
+              <div class="sh">Premier résultat</div>
+              <div class="st">Un code moins sûr</div>
+              <div class="sb">Les participants disposant d'un assistant d'IA ont écrit un code <b>significativement moins sûr</b> que le groupe témoin, sur les mêmes tâches et dans les mêmes langages.</div>
+              <div class="foot">L'effet mesuré</div>
+            </div>
+            <div class="side con a-rise" style="--d:.58s">
+              <div class="sh">Second résultat</div>
+              <div class="st">Une confiance accrue</div>
+              <div class="sb">Simultanément, ces mêmes participants se sont déclarés <b>plus confiants</b> dans la sécurité de leur code. Les auteurs nomment cette conjonction un « faux sentiment de sécurité ».</div>
+              <div class="foot">L'effet qui aggrave le premier</div>
+            </div>
+          </div>
 
-        <div class="src a-fade" style="--d:.9s">Perry, Srivastava, Kumar &amp; Boneh, <em>Do Users Write More Insecure Code with AI Assistants?</em>, ACM CCS 2023 — arXiv:2211.03622.</div>
-        <div class="pageno">12<b>/15</b></div>
+          <div class="pull a-zoom" style="--d:.74s">
+            <p>Voilà le poison sous sa forme la plus pure : <b>le remède anesthésie la vigilance</b> qu'il rendrait pourtant plus nécessaire. Un développeur qui se croit d'autant plus protégé qu'il l'est moins n'est pas dans une erreur ordinaire — il est là où l'erreur se dissimule à ses propres yeux.</p>
+          </div>
+
+          <div class="src a-fade" style="--d:.9s">Perry, Srivastava, Kumar &amp; Boneh, <em>Do Users Write More Insecure Code with AI Assistants?</em>, ACM CCS 2023 — arXiv:2211.03622.</div>
+        </div>
+        <div class="pageno">9<b>/12</b></div>
       </section>
 
-      <!-- ========== 13 · RISQUE DÉPENDANCES ========== -->
+      <!-- ========== 10 · DÉPENDANCES ========== -->
       <section class="slide" data-label="Risque 3 · les dépendances">
-        <div class="ey a-fade" style="--d:.1s">4 · Troisième lieu — les dépendances</div>
-        <h2 class="a-rise" style="--d:.2s">Quand le modèle invente une bibliothèque</h2>
-        <p class="lede a-rise" style="--d:.3s">Le point le plus contre-intuitif, car il n'existait pas avant l'IA générative. Lorsqu'un modèle recommande d'importer une bibliothèque, il lui arrive d'en <b>inventer une qui n'existe pas</b> — une <em>hallucination de paquet</em>.</p>
-
-        <div class="figs c3">
-          <div class="fig a-rise" style="--d:.44s">
-            <div class="fv">19,7 <small>%</small></div>
-            <div class="fl">des paquets recommandés sont inexistants</div>
-            <div class="fd">Sur 576 000 échantillons produits par seize modèles, soit plus de <b>205 000 noms fictifs distincts</b>. Les modèles ouverts hallucinent davantage (≈ 21,7 %) que les commerciaux (≈ 5,2 %).</div>
-          </div>
-          <div class="fig a-rise" style="--d:.56s">
-            <div class="fv">43 <small>%</small></div>
-            <div class="fl">des noms hallucinés sont répétables</div>
-            <div class="fd">Ils réapparaissent aux <b>dix exécutions</b> d'une même requête. C'est ce second fait qui transforme un défaut en vulnérabilité exploitable.</div>
-          </div>
-          <div class="fig a-rise" style="--d:.68s">
-            <div class="fv slate">L'attaque</div>
-            <div class="fl">Le <em>slopsquatting</em></div>
-            <div class="fd">Un attaquant anticipe le nom qu'un modèle inventera, enregistre <b>à l'avance</b> un paquet malveillant sous ce nom, et attend que le développeur, en confiance, l'installe.</div>
-          </div>
+        <div class="top">
+          <div class="ey a-fade" style="--d:.1s">4 · Troisième lieu — les dépendances</div>
+          <h2 class="a-rise" style="--d:.2s">Quand le modèle invente une bibliothèque</h2>
+          <p class="lede a-rise" style="--d:.3s">Le point le plus contre-intuitif, car il n'existait pas avant l'IA générative. Lorsqu'un modèle recommande d'importer une bibliothèque, il lui arrive d'en <b>inventer une qui n'existe pas</b> — une <em>hallucination de paquet</em>. L'étude de Spracklen et ses collègues, présentée à USENIX Security 2025, en mesure l'ampleur.</p>
         </div>
 
-        <div class="src a-fade" style="--d:.84s">Spracklen <em>et al.</em>, <em>We Have a Package for You!</em>, USENIX Security 2025. Le <b>Module 3</b> reviendra sur les mécanismes de défense ; nous ne faisons ici que nommer l'attaque.</div>
-        <div class="pageno">13<b>/15</b></div>
+        <div class="body">
+          <div class="figs c3">
+            <div class="fig a-rise" style="--d:.44s">
+              <div class="fv">19,7 <small>%</small></div>
+              <div class="fl">des paquets recommandés sont inexistants</div>
+              <div class="fd">Sur <b>576 000 échantillons</b> de code produits par seize modèles, soit plus de <b>205 000 noms fictifs distincts</b>.</div>
+              <div class="fd">Le modèle ne se trompe pas sur une version ou une orthographe : il produit un nom de bibliothèque <em>entièrement inventé</em>, syntaxiquement crédible, inséré dans un code par ailleurs correct. Rien, à la lecture, ne le distingue d'une dépendance légitime.</div>
+              <div class="fend">Modèles ouverts ≈ 21,7 % · commerciaux ≈ 5,2 %</div>
+            </div>
+            <div class="fig a-rise" style="--d:.56s">
+              <div class="fv">43 <small>%</small></div>
+              <div class="fl">des noms hallucinés sont répétables</div>
+              <div class="fd">Ils réapparaissent aux <b>dix exécutions</b> d'une même requête, mesurées par la même équipe.</div>
+              <div class="fd">C'est ce second fait, et lui seul, qui transforme un défaut en vulnérabilité exploitable. Une erreur aléatoire serait sans conséquence : nul ne pourrait la devancer. Une erreur <b>prévisible</b> devient une adresse que l'on peut occuper à l'avance.</div>
+              <div class="fend">La régularité fait la faille, non l'erreur</div>
+            </div>
+            <div class="fig a-rise" style="--d:.68s">
+              <div class="fv slate">L'attaque</div>
+              <div class="fl">Le <em>slopsquatting</em></div>
+              <div class="fd">Un attaquant interroge les modèles, relève les noms qu'ils inventent le plus souvent, puis <b>enregistre à l'avance</b> un paquet malveillant sous l'un de ces noms.</div>
+              <div class="fd">Il n'a plus qu'à attendre. Le développeur, en confiance, installe la brique « suggérée par l'IA » — et installe en réalité le piège. Le principe à retenir dépasse le cas : <b>une suggestion plausible n'est pas une suggestion vérifiée</b>.</div>
+              <div class="fend">Une attaque de chaîne d'approvisionnement</div>
+            </div>
+          </div>
+
+          <div class="src a-fade" style="--d:.84s">Spracklen <em>et al.</em>, <em>We Have a Package for You! A Comprehensive Analysis of Package Hallucinations by Code Generating LLMs</em>, USENIX Security 2025. Le <b>Module 3</b> reviendra sur les mécanismes de défense ; nous ne faisons ici que nommer l'attaque.</div>
+        </div>
+        <div class="pageno">10<b>/12</b></div>
       </section>
 
-      <!-- ========== 14 · LA DOSE ET LE DISPOSITIF ========== -->
+      <!-- ========== 11 · LA DOSE ET LE DISPOSITIF ========== -->
       <section class="slide dark" data-label="La dose et le dispositif">
         <div class="ey a-fade" style="--d:.12s">4 · Ce que l'organisation en fait</div>
         <h1 class="a-rise" style="--d:.28s">La dose<br>et le dispositif</h1>
@@ -827,29 +857,33 @@ h2{
         <div class="closer a-fade" style="--d:.94s">La substance n'est ni remède ni poison en soi ;<br>c'est la dose et le dispositif qui décident.</div>
       </section>
 
-      <!-- ========== 15 · RÉFÉRENCES ========== -->
+      <!-- ========== 12 · RÉFÉRENCES ========== -->
       <section class="slide" data-label="Références">
-        <div class="ey a-fade" style="--d:.1s">Pour aller vérifier</div>
-        <h2 class="a-rise" style="--d:.2s">Références</h2>
+        <div class="top">
+          <div class="ey a-fade" style="--d:.1s">Pour aller vérifier</div>
+          <h2 class="a-rise" style="--d:.2s">Références</h2>
+        </div>
 
-        <div class="refgrid">
-          <div class="a-rise" style="--d:.34s">
-            <div class="refh">Sources primaires — une donnée peut y être contestée</div>
-            <div class="ref"><b>Peng, Kalliamvakou, Cihon &amp; Demirer (2023)</b> — <em>The Impact of AI on Developer Productivity: Evidence from GitHub Copilot.</em> arXiv:2302.06590. Étude contrôlée ; gain de temps de 55 %.</div>
-            <div class="ref"><b>Perry, Srivastava, Kumar &amp; Boneh (2023)</b> — <em>Do Users Write More Insecure Code with AI Assistants?</em> ACM CCS 2023, arXiv:2211.03622. 47 participants ; code moins sûr et faux sentiment de sécurité.</div>
-            <div class="ref"><b>GitClear (2025)</b> — <em>AI Copilot Code Quality: 2025 Research.</em> Données 2020–2024, 211 M de lignes. Reprise à chaud, copier-coller, remaniement.</div>
-            <div class="ref"><b>Spracklen, Wijewickrama, Sakib, Maiti, Viswanath &amp; Jadliwala (2025)</b> — <em>We Have a Package for You!</em> USENIX Security 2025. 19,7 % de paquets hallucinés ; répétabilité.</div>
-            <div class="ref"><b>Stack Overflow (2025)</b> — <em>Developer Survey 2025</em>, section IA. Adoption 84 % ; confiance 29 % ; frustration « presque juste » 66 %.</div>
-            <div class="ref"><b>Google / DORA (2024)</b> — <em>Accelerate State of DevOps Report 2024.</em> Effet de l'adoption d'IA sur le débit et la stabilité de livraison.</div>
-          </div>
-          <div class="b-col a-rise" style="--d:.5s">
-            <div class="refh b">Repères de contexte — situent sans mesurer</div>
-            <div class="ref"><b>GitHub</b> — Copilot : préversion technique le 29 juin 2021 ; disponibilité générale pour les développeurs individuels en juin 2022.</div>
-            <div class="ref"><b>OpenAI</b> — mise en ligne de ChatGPT le 30 novembre 2022.</div>
-            <div class="ref">La <b>tripartition en trois générations</b> (2021 → 2026) est un <em>cadre d'analyse proposé pour ce module</em>, non une catégorisation attestée par une source unique ; les bornes sont indicatives.</div>
+        <div class="body">
+          <div class="refgrid">
+            <div class="a-rise" style="--d:.34s">
+              <div class="refh">Sources primaires — une donnée peut y être contestée</div>
+              <div class="ref"><b>Peng, Kalliamvakou, Cihon &amp; Demirer (2023)</b> — <em>The Impact of AI on Developer Productivity: Evidence from GitHub Copilot.</em> arXiv:2302.06590. Étude contrôlée ; gain de temps de 55 %.</div>
+              <div class="ref"><b>Perry, Srivastava, Kumar &amp; Boneh (2023)</b> — <em>Do Users Write More Insecure Code with AI Assistants?</em> ACM CCS 2023, arXiv:2211.03622. 47 participants ; code moins sûr et faux sentiment de sécurité.</div>
+              <div class="ref"><b>GitClear (2025)</b> — <em>AI Copilot Code Quality: 2025 Research.</em> Données 2020–2024, 211 M de lignes. Reprise à chaud, copier-coller, remaniement.</div>
+              <div class="ref"><b>Spracklen, Wijewickrama, Sakib, Maiti, Viswanath &amp; Jadliwala (2025)</b> — <em>We Have a Package for You!</em> USENIX Security 2025. 19,7 % de paquets hallucinés ; répétabilité de 43 %.</div>
+              <div class="ref"><b>Stack Overflow (2025)</b> — <em>Developer Survey 2025</em>, section IA. Adoption 84 % ; confiance 29 % ; frustration « presque juste » 66 %.</div>
+              <div class="ref"><b>Google / DORA (2024)</b> — <em>Accelerate State of DevOps Report 2024.</em> Effet de l'adoption d'IA sur le débit et la stabilité de livraison.</div>
+            </div>
+            <div class="b-col a-rise" style="--d:.5s">
+              <div class="refh b">Repères de contexte — situent sans mesurer</div>
+              <div class="ref"><b>GitHub</b> — Copilot : préversion technique le 29 juin 2021 ; disponibilité générale pour les développeurs individuels en juin 2022.</div>
+              <div class="ref"><b>OpenAI</b> — mise en ligne de ChatGPT le 30 novembre 2022.</div>
+              <div class="ref">La <b>tripartition en trois générations</b> (2021 → 2026) est un <em>cadre d'analyse proposé pour ce module</em>, non une catégorisation attestée par une source unique ; les bornes sont indicatives.</div>
+            </div>
           </div>
         </div>
-        <div class="pageno">15<b>/15</b></div>
+        <div class="pageno">12<b>/12</b></div>
       </section>
 
     </div>
@@ -858,7 +892,7 @@ h2{
       <button id="prev" title="Précédent (←)">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
       </button>
-      <span class="count" id="count">1 / 15</span>
+      <span class="count" id="count">1 / 12</span>
       <button id="next" title="Suivant (→)">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
       </button>
