@@ -107,6 +107,8 @@ body{
 .stage.idle .hint{opacity:0}
 
 .slide{
+  --e:1;          /* échelle typographique de la carte, ajustée à sa matière */
+  --ed:calc(1 + (var(--e) - 1) * .45);   /* échelle amortie des grandes tailles */
   position:absolute; inset:0; width:var(--W); height:var(--H);
   padding:52px 66px 48px; background:var(--card);
   opacity:0; visibility:hidden; z-index:1;
@@ -117,14 +119,20 @@ body{
 .thumb-scale .slide{opacity:0; visibility:hidden}
 .thumb-scale .slide.tvis{opacity:1; visibility:visible}
 .top{flex:0 0 auto}
-.body{flex:1 1 auto; min-height:0; display:flex; flex-direction:column; gap:15px; padding-top:17px}
-.body > .mods,
-.body > .figs,
-.body > .split,
-.body > .gtab,
+.body{flex:1 1 auto; min-height:0; display:flex; flex-direction:column;
+      gap:15px; padding-top:17px; justify-content:center}
+/* Seules les FIGURES occupent la place qu'on leur donne : leurs éléments
+   grandissent avec elles. Une boîte de texte garde la hauteur de sa matière —
+   l'étirer ne remplit rien, cela creuse un trou entre l'énoncé et son
+   explication. Le résidu, lui, se partage en haut et en bas. */
 .body > .frise,
+.body > .gtab,
 .body > .panelrow,
 .body > .stack{flex:1 1 auto}
+.stack > .chain,
+.stack > .frise,
+.stack > .gtab,
+.stack > .bars{flex:1 1 auto}
 
 .slide.dark{background:var(--dark-bg); color:#fff; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center}
 .pageno{position:absolute; right:40px; bottom:30px; font-size:11.5px; font-weight:600; letter-spacing:.1em; color:var(--ink-50); font-variant-numeric:tabular-nums}
@@ -158,10 +166,10 @@ body{
    Ajouts propres à ce module : la table générationnelle (.gtab)
    et l'écart daté (.gap), qui sert à faire voir un intervalle.
    ============================================================ */
-.ey{font-size:10.5px; letter-spacing:.2em; text-transform:uppercase; color:var(--accent); font-weight:700}
-h2{font-family:var(--serif); font-size:38px; line-height:1.1; font-weight:400; margin:9px 0 0; letter-spacing:-.015em}
+.ey{font-size:calc(10.5px * var(--e)); letter-spacing:.2em; text-transform:uppercase; color:var(--accent); font-weight:700}
+h2{font-family:var(--serif); font-size:calc(38px * var(--ed)); line-height:1.1; font-weight:400; margin:9px 0 0; letter-spacing:-.015em}
 h2 em{font-style:normal; color:var(--accent)}
-.lede{font-size:15.5px; line-height:1.5; color:var(--ink-70); margin:11px 0 0; max-width:1020px}
+.lede{font-size:calc(15.5px * var(--e)); line-height:1.5; color:var(--ink-70); margin:11px 0 0; max-width:1020px}
 .lede b{color:var(--ink); font-weight:600}
 
 /* Couverture et cartes foncées */
@@ -184,23 +192,23 @@ h2 em{font-style:normal; color:var(--accent)}
 .mods{display:grid; grid-template-columns:repeat(3,1fr); gap:16px}
 .mods.two{grid-template-columns:1fr 1fr}
 .mods.four{grid-template-columns:repeat(4,1fr); gap:13px}
-.mod{background:var(--paper); border:1px solid var(--line); border-radius:12px; padding:19px 20px; display:flex; flex-direction:column; justify-content:space-between}
+.mod{background:var(--paper); border:1px solid var(--line); border-radius:12px; padding:calc(19px * var(--e)) calc(20px * var(--e)); display:flex; flex-direction:column; justify-content:flex-start}
 .mod.acc{background:var(--accent-wash); border-color:rgba(14,149,148,.26)}
 .mod.ink{background:rgba(11,37,69,.045); border-color:rgba(11,37,69,.16)}
-.mod-n{font-family:var(--serif); font-size:15px; color:var(--accent); font-weight:600; letter-spacing:.06em}
-.mod-t{font-size:15px; font-weight:600; line-height:1.3; margin-top:6px}
-.mod-p{font-size:13px; line-height:1.55; color:var(--ink-70); margin-top:9px}
+.mod-n{font-family:var(--serif); font-size:calc(15px * var(--e)); color:var(--accent); font-weight:600; letter-spacing:.06em}
+.mod-t{font-size:calc(15px * var(--e)); font-weight:600; line-height:1.3; margin-top:6px}
+.mod-p{font-size:calc(13px * var(--e)); line-height:1.55; color:var(--ink-70); margin-top:9px}
 .mod-p b{color:var(--ink); font-weight:600}
 
 /* Deux colonnes opposées — le balancier */
 .split{display:grid; grid-template-columns:1fr 1fr; gap:18px; position:relative}
-.pane{border-radius:13px; padding:20px 22px; display:flex; flex-direction:column; justify-content:space-between}
+.pane{border-radius:13px; padding:calc(20px * var(--e)) calc(22px * var(--e)); display:flex; flex-direction:column; justify-content:flex-start}
 .pane.centre{background:linear-gradient(160deg,rgba(29,78,137,.10),rgba(29,78,137,.03)); border:1px solid rgba(29,78,137,.24)}
 .pane.metier{background:linear-gradient(160deg,rgba(14,149,148,.12),rgba(14,149,148,.03)); border:1px solid rgba(14,149,148,.28)}
-.pane-h{font-size:11px; letter-spacing:.16em; text-transform:uppercase; font-weight:700}
+.pane-h{font-size:calc(11px * var(--e)); letter-spacing:.16em; text-transform:uppercase; font-weight:700}
 .pane.centre .pane-h{color:var(--blue)}
 .pane.metier .pane-h{color:var(--accent)}
-.pane-t{font-family:var(--serif); font-size:22px; line-height:1.2; margin-top:8px; font-weight:500}
+.pane-t{font-family:var(--serif); font-size:calc(22px * var(--ed)); line-height:1.2; margin-top:8px; font-weight:500}
 .pane ul{margin:13px 0 0; padding-left:17px}
 .pane li{font-size:13.5px; line-height:1.6; color:var(--ink-70); margin-bottom:7px}
 .pane li b{color:var(--ink); font-weight:600}
@@ -212,9 +220,9 @@ h2 em{font-style:normal; color:var(--accent)}
 .fp{position:relative; text-align:center; flex:1}
 .fp-dot{width:13px; height:13px; border-radius:50%; background:#fff; border:3px solid var(--accent); margin:0 auto; box-shadow:0 0 0 4px var(--accent-wash)}
 .fp-dot.dim{border-color:var(--blue-soft); box-shadow:0 0 0 4px rgba(110,155,209,.16)}
-.fp-y{font-family:var(--serif); font-size:26px; font-weight:600; margin-top:11px; color:var(--ink)}
+.fp-y{font-family:var(--serif); font-size:calc(26px * var(--ed)); font-weight:600; margin-top:11px; color:var(--ink)}
 .fp-y.dim{color:var(--blue)}
-.fp-t{font-size:12.5px; line-height:1.45; color:var(--ink-70); margin-top:5px; padding:0 6px}
+.fp-t{font-size:calc(12.5px * var(--e)); line-height:1.45; color:var(--ink-70); margin-top:5px; padding:0 6px}
 .fp-t b{color:var(--ink); font-weight:600}
 
 /* Chaîne / processus */
@@ -222,35 +230,35 @@ h2 em{font-style:normal; color:var(--accent)}
 .ch{flex:1; background:var(--paper); border:1px solid var(--line); border-radius:11px; padding:15px 15px; text-align:center; display:flex; flex-direction:column; justify-content:center}
 .ch.acc{background:var(--accent-wash); border-color:rgba(14,149,148,.28)}
 .ch.ink{background:rgba(11,37,69,.045); border-color:rgba(11,37,69,.16)}
-.ch-t{font-size:13.5px; font-weight:600; line-height:1.3}
-.ch-p{font-size:11.5px; line-height:1.45; color:var(--ink-50); margin-top:6px}
+.ch-t{font-size:calc(13.5px * var(--e)); font-weight:600; line-height:1.3}
+.ch-p{font-size:calc(11.5px * var(--e)); line-height:1.45; color:var(--ink-50); margin-top:6px}
 .arw{flex:0 0 34px; display:grid; place-items:center; color:var(--accent)}
 .arw svg{width:18px; height:18px}
 
 /* Figure chiffrée */
 .figs{display:grid; grid-template-columns:repeat(3,1fr); gap:16px}
 .figs.two{grid-template-columns:1fr 1fr}
-.fig{background:var(--paper); border:1px solid var(--line); border-radius:12px; padding:20px; display:flex; flex-direction:column; justify-content:space-between; text-align:center}
+.fig{background:var(--paper); border:1px solid var(--line); border-radius:12px; padding:calc(20px * var(--e)); display:flex; flex-direction:column; justify-content:center; text-align:center}
 .fig.acc{background:var(--accent-wash); border-color:rgba(14,149,148,.26)}
-.fig-n{font-family:var(--serif); font-size:46px; font-weight:600; color:var(--accent); line-height:1; letter-spacing:-.02em}
+.fig-n{font-family:var(--serif); font-size:calc(46px * var(--ed)); font-weight:600; color:var(--accent); line-height:1; letter-spacing:-.02em}
 .fig-n small{font-size:20px; font-weight:500}
-.fig-l{font-size:13px; line-height:1.5; color:var(--ink-70); margin-top:11px}
+.fig-l{font-size:calc(13px * var(--e)); line-height:1.5; color:var(--ink-70); margin-top:11px}
 .fig-l b{color:var(--ink); font-weight:600}
 
 /* Barres de répartition */
 .bars{display:flex; flex-direction:column; gap:14px; justify-content:center}
 .bar-row{display:grid; grid-template-columns:150px 1fr 62px; align-items:center; gap:15px}
-.bar-lab{font-size:13.5px; font-weight:600; text-align:right; line-height:1.25}
+.bar-lab{font-size:calc(13.5px * var(--e)); font-weight:600; text-align:right; line-height:1.25}
 .bar-lab small{display:block; font-size:11px; font-weight:400; color:var(--ink-50); margin-top:2px}
 .bar-tr{height:26px; background:rgba(11,37,69,.06); border-radius:6px; overflow:hidden}
 .bar-fl{height:100%; border-radius:6px; background:linear-gradient(90deg,var(--accent),var(--accent-2))}
 .bar-fl.dim{background:linear-gradient(90deg,var(--blue),var(--blue-soft))}
-.bar-v{font-family:var(--serif); font-size:20px; font-weight:600; color:var(--ink)}
+.bar-v{font-family:var(--serif); font-size:calc(20px * var(--e)); font-weight:600; color:var(--ink)}
 
 /* Table générationnelle — la synthèse des deux modules */
 .gtab{display:grid; grid-template-columns:1fr 1.35fr 1.35fr; border:1px solid var(--line); border-radius:12px; overflow:hidden}
 .gt-h{background:rgba(11,37,69,.055); font-size:10px; letter-spacing:.15em; text-transform:uppercase; font-weight:700; color:var(--ink-50); padding:11px 18px; border-bottom:1px solid var(--line); display:flex; align-items:center}
-.gt-c{padding:13px 18px; font-size:13.5px; line-height:1.45; color:var(--ink-70); border-bottom:1px solid var(--line); display:flex; align-items:center}
+.gt-c{padding:13px 18px; font-size:calc(13.5px * var(--e)); line-height:1.45; color:var(--ink-70); border-bottom:1px solid var(--line); display:flex; align-items:center}
 .gt-c.lab{font-family:var(--serif); font-size:18px; color:var(--ink); font-weight:600; background:var(--paper)}
 .gt-c.acc{background:var(--accent-wash); color:var(--ink); font-weight:500}
 .gtab > *:nth-last-child(-n+3){border-bottom:0}
@@ -259,25 +267,25 @@ h2 em{font-style:normal; color:var(--accent)}
 .gap{display:grid; grid-template-columns:1fr auto 1fr; align-items:center; gap:18px}
 .gap-c{background:var(--paper); border:1px solid var(--line); border-radius:12px; padding:20px 22px; text-align:center}
 .gap-c.acc{background:var(--accent-wash); border-color:rgba(14,149,148,.26)}
-.gap-d{font-family:var(--serif); font-size:19px; font-weight:600; color:var(--ink)}
-.gap-t{font-size:13px; line-height:1.5; color:var(--ink-70); margin-top:8px}
+.gap-d{font-family:var(--serif); font-size:calc(19px * var(--ed)); font-weight:600; color:var(--ink)}
+.gap-t{font-size:calc(13px * var(--e)); line-height:1.5; color:var(--ink-70); margin-top:8px}
 .gap-t b{color:var(--ink); font-weight:600}
 .gap-mid{text-align:center; padding:0 4px}
 .gap-mid .n{font-family:var(--serif); font-size:40px; font-weight:600; color:var(--accent); line-height:1}
 .gap-mid .u{font-size:11px; letter-spacing:.16em; text-transform:uppercase; color:var(--ink-50); font-weight:700; margin-top:6px}
 
 /* Encart de réserve — la déclaration de fragilité */
-.warn{background:rgba(29,78,137,.05); border-left:3px solid var(--blue-soft); border-radius:0 9px 9px 0; padding:13px 17px; font-size:12.5px; line-height:1.55; color:var(--ink-70)}
+.warn{background:rgba(29,78,137,.05); border-left:3px solid var(--blue-soft); border-radius:0 9px 9px 0; padding:13px 17px; font-size:calc(12.5px * var(--e)); line-height:1.55; color:var(--ink-70)}
 .warn b{color:var(--blue); font-weight:600}
 .warn.acc{background:var(--accent-wash); border-left-color:var(--accent)}
 .warn.acc b{color:var(--accent)}
 
 /* Citation */
-.quote{font-family:var(--serif); font-size:22px; line-height:1.42; color:var(--ink); font-weight:400; padding-left:22px; border-left:3px solid var(--accent)}
+.quote{font-family:var(--serif); font-size:calc(22px * var(--ed)); line-height:1.42; color:var(--ink); font-weight:400; padding-left:22px; border-left:3px solid var(--accent)}
 .quote cite{display:block; font-family:var(--sans); font-size:12px; font-style:normal; color:var(--ink-50); margin-top:12px; letter-spacing:.03em}
 
 /* Note de source au fil du propos */
-.src{font-size:11.5px; color:var(--ink-50); line-height:1.5}
+.src{font-size:calc(11.5px * var(--e)); color:var(--ink-50); line-height:1.5}
 .src b{color:var(--ink-70); font-weight:600}
 
 /* Planche Références — colonne fournie élargie */
@@ -291,7 +299,7 @@ h2 em{font-style:normal; color:var(--accent)}
 .ref i{font-style:italic}
 .ref span{display:block; color:var(--ink-50); font-size:10.5px; margin-top:1px}
 
-.stack{display:flex; flex-direction:column; gap:15px; justify-content:space-between}
+.stack{display:flex; flex-direction:column; gap:15px; justify-content:center}
 
 @page{ size:1280px 720px; margin:0 }
 @media print{
@@ -345,7 +353,7 @@ h2 em{font-style:normal; color:var(--accent)}
 </section>
 
 <!-- ============ 2 · REPRISE ============ -->
-<section class="slide" data-label="Là où nous nous étions arrêtés">
+<section class="slide" data-label="Là où nous nous étions arrêtés" style="--e:1.55">
   <div class="top">
     <div class="ey a-fade">Ouverture · Reprise</div>
     <h2 class="a-rise" style="--d:.06s">Le module 1 s'est refermé sur une <em>tension</em></h2>
@@ -374,7 +382,7 @@ h2 em{font-style:normal; color:var(--accent)}
 </section>
 
 <!-- ============ 3 · ACQUIS ============ -->
-<section class="slide" data-label="Objectifs">
+<section class="slide" data-label="Objectifs" style="--e:1.35">
   <div class="top">
     <div class="ey a-fade">Ouverture · Programme</div>
     <h2 class="a-rise" style="--d:.06s">Ce que vous saurez faire</h2>
@@ -412,7 +420,7 @@ h2 em{font-style:normal; color:var(--accent)}
 </section>
 
 <!-- ============ 4 · ARTICULATION ============ -->
-<section class="slide" data-label="Articulation">
+<section class="slide" data-label="Articulation" style="--e:1.35">
   <div class="top">
     <div class="ey a-fade">Ouverture · Programme</div>
     <h2 class="a-rise" style="--d:.06s">Six temps, et une boucle qui se referme</h2>
@@ -465,7 +473,7 @@ h2 em{font-style:normal; color:var(--accent)}
 </section>
 
 <!-- ============ 6 · A.1 · L'HYPOTHÈSE TACITE ============ -->
-<section class="slide" data-label="L'hypothèse tacite qui cède">
+<section class="slide" data-label="L'hypothèse tacite qui cède" style="--e:1.6">
   <div class="top">
     <div class="ey a-fade">A.1 · Transition</div>
     <h2 class="a-rise" style="--d:.06s">Ce n'est plus la solution qui produit le problème —<br>c'est son <em>succès</em></h2>
@@ -505,7 +513,7 @@ h2 em{font-style:normal; color:var(--accent)}
 </section>
 
 <!-- ============ 7 · A.2 · LES 3V ============ -->
-<section class="slide" data-label="Les 3V : deux erreurs qui ont fait carrière">
+<section class="slide" data-label="Les 3V : deux erreurs qui ont fait carrière" style="--e:1.5">
   <div class="top">
     <div class="ey a-fade">A.2 · Une note de quatre pages, en 2001</div>
     <h2 class="a-rise" style="--d:.06s">Ni « Gartner », ni « <em>Big Data</em> »</h2>
@@ -528,7 +536,7 @@ h2 em{font-style:normal; color:var(--accent)}
 </section>
 
 <!-- ============ 8 · A.3 · L'ARCHITECTURE SE DÉCOUPE ============ -->
-<section class="slide" data-label="Une architecture qui se découpe">
+<section class="slide" data-label="Une architecture qui se découpe" style="--e:1.5">
   <div class="top">
     <div class="ey a-fade">A.3 · La réponse architecturale</div>
     <h2 class="a-rise" style="--d:.06s">Cesser de tenir ensemble ce qui n'a <em>pas</em> à l'être</h2>
@@ -558,7 +566,7 @@ h2 em{font-style:normal; color:var(--accent)}
 </section>
 
 <!-- ============ 9 · A.4 · LE LAKEHOUSE ============ -->
-<section class="slide" data-label="Le lakehouse : un mot d'éditeur">
+<section class="slide" data-label="Le lakehouse : un mot d'éditeur" style="--e:1.4">
   <div class="top">
     <div class="ey a-fade">A.4 · Statut d'une source, encore</div>
     <h2 class="a-rise" style="--d:.06s">« Premier emploi documenté » — jamais « <em>invention</em> »</h2>
@@ -591,7 +599,7 @@ h2 em{font-style:normal; color:var(--accent)}
 </section>
 
 <!-- ============ 10 · A.5 · ETL → ELT ============ -->
-<section class="slide" data-label="L'inversion ETL → ELT">
+<section class="slide" data-label="L'inversion ETL → ELT" style="--e:1.7">
   <div class="top">
     <div class="ey a-fade">A.5 · Une inversion, et ce qu'elle déplace</div>
     <h2 class="a-rise" style="--d:.06s">La transformation n'a pas disparu —<br>elle a changé de <em>main</em> et de <em>moment</em></h2>
@@ -629,7 +637,7 @@ h2 em{font-style:normal; color:var(--accent)}
 </section>
 
 <!-- ============ 11 · A.6 · LE FLUX CONTINU ============ -->
-<section class="slide" data-label="Le flux continu">
+<section class="slide" data-label="Le flux continu" style="--e:1.35">
   <div class="top">
     <div class="ey a-fade">A.6 · Quand la décision ne peut pas attendre</div>
     <h2 class="a-rise" style="--d:.06s">Le lot est un <em>cas particulier</em> du flux</h2>
@@ -658,7 +666,7 @@ h2 em{font-style:normal; color:var(--accent)}
 </section>
 
 <!-- ============ 12 · A.7 · DATAOPS ============ -->
-<section class="slide" data-label="DataOps : nommer avant de définir">
+<section class="slide" data-label="DataOps : nommer avant de définir" style="--e:1.7">
   <div class="top">
     <div class="ey a-fade">A.7 · Un motif qui traverse tout ce module</div>
     <h2 class="a-rise" style="--d:.06s">Le marché nomme. La recherche définit <em>ensuite</em>.</h2>
@@ -686,7 +694,7 @@ h2 em{font-style:normal; color:var(--accent)}
 </section>
 
 <!-- ============ 13 · A.8 · LA COMPLEXITÉ COMME COÛT ============ -->
-<section class="slide" data-label="La complexité comme nouveau coût">
+<section class="slide" data-label="La complexité comme nouveau coût" style="--e:1.25">
   <div class="top">
     <div class="ey a-fade">A.8 · Le prix de l'échelle</div>
     <h2 class="a-rise" style="--d:.06s">Ce qu'elle gagne en échelle, elle le paie en <em>complexité</em></h2>
@@ -715,7 +723,7 @@ h2 em{font-style:normal; color:var(--accent)}
 </section>
 
 <!-- ============ 14 · A.9 · SCÉNARIO TYPE ============ -->
-<section class="slide" data-label="Scénario type · la détection de fraude">
+<section class="slide" data-label="Scénario type · la détection de fraude" style="--e:1.55">
   <div class="top">
     <div class="ey a-fade">A.9 · Une requalification, et sa raison</div>
     <h2 class="a-rise" style="--d:.06s">Ceci est un <em>scénario type</em>. Ce n'est pas un cas d'étude.</h2>
@@ -748,7 +756,7 @@ h2 em{font-style:normal; color:var(--accent)}
 </section>
 
 <!-- ============ 16 · A.11 · RUPTURE OU RENOMMAGE ============ -->
-<section class="slide" data-label="Analyse augmentée : rupture ou renommage ?">
+<section class="slide" data-label="Analyse augmentée : rupture ou renommage ?" style="--e:1.5">
   <div class="top">
     <div class="ey a-fade">A.11 · Quatre jours</div>
     <h2 class="a-rise" style="--d:.06s">L'auteur du terme écrit elle-même que c'est un <em>renommage</em></h2>
@@ -777,7 +785,7 @@ h2 em{font-style:normal; color:var(--accent)}
 </section>
 
 <!-- ============ 17 · A.12a · L'EFFONDREMENT D'UNE MESURE ============ -->
-<section class="slide" data-label="Les bancs d'épreuve sont brisés">
+<section class="slide" data-label="Les bancs d'épreuve sont brisés" style="--e:1.35">
   <div class="top">
     <div class="ey a-fade">A.12 · Le point le plus important de ce module</div>
     <h2 class="a-rise" style="--d:.06s">L'instrument ne mesurait pas ce que nous <em>croyions</em></h2>
@@ -810,7 +818,7 @@ h2 em{font-style:normal; color:var(--accent)}
 </section>
 
 <!-- ============ 18 · A.12b · LA BONNE QUESTION ============ -->
-<section class="slide" data-label="La bonne question, et elle est plus dure">
+<section class="slide" data-label="La bonne question, et elle est plus dure" style="--e:1.35">
   <div class="top">
     <div class="ey a-fade">A.12 · Ce que l'on mesure quand on mesure</div>
     <h2 class="a-rise" style="--d:.06s">« Elle s'exécute » n'est pas « elle veut dire ce qu'on a demandé »</h2>
@@ -840,7 +848,7 @@ h2 em{font-style:normal; color:var(--accent)}
 </section>
 
 <!-- ============ 19 · A.13 · CE QUE NOUS NE SAVONS PAS DE L'USAGE ============ -->
-<section class="slide" data-label="L'usage : un angle mort constaté">
+<section class="slide" data-label="L'usage : un angle mort constaté" style="--e:1.45">
   <div class="top">
     <div class="ey a-fade">A.13 · Une lacune structurelle</div>
     <h2 class="a-rise" style="--d:.06s">Des sièges facturés ne sont pas un <em>usage</em></h2>
@@ -875,7 +883,7 @@ h2 em{font-style:normal; color:var(--accent)}
 </section>
 
 <!-- ============ 20 · A.14 · LA BOUCLE REFERMÉE ============ -->
-<section class="slide" data-label="La boucle refermée">
+<section class="slide" data-label="La boucle refermée" style="--e:1.45">
   <div class="top">
     <div class="ey a-fade">A.14 · Le nom annoncé au module 1</div>
     <h2 class="a-rise" style="--d:.06s">C'est le <em>même objet</em>. Il a trente-cinq ans, et il revient.</h2>
@@ -905,7 +913,7 @@ h2 em{font-style:normal; color:var(--accent)}
 </section>
 
 <!-- ============ 22 · A.15 · MESH ET FABRIC ============ -->
-<section class="slide" data-label="Data Mesh ≠ Data Fabric">
+<section class="slide" data-label="Data Mesh ≠ Data Fabric" style="--e:1.25">
   <div class="top">
     <div class="ey a-fade">A.15 · Une confusion qui annule la démonstration</div>
     <h2 class="a-rise" style="--d:.06s">Une doctrine et une <em>étiquette</em> — savoir laquelle est laquelle</h2>
@@ -941,7 +949,7 @@ h2 em{font-style:normal; color:var(--accent)}
 </section>
 
 <!-- ============ 23 · A.16 · LE CADRE JURIDIQUE ============ -->
-<section class="slide" data-label="Le cadre juridique européen">
+<section class="slide" data-label="Le cadre juridique européen" style="--e:1.35">
   <div class="top">
     <div class="ey a-fade">A.16 · Ce que le droit impose, et depuis quand</div>
     <h2 class="a-rise" style="--d:.06s">Une aide à la décision peut juridiquement être une <em>décision</em></h2>
@@ -970,7 +978,7 @@ h2 em{font-style:normal; color:var(--accent)}
 </section>
 
 <!-- ============ 24 · A.17 + A.19 · DÉPENDANCE ET EMPREINTE ============ -->
-<section class="slide" data-label="Dépendance et empreinte">
+<section class="slide" data-label="Dépendance et empreinte" style="--e:1.3">
   <div class="top">
     <div class="ey a-fade">A.17 · A.19 · Ce que le récit technologique omet</div>
     <h2 class="a-rise" style="--d:.06s">Deux objections qui ne sont pas des <em>opinions</em></h2>
@@ -1007,7 +1015,7 @@ h2 em{font-style:normal; color:var(--accent)}
 </section>
 
 <!-- ============ 25 · A.18 · D'OÙ VIENT UN CHIFFRE ? ============ -->
-<section class="slide" data-label="Exercice · d'où vient un chiffre ?">
+<section class="slide" data-label="Exercice · d'où vient un chiffre ?" style="--e:1.1">
   <div class="top">
     <div class="ey a-fade">A.18 · Exercice de méthode</div>
     <h2 class="a-rise" style="--d:.06s">Trois chiffres célèbres, trois ruptures de <em>traçabilité</em></h2>
@@ -1080,7 +1088,7 @@ h2 em{font-style:normal; color:var(--accent)}
 </section>
 
 <!-- ============ 27 · À RETENIR ============ -->
-<section class="slide" data-label="À retenir">
+<section class="slide" data-label="À retenir" style="--e:1.3">
   <div class="top">
     <div class="ey a-fade">Synthèse</div>
     <h2 class="a-rise" style="--d:.06s">Cinq acquis, et un réflexe qui les commande tous</h2>
