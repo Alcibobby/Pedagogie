@@ -172,20 +172,20 @@ h2 em{font-style:normal; color:var(--accent)}
 .lede b{color:var(--ink); font-weight:600}
 
 /* Couverture et cartes foncées */
-.cov-ey{font-size:11px; letter-spacing:.3em; text-transform:uppercase; color:var(--accent-2); font-weight:700}
-.cov-h{font-family:var(--serif); font-size:62px; line-height:1.06; font-weight:400; margin:20px 0 0; max-width:940px; letter-spacing:-.02em}
+.cov-ey{font-size:calc(11px * var(--e)); letter-spacing:.3em; text-transform:uppercase; color:var(--accent-2); font-weight:700}
+.cov-h{font-family:var(--serif); font-size:calc(62px * var(--ed)); line-height:1.06; font-weight:400; margin:20px 0 0; max-width:940px; letter-spacing:-.02em}
 .cov-h em{font-style:normal; color:var(--accent-2)}
-.cov-sub{font-size:16.5px; line-height:1.55; color:rgba(255,255,255,.76); margin:22px auto 0; max-width:700px}
+.cov-sub{font-size:calc(16.5px * var(--e)); line-height:1.55; color:rgba(255,255,255,.76); margin:22px auto 0; max-width:700px}
 .cov-rule{width:74px; height:2px; background:var(--accent-2); margin:30px auto 0; border-radius:2px}
-.cov-meta{font-size:12px; letter-spacing:.14em; text-transform:uppercase; color:rgba(255,255,255,.5); margin-top:26px}
-.dk-ey{font-size:11px; letter-spacing:.28em; text-transform:uppercase; color:var(--accent-2); font-weight:700}
-.dk-h{font-family:var(--serif); font-size:48px; line-height:1.12; font-weight:400; margin:18px 0 0; max-width:900px}
+.cov-meta{font-size:calc(12px * var(--e)); letter-spacing:.14em; text-transform:uppercase; color:rgba(255,255,255,.5); margin-top:26px}
+.dk-ey{font-size:calc(11px * var(--e)); letter-spacing:.28em; text-transform:uppercase; color:var(--accent-2); font-weight:700}
+.dk-h{font-family:var(--serif); font-size:calc(48px * var(--ed)); line-height:1.12; font-weight:400; margin:18px 0 0; max-width:900px}
 .dk-h em{font-style:normal; color:var(--accent-2)}
-.dk-p{font-size:16px; line-height:1.6; color:rgba(255,255,255,.74); margin:22px auto 0; max-width:720px}
+.dk-p{font-size:calc(16px * var(--e)); line-height:1.6; color:rgba(255,255,255,.74); margin:22px auto 0; max-width:720px}
 .dk-q{display:flex; gap:26px; margin-top:34px; justify-content:center; max-width:940px}
-.dk-qi{flex:1; background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.13); border-radius:12px; padding:18px 20px; text-align:left}
-.dk-qn{font-family:var(--serif); font-size:24px; color:var(--accent-2); line-height:1}
-.dk-qt{font-size:13.5px; line-height:1.5; color:rgba(255,255,255,.84); margin-top:9px}
+.dk-qi{flex:1; background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.13); border-radius:12px; padding:calc(18px * var(--e)) calc(20px * var(--e)); text-align:left}
+.dk-qn{font-family:var(--serif); font-size:calc(24px * var(--e)); color:var(--accent-2); line-height:1}
+.dk-qt{font-size:calc(13.5px * var(--e)); line-height:1.5; color:rgba(255,255,255,.84); margin-top:9px}
 
 /* Grilles de blocs */
 .mods{display:grid; grid-template-columns:repeat(3,1fr); gap:16px}
@@ -270,8 +270,8 @@ h2 em{font-style:normal; color:var(--accent)}
 .panelrow{display:grid; grid-template-columns:1.8fr 1fr; gap:20px}
 .panel{background:var(--paper); border:1px solid var(--line); border-radius:12px; padding:18px 20px; display:flex; flex-direction:column}
 .panel.tight{justify-content:space-between}
-.panel-h{font-size:10.5px; letter-spacing:.16em; text-transform:uppercase; color:var(--accent); font-weight:700; padding-bottom:9px; border-bottom:1px solid var(--line); margin-bottom:11px}
-.ref{font-size:11.5px; line-height:1.5; color:var(--ink-70); margin-bottom:9px}
+.panel-h{font-size:calc(10.5px * var(--e)); letter-spacing:.16em; text-transform:uppercase; color:var(--accent); font-weight:700; padding-bottom:9px; border-bottom:1px solid var(--line); margin-bottom:11px}
+.ref{font-size:calc(11.5px * var(--e)); line-height:1.5; color:var(--ink-70); margin-bottom:9px}
 .ref:last-child{margin-bottom:0}
 .ref b{color:var(--ink); font-weight:600}
 .ref i{font-style:italic}
@@ -500,7 +500,7 @@ h2 em{font-style:normal; color:var(--accent)}
 </section>
 
 <!-- ============ 7 · INTERTITRE PREMIÈRE GÉNÉRATION ============ -->
-<section class="slide dark" data-label="I · Le contrôle centralisé">
+<section class="slide dark" data-label="I · Le contrôle centralisé" style="--e:1.5">
   <div class="dk-ey a-fade">Première génération · 1990-2000</div>
   <h2 class="dk-h a-rise" style="--d:.12s">L'ordre par <em>le centre</em></h2>
   <p class="dk-p a-rise" style="--d:.3s">Les données existent, mais elles sont prisonnières. Chaque application détient les siennes, dans son format, avec ses codes. Croiser les ventes et les coûts relève de l'exploit artisanal.</p>
@@ -825,7 +825,7 @@ h2 em{font-style:normal; color:var(--accent)}
 </section>
 
 <!-- ============ 18 · TRANSITION DIALECTIQUE ============ -->
-<section class="slide dark" data-label="La solution devient le problème">
+<section class="slide dark" data-label="La solution devient le problème" style="--e:1.35">
   <div class="dk-ey a-fade">A.11 · Transition</div>
   <h2 class="dk-h a-rise" style="--d:.12s">La solution de la première génération<br>est <em>la cause</em> du problème de la seconde</h2>
   <div class="dk-q">
@@ -999,7 +999,7 @@ h2 em{font-style:normal; color:var(--accent)}
 </section>
 
 <!-- ============ 24 · TROIS QUESTIONS OUVERTES ============ -->
-<section class="slide dark" data-label="Trois questions ouvertes">
+<section class="slide dark" data-label="Trois questions ouvertes" style="--e:1.5">
   <div class="dk-ey a-fade">A.16 · Ce module ne les résout pas</div>
   <h2 class="dk-h a-rise" style="--d:.12s">Trois questions restent <em>entières</em></h2>
   <div class="dk-q">
@@ -1039,7 +1039,7 @@ h2 em{font-style:normal; color:var(--accent)}
 </section>
 
 <!-- ============ 26 · RÉFÉRENCES I ============ -->
-<section class="slide" data-label="Références · les fondations">
+<section class="slide" data-label="Références · les fondations" style="--e:1.1">
   <div class="top">
     <div class="ey a-fade">Références · 1/2 — les fondations, 1864-1999</div>
     <h2 class="a-rise" style="--d:.06s">Ce que vous pouvez contester, ce qui vous situe</h2>
@@ -1076,7 +1076,7 @@ h2 em{font-style:normal; color:var(--accent)}
 </section>
 
 <!-- ============ 27 · RÉFÉRENCES II ============ -->
-<section class="slide" data-label="Références · l'époque du libre-service">
+<section class="slide" data-label="Références · l'époque du libre-service" style="--e:1.2">
   <div class="top">
     <div class="ey a-fade">Références · 2/2 — l'époque du libre-service, 2002-2025</div>
     <h2 class="a-rise" style="--d:.06s">Et ce que cet appareil ne permet pas d'affirmer</h2>
