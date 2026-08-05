@@ -1,0 +1,1294 @@
+<meta charset="utf-8">
+<title>Module 2 — Du cloud à l'intelligence augmentée</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<meta name="pedago:chemin"  content="cours/informatique-decisionnelle">
+<meta name="pedago:famille" content="cours">
+<meta name="pedago:titre"   content="Du cloud à l'intelligence augmentée — l'échelle et ce qu'elle coûte">
+<meta name="pedago:rang"    content="2">
+<meta name="pedago:mode"    content="cours">
+<meta name="pedago:cartes"  content="30">
+<meta name="pedago:resume"  content="Les deux dernières générations de l'informatique décisionnelle, 2010-2026 : un changement d'échelle résolu par l'architecture, puis un changement de nature qui n'est plus un problème d'ingénierie mais de confiance — et l'effondrement, en 2026, de la mesure sur laquelle reposait ce que nous croyions savoir.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --ink:#0B2545;
+  --ink-2:#13315C;
+  --blue:#1D4E89;
+  --blue-soft:#6E9BD1;
+  --accent:#0E9594;
+  --accent-2:#17B3A3;
+  --accent-wash:rgba(14,149,148,.10);
+  --accent-glow:rgba(14,149,148,.22);
+  --bg:#EEF3F8;
+  --card:#FFFFFF;
+  --paper:#F7FAFC;
+  --line:rgba(11,37,69,.11);
+  --ink-70:rgba(11,37,69,.72);
+  --ink-50:rgba(11,37,69,.52);
+  --stage-bg:radial-gradient(1100px 620px at 50% 8%, #fff 0%, rgba(255,255,255,0) 62%), #EEF3F8;
+  --dark-bg:radial-gradient(900px 560px at 22% 12%, #1B4A7E 0%, rgba(27,74,126,0) 60%),
+            radial-gradient(700px 500px at 88% 92%, rgba(14,149,148,.34) 0%, rgba(14,149,148,0) 62%),
+            linear-gradient(150deg,#0B2545 0%,#0A1E3A 100%);
+  --serif:'Fraunces','Iowan Old Style',Georgia,'Times New Roman',serif;
+  --sans:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;
+  --W:1280px; --H:720px;
+}
+
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0; background:var(--bg); color:var(--ink);
+  font-family:var(--sans); -webkit-font-smoothing:antialiased;
+  overflow:hidden;
+}
+
+.app{display:flex; height:100vh; width:100vw}
+
+.rail{
+  width:250px; flex:0 0 250px; height:100vh;
+  background:#fff; border-right:1px solid var(--line);
+  display:flex; flex-direction:column;
+  box-shadow:0 0 40px rgba(0,0,0,.06); z-index:5;
+}
+.rail-head{padding:20px 18px 14px; border-bottom:1px solid var(--line)}
+.rail-back{
+  display:inline-flex; align-items:center; gap:6px;
+  margin-bottom:12px;
+  font-size:10.5px; font-weight:500; letter-spacing:.02em;
+  color:var(--ink-50); text-decoration:none;
+  transition:color .18s;
+}
+.rail-back:hover{color:var(--accent)}
+.rail-back:focus-visible{outline:2px solid var(--accent); outline-offset:3px; border-radius:3px}
+.rail-back svg{width:11px; height:11px; flex:0 0 11px}
+.rail-kicker{font-size:9.5px; letter-spacing:.18em; text-transform:uppercase; color:var(--accent); font-weight:700}
+.rail-title{font-family:var(--serif); font-size:17px; line-height:1.25; font-weight:500; margin-top:7px; color:var(--ink)}
+.rail-meta{font-size:11px; color:var(--ink-50); margin-top:6px}
+
+.thumbs{flex:1; overflow-y:auto; padding:14px 16px 18px; scrollbar-width:thin}
+.thumbs::-webkit-scrollbar{width:6px}
+.thumbs::-webkit-scrollbar-thumb{background:rgba(0,0,0,.16); border-radius:3px}
+.thumb{position:relative; margin-bottom:13px; cursor:pointer; border-radius:8px; padding-left:22px; transition:transform .22s cubic-bezier(.2,.7,.3,1)}
+.thumb:hover{transform:translateX(2px)}
+.thumb-no{position:absolute; left:0; top:50%; transform:translateY(-50%); font-size:10.5px; font-weight:600; color:var(--ink-50); font-variant-numeric:tabular-nums; transition:color .2s}
+.thumb-box{position:relative; width:212px; height:119.25px; overflow:hidden; border-radius:7px; background:#fff; border:1px solid var(--line); box-shadow:0 2px 8px rgba(0,0,0,.07); transition:box-shadow .25s, border-color .25s}
+.thumb-box::after{content:''; position:absolute; inset:0; border-radius:7px; box-shadow:inset 0 0 0 2px transparent; transition:box-shadow .25s}
+.thumb.on .thumb-box::after{box-shadow:inset 0 0 0 2px var(--accent)}
+.thumb.on .thumb-box{box-shadow:0 6px 20px var(--accent-glow)}
+.thumb.on .thumb-no{color:var(--accent); font-weight:700}
+.thumb-scale{position:absolute; top:0; left:0; width:var(--W); height:var(--H); transform:scale(.16563); transform-origin:0 0; pointer-events:none}
+.thumb-label{font-size:10.5px; color:var(--ink-50); margin-top:5px; letter-spacing:.01em; white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+.thumb.on .thumb-label{color:var(--ink-70); font-weight:500}
+
+.rail-foot{padding:13px 16px 16px; border-top:1px solid var(--line); display:grid; gap:8px}
+.btn{display:flex; align-items:center; gap:9px; width:100%; padding:9px 12px; border-radius:8px; border:1px solid var(--line); background:var(--paper); color:var(--ink-70); font-family:var(--sans); font-size:12px; font-weight:500; cursor:pointer; transition:all .18s}
+.btn:hover{background:var(--ink); color:#fff; border-color:var(--ink)}
+.btn svg{width:14px; height:14px; flex:0 0 14px}
+.btn .k{margin-left:auto; font-size:9.5px; opacity:.5; letter-spacing:.06em}
+
+.stage{flex:1; position:relative; display:flex; align-items:center; justify-content:center; background:var(--stage-bg); overflow:hidden}
+.deck{position:relative; width:var(--W); height:var(--H); transform-origin:center center; border-radius:14px; overflow:hidden; box-shadow:0 26px 70px rgba(0,0,0,.20), 0 2px 6px rgba(0,0,0,.08)}
+.stage:fullscreen{background:var(--ink)}
+.stage:fullscreen .deck{border-radius:0; box-shadow:none}
+
+.nav{position:absolute; bottom:22px; left:50%; transform:translateX(-50%); display:flex; align-items:center; gap:6px; z-index:10; background:rgba(255,255,255,.86); backdrop-filter:blur(14px); border:1px solid var(--line); border-radius:999px; padding:5px 6px; box-shadow:0 6px 22px rgba(0,0,0,.14); transition:opacity .4s}
+.nav button{width:30px; height:30px; border-radius:50%; border:0; background:transparent; color:var(--ink-70); cursor:pointer; display:grid; place-items:center; transition:.16s}
+.nav button:hover{background:var(--ink); color:#fff}
+.nav button:disabled{opacity:.25; cursor:default; background:transparent; color:var(--ink-70)}
+.nav .count{font-size:11.5px; font-weight:600; color:var(--ink-70); font-variant-numeric:tabular-nums; padding:0 9px; letter-spacing:.04em}
+.stage.idle .nav{opacity:0}
+.hint{position:absolute; top:16px; right:18px; z-index:10; font-size:10.5px; color:var(--ink-50); letter-spacing:.05em; background:rgba(255,255,255,.8); padding:5px 11px; border-radius:999px; border:1px solid var(--line); transition:opacity .4s}
+.stage:not(:fullscreen) .hint{display:none}
+.stage.idle .hint{opacity:0}
+
+.slide{
+  position:absolute; inset:0; width:var(--W); height:var(--H);
+  padding:52px 66px 48px; background:var(--card);
+  opacity:0; visibility:hidden; z-index:1;
+  transition:opacity .5s ease;
+  display:flex; flex-direction:column;
+}
+.slide.active{opacity:1; visibility:visible; z-index:2}
+.thumb-scale .slide{opacity:0; visibility:hidden}
+.thumb-scale .slide.tvis{opacity:1; visibility:visible}
+.top{flex:0 0 auto}
+.body{flex:1 1 auto; min-height:0; display:flex; flex-direction:column; gap:15px; padding-top:17px}
+.body > .mods,
+.body > .figs,
+.body > .split,
+.body > .gtab,
+.body > .frise,
+.body > .panelrow,
+.body > .stack{flex:1 1 auto}
+
+.slide.dark{background:var(--dark-bg); color:#fff; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center}
+.pageno{position:absolute; right:40px; bottom:30px; font-size:11.5px; font-weight:600; letter-spacing:.1em; color:var(--ink-50); font-variant-numeric:tabular-nums}
+.pageno b{color:var(--accent); font-weight:700}
+
+@keyframes rise{from{opacity:0; transform:translateY(26px)}}
+@keyframes fade{from{opacity:0}}
+@keyframes slideIn{from{opacity:0; transform:translateX(-30px)}}
+@keyframes zoomIn{from{opacity:0; transform:scale(.9)}}
+@keyframes grow{from{transform:scaleX(0)}}
+@keyframes growY{from{transform:scaleY(0)}}
+@keyframes draw{from{stroke-dashoffset:var(--len)}}
+@keyframes pop{from{opacity:0; transform:scale(.3)}}
+@keyframes sweep{from{opacity:0; clip-path:inset(0 100% 0 0)}}
+.slide.active .a-rise {animation:rise .82s var(--d,0s) both cubic-bezier(.18,.75,.25,1)}
+.slide.active .a-fade {animation:fade 1.05s var(--d,0s) both ease}
+.slide.active .a-slide{animation:slideIn .8s var(--d,0s) both cubic-bezier(.18,.75,.25,1)}
+.slide.active .a-zoom {animation:zoomIn .85s var(--d,0s) both cubic-bezier(.18,.8,.25,1)}
+.slide.active .a-grow {animation:grow 1.05s var(--d,0s) both cubic-bezier(.2,.75,.25,1); transform-origin:left center}
+.slide.active .a-growy{animation:growY .95s var(--d,0s) both cubic-bezier(.2,.75,.25,1); transform-origin:bottom center}
+.slide.active .a-draw {animation:draw 1.5s var(--d,0s) both cubic-bezier(.3,.7,.3,1)}
+.slide.active .a-pop  {animation:pop .6s var(--d,0s) both cubic-bezier(.2,1.5,.4,1)}
+.slide.active .a-sweep{animation:sweep 1.1s var(--d,0s) both cubic-bezier(.2,.75,.25,1)}
+.a-draw{stroke-dasharray:var(--len); stroke-dashoffset:0}
+
+/* ============================================================
+   STYLES DE MAQUETTE — « le balancier » (module 2)
+   Reprise stricte de la maquette du module 1 : les deux modules
+   forment un diptyque. Marine pour le centre, sarcelle pour les
+   métiers ; la bichromie porte l'argument, elle ne décore pas.
+   Ajouts propres à ce module : la table générationnelle (.gtab)
+   et l'écart daté (.gap), qui sert à faire voir un intervalle.
+   ============================================================ */
+.ey{font-size:10.5px; letter-spacing:.2em; text-transform:uppercase; color:var(--accent); font-weight:700}
+h2{font-family:var(--serif); font-size:38px; line-height:1.1; font-weight:400; margin:9px 0 0; letter-spacing:-.015em}
+h2 em{font-style:normal; color:var(--accent)}
+.lede{font-size:15.5px; line-height:1.5; color:var(--ink-70); margin:11px 0 0; max-width:1020px}
+.lede b{color:var(--ink); font-weight:600}
+
+/* Couverture et cartes foncées */
+.cov-ey{font-size:11px; letter-spacing:.3em; text-transform:uppercase; color:var(--accent-2); font-weight:700}
+.cov-h{font-family:var(--serif); font-size:62px; line-height:1.06; font-weight:400; margin:20px 0 0; max-width:940px; letter-spacing:-.02em}
+.cov-h em{font-style:normal; color:var(--accent-2)}
+.cov-sub{font-size:16.5px; line-height:1.55; color:rgba(255,255,255,.76); margin:22px auto 0; max-width:700px}
+.cov-rule{width:74px; height:2px; background:var(--accent-2); margin:30px auto 0; border-radius:2px}
+.cov-meta{font-size:12px; letter-spacing:.14em; text-transform:uppercase; color:rgba(255,255,255,.5); margin-top:26px}
+.dk-ey{font-size:11px; letter-spacing:.28em; text-transform:uppercase; color:var(--accent-2); font-weight:700}
+.dk-h{font-family:var(--serif); font-size:48px; line-height:1.12; font-weight:400; margin:18px 0 0; max-width:900px}
+.dk-h em{font-style:normal; color:var(--accent-2)}
+.dk-p{font-size:16px; line-height:1.6; color:rgba(255,255,255,.74); margin:22px auto 0; max-width:720px}
+.dk-q{display:flex; gap:26px; margin-top:34px; justify-content:center; max-width:940px}
+.dk-qi{flex:1; background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.13); border-radius:12px; padding:18px 20px; text-align:left}
+.dk-qn{font-family:var(--serif); font-size:24px; color:var(--accent-2); line-height:1}
+.dk-qt{font-size:13.5px; line-height:1.5; color:rgba(255,255,255,.84); margin-top:9px}
+
+/* Grilles de blocs */
+.mods{display:grid; grid-template-columns:repeat(3,1fr); gap:16px}
+.mods.two{grid-template-columns:1fr 1fr}
+.mods.four{grid-template-columns:repeat(4,1fr); gap:13px}
+.mod{background:var(--paper); border:1px solid var(--line); border-radius:12px; padding:19px 20px; display:flex; flex-direction:column; justify-content:space-between}
+.mod.acc{background:var(--accent-wash); border-color:rgba(14,149,148,.26)}
+.mod.ink{background:rgba(11,37,69,.045); border-color:rgba(11,37,69,.16)}
+.mod-n{font-family:var(--serif); font-size:15px; color:var(--accent); font-weight:600; letter-spacing:.06em}
+.mod-t{font-size:15px; font-weight:600; line-height:1.3; margin-top:6px}
+.mod-p{font-size:13px; line-height:1.55; color:var(--ink-70); margin-top:9px}
+.mod-p b{color:var(--ink); font-weight:600}
+
+/* Deux colonnes opposées — le balancier */
+.split{display:grid; grid-template-columns:1fr 1fr; gap:18px; position:relative}
+.pane{border-radius:13px; padding:20px 22px; display:flex; flex-direction:column; justify-content:space-between}
+.pane.centre{background:linear-gradient(160deg,rgba(29,78,137,.10),rgba(29,78,137,.03)); border:1px solid rgba(29,78,137,.24)}
+.pane.metier{background:linear-gradient(160deg,rgba(14,149,148,.12),rgba(14,149,148,.03)); border:1px solid rgba(14,149,148,.28)}
+.pane-h{font-size:11px; letter-spacing:.16em; text-transform:uppercase; font-weight:700}
+.pane.centre .pane-h{color:var(--blue)}
+.pane.metier .pane-h{color:var(--accent)}
+.pane-t{font-family:var(--serif); font-size:22px; line-height:1.2; margin-top:8px; font-weight:500}
+.pane ul{margin:13px 0 0; padding-left:17px}
+.pane li{font-size:13.5px; line-height:1.6; color:var(--ink-70); margin-bottom:7px}
+.pane li b{color:var(--ink); font-weight:600}
+
+/* Frise chronologique */
+.frise{position:relative; display:flex; flex-direction:column; justify-content:center; padding:8px 0}
+.frise-line{position:relative; height:3px; background:linear-gradient(90deg,rgba(29,78,137,.22),var(--accent)); border-radius:2px; margin:52px 12px 0}
+.frise-pts{display:flex; justify-content:space-between; margin:-8px 12px 0}
+.fp{position:relative; text-align:center; flex:1}
+.fp-dot{width:13px; height:13px; border-radius:50%; background:#fff; border:3px solid var(--accent); margin:0 auto; box-shadow:0 0 0 4px var(--accent-wash)}
+.fp-dot.dim{border-color:var(--blue-soft); box-shadow:0 0 0 4px rgba(110,155,209,.16)}
+.fp-y{font-family:var(--serif); font-size:26px; font-weight:600; margin-top:11px; color:var(--ink)}
+.fp-y.dim{color:var(--blue)}
+.fp-t{font-size:12.5px; line-height:1.45; color:var(--ink-70); margin-top:5px; padding:0 6px}
+.fp-t b{color:var(--ink); font-weight:600}
+
+/* Chaîne / processus */
+.chain{display:flex; align-items:stretch; gap:0; margin-top:4px}
+.ch{flex:1; background:var(--paper); border:1px solid var(--line); border-radius:11px; padding:15px 15px; text-align:center; display:flex; flex-direction:column; justify-content:center}
+.ch.acc{background:var(--accent-wash); border-color:rgba(14,149,148,.28)}
+.ch.ink{background:rgba(11,37,69,.045); border-color:rgba(11,37,69,.16)}
+.ch-t{font-size:13.5px; font-weight:600; line-height:1.3}
+.ch-p{font-size:11.5px; line-height:1.45; color:var(--ink-50); margin-top:6px}
+.arw{flex:0 0 34px; display:grid; place-items:center; color:var(--accent)}
+.arw svg{width:18px; height:18px}
+
+/* Figure chiffrée */
+.figs{display:grid; grid-template-columns:repeat(3,1fr); gap:16px}
+.figs.two{grid-template-columns:1fr 1fr}
+.fig{background:var(--paper); border:1px solid var(--line); border-radius:12px; padding:20px; display:flex; flex-direction:column; justify-content:space-between; text-align:center}
+.fig.acc{background:var(--accent-wash); border-color:rgba(14,149,148,.26)}
+.fig-n{font-family:var(--serif); font-size:46px; font-weight:600; color:var(--accent); line-height:1; letter-spacing:-.02em}
+.fig-n small{font-size:20px; font-weight:500}
+.fig-l{font-size:13px; line-height:1.5; color:var(--ink-70); margin-top:11px}
+.fig-l b{color:var(--ink); font-weight:600}
+
+/* Barres de répartition */
+.bars{display:flex; flex-direction:column; gap:14px; justify-content:center}
+.bar-row{display:grid; grid-template-columns:150px 1fr 62px; align-items:center; gap:15px}
+.bar-lab{font-size:13.5px; font-weight:600; text-align:right; line-height:1.25}
+.bar-lab small{display:block; font-size:11px; font-weight:400; color:var(--ink-50); margin-top:2px}
+.bar-tr{height:26px; background:rgba(11,37,69,.06); border-radius:6px; overflow:hidden}
+.bar-fl{height:100%; border-radius:6px; background:linear-gradient(90deg,var(--accent),var(--accent-2))}
+.bar-fl.dim{background:linear-gradient(90deg,var(--blue),var(--blue-soft))}
+.bar-v{font-family:var(--serif); font-size:20px; font-weight:600; color:var(--ink)}
+
+/* Table générationnelle — la synthèse des deux modules */
+.gtab{display:grid; grid-template-columns:1fr 1.35fr 1.35fr; border:1px solid var(--line); border-radius:12px; overflow:hidden}
+.gt-h{background:rgba(11,37,69,.055); font-size:10px; letter-spacing:.15em; text-transform:uppercase; font-weight:700; color:var(--ink-50); padding:11px 18px; border-bottom:1px solid var(--line); display:flex; align-items:center}
+.gt-c{padding:13px 18px; font-size:13.5px; line-height:1.45; color:var(--ink-70); border-bottom:1px solid var(--line); display:flex; align-items:center}
+.gt-c.lab{font-family:var(--serif); font-size:18px; color:var(--ink); font-weight:600; background:var(--paper)}
+.gt-c.acc{background:var(--accent-wash); color:var(--ink); font-weight:500}
+.gtab > *:nth-last-child(-n+3){border-bottom:0}
+
+/* Écart daté — faire voir un intervalle */
+.gap{display:grid; grid-template-columns:1fr auto 1fr; align-items:center; gap:18px}
+.gap-c{background:var(--paper); border:1px solid var(--line); border-radius:12px; padding:20px 22px; text-align:center}
+.gap-c.acc{background:var(--accent-wash); border-color:rgba(14,149,148,.26)}
+.gap-d{font-family:var(--serif); font-size:19px; font-weight:600; color:var(--ink)}
+.gap-t{font-size:13px; line-height:1.5; color:var(--ink-70); margin-top:8px}
+.gap-t b{color:var(--ink); font-weight:600}
+.gap-mid{text-align:center; padding:0 4px}
+.gap-mid .n{font-family:var(--serif); font-size:40px; font-weight:600; color:var(--accent); line-height:1}
+.gap-mid .u{font-size:11px; letter-spacing:.16em; text-transform:uppercase; color:var(--ink-50); font-weight:700; margin-top:6px}
+
+/* Encart de réserve — la déclaration de fragilité */
+.warn{background:rgba(29,78,137,.05); border-left:3px solid var(--blue-soft); border-radius:0 9px 9px 0; padding:13px 17px; font-size:12.5px; line-height:1.55; color:var(--ink-70)}
+.warn b{color:var(--blue); font-weight:600}
+.warn.acc{background:var(--accent-wash); border-left-color:var(--accent)}
+.warn.acc b{color:var(--accent)}
+
+/* Citation */
+.quote{font-family:var(--serif); font-size:22px; line-height:1.42; color:var(--ink); font-weight:400; padding-left:22px; border-left:3px solid var(--accent)}
+.quote cite{display:block; font-family:var(--sans); font-size:12px; font-style:normal; color:var(--ink-50); margin-top:12px; letter-spacing:.03em}
+
+/* Note de source au fil du propos */
+.src{font-size:11.5px; color:var(--ink-50); line-height:1.5}
+.src b{color:var(--ink-70); font-weight:600}
+
+/* Planche Références — colonne fournie élargie */
+.panelrow{display:grid; grid-template-columns:1.8fr 1fr; gap:20px}
+.panel{background:var(--paper); border:1px solid var(--line); border-radius:12px; padding:18px 20px; display:flex; flex-direction:column}
+.panel.tight{justify-content:space-between}
+.panel-h{font-size:10.5px; letter-spacing:.16em; text-transform:uppercase; color:var(--accent); font-weight:700; padding-bottom:9px; border-bottom:1px solid var(--line); margin-bottom:11px}
+.ref{font-size:11.5px; line-height:1.5; color:var(--ink-70); margin-bottom:9px}
+.ref:last-child{margin-bottom:0}
+.ref b{color:var(--ink); font-weight:600}
+.ref i{font-style:italic}
+.ref span{display:block; color:var(--ink-50); font-size:10.5px; margin-top:1px}
+
+.stack{display:flex; flex-direction:column; gap:15px; justify-content:space-between}
+
+@page{ size:1280px 720px; margin:0 }
+@media print{
+  html,body{overflow:visible; background:#fff; height:auto}
+  .rail,.nav,.hint{display:none !important}
+  .app{display:block; height:auto}
+  .stage{display:block; height:auto; background:#fff; overflow:visible}
+  .deck{width:auto; height:auto; transform:none !important; box-shadow:none; border-radius:0; position:static}
+  .slide{position:relative; inset:auto; display:flex; width:1280px; height:720px; opacity:1 !important; visibility:visible !important; page-break-after:always; break-after:page; overflow:hidden; -webkit-print-color-adjust:exact; print-color-adjust:exact}
+  .slide:last-child{page-break-after:auto; break-after:auto}
+  .slide *{animation:none !important; transition:none !important}
+}
+</style>
+
+<div class="app" id="app">
+
+  <aside class="rail">
+    <div class="rail-head">
+      <a class="rail-back" href="index.html">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18 9 12l6-6"/></svg>
+        Retour au cours
+      </a>
+      <div class="rail-kicker">Module 2 · Informatique décisionnelle</div>
+      <div class="rail-title">Du cloud à l'intelligence augmentée</div>
+      <div class="rail-meta">Cours · 30 cartes · 2010-2026</div>
+    </div>
+    <div class="thumbs" id="thumbs"></div>
+    <div class="rail-foot">
+      <button class="btn" id="btnFs">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M8 3H5a2 2 0 0 0-2 2v3M16 3h3a2 2 0 0 1 2 2v3M8 21H5a2 2 0 0 1-2-2v-3M16 21h3a2 2 0 0 0 2-2v-3"/></svg>
+        Plein écran <span class="k">F</span>
+      </button>
+      <button class="btn" id="btnPdf">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0 4-4m-4 4-4-4M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg>
+        Exporter en PDF <span class="k">P</span>
+      </button>
+    </div>
+  </aside>
+
+  <main class="stage" id="stage">
+    <div class="hint">Échap pour quitter le plein écran</div>
+    <div class="deck" id="deck">
+
+<!-- ============ 1 · COUVERTURE ============ -->
+<section class="slide dark" data-label="Couverture">
+  <div class="cov-ey a-fade">Module 2 · Informatique décisionnelle</div>
+  <h1 class="cov-h a-rise" style="--d:.12s">Du cloud à<br>l'<em>intelligence augmentée</em></h1>
+  <div class="cov-rule a-grow" style="--d:.5s"></div>
+  <p class="cov-sub a-rise" style="--d:.62s">L'échelle et ce qu'elle coûte — un problème d'ingénierie résolu par l'architecture, puis un problème de confiance que l'architecture ne résout pas.</p>
+  <div class="cov-meta a-fade" style="--d:.9s">Robert Voyer · IMT-BS</div>
+</section>
+
+<!-- ============ 2 · REPRISE ============ -->
+<section class="slide" data-label="Là où nous nous étions arrêtés">
+  <div class="top">
+    <div class="ey a-fade">Ouverture · Reprise</div>
+    <h2 class="a-rise" style="--d:.06s">Le module 1 s'est refermé sur une <em>tension</em></h2>
+    <p class="lede a-rise" style="--d:.12s">Non sur une conclusion. La première génération avait donné la cohérence et pris le temps ; la seconde avait rendu le temps et repris la cohérence. Trois questions restaient entières.</p>
+  </div>
+  <div class="body">
+    <div class="stack">
+      <div class="mods">
+        <div class="mod a-rise" style="--d:.2s">
+          <div><div class="mod-n">?</div><div class="mod-t">La frontière</div></div>
+          <div class="mod-p">Si les définitions doivent être communes et les analyses libres, <b>où placer la limite</b> ?</div>
+        </div>
+        <div class="mod a-rise" style="--d:.28s">
+          <div><div class="mod-n">?</div><div class="mod-t">L'opposition</div></div>
+          <div class="mod-p">Gouvernance et agilité s'opposent-elles <b>réellement</b>, ou seulement par défaut d'outillage ?</div>
+        </div>
+        <div class="mod acc a-rise" style="--d:.36s">
+          <div><div class="mod-n">?</div><div class="mod-t">L'échelle</div></div>
+          <div class="mod-p">Ces réponses tiennent-elles encore lorsque le volume des données <b>change d'échelle</b> ?</div>
+        </div>
+      </div>
+      <div class="warn acc a-fade" style="--d:.5s"><b>Ce module répond à la troisième —</b> et découvre que la réponse déplace les deux autres sans les résoudre. <b>Prérequis :</b> le module 1, dont nous reprenons le vocabulaire et la tension finale.</div>
+    </div>
+  </div>
+  <div class="pageno">2<b>/30</b></div>
+</section>
+
+<!-- ============ 3 · ACQUIS ============ -->
+<section class="slide" data-label="Objectifs">
+  <div class="top">
+    <div class="ey a-fade">Ouverture · Programme</div>
+    <h2 class="a-rise" style="--d:.06s">Ce que vous saurez faire</h2>
+    <p class="lede a-rise" style="--d:.12s">Deux mouvements se succèdent ici, et il faut les distinguer : un changement <b>d'échelle</b>, qui est un problème d'ingénierie — puis un changement <b>de nature</b>, qui est un problème de confiance.</p>
+  </div>
+  <div class="body">
+    <div class="mods">
+      <div class="mod a-rise" style="--d:.2s">
+        <div><div class="mod-n">01</div><div class="mod-t">Décrire</div></div>
+        <div class="mod-p">L'architecture décisionnelle contemporaine — stockage objet, séparation du calcul, <b>formats de table ouverts</b>, traitement de flux.</div>
+      </div>
+      <div class="mod a-rise" style="--d:.28s">
+        <div><div class="mod-n">02</div><div class="mod-t">Distinguer</div></div>
+        <div class="mod-p">Dans le vocabulaire du marché, ce qui désigne une <b>rupture technique</b> et ce qui désigne un <b>renommage</b>.</div>
+      </div>
+      <div class="mod a-rise" style="--d:.36s">
+        <div><div class="mod-n">03</div><div class="mod-t">Évaluer</div></div>
+        <div class="mod-p">Une affirmation de performance en remontant au <b>protocole de mesure</b>, et non au classement.</div>
+      </div>
+      <div class="mod a-rise" style="--d:.44s">
+        <div><div class="mod-n">04</div><div class="mod-t">Situer</div></div>
+        <div class="mod-p">Un système décisionnel dans le <b>cadre juridique européen en vigueur</b> — qui a changé il y a quelques jours.</div>
+      </div>
+      <div class="mod acc a-rise" style="--d:.52s">
+        <div><div class="mod-n">05</div><div class="mod-t">Retracer</div></div>
+        <div class="mod-p">La généalogie d'une statistique jusqu'à sa source — <b>ou constater qu'elle n'en a pas</b>. C'est l'exercice final.</div>
+      </div>
+      <div class="mod ink a-rise" style="--d:.6s">
+        <div><div class="mod-n">La question</div><div class="mod-t">Qui court sous tout</div></div>
+        <div class="mod-p">Que devient la fiabilité quand le système qui répond est aussi <b>celui qui formule la question</b> ?</div>
+      </div>
+    </div>
+  </div>
+  <div class="pageno">3<b>/30</b></div>
+</section>
+
+<!-- ============ 4 · ARTICULATION ============ -->
+<section class="slide" data-label="Articulation">
+  <div class="top">
+    <div class="ey a-fade">Ouverture · Programme</div>
+    <h2 class="a-rise" style="--d:.06s">Six temps, et une boucle qui se referme</h2>
+    <p class="lede a-rise" style="--d:.12s">Ce module se termine sur un objet <b>déjà rencontré dans le module 1</b>, et qui revient trente-cinq ans plus tard sous un autre nom.</p>
+  </div>
+  <div class="body">
+    <div class="mods four">
+      <div class="mod a-rise" style="--d:.2s">
+        <div><div class="mod-n">I</div><div class="mod-t">Le changement d'échelle</div></div>
+        <div class="mod-p">Et l'architecture qui le rend possible.</div>
+      </div>
+      <div class="mod a-rise" style="--d:.27s">
+        <div><div class="mod-n">II</div><div class="mod-t">L'industrialisation</div></div>
+        <div class="mod-p">Flux continu, DataOps — et le prix de la complexité.</div>
+      </div>
+      <div class="mod a-rise" style="--d:.34s">
+        <div><div class="mod-n">III</div><div class="mod-t">L'intelligence augmentée</div></div>
+        <div class="mod-p">Ce qui est neuf, ce qui est renommé.</div>
+      </div>
+      <div class="mod acc a-rise" style="--d:.41s">
+        <div><div class="mod-n">IV</div><div class="mod-t">La mesure de la fiabilité</div></div>
+        <div class="mod-p">Et pourquoi elle s'est effondrée en 2026.</div>
+      </div>
+    </div>
+    <div class="split">
+      <div class="pane centre a-rise" style="--d:.5s">
+        <div>
+          <div class="pane-h">V · Ce que le récit omet</div>
+          <div class="pane-t">Coût, droit, souveraineté, énergie</div>
+        </div>
+        <div class="mod-p" style="margin-top:10px">Ces angles ne manquaient pas au support d'origine par négligence : ils manquent à <b>la plupart des cours du domaine</b>. Nous les traitons comme du contenu, non comme un supplément moral.</div>
+      </div>
+      <div class="pane metier a-rise" style="--d:.58s">
+        <div>
+          <div class="pane-h">VI · La boucle refermée</div>
+          <div class="pane-t">Et la question qui reste</div>
+        </div>
+        <div class="mod-p" style="margin-top:10px">Nous formulerons la thèse des deux modules sur <b>un cas unique et traçable</b> — puis nous refuserons explicitement une inférence qui la refermerait trop bien.</div>
+      </div>
+    </div>
+  </div>
+  <div class="pageno">4<b>/30</b></div>
+</section>
+
+<!-- ============ 5 · INTERTITRE TROISIÈME GÉNÉRATION ============ -->
+<section class="slide dark" data-label="I · Le changement d'échelle">
+  <div class="dk-ey a-fade">Troisième génération · 2010-2020</div>
+  <h2 class="dk-h a-rise" style="--d:.12s">L'échelle, et sa <em>refonte</em></h2>
+  <p class="dk-p a-rise" style="--d:.3s">Journaux d'activité, capteurs, textes, images : les données arrivent en continu et dans des formats que l'entrepôt relationnel n'accueille pas. Le problème est d'ingénierie. Il sera résolu par l'ingénierie — et c'est le dernier de ce cours dont on pourra dire cela.</p>
+</section>
+
+<!-- ============ 6 · A.1 · L'HYPOTHÈSE TACITE ============ -->
+<section class="slide" data-label="L'hypothèse tacite qui cède">
+  <div class="top">
+    <div class="ey a-fade">A.1 · Transition</div>
+    <h2 class="a-rise" style="--d:.06s">Ce n'est plus la solution qui produit le problème —<br>c'est son <em>succès</em></h2>
+  </div>
+  <div class="body">
+    <div class="stack">
+      <div class="split">
+        <div class="pane centre a-slide" style="--d:.18s">
+          <div>
+            <div class="pane-h">Ce que le libre-service supposait</div>
+            <div class="pane-t">Une hypothèse jamais énoncée</div>
+            <ul>
+              <li>Des données <b>structurées</b></li>
+              <li>Un volume <b>maîtrisé</b></li>
+              <li>Stockées dans des <b>entrepôts d'entreprise</b></li>
+            </ul>
+          </div>
+          <div class="src" style="margin-top:10px">Elle était si évidente qu'aucun texte de l'époque ne la formule.</div>
+        </div>
+        <div class="pane metier a-slide" style="--d:.3s">
+          <div>
+            <div class="pane-h">Ce qui cède au début des années 2010</div>
+            <div class="pane-t">Les trois termes, ensemble</div>
+            <ul>
+              <li>Journaux d'activité web, capteurs, textes, images</li>
+              <li>Arrivée <b>continue</b>, non plus par lots</li>
+              <li>Formats que le modèle relationnel <b>n'accueille pas</b></li>
+            </ul>
+          </div>
+          <div class="src" style="margin-top:10px">L'architecture ne devient pas insuffisante par usure : elle devient <b>inadéquate</b>, parce que son objet a changé.</div>
+        </div>
+      </div>
+      <div class="warn acc a-fade" style="--d:.5s"><b>Notons la forme du mouvement, identique à celle du module 1 mais déplacée.</b> Là, la solution produisait le problème suivant. Ici, c'est le <b>succès</b> de la solution qui déplace le terrain sur lequel elle valait : plus les entreprises s'équipaient pour analyser, plus elles produisaient de données à analyser.</div>
+    </div>
+  </div>
+  <div class="pageno">6<b>/30</b></div>
+</section>
+
+<!-- ============ 7 · A.2 · LES 3V ============ -->
+<section class="slide" data-label="Les 3V : deux erreurs qui ont fait carrière">
+  <div class="top">
+    <div class="ey a-fade">A.2 · Une note de quatre pages, en 2001</div>
+    <h2 class="a-rise" style="--d:.06s">Ni « Gartner », ni « <em>Big Data</em> »</h2>
+    <p class="lede a-rise" style="--d:.12s">Volume, vélocité, variété. L'origine est parfaitement datable — <b>Doug Laney, 6 février 2001</b>, note « File 949 » — et elle est presque toujours mal citée, de deux façons.</p>
+  </div>
+  <div class="body">
+    <div class="stack">
+      <div class="chain">
+        <div class="ch a-rise" style="--d:.2s"><div class="ch-t">6 février 2001</div><div class="ch-p">La note paraît chez <b>META Group</b>, Stamford, Connecticut</div></div>
+        <div class="arw a-pop" style="--d:.3s"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14m0 0-5-5m5 5-5 5"/></svg></div>
+        <div class="ch a-rise" style="--d:.34s"><div class="ch-t">28 janvier 2005</div><div class="ch-p">Gartner rachète META Group — opération enregistrée par la <b>FTC</b></div></div>
+        <div class="arw a-pop" style="--d:.44s"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14m0 0-5-5m5 5-5 5"/></svg></div>
+        <div class="ch acc a-rise" style="--d:.48s"><div class="ch-t">Depuis</div><div class="ch-p">« Les 3V de Gartner » — <b>un effet rétrospectif du rachat</b></div></div>
+      </div>
+      <div class="warn acc a-fade" style="--d:.64s"><b>Seconde erreur, plus instructive encore : l'expression « Big Data » n'apparaît nulle part dans la note.</b> « Les 3V du Big Data » est une reconstruction postérieure. Laney a décrit trois pressions sur la gestion des données ; il n'a pas nommé un phénomène.</div>
+      <div class="quote a-rise" style="--d:.78s">Un concept peut circuler vingt-cinq ans sous un nom que son auteur n'a pas employé, attribué à une maison qui ne l'a pas publié.<cite>Le document existait, en libre accès. Personne n'était allé le lire.</cite></div>
+    </div>
+  </div>
+  <div class="pageno">7<b>/30</b></div>
+</section>
+
+<!-- ============ 8 · A.3 · L'ARCHITECTURE SE DÉCOUPE ============ -->
+<section class="slide" data-label="Une architecture qui se découpe">
+  <div class="top">
+    <div class="ey a-fade">A.3 · La réponse architecturale</div>
+    <h2 class="a-rise" style="--d:.06s">Cesser de tenir ensemble ce qui n'a <em>pas</em> à l'être</h2>
+  </div>
+  <div class="body">
+    <div class="stack">
+      <div class="split">
+        <div class="pane centre a-rise" style="--d:.18s">
+          <div>
+            <div class="pane-h">Premier découplage</div>
+            <div class="pane-t">Le stockage et le calcul</div>
+          </div>
+          <div class="mod-p" style="margin-top:10px">Dans l'entrepôt classique, les deux sont solidaires : agrandir l'un force à payer l'autre. L'architecture décrite par <b>Dageville et ses dix-sept coauteurs</b> (<i>SIGMOD</i>, 2016) les rend indépendants — on stocke beaucoup et l'on calcule ponctuellement.</div>
+        </div>
+        <div class="pane metier a-rise" style="--d:.3s">
+          <div>
+            <div class="pane-h">Second découplage</div>
+            <div class="pane-t">Le format et le moteur</div>
+          </div>
+          <div class="mod-p" style="margin-top:10px">Les données ne vivent plus dans le système qui les interroge. Elles reposent sur un <b>stockage objet</b>, dans des formats de table ouverts que <b>plusieurs moteurs</b> peuvent lire. La donnée cesse d'appartenir à son outil.</div>
+        </div>
+      </div>
+      <div class="warn a-fade" style="--d:.5s"><b>Deux précisions de datation, qui sont aussi deux exercices.</b> La borne de départ est un document précis : <i>Dremel</i>, Melnik et coauteurs, <i>PVLDB</i> 2010 — fondement technique de ce qui deviendra BigQuery. Et Amazon Redshift est <b>annoncé le 28 novembre 2012</b>, puis <b>généralement disponible le 15 février 2013</b> : la chronologie courante confond systématiquement ces deux dates.</div>
+    </div>
+  </div>
+  <div class="pageno">8<b>/30</b></div>
+</section>
+
+<!-- ============ 9 · A.4 · LE LAKEHOUSE ============ -->
+<section class="slide" data-label="Le lakehouse : un mot d'éditeur">
+  <div class="top">
+    <div class="ey a-fade">A.4 · Statut d'une source, encore</div>
+    <h2 class="a-rise" style="--d:.06s">« Premier emploi documenté » — jamais « <em>invention</em> »</h2>
+    <p class="lede a-rise" style="--d:.12s">L'entrepôt garantissait la qualité mais refusait l'hétérogène ; le lac acceptait tout mais ne garantissait rien. Le <i>lakehouse</i> prétend dépasser l'alternative. Sa datation mérite notre prudence habituelle.</p>
+  </div>
+  <div class="body">
+    <div class="frise">
+      <div class="frise-line a-grow" style="--d:.2s"></div>
+      <div class="frise-pts">
+        <div class="fp a-rise" style="--d:.32s">
+          <div class="fp-dot dim"></div>
+          <div class="fp-y dim">30 janv. 2020</div>
+          <div class="fp-t">Plus ancienne occurrence publique <b>datée sur pièce</b> du mot — un billet de blog de Databricks. C'est-à-dire de <b>l'éditeur qui vend le produit</b>.</div>
+        </div>
+        <div class="fp a-rise" style="--d:.46s">
+          <div class="fp-dot"></div>
+          <div class="fp-y">2020</div>
+          <div class="fp-t"><i>Delta Lake</i>, <b>PVLDB 13(12), p. 3411-3424</b>. La brique technique est bien antérieure au mot-valise — et le support que nous reprenons la datait de <b>2024</b>.</div>
+        </div>
+        <div class="fp a-rise" style="--d:.6s">
+          <div class="fp-dot"></div>
+          <div class="fp-y">janv. 2021</div>
+          <div class="fp-t">Le texte académique de position, à <b>CIDR</b>. Un an <b>après</b> le billet commercial : l'ordre est l'inverse de celui qu'on suppose.</div>
+        </div>
+      </div>
+    </div>
+    <div class="warn a-fade" style="--d:.78s"><b>État en 2026, cité depuis la spécification elle-même</b> et non depuis un commentaire : Apache Iceberg porte les versions 1 à 3 formellement adoptées, la version 4 étant explicitement « en développement actif et non formellement adoptée ». — <b>Réserve à déclarer :</b> les vingt-et-un auteurs de <i>Delta Lake</i> sont tous liés à Databricks. C'est un document primaire d'ingénierie, non une évaluation indépendante ; le contrepoint universitaire existe (<b>Durner, Leis &amp; Neumann</b>, 2023).</div>
+  </div>
+  <div class="pageno">9<b>/30</b></div>
+</section>
+
+<!-- ============ 10 · A.5 · ETL → ELT ============ -->
+<section class="slide" data-label="L'inversion ETL → ELT">
+  <div class="top">
+    <div class="ey a-fade">A.5 · Une inversion, et ce qu'elle déplace</div>
+    <h2 class="a-rise" style="--d:.06s">La transformation n'a pas disparu —<br>elle a changé de <em>main</em> et de <em>moment</em></h2>
+  </div>
+  <div class="body">
+    <div class="stack">
+      <div class="split">
+        <div class="pane centre a-slide" style="--d:.18s">
+          <div>
+            <div class="pane-h">ETL · transformer avant de charger</div>
+            <div class="pane-t">On décide en amont</div>
+            <ul>
+              <li>La forme des données est <b>arrêtée avant</b> leur arrivée</li>
+              <li>Donc la forme des <b>questions</b> aussi</li>
+              <li>L'original n'est pas conservé</li>
+            </ul>
+          </div>
+        </div>
+        <div class="pane metier a-slide" style="--d:.3s">
+          <div>
+            <div class="pane-h">ELT · charger puis transformer</div>
+            <div class="pane-t">On décide au moment de l'usage</div>
+            <ul>
+              <li>La donnée brute est <b>conservée</b></li>
+              <li>On peut poser demain une question <b>non prévue hier</b></li>
+              <li>Trois couches — brute, nettoyée, prête pour le métier</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="warn acc a-fade" style="--d:.5s"><b>Mesurons le déplacement, car il n'est pas favorable.</b> La transformation n'incombe plus à une équipe centrale <b>avant</b> le chargement ; elle incombe à chaque usage, <b>après</b>. Le problème de cohérence du module 1 n'est donc pas résolu : il est reporté en aval, <b>où il se multiplie</b>.</div>
+    </div>
+  </div>
+  <div class="pageno">10<b>/30</b></div>
+</section>
+
+<!-- ============ 11 · A.6 · LE FLUX CONTINU ============ -->
+<section class="slide" data-label="Le flux continu">
+  <div class="top">
+    <div class="ey a-fade">A.6 · Quand la décision ne peut pas attendre</div>
+    <h2 class="a-rise" style="--d:.06s">Le lot est un <em>cas particulier</em> du flux</h2>
+    <p class="lede a-rise" style="--d:.12s">Le traitement par lots nocturnes suppose que la décision peut attendre le lendemain. Pour la détection de fraude ou la supervision industrielle, elle ne le peut pas.</p>
+  </div>
+  <div class="body">
+    <div class="stack">
+      <div class="mods">
+        <div class="mod a-rise" style="--d:.18s">
+          <div><div class="mod-n">2011</div><div class="mod-t">Kafka</div></div>
+          <div class="mod-p"><b>Kreps, Narkhede &amp; Rao</b>, atelier NetDB, juin 2011. Le socle : un journal distribué que plusieurs consommateurs relisent à leur rythme.</div>
+        </div>
+        <div class="mod a-rise" style="--d:.28s">
+          <div><div class="mod-n">2015</div><div class="mod-t">Apache Flink</div></div>
+          <div class="mod-p"><b>Carbone et coauteurs.</b> La thèse tient en une phrase, et elle renverse l'intuition : <b>le lot est un cas particulier du flux</b>, non l'inverse.</div>
+        </div>
+        <div class="mod a-rise" style="--d:.38s">
+          <div><div class="mod-n">2018</div><div class="mod-t">Structured Streaming</div></div>
+          <div class="mod-p">Présenté à <i>SIGMOD</i> par une équipe qui <b>recouvre largement</b> celle de <i>Delta Lake</i>. Le fait mérite d'être noté.</div>
+        </div>
+      </div>
+      <div class="warn a-fade" style="--d:.52s"><b>Un test de vigilance bibliographique, à faire vous-même.</b> Les actes de NetDB'11 <b>ne sont pas paginés</b>. Toute notice qui affiche des pages pour l'article Kafka est donc fabriquée — et vous en trouverez. — <b>Et un fait de sociologie technique :</b> une même équipe a défini une part considérable de la pile que le marché tient aujourd'hui pour standard.</div>
+    </div>
+  </div>
+  <div class="pageno">11<b>/30</b></div>
+</section>
+
+<!-- ============ 12 · A.7 · DATAOPS ============ -->
+<section class="slide" data-label="DataOps : nommer avant de définir">
+  <div class="top">
+    <div class="ey a-fade">A.7 · Un motif qui traverse tout ce module</div>
+    <h2 class="a-rise" style="--d:.06s">Le marché nomme. La recherche définit <em>ensuite</em>.</h2>
+  </div>
+  <div class="body">
+    <div class="stack">
+      <div class="gap">
+        <div class="gap-c a-rise" style="--d:.2s">
+          <div class="gap-d">2015 · l'acte de naissance</div>
+          <div class="gap-t">Un billet d'<b>Andy Palmer</b>, cofondateur de Tamr. Source promotionnelle : à citer comme naissance du terme, et <b>à aucun autre titre</b>.</div>
+        </div>
+        <div class="gap-mid a-pop" style="--d:.44s">
+          <div class="n">3</div>
+          <div class="u">années</div>
+        </div>
+        <div class="gap-c acc a-rise" style="--d:.32s">
+          <div class="gap-d">2018 · la première définition</div>
+          <div class="gap-t"><b>Julian Ereth</b>, <i>DataOps — Towards a Definition</i>, LWDA 2018, p. 104-112. Il présente lui-même sa définition comme <b>non définitive</b>, et établit qu'il n'a pas créé le terme.</div>
+        </div>
+      </div>
+      <div class="quote a-rise" style="--d:.6s">Pendant cet intervalle, le mot circule <em style="color:var(--accent);font-style:normal">sans référent stable</em> — et c'est précisément là qu'on l'achète.<cite>Le motif se répétera en A.11 avec « analyse augmentée », et en A.15 avec « Data Fabric ». Ce n'est pas une anomalie : c'est le régime ordinaire du vocabulaire de ce domaine.</cite></div>
+    </div>
+  </div>
+  <div class="pageno">12<b>/30</b></div>
+</section>
+
+<!-- ============ 13 · A.8 · LA COMPLEXITÉ COMME COÛT ============ -->
+<section class="slide" data-label="La complexité comme nouveau coût">
+  <div class="top">
+    <div class="ey a-fade">A.8 · Le prix de l'échelle</div>
+    <h2 class="a-rise" style="--d:.06s">Ce qu'elle gagne en échelle, elle le paie en <em>complexité</em></h2>
+    <p class="lede a-rise" style="--d:.12s">L'entrepôt monolithique était rigide, mais il tenait en un système. L'architecture contemporaine assemble une dizaine de composants dont chacun demande une expertise propre. Le support d'origine n'abordait pas ce coût.</p>
+  </div>
+  <div class="body">
+    <div class="stack">
+      <div class="mods">
+        <div class="mod a-rise" style="--d:.18s">
+          <div><div class="mod-n">01</div><div class="mod-t">La dépense change de nature</div></div>
+          <div class="mod-p">Le modèle à l'usage transforme l'<b>investissement initial</b> en <b>dépense courante</b>, proportionnelle à l'activité — donc imprévisible par construction.</div>
+        </div>
+        <div class="mod a-rise" style="--d:.28s">
+          <div><div class="mod-n">02</div><div class="mod-t">Une discipline en réponse</div></div>
+          <div class="mod-p">Le <b>FinOps</b> s'est constitué pour maîtriser cette dépense. Notons qu'il s'agit d'une réponse <b>organisationnelle</b> à un problème créé par un choix technique.</div>
+        </div>
+        <div class="mod acc a-rise" style="--d:.38s">
+          <div><div class="mod-n">03</div><div class="mod-t">Le point que les cours omettent</div></div>
+          <div class="mod-p">Les crédits d'intelligence artificielle <b>s'ajoutent</b> au coût de calcul analytique, ils ne s'y substituent pas. Une question en langage naturel consomme <b>le modèle <i>et</i> la requête</b> qu'il engendre.</div>
+        </div>
+      </div>
+      <div class="warn a-fade" style="--d:.52s"><b>Retenons la forme de l'argument plus que le chiffrage,</b> qui varierait de toute façon d'un fournisseur à l'autre et d'une année sur l'autre. Chaque génération de ce cours a déplacé un coût sans le supprimer : la première le mettait dans le <b>délai</b>, la deuxième dans la <b>cohérence</b>, la troisième le met dans la <b>complexité</b> — et la facture.</div>
+    </div>
+  </div>
+  <div class="pageno">13<b>/30</b></div>
+</section>
+
+<!-- ============ 14 · A.9 · SCÉNARIO TYPE ============ -->
+<section class="slide" data-label="Scénario type · la détection de fraude">
+  <div class="top">
+    <div class="ey a-fade">A.9 · Une requalification, et sa raison</div>
+    <h2 class="a-rise" style="--d:.06s">Ceci est un <em>scénario type</em>. Ce n'est pas un cas d'étude.</h2>
+    <p class="lede a-rise" style="--d:.12s">Le support d'origine présentait ici un « cas d'étude » : <b>une institution financière moderne</b>, sans nom, sans date, sans source — mais avec des chiffres de performance précis.</p>
+  </div>
+  <div class="body">
+    <div class="stack">
+      <div class="chain">
+        <div class="ch a-rise" style="--d:.2s"><div class="ch-t">Capture</div><div class="ch-p">Le flux transactionnel, en continu</div></div>
+        <div class="arw a-pop" style="--d:.28s"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14m0 0-5-5m5 5-5 5"/></svg></div>
+        <div class="ch a-rise" style="--d:.32s"><div class="ch-t">Enrichissement</div><div class="ch-p">Contexte, historique, référentiels</div></div>
+        <div class="arw a-pop" style="--d:.4s"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14m0 0-5-5m5 5-5 5"/></svg></div>
+        <div class="ch a-rise" style="--d:.44s"><div class="ch-t">Score</div><div class="ch-p">Un modèle évalue la transaction</div></div>
+        <div class="arw a-pop" style="--d:.52s"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14m0 0-5-5m5 5-5 5"/></svg></div>
+        <div class="ch acc a-rise" style="--d:.56s"><div class="ch-t">Action</div><div class="ch-p">Et conservation parallèle pour le <b>réentraînement</b></div></div>
+      </div>
+      <div class="warn acc a-fade" style="--d:.7s"><b>Nous n'avons retrouvé aucune source pour ces chiffres, ni pour ce cas.</b> Nous conservons donc la description — la chaîne est réelle et illustre correctement ce que l'architecture rend possible — sous le nom qui lui convient, et <b>sans chiffres</b>. Un cas d'étude nomme une entreprise, une date, une source.</div>
+      <div class="quote a-rise" style="--d:.84s">Un support qui enseigne à sourcer ne peut pas faire passer un scénario pour un cas.<cite>La distinction n'est pas une précaution ajoutée au contenu. Elle est le contenu même de la leçon.</cite></div>
+    </div>
+  </div>
+  <div class="pageno">14<b>/30</b></div>
+</section>
+
+<!-- ============ 15 · INTERTITRE QUATRIÈME GÉNÉRATION ============ -->
+<section class="slide dark" data-label="II · Du volume au sens">
+  <div class="dk-ey a-fade">A.10 · Transition · Quatrième génération</div>
+  <h2 class="dk-h a-rise" style="--d:.12s">Le goulet s'est déplacé<br>de la machine vers <em>l'humain</em></h2>
+  <p class="dk-p a-rise" style="--d:.3s">Nous pouvons désormais tout stocker et tout interroger. Mais un tableau de bord que personne n'ouvre ne vaut pas mieux qu'une donnée qu'on n'a pas ; et une entreprise qui dispose de dix mille indicateurs n'est pas mieux informée que celle qui en avait dix, <b style="color:#17B3A3">si personne ne sait lesquels regarder</b>.</p>
+  <p class="dk-p a-fade" style="--d:.56s">Le problème que résolvait la troisième génération était un problème de <b>capacité</b>. Celui qu'elle découvre n'est pas de même nature — et il ne se résout pas par l'ingénierie.</p>
+</section>
+
+<!-- ============ 16 · A.11 · RUPTURE OU RENOMMAGE ============ -->
+<section class="slide" data-label="Analyse augmentée : rupture ou renommage ?">
+  <div class="top">
+    <div class="ey a-fade">A.11 · Quatre jours</div>
+    <h2 class="a-rise" style="--d:.06s">L'auteur du terme écrit elle-même que c'est un <em>renommage</em></h2>
+  </div>
+  <div class="body">
+    <div class="stack">
+      <div class="gap">
+        <div class="gap-c a-rise" style="--d:.2s">
+          <div class="gap-d">27 juillet 2017</div>
+          <div class="gap-t"><b>Sallam, Howson &amp; Idoine</b>, <i>Augmented Analytics Is the Future of Data and Analytics</i>, Gartner Research, doc. n° 3773164. Le terme entre au vocabulaire du marché.</div>
+        </div>
+        <div class="gap-mid a-pop" style="--d:.44s">
+          <div class="n">4</div>
+          <div class="u">jours</div>
+        </div>
+        <div class="gap-c acc a-rise" style="--d:.32s">
+          <div class="gap-d">31 juillet 2017</div>
+          <div class="gap-t"><b>Rita Sallam</b> publie un billet où elle indique qu'il s'agit d'un <b>renommage de « Smart Data Discovery »</b>, catégorie qu'elle promouvait depuis 2015.</div>
+        </div>
+      </div>
+      <div class="warn acc a-fade" style="--d:.58s"><b>Prenons-en la mesure sans excès.</b> Cela ne signifie pas que rien n'a changé entre 2015 et 2017. Cela signifie que <b>la césure générationnelle est un acte de nomenclature avant d'être un fait technique</b> — y compris le vocabulaire « BI 1.0, 2.0, 3.0, 4.0 » que nous employons dans ces deux modules. Nous l'utilisons parce qu'il est commode ; nous venons de montrer ce qu'il vaut.</div>
+      <div class="src a-fade" style="--d:.74s"><b>Précision de méthode.</b> Le texte intégral de la note de 2017 est sous abonnement et <b>nous ne l'avons pas lu</b>. Nous en établissons les auteurs, le titre, la date et le numéro sur la fiche éditeur archivée, et la thèse par le billet en accès libre du même auteur. Aucune phrase du corps n'est citée.</div>
+    </div>
+  </div>
+  <div class="pageno">16<b>/30</b></div>
+</section>
+
+<!-- ============ 17 · A.12a · L'EFFONDREMENT D'UNE MESURE ============ -->
+<section class="slide" data-label="Les bancs d'épreuve sont brisés">
+  <div class="top">
+    <div class="ey a-fade">A.12 · Le point le plus important de ce module</div>
+    <h2 class="a-rise" style="--d:.06s">L'instrument ne mesurait pas ce que nous <em>croyions</em></h2>
+    <p class="lede a-rise" style="--d:.12s">La promesse est simple : poser sa question en français, obtenir la réponse. Elle s'évalue depuis 2018 sur des jeux d'épreuves publics, dont les classements affichaient des scores élevés — et dont l'industrie s'est abondamment prévalue.</p>
+  </div>
+  <div class="body">
+    <div class="frise">
+      <div class="frise-line a-grow" style="--d:.2s"></div>
+      <div class="frise-pts">
+        <div class="fp a-rise" style="--d:.32s">
+          <div class="fp-dot dim"></div>
+          <div class="fp-y dim">2018</div>
+          <div class="fp-t"><b>Spider</b> — Yu et coauteurs, EMNLP. Le classement est <b>gelé depuis février 2024</b>, sur une soumission anonyme jamais publiée : c'est un repère historique, non un état de l'art.</div>
+        </div>
+        <div class="fp a-rise" style="--d:.46s">
+          <div class="fp-dot dim"></div>
+          <div class="fp-y dim">2023</div>
+          <div class="fp-t"><b>BIRD</b> — Li et coauteurs, NeurIPS. Bâti sur des bases plus réalistes. Les scores publiés flattent, et sont cités partout.</div>
+        </div>
+        <div class="fp a-rise" style="--d:.6s">
+          <div class="fp-dot"></div>
+          <div class="fp-y">2026</div>
+          <div class="fp-t"><b>Jin, Choi, Zhu &amp; Kang</b> — CIDR et <i>PVLDB</i>. Erreurs d'annotation massives. Une fois corrigées, <b>le classement des systèmes change</b>.</div>
+        </div>
+      </div>
+    </div>
+    <div class="warn acc a-fade" style="--d:.78s"><b>Le résultat central, et il faut le lire lentement : le classement non corrigé ne corrèle plus significativement avec le classement corrigé.</b> Cet énoncé ne dit pas « les systèmes sont moins bons qu'annoncé ». Il dit que <b>l'instrument avec lequel nous les mesurions ne mesurait pas ce que nous croyions</b>.</div>
+  </div>
+  <div class="pageno">17<b>/30</b></div>
+</section>
+
+<!-- ============ 18 · A.12b · LA BONNE QUESTION ============ -->
+<section class="slide" data-label="La bonne question, et elle est plus dure">
+  <div class="top">
+    <div class="ey a-fade">A.12 · Ce que l'on mesure quand on mesure</div>
+    <h2 class="a-rise" style="--d:.06s">« Elle s'exécute » n'est pas « elle veut dire ce qu'on a demandé »</h2>
+  </div>
+  <div class="body">
+    <div class="stack">
+      <div class="split">
+        <div class="pane centre a-slide" style="--d:.18s">
+          <div>
+            <div class="pane-h">La question qu'on posait</div>
+            <div class="pane-t">La requête s'exécute-t-elle ?</div>
+          </div>
+          <div class="mod-p" style="margin-top:10px">Critère commode, automatisable, et <b>insuffisant</b> : une requête syntaxiquement valide qui répond à côté est comptée juste. Les épreuves bâties sur des charges de travail <b>réelles</b> donnent d'ailleurs des résultats d'un tout autre ordre — de l'ordre du <b>dixième</b> des tâches difficiles réussies, contre des scores proches de 90 % sur les palmarès historiques.</div>
+        </div>
+        <div class="pane metier a-slide" style="--d:.3s">
+          <div>
+            <div class="pane-h">La question qu'il faut poser</div>
+            <div class="pane-t">Veut-elle dire ce qu'on a demandé ?</div>
+          </div>
+          <div class="mod-p" style="margin-top:10px"><b>NL2SQL-BUGs</b> (KDD 2025) déplace l'évaluation vers l'<b>erreur sémantique</b> : la requête est exécutable, et fausse quant à l'intention. C'est la bonne question — et elle est nettement plus dure à instrumenter, ce qui explique qu'on ne l'ait pas posée plus tôt.</div>
+        </div>
+      </div>
+      <div class="quote a-rise" style="--d:.5s">Sur ce sujet, nous en savons <em style="color:var(--accent);font-style:normal">moins</em> en 2026 qu'en 2025.<cite>Non parce que les systèmes ont régressé, mais parce que ce que nous croyions savoir reposait sur des mesures défectueuses. C'est un progrès de la connaissance qui prend la forme d'une perte de certitude — et c'est inconfortable à enseigner.</cite></div>
+    </div>
+  </div>
+  <div class="pageno">18<b>/30</b></div>
+</section>
+
+<!-- ============ 19 · A.13 · CE QUE NOUS NE SAVONS PAS DE L'USAGE ============ -->
+<section class="slide" data-label="L'usage : un angle mort constaté">
+  <div class="top">
+    <div class="ey a-fade">A.13 · Une lacune structurelle</div>
+    <h2 class="a-rise" style="--d:.06s">Des sièges facturés ne sont pas un <em>usage</em></h2>
+  </div>
+  <div class="body">
+    <div class="stack">
+      <div class="split">
+        <div class="pane centre a-rise" style="--d:.18s">
+          <div>
+            <div class="pane-h">Ce que les chiffres publics mesurent</div>
+            <div class="pane-t">Des métriques de vente</div>
+            <ul>
+              <li>Licences acquises</li>
+              <li>Sièges facturés</li>
+              <li>Déploiements annoncés</li>
+            </ul>
+          </div>
+          <div class="src" style="margin-top:10px">Ces chiffres sont exacts. Ils ne portent simplement pas sur ce dont on les fait témoigner.</div>
+        </div>
+        <div class="pane metier a-rise" style="--d:.3s">
+          <div>
+            <div class="pane-h">Ce dont nous ne disposons pas</div>
+            <div class="pane-t">Une mesure indépendante de l'usage réel</div>
+          </div>
+          <div class="mod-p" style="margin-top:10px">Combien de questions posées, par qui, avec quel taux d'abandon, et pour quelles décisions ? <b>Nous n'avons trouvé aucune mesure indépendante</b> — ni dans la littérature académique, ni hors des documents d'éditeurs.</div>
+        </div>
+      </div>
+      <div class="warn acc a-fade" style="--d:.5s"><b>La distinction importe, et nous la déclarons plutôt que de la masquer.</b> Ce n'est pas un angle que nous avons <b>choisi</b> de laisser de côté : c'est un angle que la recherche <b>n'a pas comblé</b>. L'un serait un choix pédagogique ; l'autre est un état du savoir. Rappelons qu'au module 1, sur le libre-service, un cas unique — 3 % de créateurs — avait suffi à démentir la promesse. L'équivalent n'existe pas encore ici.</div>
+    </div>
+  </div>
+  <div class="pageno">19<b>/30</b></div>
+</section>
+
+<!-- ============ 20 · A.14 · LA BOUCLE REFERMÉE ============ -->
+<section class="slide" data-label="La boucle refermée">
+  <div class="top">
+    <div class="ey a-fade">A.14 · Le nom annoncé au module 1</div>
+    <h2 class="a-rise" style="--d:.06s">C'est le <em>même objet</em>. Il a trente-cinq ans, et il revient.</h2>
+  </div>
+  <div class="body">
+    <div class="stack">
+      <div class="chain">
+        <div class="ch ink a-rise" style="--d:.2s"><div class="ch-t">Novembre 1991 · l'<i>univers</i></div><div class="ch-p">Deux ingénieurs français brevettent une couche qui traduit les tables en termes métier. <b>L'instrument de la centralisation.</b></div></div>
+        <div class="arw a-pop" style="--d:.32s"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14m0 0-5-5m5 5-5 5"/></svg></div>
+        <div class="ch a-rise" style="--d:.36s"><div class="ch-t">Années 2000 · le démantèlement</div><div class="ch-p">Au nom de l'autonomie. Chacun définit ses indicateurs — et la réunion redevient un débat sur les chiffres.</div></div>
+        <div class="arw a-pop" style="--d:.48s"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14m0 0-5-5m5 5-5 5"/></svg></div>
+        <div class="ch acc a-rise" style="--d:.52s"><div class="ch-t">Aujourd'hui · la <b>couche sémantique</b></div><div class="ch-p">Définitions centralisées, versionnées, gouvernées — et consommées par des outils décentralisés.</div></div>
+      </div>
+      <div class="warn a-fade" style="--d:.66s"><b>Première prudence, que nous nous devons.</b> Le brevet de 1991 décrit une <b>dynamique sémantique</b> : un même objet rend un résultat différent selon ceux avec lesquels on l'interroge. L'univers n'était donc <b>pas</b> le gel d'un sens unique — contrairement à ce qu'en disent ses critiques comme ses défenseurs.</div>
+      <div class="warn acc a-fade" style="--d:.8s"><b>Seconde prudence — une tentation qu'il faut refuser.</b> Il serait élégant d'affirmer que la couche sémantique conditionne la fiabilité des systèmes de la section A.12. <b>Ce lien est plausible, séduisant, et nous ne l'avons pas établi.</b> Nous ne l'écrirons donc pas — et vous devez savoir que nous avons eu envie de l'écrire.</div>
+    </div>
+  </div>
+  <div class="pageno">20<b>/30</b></div>
+</section>
+
+<!-- ============ 21 · LA THÈSE DES DEUX MODULES ============ -->
+<section class="slide dark" data-label="La thèse des deux modules">
+  <div class="dk-ey a-fade">A.14 · Ce que ces deux modules démontrent</div>
+  <h2 class="dk-h a-rise" style="--d:.12s">Ce que chaque génération rejette au nom de <em>la liberté</em>,<br>la suivante le réinvente au nom de <em>l'ordre</em></h2>
+  <p class="dk-p a-rise" style="--d:.34s">Et réciproquement. Non par ignorance de l'histoire — les acteurs de 2020 connaissaient parfaitement Business Objects — mais parce que les deux exigences sont <b style="color:#17B3A3">réellement incompatibles et réellement nécessaires</b>.</p>
+  <p class="dk-p a-fade" style="--d:.6s">C'est la seule thèse de ce cours qui se démontre sur un cas unique, daté et traçable : un brevet de novembre 1991, son abandon, et son retour sous un autre nom.</p>
+</section>
+
+<!-- ============ 22 · A.15 · MESH ET FABRIC ============ -->
+<section class="slide" data-label="Data Mesh ≠ Data Fabric">
+  <div class="top">
+    <div class="ey a-fade">A.15 · Une confusion qui annule la démonstration</div>
+    <h2 class="a-rise" style="--d:.06s">Une doctrine et une <em>étiquette</em> — savoir laquelle est laquelle</h2>
+    <p class="lede a-rise" style="--d:.12s">Le support d'origine les présentait ensemble, comme un même « nouveau paradigme ». Les deux termes circulent avec la même assurance dans les présentations commerciales. <b>Leur statut documentaire n'a rien de comparable.</b></p>
+  </div>
+  <div class="body">
+    <div class="split">
+      <div class="pane metier a-slide" style="--d:.2s">
+        <div>
+          <div class="pane-h">Data Mesh · une thèse organisationnelle</div>
+          <div class="pane-t">Un auteur, des dates, des textes</div>
+          <ul>
+            <li><b>20 mai 2019</b> — Zhamak Dehghani pose le diagnostic</li>
+            <li><b>3 décembre 2020</b> — les quatre principes : <b>c'est ce texte qu'il faut citer</b></li>
+            <li><b>2022</b> — systématisation chez O'Reilly</li>
+            <li><b>2024</b> — revue systématique universitaire, <i>ACM Computing Surveys</i></li>
+          </ul>
+        </div>
+        <div class="src" style="margin-top:10px">Décentraliser la propriété des données par domaines métier. Une doctrine <b>critiquable</b> — donc utilisable.</div>
+      </div>
+      <div class="pane centre a-slide" style="--d:.32s">
+        <div>
+          <div class="pane-h">Data Fabric · une catégorie de cabinet</div>
+          <div class="pane-t">Aucun document fondateur consultable</div>
+        </div>
+        <div class="mod-p" style="margin-top:10px">Nous en avons cherché un. Nous n'en avons pas trouvé. C'est, des <b>quatre notions structurantes</b> de ces deux modules — entrepôt, univers sémantique, <i>lakehouse</i>, <i>data fabric</i> — <b>la seule sans texte d'origine</b>.</div>
+        <div class="src" style="margin-top:10px">Une étiquette ne se réfute pas : elle se vend.</div>
+      </div>
+    </div>
+    <div class="warn acc a-fade" style="--d:.5s"><b>L'asymétrie est elle-même l'enseignement</b> — et c'est exactement la compétence que ce cours vise. Devant un terme du marché, la première question n'est pas « que désigne-t-il ? » mais <b>« existe-t-il un document que je peux aller lire ? »</b>.</div>
+  </div>
+  <div class="pageno">22<b>/30</b></div>
+</section>
+
+<!-- ============ 23 · A.16 · LE CADRE JURIDIQUE ============ -->
+<section class="slide" data-label="Le cadre juridique européen">
+  <div class="top">
+    <div class="ey a-fade">A.16 · Ce que le droit impose, et depuis quand</div>
+    <h2 class="a-rise" style="--d:.06s">Une aide à la décision peut juridiquement être une <em>décision</em></h2>
+  </div>
+  <div class="body">
+    <div class="stack">
+      <div class="mods">
+        <div class="mod a-rise" style="--d:.18s">
+          <div><div class="mod-n">RGPD · 2016/679</div><div class="mod-t">Quatre exigences directes</div></div>
+          <div class="mod-p"><b>Minimisation</b> (art. 5.1.c), <b>limitation des finalités</b> (5.1.b) et test de compatibilité d'une réutilisation (6.4), <b>limitation de la conservation</b> (5.1.e), <b>analyse d'impact</b> (art. 35).</div>
+        </div>
+        <div class="mod a-rise" style="--d:.28s">
+          <div><div class="mod-n">CJUE · C-634/21</div><div class="mod-t">L'arrêt SCHUFA</div></div>
+          <div class="mod-p">L'article 22 encadre la décision individuelle automatisée. La Cour a jugé qu'un <b>score suffisamment déterminant</b> relève de cet article — même présenté comme un simple avis.</div>
+        </div>
+        <div class="mod acc a-rise" style="--d:.38s">
+          <div><div class="mod-n">2024/1689 + 2026/1744</div><div class="mod-t">Le calendrier a changé</div></div>
+          <div class="mod-p">Le <b>Digital Omnibus on AI</b>, en vigueur le <b>27 juillet 2026</b>, reporte l'annexe III au <b>2 décembre 2027</b> et l'annexe I au <b>2 août 2028</b>.</div>
+        </div>
+      </div>
+      <div class="warn acc a-fade" style="--d:.52s"><b>La quasi-totalité des commentaires disponibles en ligne annonce encore la date du 2 août 2026. Ils sont faux.</b> Nous avons lu le règlement à la source et vérifié deux fois. — <b>Conséquence pratique pour ce cours :</b> ce sont aujourd'hui les obligations de <b>transparence</b> qui s'appliquent, et ce sont elles qui visent les assistants analytiques — l'utilisateur doit savoir qu'il s'adresse à une machine.</div>
+      <div class="src a-fade" style="--d:.68s"><b>Et la tension de fond, qui n'est pas juridique mais architecturale :</b> les quatre exigences du RGPD entrent frontalement en conflit avec la logique du lac de données décrite en A.5 — conserver tout, longtemps, pour des usages non encore définis.</div>
+    </div>
+  </div>
+  <div class="pageno">23<b>/30</b></div>
+</section>
+
+<!-- ============ 24 · A.17 + A.19 · DÉPENDANCE ET EMPREINTE ============ -->
+<section class="slide" data-label="Dépendance et empreinte">
+  <div class="top">
+    <div class="ey a-fade">A.17 · A.19 · Ce que le récit technologique omet</div>
+    <h2 class="a-rise" style="--d:.06s">Deux objections qui ne sont pas des <em>opinions</em></h2>
+    <p class="lede a-rise" style="--d:.12s">L'une a été instruite par des régulateurs et une commission parlementaire ; l'autre est documentée par trois institutions publiques. Nous les traitons pour cela, et non pour leur charge militante.</p>
+  </div>
+  <div class="body">
+    <div class="split">
+      <div class="pane centre a-slide" style="--d:.2s">
+        <div>
+          <div class="pane-h">La dépendance, objectivée</div>
+          <div class="pane-t">Le verrouillage a été instruit</div>
+          <ul>
+            <li><b>Autorité de la concurrence</b>, avis <b>23-A-08</b> : les mécanismes de verrouillage sont décrits par un régulateur</li>
+            <li><b>Sénat, 10 juin 2025</b> : un représentant de Microsoft France reconnaît <b>sous serment</b> ne pouvoir garantir que des données hébergées en Europe échapperaient à une demande fondée sur le droit américain</li>
+            <li><b>Data Act</b> (règlement 2023/2854) : changement de fournisseur, suppression progressive des frais de transfert</li>
+          </ul>
+        </div>
+        <div class="src" style="margin-top:10px"><b>Réserve d'honnêteté :</b> nous n'avons pas recoupé chaque numéro d'article du Data Act. Nous en mentionnons donc l'objet, <b>sans citer article par article</b>.</div>
+      </div>
+      <div class="pane metier a-slide" style="--d:.32s">
+        <div>
+          <div class="pane-h">L'empreinte, et ce qu'on en sait</div>
+          <div class="pane-t">Une convergence, pas un chiffre</div>
+          <ul>
+            <li><b>AIE</b>, <b>Centre commun de recherche</b> de la Commission, <b>Lawrence Berkeley National Laboratory</b> : convergence sur les <b>ordres de grandeur</b> de la consommation des centres de données</li>
+            <li>L'Union européenne <b>ne dispose pas</b> de statistique officielle consolidée ; une obligation de déclaration existe depuis 2024 au-delà de <b>500 kW</b></li>
+          </ul>
+        </div>
+        <div class="src" style="margin-top:10px">Les chiffres de consommation <b>par requête</b> qui circulent proviennent le plus souvent de <b>déclarations d'acteurs</b>, non de mesures indépendantes. Nous n'en citons aucun.</div>
+      </div>
+    </div>
+  </div>
+  <div class="pageno">24<b>/30</b></div>
+</section>
+
+<!-- ============ 25 · A.18 · D'OÙ VIENT UN CHIFFRE ? ============ -->
+<section class="slide" data-label="Exercice · d'où vient un chiffre ?">
+  <div class="top">
+    <div class="ey a-fade">A.18 · Exercice de méthode</div>
+    <h2 class="a-rise" style="--d:.06s">Trois chiffres célèbres, trois ruptures de <em>traçabilité</em></h2>
+    <p class="lede a-rise" style="--d:.12s">Ils portent sur l'échec des projets, et vous les rencontrerez partout dans ce domaine. Remontons-les.</p>
+  </div>
+  <div class="body">
+    <div class="split" style="grid-template-columns:1.25fr 1fr">
+      <div class="pane centre a-slide" style="--d:.2s">
+        <div>
+          <div class="pane-h">Ce que la remontée trouve</div>
+          <ul>
+            <li><b>« 85 % des projets d'IA échouent »</b> — une <b>prévision</b> de cabinet publiée en 2018, portant sur des <i>résultats erronés</i>, ce qui n'est pas un échec de projet. Une prévision devenue mesure par simple répétition.</li>
+            <li><b>« 85 % des projets big data échouent »</b> — un <b>message publié puis supprimé</b> sur un réseau social par un analyste. Il n'y a pas de rapport.</li>
+            <li><b>« 87 % des projets de science des données n'arrivent pas en production »</b> — une <b>déclaration orale</b> en table ronde, relayée par un article signalé comme contenu sponsorisé.</li>
+          </ul>
+        </div>
+        <div class="src" style="margin-top:10px">Quant au rapport le plus cité de l'histoire du domaine sur l'échec informatique, sa <b>méthode n'a jamais été publiée</b> — et deux travaux académiques en contestent la validité (Jørgensen &amp; Moløkken-Østvold, 2006 ; Eveleens &amp; Verhoef, 2010).</div>
+      </div>
+      <div class="pane metier a-zoom" style="--d:.34s">
+        <div style="text-align:center;margin-top:6px">
+          <div class="fig-n" style="font-size:56px">1 471</div>
+          <div class="fig-l" style="margin-top:12px">projets — <b>Flyvbjerg &amp; Budzier</b>. La seule base solide de notre corpus, <b>lue intégralement</b>.</div>
+        </div>
+        <div class="src" style="margin-top:14px"><b>Et ses limites, énoncées avec la même rigueur que le résultat :</b> 92 % de projets publics, 83 % américains. Une base solide n'est pas une base universelle — et la déclarer ainsi fait partie de l'exercice.</div>
+      </div>
+    </div>
+    <div class="warn acc a-fade" style="--d:.62s"><b>Ce n'est pas un angle mort du cours que nous comblons ici : c'est la compétence elle-même que nous exerçons.</b> Un chiffre qu'on ne peut pas remonter n'est pas un chiffre — c'est une rumeur bien habillée.</div>
+  </div>
+  <div class="pageno">25<b>/30</b></div>
+</section>
+
+<!-- ============ 26 · A.20 · SYNTHÈSE, QUATRE GÉNÉRATIONS ============ -->
+<section class="slide" data-label="Quatre générations, un seul mouvement">
+  <div class="top">
+    <div class="ey a-fade">A.20 · Synthèse des deux modules</div>
+    <h2 class="a-rise" style="--d:.06s">Chacune résout le problème de la précédente<br>et <em>produit</em> le suivant</h2>
+  </div>
+  <div class="body">
+    <div class="stack">
+      <div class="gtab">
+        <div class="gt-h a-fade" style="--d:.14s">Génération</div>
+        <div class="gt-h a-fade" style="--d:.18s">Ce qu'elle résout</div>
+        <div class="gt-h a-fade" style="--d:.22s">Ce qu'elle produit</div>
+        <div class="gt-c lab a-slide" style="--d:.26s">Première</div>
+        <div class="gt-c a-slide" style="--d:.3s">Le désordre des données</div>
+        <div class="gt-c a-slide" style="--d:.34s">La latence et la dépendance</div>
+        <div class="gt-c lab a-slide" style="--d:.38s">Deuxième</div>
+        <div class="gt-c a-slide" style="--d:.42s">La latence et la dépendance</div>
+        <div class="gt-c a-slide" style="--d:.46s">Le désordre des définitions</div>
+        <div class="gt-c lab a-slide" style="--d:.5s">Troisième</div>
+        <div class="gt-c a-slide" style="--d:.54s">L'échelle et l'hétérogénéité</div>
+        <div class="gt-c a-slide" style="--d:.58s">La complexité et son coût</div>
+        <div class="gt-c lab a-slide" style="--d:.62s">Quatrième</div>
+        <div class="gt-c acc a-slide" style="--d:.66s">La charge cognitive</div>
+        <div class="gt-c acc a-slide" style="--d:.7s">L'incertitude sur la fiabilité</div>
+      </div>
+      <div class="split">
+        <div class="pane metier a-fade" style="--d:.78s">
+          <div><div class="pane-h">Trois dynamiques traversent ce tableau</div></div>
+          <div class="mod-p" style="margin-top:8px">Le <b>pouvoir</b> oscille entre le centre et les métiers, sans se stabiliser. La <b>contrainte</b> se déplace de la machine vers l'humain, puis vers la confiance. Et le <b>critère de qualité</b> change de nature : l'exactitude, puis la rapidité, puis l'échelle, aujourd'hui la <b>traçabilité</b>.</div>
+        </div>
+        <div class="pane centre a-fade" style="--d:.88s">
+          <div><div class="pane-h">Gardons-nous d'une lecture trop satisfaisante</div></div>
+          <div class="mod-p" style="margin-top:8px">Ce tableau est une <b>construction</b> — nous l'avons montré en A.11 : la nomenclature des générations est un produit de l'industrie qu'elle décrit. Il éclaire un mouvement réel ; il lui donne une <b>netteté que l'histoire n'a pas</b>.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="pageno">26<b>/30</b></div>
+</section>
+
+<!-- ============ 27 · À RETENIR ============ -->
+<section class="slide" data-label="À retenir">
+  <div class="top">
+    <div class="ey a-fade">Synthèse</div>
+    <h2 class="a-rise" style="--d:.06s">Cinq acquis, et un réflexe qui les commande tous</h2>
+  </div>
+  <div class="body">
+    <div class="mods">
+      <div class="mod a-rise" style="--d:.16s"><div><div class="mod-n">01</div><div class="mod-t">Le mot précède la définition</div></div><div class="mod-p">Les 3V, DataOps, le <i>lakehouse</i>, l'analyse augmentée : le marché nomme, la recherche définit des années plus tard. Entre les deux, le terme circule <b>sans référent stable</b>.</div></div>
+      <div class="mod a-rise" style="--d:.24s"><div><div class="mod-n">02</div><div class="mod-t">Le découplage est l'idée centrale</div></div><div class="mod-p">Stockage et calcul, format et moteur : la troisième génération tient dans une seule opération, <b>séparer ce qui n'a pas à tenir ensemble</b>.</div></div>
+      <div class="mod a-rise" style="--d:.32s"><div><div class="mod-n">03</div><div class="mod-t">La transformation s'est déplacée</div></div><div class="mod-p">L'ELT ne supprime pas le travail de mise en cohérence : il le <b>reporte en aval</b>, où il se multiplie. Le problème du module 1 est intact.</div></div>
+      <div class="mod acc a-rise" style="--d:.4s"><div><div class="mod-n">04</div><div class="mod-t">L'instrument était faux</div></div><div class="mod-p">Sur la traduction du langage naturel vers SQL, <b>nous en savons moins en 2026 qu'en 2025</b>. Une perte de certitude est parfois un progrès de la connaissance.</div></div>
+      <div class="mod a-rise" style="--d:.48s"><div><div class="mod-n">05</div><div class="mod-t">La boucle se referme</div></div><div class="mod-p">Ce qu'une génération rejette au nom de la liberté, la suivante le réinvente au nom de l'ordre. Démontré sur <b>un brevet de 1991</b>.</div></div>
+      <div class="mod ink a-rise" style="--d:.56s"><div><div class="mod-n">Le réflexe</div><div class="mod-t">Existe-t-il un document ?</div></div><div class="mod-p">Avant « que veut dire ce terme ? », poser : <b>« puis-je aller lire la source ? »</b>. Trois des quatre notions de ce cours y résistent. Une seule n'y résiste pas.</div></div>
+    </div>
+  </div>
+  <div class="pageno">27<b>/30</b></div>
+</section>
+
+<!-- ============ 28 · A.21 · QUESTION OUVERTE ============ -->
+<section class="slide dark" data-label="Question ouverte">
+  <div class="dk-ey a-fade">A.21 · Ce cours ne la referme pas</div>
+  <h2 class="dk-h a-rise" style="--d:.12s">La question de la <em>disparition</em><br>est peut-être mal posée</h2>
+  <div class="dk-q">
+    <div class="dk-qi a-rise" style="--d:.34s">
+      <div class="dk-qn">?</div>
+      <div class="dk-qt">La formulation reçue : <b>l'informatique décisionnelle est-elle appelée à disparaître dans l'IA générative</b> ?</div>
+    </div>
+    <div class="dk-qi a-rise" style="--d:.44s">
+      <div class="dk-qn">!</div>
+      <div class="dk-qt">Ce que nous avons observé : chaque génération <b>conserve les problèmes de la précédente</b> en changeant les mots pour les dire.</div>
+    </div>
+    <div class="dk-qi a-rise" style="--d:.54s">
+      <div class="dk-qn">→</div>
+      <div class="dk-qt">Qui a autorité pour dire ce que « client actif » signifie ? <b>Aucune génération technique ne l'a tranché.</b></div>
+    </div>
+  </div>
+  <p class="dk-p a-fade" style="--d:.74s">Peut-être l'informatique décisionnelle n'est-elle pas une technologie susceptible d'être remplacée, mais <b style="color:#17B3A3">un problème d'organisation que chaque technologie hérite</b>. C'est cette hypothèse que nous vous laissons discuter.</p>
+</section>
+
+<!-- ============ 29 · RÉFÉRENCES I ============ -->
+<section class="slide" data-label="Références · l'architecture">
+  <div class="top">
+    <div class="ey a-fade">Références · 1/2 — l'architecture et le flux, 2001-2023</div>
+    <h2 class="a-rise" style="--d:.06s">Ce que vous pouvez contester, ce qui vous situe</h2>
+  </div>
+  <div class="body">
+    <div class="panelrow">
+      <div class="panel a-rise" style="--d:.16s">
+        <div class="panel-h">Sources primaires</div>
+        <div class="ref"><b>Laney, D.</b> (2001). <i>3D Data Management: Controlling Data Volume, Velocity, and Variety</i>. Application Delivery Strategies, File 949. META Group, 6 février 2001, 4 p.<span>Lue sur exemplaire archivé. « Big Data » n'y figure pas ; l'éditeur est META Group, non Gartner.</span></div>
+        <div class="ref"><b>Federal Trade Commission</b> (2005). <i>20050490: Gartner, Inc.; META Group, Inc.</i> Early Termination Notices, 28 janvier 2005.<span>Registre fédéral primaire : la cause documentaire de la mésattribution.</span></div>
+        <div class="ref"><b>Melnik, S. et al.</b> (2010). « Dremel: Interactive Analysis of Web-Scale Datasets ». <i>PVLDB</i>, 3(1), 330-339.</div>
+        <div class="ref"><b>Kreps, J., Narkhede, N. &amp; Rao, J.</b> (2011). « Kafka: a Distributed Messaging System for Log Processing ». <i>NetDB'11</i>, Athènes.<span>Actes non paginés — toute notice affichant des pages est fabriquée.</span></div>
+        <div class="ref"><b>Carbone, P. et al.</b> (2015). « Apache Flink™: Stream and Batch Processing in a Single Engine ». <i>IEEE Data Engineering Bulletin</i>, 38(4), 28-38.</div>
+        <div class="ref"><b>Dageville, B. et al.</b> (2016). « The Snowflake Elastic Data Warehouse ». <i>SIGMOD '16</i>, 215-226.<span>Document primaire de la séparation stockage / calcul.</span></div>
+        <div class="ref"><b>Ereth, J.</b> (2018). « DataOps — Towards a Definition ». <i>LWDA 2018</i>, CEUR-WS vol. 2191, 104-112.<span>Première définition académique ; l'auteur la donne pour non définitive.</span></div>
+        <div class="ref"><b>Armbrust, M. et al.</b> (2018). « Structured Streaming ». <i>SIGMOD '18</i>, 601-613. — (2020). « Delta Lake ». <i>PVLDB</i>, 13(12), 3411-3424. — (2021). « Lakehouse ». <i>CIDR '21</i>.<span>Vingt-et-un auteurs pour Delta Lake, tous liés à Databricks : ingénierie primaire, non évaluation.</span></div>
+        <div class="ref"><b>Dehghani, Z.</b> (2019, 2020, 2022). <i>Data Mesh</i> — diagnostic, quatre principes, livre O'Reilly.<span>Citer le texte du 3 décembre 2020 pour les principes.</span></div>
+        <div class="ref"><b>Durner, D., Leis, V. &amp; Neumann, T.</b> (2023). « Exploiting Cloud Object Storage for High-Performance Analytics ». <i>PVLDB</i>, 16(11), 2769-2782.<span>Équipe universitaire sans intérêt commercial : le contrepoint aux papiers d'éditeurs.</span></div>
+      </div>
+      <div class="panel tight a-rise" style="--d:.28s">
+        <div>
+          <div class="panel-h">Repères de contexte</div>
+          <div class="ref"><b>Palmer, A.</b> (2015). <i>From DevOps to DataOps</i>. Tamr.<span>Blog d'un cofondateur : acte de naissance du terme, et rien d'autre.</span></div>
+          <div class="ref"><b>Lorica, B. et al.</b> (2020). <i>What Is a Lakehouse?</i> Databricks Blog, 30 janvier 2020.<span>Blog de l'éditeur du produit décrit. « Premier emploi documenté », jamais « invention ».</span></div>
+          <div class="ref"><b>Barr, J.</b> (2012, 2013). <i>Amazon Redshift</i>. AWS News Blog.<span>Le couple donne annonce (28 nov. 2012) et disponibilité générale (15 fév. 2013).</span></div>
+          <div class="ref"><b>Apache Software Foundation</b>. <i>Apache Iceberg Table Spec</i>, branche <code>main</code>.<span>v1-v3 adoptées ; v4 « en développement actif, non formellement adoptée ».</span></div>
+        </div>
+        <div class="src" style="margin-top:12px;padding-top:12px;border-top:1px solid var(--line)">Une source primaire est une source dont <b>une donnée peut être contestée</b>. Un repère de contexte situe sans mesurer : il ne se cite pas comme preuve.</div>
+      </div>
+    </div>
+  </div>
+  <div class="pageno">29<b>/30</b></div>
+</section>
+
+<!-- ============ 30 · RÉFÉRENCES II ============ -->
+<section class="slide" data-label="Références · l'intelligence augmentée et le droit">
+  <div class="top">
+    <div class="ey a-fade">Références · 2/2 — l'intelligence augmentée, le droit, l'échec</div>
+    <h2 class="a-rise" style="--d:.06s">Et ce que cet appareil ne permet <em>pas</em> d'affirmer</h2>
+  </div>
+  <div class="body">
+    <div class="panelrow">
+      <div class="panel a-rise" style="--d:.16s">
+        <div class="panel-h">Sources primaires</div>
+        <div class="ref"><b>Sallam, R. L., Howson, C. &amp; Idoine, C. J.</b> (2017). <i>Augmented Analytics Is the Future of Data and Analytics</i>. Gartner Research, 27 juillet 2017, doc. n° 3773164. — Et <b>Sallam, R.</b>, billet du 31 juillet 2017.<span>Notice établie sur fiche éditeur archivée ; texte intégral sous abonnement, non lu. Le billet établit le renommage de « Smart Data Discovery ».</span></div>
+        <div class="ref"><b>Yu, T. et al.</b> (2018). « Spider ». <i>EMNLP 2018</i>, 3911-3921. — <b>Li, J. et al.</b> (2023). « BIRD ». <i>NeurIPS 2023</i>, Datasets and Benchmarks.<span>Classement Spider gelé depuis le 5 février 2024 : repère historique.</span></div>
+        <div class="ref"><b>Liu, X. et al.</b> (2025). « NL2SQL-BUGs: A Benchmark for Detecting Semantic Errors in NL2SQL Translation ». <i>KDD '25</i>, vol. 2.</div>
+        <div class="ref"><b>Jin, T., Choi, Y., Zhu, Y. &amp; Kang, D.</b> (2026). « Text-to-SQL Benchmarks are Broken ». <i>CIDR 2026</i>. — Version longue : « Pervasive Annotation Errors Break Text-to-SQL Benchmarks and Leaderboards », <i>PVLDB</i>.<span>Résultat central du dossier. Citer les chiffres depuis la version longue.</span></div>
+        <div class="ref"><b>Goedegebuure, A. et al.</b> (2024). « Data Mesh: a Systematic Gray Literature Review ». <i>ACM Computing Surveys</i>.<span>Seule évaluation indépendante du Data Mesh dans notre corpus.</span></div>
+        <div class="ref"><b>Union européenne</b>. Règlement <b>2016/679</b> (RGPD) — art. 5.1.b, 5.1.c, 5.1.e, 6.4, 22, 35. Règlement <b>2024/1689</b> (IA) — art. 6, annexe III, art. 113. Règlement <b>2026/1744</b> (<i>Digital Omnibus on AI</i>), en vigueur le 27 juillet 2026. Règlement <b>2023/2854</b> (<i>Data Act</i>).<span>Textes primaires lus directement. Le report de calendrier a été vérifié deux fois sur EUR-Lex. Data Act : articles non recoupés, non cités un à un.</span></div>
+        <div class="ref"><b>CJUE</b>, affaire <b>C-634/21</b> (SCHUFA). — <b>Autorité de la concurrence</b>, avis <b>23-A-08</b>.<span>Un score déterminant relève de l'art. 22 ; le verrouillage du nuage objectivé par un régulateur.</span></div>
+        <div class="ref"><b>Flyvbjerg, B. &amp; Budzier, A.</b> Étude sur <b>1 471 projets</b>. — <b>Glass, R. L.</b> (2005). « IT Failure Rates — 70% or 10-15%? ». <i>IEEE Software</i>, 22(3), 110-112. — <b>Jørgensen &amp; Moløkken-Østvold</b> (2006) ; <b>Eveleens &amp; Verhoef</b> (2010).<span>Flyvbjerg lu intégralement. Limites déclarées : 92 % de projets publics, 83 % américains.</span></div>
+      </div>
+      <div class="panel tight a-rise" style="--d:.28s">
+        <div>
+          <div class="panel-h">Repères de contexte</div>
+          <div class="ref"><b>Ryseff, J., De Bruhl, B. F. &amp; Newberry, S. J.</b> (2024). <i>The Root Causes of Failure for Artificial Intelligence Projects</i>. RAND, RR-A2680-1.<span>65 entretiens. RAND n'est pas l'émetteur du « 80 % d'échec » : il le reprend explicitement.</span></div>
+          <div class="ref"><b>AIE</b>, <b>Centre commun de recherche</b> de la Commission européenne, <b>Lawrence Berkeley National Laboratory</b>. Consommation des centres de données.<span>Cités pour une convergence d'ordres de grandeur, non pour un chiffre unique.</span></div>
+          <div class="ref"><b>Classements officiels</b> Spider 1.0, Spider 2.0, BIRD-SQL, consultés le 2 août 2026.<span>À lire avec Jin et al. (2026), qui en établissent le taux d'erreur d'annotation.</span></div>
+        </div>
+        <div class="warn a-fade" style="--d:.44s;margin-top:12px"><b>Ce que cet appareil ne permet pas.</b> Gartner n'a jamais été consultée dans le texte. La documentation du <i>lakehouse</i> est massivement produite par ceux qui le vendent. <b>Aucune mesure indépendante de l'usage réel des assistants analytiques n'existe.</b> Et le lien entre couche sémantique et fiabilité du texte-vers-SQL n'est <b>pas établi</b> : nous ne l'écrivons pas.</div>
+      </div>
+    </div>
+  </div>
+  <div class="pageno">30<b>/30</b></div>
+</section>
+
+    </div>
+
+    <div class="nav" id="nav">
+      <button id="prev" title="Précédent (←)">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+      </button>
+      <span class="count" id="count">1 / 30</span>
+      <button id="next" title="Suivant (→)">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+      </button>
+    </div>
+  </main>
+</div>
+
+<script>
+(function(){
+  const deck   = document.getElementById('deck');
+  const stage  = document.getElementById('stage');
+  const slides = Array.from(deck.querySelectorAll('.slide'));
+  const thumbs = document.getElementById('thumbs');
+  const count  = document.getElementById('count');
+  const N = slides.length;
+  let cur = 0;
+
+  slides.forEach((s, i) => {
+    const wrap = document.createElement('div');
+    wrap.className = 'thumb';
+    const clone = s.cloneNode(true);
+    clone.classList.remove('active');
+    clone.classList.add('tvis');
+    wrap.innerHTML =
+      '<div class="thumb-no">' + (i+1) + '</div>' +
+      '<div class="thumb-box"><div class="thumb-scale"></div></div>' +
+      '<div class="thumb-label">' + (s.dataset.label || ('Carte ' + (i+1))) + '</div>';
+    wrap.querySelector('.thumb-scale').appendChild(clone);
+    wrap.addEventListener('click', () => go(i));
+    thumbs.appendChild(wrap);
+  });
+  const thumbEls = Array.from(thumbs.querySelectorAll('.thumb'));
+
+  function go(i){
+    if(i < 0 || i > N-1) return;
+    const s = slides[i];
+    slides.forEach(x => x.classList.remove('active'));
+    void s.offsetWidth;
+    s.classList.add('active');
+    cur = i;
+    thumbEls.forEach((t,k) => t.classList.toggle('on', k === i));
+    count.textContent = (i+1) + ' / ' + N;
+    document.getElementById('prev').disabled = (i === 0);
+    document.getElementById('next').disabled = (i === N-1);
+    thumbEls[i].scrollIntoView({block:'nearest', behavior:'smooth'});
+  }
+  document.getElementById('prev').onclick = () => go(cur-1);
+  document.getElementById('next').onclick = () => go(cur+1);
+
+  function fit(){
+    const pad = document.fullscreenElement ? 0 : 56;
+    const r = stage.getBoundingClientRect();
+    const s = Math.min((r.width - pad) / 1280, (r.height - pad) / 720);
+    deck.style.transform = 'scale(' + s + ')';
+  }
+  window.addEventListener('resize', fit);
+
+  function toggleFs(){
+    if(document.fullscreenElement) document.exitFullscreen();
+    else stage.requestFullscreen && stage.requestFullscreen();
+  }
+  document.getElementById('btnFs').onclick = toggleFs;
+  document.addEventListener('fullscreenchange', () => {
+    fit(); setTimeout(fit, 130);
+    go(cur); wake();
+  });
+
+  let idleT;
+  function wake(){
+    stage.classList.remove('idle');
+    clearTimeout(idleT);
+    if(document.fullscreenElement) idleT = setTimeout(() => stage.classList.add('idle'), 2600);
+  }
+  stage.addEventListener('mousemove', wake);
+
+  function toPdf(){
+    const wasFs = !!document.fullscreenElement;
+    const finish = () => window.print();
+    if(wasFs) document.exitFullscreen().then(() => setTimeout(finish, 260));
+    else finish();
+  }
+  document.getElementById('btnPdf').onclick = toPdf;
+
+  document.addEventListener('keydown', e => {
+    if(e.metaKey || e.ctrlKey || e.altKey) return;
+    if(e.key === 'ArrowRight' || e.key === 'PageDown' || e.key === ' '){ e.preventDefault(); go(cur+1); }
+    else if(e.key === 'ArrowLeft' || e.key === 'PageUp'){ e.preventDefault(); go(cur-1); }
+    else if(e.key === 'Home'){ go(0); }
+    else if(e.key === 'End'){ go(N-1); }
+    else if(e.key === 'f' || e.key === 'F'){ toggleFs(); }
+    else if(e.key === 'p' || e.key === 'P'){ e.preventDefault(); toPdf(); }
+  });
+
+  fit();
+  go(0);
+})();
+</script>

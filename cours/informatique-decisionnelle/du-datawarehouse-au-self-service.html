@@ -1,0 +1,1205 @@
+<meta charset="utf-8">
+<title>Module 1 — Du data warehouse au self-service</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<meta name="pedago:chemin"  content="cours/informatique-decisionnelle">
+<meta name="pedago:famille" content="cours">
+<meta name="pedago:titre"   content="Du data warehouse au self-service — le contrôle et sa contestation">
+<meta name="pedago:rang"    content="1">
+<meta name="pedago:mode"    content="cours">
+<meta name="pedago:cartes"  content="27">
+<meta name="pedago:resume"  content="Les deux premières générations de l'informatique décisionnelle, 1864-2010 : comment l'ordre imposé par le centre a produit la révolte des métiers, et comment cette révolte a recréé le désordre qu'elle prétendait fuir.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --ink:#0B2545;
+  --ink-2:#13315C;
+  --blue:#1D4E89;
+  --blue-soft:#6E9BD1;
+  --accent:#0E9594;
+  --accent-2:#17B3A3;
+  --accent-wash:rgba(14,149,148,.10);
+  --accent-glow:rgba(14,149,148,.22);
+  --bg:#EEF3F8;
+  --card:#FFFFFF;
+  --paper:#F7FAFC;
+  --line:rgba(11,37,69,.11);
+  --ink-70:rgba(11,37,69,.72);
+  --ink-50:rgba(11,37,69,.52);
+  --stage-bg:radial-gradient(1100px 620px at 50% 8%, #fff 0%, rgba(255,255,255,0) 62%), #EEF3F8;
+  --dark-bg:radial-gradient(900px 560px at 22% 12%, #1B4A7E 0%, rgba(27,74,126,0) 60%),
+            radial-gradient(700px 500px at 88% 92%, rgba(14,149,148,.34) 0%, rgba(14,149,148,0) 62%),
+            linear-gradient(150deg,#0B2545 0%,#0A1E3A 100%);
+  --serif:'Fraunces','Iowan Old Style',Georgia,'Times New Roman',serif;
+  --sans:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;
+  --W:1280px; --H:720px;
+}
+
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0; background:var(--bg); color:var(--ink);
+  font-family:var(--sans); -webkit-font-smoothing:antialiased;
+  overflow:hidden;
+}
+
+.app{display:flex; height:100vh; width:100vw}
+
+.rail{
+  width:250px; flex:0 0 250px; height:100vh;
+  background:#fff; border-right:1px solid var(--line);
+  display:flex; flex-direction:column;
+  box-shadow:0 0 40px rgba(0,0,0,.06); z-index:5;
+}
+.rail-head{padding:20px 18px 14px; border-bottom:1px solid var(--line)}
+.rail-back{
+  display:inline-flex; align-items:center; gap:6px;
+  margin-bottom:12px;
+  font-size:10.5px; font-weight:500; letter-spacing:.02em;
+  color:var(--ink-50); text-decoration:none;
+  transition:color .18s;
+}
+.rail-back:hover{color:var(--accent)}
+.rail-back:focus-visible{outline:2px solid var(--accent); outline-offset:3px; border-radius:3px}
+.rail-back svg{width:11px; height:11px; flex:0 0 11px}
+.rail-kicker{font-size:9.5px; letter-spacing:.18em; text-transform:uppercase; color:var(--accent); font-weight:700}
+.rail-title{font-family:var(--serif); font-size:17px; line-height:1.25; font-weight:500; margin-top:7px; color:var(--ink)}
+.rail-meta{font-size:11px; color:var(--ink-50); margin-top:6px}
+
+.thumbs{flex:1; overflow-y:auto; padding:14px 16px 18px; scrollbar-width:thin}
+.thumbs::-webkit-scrollbar{width:6px}
+.thumbs::-webkit-scrollbar-thumb{background:rgba(0,0,0,.16); border-radius:3px}
+.thumb{position:relative; margin-bottom:13px; cursor:pointer; border-radius:8px; padding-left:22px; transition:transform .22s cubic-bezier(.2,.7,.3,1)}
+.thumb:hover{transform:translateX(2px)}
+.thumb-no{position:absolute; left:0; top:50%; transform:translateY(-50%); font-size:10.5px; font-weight:600; color:var(--ink-50); font-variant-numeric:tabular-nums; transition:color .2s}
+.thumb-box{position:relative; width:212px; height:119.25px; overflow:hidden; border-radius:7px; background:#fff; border:1px solid var(--line); box-shadow:0 2px 8px rgba(0,0,0,.07); transition:box-shadow .25s, border-color .25s}
+.thumb-box::after{content:''; position:absolute; inset:0; border-radius:7px; box-shadow:inset 0 0 0 2px transparent; transition:box-shadow .25s}
+.thumb.on .thumb-box::after{box-shadow:inset 0 0 0 2px var(--accent)}
+.thumb.on .thumb-box{box-shadow:0 6px 20px var(--accent-glow)}
+.thumb.on .thumb-no{color:var(--accent); font-weight:700}
+.thumb-scale{position:absolute; top:0; left:0; width:var(--W); height:var(--H); transform:scale(.16563); transform-origin:0 0; pointer-events:none}
+.thumb-label{font-size:10.5px; color:var(--ink-50); margin-top:5px; letter-spacing:.01em; white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+.thumb.on .thumb-label{color:var(--ink-70); font-weight:500}
+
+.rail-foot{padding:13px 16px 16px; border-top:1px solid var(--line); display:grid; gap:8px}
+.btn{display:flex; align-items:center; gap:9px; width:100%; padding:9px 12px; border-radius:8px; border:1px solid var(--line); background:var(--paper); color:var(--ink-70); font-family:var(--sans); font-size:12px; font-weight:500; cursor:pointer; transition:all .18s}
+.btn:hover{background:var(--ink); color:#fff; border-color:var(--ink)}
+.btn svg{width:14px; height:14px; flex:0 0 14px}
+.btn .k{margin-left:auto; font-size:9.5px; opacity:.5; letter-spacing:.06em}
+
+.stage{flex:1; position:relative; display:flex; align-items:center; justify-content:center; background:var(--stage-bg); overflow:hidden}
+.deck{position:relative; width:var(--W); height:var(--H); transform-origin:center center; border-radius:14px; overflow:hidden; box-shadow:0 26px 70px rgba(0,0,0,.20), 0 2px 6px rgba(0,0,0,.08)}
+.stage:fullscreen{background:var(--ink)}
+.stage:fullscreen .deck{border-radius:0; box-shadow:none}
+
+.nav{position:absolute; bottom:22px; left:50%; transform:translateX(-50%); display:flex; align-items:center; gap:6px; z-index:10; background:rgba(255,255,255,.86); backdrop-filter:blur(14px); border:1px solid var(--line); border-radius:999px; padding:5px 6px; box-shadow:0 6px 22px rgba(0,0,0,.14); transition:opacity .4s}
+.nav button{width:30px; height:30px; border-radius:50%; border:0; background:transparent; color:var(--ink-70); cursor:pointer; display:grid; place-items:center; transition:.16s}
+.nav button:hover{background:var(--ink); color:#fff}
+.nav button:disabled{opacity:.25; cursor:default; background:transparent; color:var(--ink-70)}
+.nav .count{font-size:11.5px; font-weight:600; color:var(--ink-70); font-variant-numeric:tabular-nums; padding:0 9px; letter-spacing:.04em}
+.stage.idle .nav{opacity:0}
+.hint{position:absolute; top:16px; right:18px; z-index:10; font-size:10.5px; color:var(--ink-50); letter-spacing:.05em; background:rgba(255,255,255,.8); padding:5px 11px; border-radius:999px; border:1px solid var(--line); transition:opacity .4s}
+.stage:not(:fullscreen) .hint{display:none}
+.stage.idle .hint{opacity:0}
+
+.slide{
+  position:absolute; inset:0; width:var(--W); height:var(--H);
+  padding:52px 66px 48px; background:var(--card);
+  opacity:0; visibility:hidden; z-index:1;
+  transition:opacity .5s ease;
+  display:flex; flex-direction:column;
+}
+.slide.active{opacity:1; visibility:visible; z-index:2}
+.thumb-scale .slide{opacity:0; visibility:hidden}
+.thumb-scale .slide.tvis{opacity:1; visibility:visible}
+.top{flex:0 0 auto}
+.body{flex:1 1 auto; min-height:0; display:flex; flex-direction:column; gap:15px; padding-top:17px}
+.body > .mods,
+.body > .figs,
+.body > .split,
+.body > .evol,
+.body > .frise,
+.body > .panelrow,
+.body > .stack{flex:1 1 auto}
+
+.slide.dark{background:var(--dark-bg); color:#fff; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center}
+.pageno{position:absolute; right:40px; bottom:30px; font-size:11.5px; font-weight:600; letter-spacing:.1em; color:var(--ink-50); font-variant-numeric:tabular-nums}
+.pageno b{color:var(--accent); font-weight:700}
+
+@keyframes rise{from{opacity:0; transform:translateY(26px)}}
+@keyframes fade{from{opacity:0}}
+@keyframes slideIn{from{opacity:0; transform:translateX(-30px)}}
+@keyframes zoomIn{from{opacity:0; transform:scale(.9)}}
+@keyframes grow{from{transform:scaleX(0)}}
+@keyframes growY{from{transform:scaleY(0)}}
+@keyframes draw{from{stroke-dashoffset:var(--len)}}
+@keyframes pop{from{opacity:0; transform:scale(.3)}}
+@keyframes sweep{from{opacity:0; clip-path:inset(0 100% 0 0)}}
+.slide.active .a-rise {animation:rise .82s var(--d,0s) both cubic-bezier(.18,.75,.25,1)}
+.slide.active .a-fade {animation:fade 1.05s var(--d,0s) both ease}
+.slide.active .a-slide{animation:slideIn .8s var(--d,0s) both cubic-bezier(.18,.75,.25,1)}
+.slide.active .a-zoom {animation:zoomIn .85s var(--d,0s) both cubic-bezier(.18,.8,.25,1)}
+.slide.active .a-grow {animation:grow 1.05s var(--d,0s) both cubic-bezier(.2,.75,.25,1); transform-origin:left center}
+.slide.active .a-growy{animation:growY .95s var(--d,0s) both cubic-bezier(.2,.75,.25,1); transform-origin:bottom center}
+.slide.active .a-draw {animation:draw 1.5s var(--d,0s) both cubic-bezier(.3,.7,.3,1)}
+.slide.active .a-pop  {animation:pop .6s var(--d,0s) both cubic-bezier(.2,1.5,.4,1)}
+.slide.active .a-sweep{animation:sweep 1.1s var(--d,0s) both cubic-bezier(.2,.75,.25,1)}
+.a-draw{stroke-dasharray:var(--len); stroke-dashoffset:0}
+
+/* ============================================================
+   STYLES DE MAQUETTE — « le balancier »
+   Motif directeur : l'oscillation entre le centre et les métiers.
+   Il gouverne les figures (bascules, frises, répartitions) et le
+   marquage des deux camps : marine pour le centre, sarcelle pour
+   les métiers. Cette bichromie porte l'argument, elle ne décore pas.
+   ============================================================ */
+.ey{font-size:10.5px; letter-spacing:.2em; text-transform:uppercase; color:var(--accent); font-weight:700}
+h2{font-family:var(--serif); font-size:38px; line-height:1.1; font-weight:400; margin:9px 0 0; letter-spacing:-.015em}
+h2 em{font-style:normal; color:var(--accent)}
+.lede{font-size:15.5px; line-height:1.5; color:var(--ink-70); margin:11px 0 0; max-width:1020px}
+.lede b{color:var(--ink); font-weight:600}
+
+/* Couverture et cartes foncées */
+.cov-ey{font-size:11px; letter-spacing:.3em; text-transform:uppercase; color:var(--accent-2); font-weight:700}
+.cov-h{font-family:var(--serif); font-size:62px; line-height:1.06; font-weight:400; margin:20px 0 0; max-width:940px; letter-spacing:-.02em}
+.cov-h em{font-style:normal; color:var(--accent-2)}
+.cov-sub{font-size:16.5px; line-height:1.55; color:rgba(255,255,255,.76); margin:22px auto 0; max-width:700px}
+.cov-rule{width:74px; height:2px; background:var(--accent-2); margin:30px auto 0; border-radius:2px}
+.cov-meta{font-size:12px; letter-spacing:.14em; text-transform:uppercase; color:rgba(255,255,255,.5); margin-top:26px}
+.dk-ey{font-size:11px; letter-spacing:.28em; text-transform:uppercase; color:var(--accent-2); font-weight:700}
+.dk-h{font-family:var(--serif); font-size:48px; line-height:1.12; font-weight:400; margin:18px 0 0; max-width:900px}
+.dk-h em{font-style:normal; color:var(--accent-2)}
+.dk-p{font-size:16px; line-height:1.6; color:rgba(255,255,255,.74); margin:22px auto 0; max-width:720px}
+.dk-q{display:flex; gap:26px; margin-top:34px; justify-content:center; max-width:940px}
+.dk-qi{flex:1; background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.13); border-radius:12px; padding:18px 20px; text-align:left}
+.dk-qn{font-family:var(--serif); font-size:24px; color:var(--accent-2); line-height:1}
+.dk-qt{font-size:13.5px; line-height:1.5; color:rgba(255,255,255,.84); margin-top:9px}
+
+/* Grilles de blocs */
+.mods{display:grid; grid-template-columns:repeat(3,1fr); gap:16px}
+.mods.two{grid-template-columns:1fr 1fr}
+.mods.four{grid-template-columns:repeat(4,1fr); gap:13px}
+.mod{background:var(--paper); border:1px solid var(--line); border-radius:12px; padding:19px 20px; display:flex; flex-direction:column; justify-content:space-between}
+.mod.acc{background:var(--accent-wash); border-color:rgba(14,149,148,.26)}
+.mod.ink{background:rgba(11,37,69,.045); border-color:rgba(11,37,69,.16)}
+.mod-n{font-family:var(--serif); font-size:15px; color:var(--accent); font-weight:600; letter-spacing:.06em}
+.mod-t{font-size:15px; font-weight:600; line-height:1.3; margin-top:6px}
+.mod-p{font-size:13px; line-height:1.55; color:var(--ink-70); margin-top:9px}
+.mod-p b{color:var(--ink); font-weight:600}
+
+/* Deux colonnes opposées — le balancier */
+.split{display:grid; grid-template-columns:1fr 1fr; gap:18px; position:relative}
+.pane{border-radius:13px; padding:20px 22px; display:flex; flex-direction:column; justify-content:space-between}
+.pane.centre{background:linear-gradient(160deg,rgba(29,78,137,.10),rgba(29,78,137,.03)); border:1px solid rgba(29,78,137,.24)}
+.pane.metier{background:linear-gradient(160deg,rgba(14,149,148,.12),rgba(14,149,148,.03)); border:1px solid rgba(14,149,148,.28)}
+.pane-h{font-size:11px; letter-spacing:.16em; text-transform:uppercase; font-weight:700}
+.pane.centre .pane-h{color:var(--blue)}
+.pane.metier .pane-h{color:var(--accent)}
+.pane-t{font-family:var(--serif); font-size:22px; line-height:1.2; margin-top:8px; font-weight:500}
+.pane ul{margin:13px 0 0; padding-left:17px}
+.pane li{font-size:13.5px; line-height:1.6; color:var(--ink-70); margin-bottom:7px}
+.pane li b{color:var(--ink); font-weight:600}
+
+/* Frise chronologique */
+.frise{position:relative; display:flex; flex-direction:column; justify-content:center; padding:8px 0}
+.frise-line{position:relative; height:3px; background:linear-gradient(90deg,rgba(29,78,137,.22),var(--accent)); border-radius:2px; margin:52px 12px 0}
+.frise-pts{display:flex; justify-content:space-between; margin:-8px 12px 0}
+.fp{position:relative; text-align:center; flex:1}
+.fp-dot{width:13px; height:13px; border-radius:50%; background:#fff; border:3px solid var(--accent); margin:0 auto; box-shadow:0 0 0 4px var(--accent-wash)}
+.fp-dot.dim{border-color:var(--blue-soft); box-shadow:0 0 0 4px rgba(110,155,209,.16)}
+.fp-y{font-family:var(--serif); font-size:26px; font-weight:600; margin-top:11px; color:var(--ink)}
+.fp-y.dim{color:var(--blue)}
+.fp-t{font-size:12.5px; line-height:1.45; color:var(--ink-70); margin-top:5px; padding:0 6px}
+.fp-t b{color:var(--ink); font-weight:600}
+
+/* Chaîne / processus */
+.chain{display:flex; align-items:stretch; gap:0; margin-top:4px}
+.ch{flex:1; background:var(--paper); border:1px solid var(--line); border-radius:11px; padding:15px 15px; text-align:center; display:flex; flex-direction:column; justify-content:center}
+.ch.acc{background:var(--accent-wash); border-color:rgba(14,149,148,.28)}
+.ch-t{font-size:13.5px; font-weight:600; line-height:1.3}
+.ch-p{font-size:11.5px; line-height:1.45; color:var(--ink-50); margin-top:6px}
+.arw{flex:0 0 34px; display:grid; place-items:center; color:var(--accent)}
+.arw svg{width:18px; height:18px}
+
+/* Figure chiffrée */
+.figs{display:grid; grid-template-columns:repeat(3,1fr); gap:16px}
+.figs.two{grid-template-columns:1fr 1fr}
+.fig{background:var(--paper); border:1px solid var(--line); border-radius:12px; padding:20px; display:flex; flex-direction:column; justify-content:space-between; text-align:center}
+.fig-n{font-family:var(--serif); font-size:46px; font-weight:600; color:var(--accent); line-height:1; letter-spacing:-.02em}
+.fig-n small{font-size:20px; font-weight:500}
+.fig-l{font-size:13px; line-height:1.5; color:var(--ink-70); margin-top:11px}
+.fig-l b{color:var(--ink); font-weight:600}
+
+/* Barres de répartition */
+.bars{display:flex; flex-direction:column; gap:14px; justify-content:center}
+.bar-row{display:grid; grid-template-columns:150px 1fr 62px; align-items:center; gap:15px}
+.bar-lab{font-size:13.5px; font-weight:600; text-align:right; line-height:1.25}
+.bar-lab small{display:block; font-size:11px; font-weight:400; color:var(--ink-50); margin-top:2px}
+.bar-tr{height:26px; background:rgba(11,37,69,.06); border-radius:6px; overflow:hidden}
+.bar-fl{height:100%; border-radius:6px; background:linear-gradient(90deg,var(--accent),var(--accent-2))}
+.bar-fl.dim{background:linear-gradient(90deg,var(--blue),var(--blue-soft))}
+.bar-v{font-family:var(--serif); font-size:20px; font-weight:600; color:var(--ink)}
+
+/* Encart de réserve — la déclaration de fragilité */
+.warn{background:rgba(29,78,137,.05); border-left:3px solid var(--blue-soft); border-radius:0 9px 9px 0; padding:13px 17px; font-size:12.5px; line-height:1.55; color:var(--ink-70)}
+.warn b{color:var(--blue); font-weight:600}
+.warn.acc{background:var(--accent-wash); border-left-color:var(--accent)}
+.warn.acc b{color:var(--accent)}
+
+/* Citation */
+.quote{font-family:var(--serif); font-size:22px; line-height:1.42; color:var(--ink); font-weight:400; padding-left:22px; border-left:3px solid var(--accent)}
+.quote cite{display:block; font-family:var(--sans); font-size:12px; font-style:normal; color:var(--ink-50); margin-top:12px; letter-spacing:.03em}
+
+/* Note de source au fil du propos */
+.src{font-size:11.5px; color:var(--ink-50); line-height:1.5}
+.src b{color:var(--ink-70); font-weight:600}
+
+/* Planche Références — colonne fournie élargie */
+.panelrow{display:grid; grid-template-columns:1.8fr 1fr; gap:20px}
+.panel{background:var(--paper); border:1px solid var(--line); border-radius:12px; padding:18px 20px; display:flex; flex-direction:column}
+.panel.tight{justify-content:space-between}
+.panel-h{font-size:10.5px; letter-spacing:.16em; text-transform:uppercase; color:var(--accent); font-weight:700; padding-bottom:9px; border-bottom:1px solid var(--line); margin-bottom:11px}
+.ref{font-size:11.5px; line-height:1.5; color:var(--ink-70); margin-bottom:9px}
+.ref:last-child{margin-bottom:0}
+.ref b{color:var(--ink); font-weight:600}
+.ref i{font-style:italic}
+.ref span{display:block; color:var(--ink-50); font-size:10.5px; margin-top:1px}
+
+.stack{display:flex; flex-direction:column; gap:15px; justify-content:space-between}
+
+@page{ size:1280px 720px; margin:0 }
+@media print{
+  html,body{overflow:visible; background:#fff; height:auto}
+  .rail,.nav,.hint{display:none !important}
+  .app{display:block; height:auto}
+  .stage{display:block; height:auto; background:#fff; overflow:visible}
+  .deck{width:auto; height:auto; transform:none !important; box-shadow:none; border-radius:0; position:static}
+  .slide{position:relative; inset:auto; display:flex; width:1280px; height:720px; opacity:1 !important; visibility:visible !important; page-break-after:always; break-after:page; overflow:hidden; -webkit-print-color-adjust:exact; print-color-adjust:exact}
+  .slide:last-child{page-break-after:auto; break-after:auto}
+  .slide *{animation:none !important; transition:none !important}
+}
+</style>
+
+<div class="app" id="app">
+
+  <aside class="rail">
+    <div class="rail-head">
+      <a class="rail-back" href="index.html">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18 9 12l6-6"/></svg>
+        Retour au cours
+      </a>
+      <div class="rail-kicker">Module 1 · Informatique décisionnelle</div>
+      <div class="rail-title">Du data warehouse au self-service</div>
+      <div class="rail-meta">Cours · 27 cartes · 1864-2010</div>
+    </div>
+    <div class="thumbs" id="thumbs"></div>
+    <div class="rail-foot">
+      <button class="btn" id="btnFs">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M8 3H5a2 2 0 0 0-2 2v3M16 3h3a2 2 0 0 1 2 2v3M8 21H5a2 2 0 0 1-2-2v-3M16 21h3a2 2 0 0 0 2-2v-3"/></svg>
+        Plein écran <span class="k">F</span>
+      </button>
+      <button class="btn" id="btnPdf">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0 4-4m-4 4-4-4M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg>
+        Exporter en PDF <span class="k">P</span>
+      </button>
+    </div>
+  </aside>
+
+  <main class="stage" id="stage">
+    <div class="hint">Échap pour quitter le plein écran</div>
+    <div class="deck" id="deck">
+
+<!-- ============ 1 · COUVERTURE ============ -->
+<section class="slide dark" data-label="Couverture">
+  <div class="cov-ey a-fade">Module 1 · Informatique décisionnelle</div>
+  <h1 class="cov-h a-rise" style="--d:.12s">Du data warehouse<br>au <em>self-service</em></h1>
+  <div class="cov-rule a-grow" style="--d:.5s"></div>
+  <p class="cov-sub a-rise" style="--d:.62s">Le contrôle et sa contestation — comment l'ordre imposé par le centre a produit la révolte des métiers, et comment cette révolte a recréé le désordre qu'elle fuyait.</p>
+  <div class="cov-meta a-fade" style="--d:.9s">Robert Voyer · IMT-BS</div>
+</section>
+
+<!-- ============ 2 · OBJECTIFS ============ -->
+<section class="slide" data-label="Objectifs">
+  <div class="top">
+    <div class="ey a-fade">Ouverture · Programme</div>
+    <h2 class="a-rise" style="--d:.06s">Ce que vous saurez faire</h2>
+    <p class="lede a-rise" style="--d:.12s">Une entreprise qui décide mal n'est pas une entreprise qui manque de données. C'est, presque toujours, une entreprise qui en a <b>trop</b>, et qui ne sait plus lesquelles croire.</p>
+  </div>
+  <div class="body">
+    <div class="mods">
+      <div class="mod a-rise" style="--d:.2s">
+        <div><div class="mod-n">01</div><div class="mod-t">Situer</div></div>
+        <div class="mod-p">Replacer l'informatique décisionnelle dans une histoire longue, et distinguer ce qui relève de la <b>technique</b> de ce qui relève de <b>l'organisation</b>.</div>
+      </div>
+      <div class="mod a-rise" style="--d:.28s">
+        <div><div class="mod-n">02</div><div class="mod-t">Décrire</div></div>
+        <div class="mod-p">L'architecture d'entreposage classique — extraction, transformation, chargement, modélisation — et nommer ses <b>deux écoles rivales</b>.</div>
+      </div>
+      <div class="mod a-rise" style="--d:.36s">
+        <div><div class="mod-n">03</div><div class="mod-t">Analyser</div></div>
+        <div class="mod-p">La « source unique de vérité » comme une <b>thèse</b>, et non comme une évidence technique.</div>
+      </div>
+      <div class="mod a-rise" style="--d:.44s">
+        <div><div class="mod-n">04</div><div class="mod-t">Expliquer</div></div>
+        <div class="mod-p">Pourquoi l'autonomie donnée aux métiers a produit un <b>désordre qu'elle n'avait pas prévu</b>.</div>
+      </div>
+      <div class="mod acc a-rise" style="--d:.52s">
+        <div><div class="mod-n">05</div><div class="mod-t">Critiquer</div></div>
+        <div class="mod-p">Remonter un chiffre jusqu'à sa source — compétence que ce module exerce <b>sur ses propres références</b>.</div>
+      </div>
+      <div class="mod ink a-rise" style="--d:.6s">
+        <div><div class="mod-n">Prérequis</div><div class="mod-t">Peu de choses</div></div>
+        <div class="mod-p">Notions élémentaires de base de données relationnelle et de requête. <b>Aucune compétence en programmation</b> n'est nécessaire.</div>
+      </div>
+    </div>
+  </div>
+  <div class="pageno">2<b>/27</b></div>
+</section>
+
+<!-- ============ 3 · ARTICULATION ============ -->
+<section class="slide" data-label="Articulation">
+  <div class="top">
+    <div class="ey a-fade">Ouverture · Programme</div>
+    <h2 class="a-rise" style="--d:.06s">Cinq temps, et une question qu'on ne referme pas</h2>
+    <p class="lede a-rise" style="--d:.12s">Ce module se clôt sur une <b>tension non résolue</b>. Le module 2 s'ouvre en la reprenant : ils se lisent ensemble.</p>
+  </div>
+  <div class="body">
+    <div class="mods four">
+      <div class="mod a-rise" style="--d:.2s">
+        <div><div class="mod-n">I</div><div class="mod-t">Le mot et la chose</div></div>
+        <div class="mod-p">Ce que « décider avec des données » veut dire, et d'où vient le terme.</div>
+      </div>
+      <div class="mod a-rise" style="--d:.27s">
+        <div><div class="mod-n">II</div><div class="mod-t">La périodisation</div></div>
+        <div class="mod-p">Posée comme un choix de lecture, non comme un fait.</div>
+      </div>
+      <div class="mod a-rise" style="--d:.34s">
+        <div><div class="mod-n">III</div><div class="mod-t">Le contrôle</div></div>
+        <div class="mod-p">La première génération : ses conquêtes, et ce qu'elles coûtent.</div>
+      </div>
+      <div class="mod a-rise" style="--d:.41s">
+        <div><div class="mod-n">IV</div><div class="mod-t">La contestation</div></div>
+        <div class="mod-p">Le libre-service, et le déplacement du pouvoir.</div>
+      </div>
+    </div>
+    <div class="split" style="grid-template-columns:1fr">
+      <div class="pane metier a-rise" style="--d:.5s">
+        <div>
+          <div class="pane-h">V · Le point d'arrivée</div>
+          <div class="pane-t">Le désordre produit par la liberté</div>
+        </div>
+        <div class="mod-p" style="margin-top:10px">Où placer la frontière entre définitions communes et analyses libres ? Gouvernance et agilité s'opposent-elles réellement, ou seulement par défaut d'outillage ? Ces questions restent ouvertes à la fin de ce module — <b>c'est délibéré</b>.</div>
+      </div>
+    </div>
+  </div>
+  <div class="pageno">3<b>/27</b></div>
+</section>
+
+<!-- ============ 4 · LE RÉFÉRENTIEL AVANT LA NOTION ============ -->
+<section class="slide" data-label="Définir">
+  <div class="top">
+    <div class="ey a-fade">A.1 · Poser le référentiel</div>
+    <h2 class="a-rise" style="--d:.06s">Deux mots qui portent toute la difficulté</h2>
+  </div>
+  <div class="body">
+    <div class="quote a-rise" style="--d:.16s">L'informatique décisionnelle désigne l'ensemble des dispositifs par lesquels une organisation <em style="color:var(--accent);font-style:normal">transforme</em> des données brutes en informations sur lesquelles elle <em style="color:var(--accent);font-style:normal">accepte de fonder</em> ses décisions.</div>
+    <div class="split">
+      <div class="pane centre a-rise" style="--d:.32s">
+        <div>
+          <div class="pane-h">Transforme</div>
+          <div class="pane-t">Il y a donc une opération</div>
+        </div>
+        <div class="mod-p" style="margin-top:10px">Et toute opération peut être <b>mal faite</b>. C'est la part que la technique sait traiter : extraction, nettoyage, modélisation, calcul. Tout le premier temps de ce cours porte là-dessus.</div>
+      </div>
+      <div class="pane metier a-rise" style="--d:.42s">
+        <div>
+          <div class="pane-h">Accepte de fonder</div>
+          <div class="pane-t">Il y a donc un acte de confiance</div>
+        </div>
+        <div class="mod-p" style="margin-top:10px">Et la confiance peut être <b>refusée</b>. C'est le point que la technique oublie le plus souvent — et celui autour duquel tourne tout ce module.</div>
+      </div>
+    </div>
+  </div>
+  <div class="pageno">4<b>/27</b></div>
+</section>
+
+<!-- ============ 5 · GÉNÉALOGIE — FRISE ============ -->
+<section class="slide" data-label="Généalogie du terme">
+  <div class="top">
+    <div class="ey a-fade">A.2 · Généalogie</div>
+    <h2 class="a-rise" style="--d:.06s">Trois dates — et une seule est <em>établie</em></h2>
+  </div>
+  <div class="body">
+    <div class="frise">
+      <div class="frise-line a-grow" style="--d:.2s"></div>
+      <div class="frise-pts">
+        <div class="fp a-rise" style="--d:.32s">
+          <div class="fp-dot"></div>
+          <div class="fp-y">1864</div>
+          <div class="fp-t"><b>Devens</b> écrit « a complete and perfect train of business intelligence ». Sens non technique : le renseignement commercial. L'anecdote porte, ironie utile, sur la <b>fabrication de fausses nouvelles</b>.</div>
+        </div>
+        <div class="fp a-rise" style="--d:.46s">
+          <div class="fp-dot"></div>
+          <div class="fp-y">1958</div>
+          <div class="fp-t"><b>Luhn</b> publie « A Business Intelligence System » (IBM). Lu intégralement : résumé et indexation automatiques, diffusion sur microfilm. <b>Ni entrepôt, ni analyse chiffrée.</b></div>
+        </div>
+        <div class="fp a-rise" style="--d:.6s">
+          <div class="fp-dot dim"></div>
+          <div class="fp-y dim">1989</div>
+          <div class="fp-t">L'attribution à <b>Dresner</b> est communément reçue. Aucun document d'époque ne l'atteste : trois sources rétrospectives, la plus ancienne de 2006, <b>divergentes sur son employeur</b>.</div>
+        </div>
+      </div>
+    </div>
+    <div class="warn acc a-fade" style="--d:.78s"><b>Règle de méthode, valable au-delà de ce cas —</b> une attribution répétée n'est pas une attribution établie. Nous en rencontrerons d'autres, et nous les traiterons de la même façon.</div>
+  </div>
+  <div class="pageno">5<b>/27</b></div>
+</section>
+
+<!-- ============ 6 · LA PÉRIODISATION ============ -->
+<section class="slide" data-label="La périodisation est une thèse">
+  <div class="top">
+    <div class="ey a-fade">A.3 · Un avertissement sur notre propre grille</div>
+    <h2 class="a-rise" style="--d:.06s">Ce découpage est <em>utile</em>. Il n'est pas vrai.</h2>
+    <p class="lede a-rise" style="--d:.12s">Nous parlerons de quatre générations calées sur des décennies rondes. Une périodisation est une <b>thèse</b>, pas un fait — et celle-ci est démentie par nos propres exemples.</p>
+  </div>
+  <div class="body">
+    <div class="figs two">
+      <div class="fig a-zoom" style="--d:.24s">
+        <div class="fig-n">1993</div>
+        <div class="fig-l"><b>QlikTech est fondée</b> — en pleine « première génération », alors qu'elle appartient intellectuellement à la seconde.</div>
+      </div>
+      <div class="fig a-zoom" style="--d:.34s">
+        <div class="fig-n">2016<small> → 2018</small></div>
+        <div class="fig-l">Le moteur <b>Hyper</b>, souvent cité comme prouesse du libre-service, est acquis par Tableau en mars 2016 et livré en janvier 2018 — <b>vingt ans après</b> la période à laquelle on le rattache.</div>
+      </div>
+    </div>
+    <div class="split">
+      <div class="pane centre a-rise" style="--d:.46s">
+        <div><div class="pane-h">Ce qu'elle éclaire</div></div>
+        <div class="mod-p" style="margin-top:8px">Un mouvement réel : chaque génération corrige un défaut de la précédente <b>et en introduit un nouveau</b>. Sans ce découpage, le mouvement reste invisible.</div>
+      </div>
+      <div class="pane metier a-rise" style="--d:.56s">
+        <div><div class="pane-h">Ce qu'elle écrase</div></div>
+        <div class="mod-p" style="margin-top:8px">Les continuités, les avances et les retards. Les décennies rondes sont un <b>artefact de présentation</b>. Gardons la grille, en sachant ce qu'elle nous coûte.</div>
+      </div>
+    </div>
+  </div>
+  <div class="pageno">6<b>/27</b></div>
+</section>
+
+<!-- ============ 7 · INTERTITRE PREMIÈRE GÉNÉRATION ============ -->
+<section class="slide dark" data-label="I · Le contrôle centralisé">
+  <div class="dk-ey a-fade">Première génération · 1990-2000</div>
+  <h2 class="dk-h a-rise" style="--d:.12s">L'ordre par <em>le centre</em></h2>
+  <p class="dk-p a-rise" style="--d:.3s">Les données existent, mais elles sont prisonnières. Chaque application détient les siennes, dans son format, avec ses codes. Croiser les ventes et les coûts relève de l'exploit artisanal.</p>
+</section>
+
+<!-- ============ 8 · L'ARCHITECTURE ============ -->
+<section class="slide" data-label="L'architecture d'entreposage">
+  <div class="top">
+    <div class="ey a-fade">A.4 · La réponse architecturale</div>
+    <h2 class="a-rise" style="--d:.06s">Un dépôt distinct, alimenté la nuit</h2>
+    <p class="lede a-rise" style="--d:.12s">La formulation initiale est de <b>Devlin et Murphy</b>, dans l'<i>IBM Systems Journal</i> en 1988 : construire un dépôt séparé, organisé pour l'analyse et non pour la transaction.</p>
+  </div>
+  <div class="body">
+    <div class="stack">
+      <div class="chain">
+        <div class="ch a-rise" style="--d:.22s"><div class="ch-t">Systèmes sources</div><div class="ch-p">ERP, CRM — données structurées, cloisonnées</div></div>
+        <div class="arw a-pop" style="--d:.32s"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14m0 0-5-5m5 5-5 5"/></svg></div>
+        <div class="ch acc a-rise" style="--d:.36s"><div class="ch-t">Extraire · Transformer · Charger</div><div class="ch-p">Par lots, la nuit, hors des heures d'activité</div></div>
+        <div class="arw a-pop" style="--d:.46s"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14m0 0-5-5m5 5-5 5"/></svg></div>
+        <div class="ch a-rise" style="--d:.5s"><div class="ch-t">Entrepôt centralisé</div><div class="ch-p">Schéma défini à l'écriture</div></div>
+        <div class="arw a-pop" style="--d:.6s"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14m0 0-5-5m5 5-5 5"/></svg></div>
+        <div class="ch a-rise" style="--d:.64s"><div class="ch-t">Rapports statiques</div><div class="ch-p">Composés et diffusés par la DSI</div></div>
+      </div>
+      <div class="warn a-fade" style="--d:.8s"><b>La fenêtre nocturne n'est pas un détail de mise en œuvre.</b> Elle détermine que l'entreprise décidera, au mieux, sur les données de la veille. Tout le problème de la latence — que nous verrons en A.8 — est déjà contenu dans ce choix d'architecture.</div>
+    </div>
+  </div>
+  <div class="pageno">8<b>/27</b></div>
+</section>
+
+<!-- ============ 9 · INMON VS KIMBALL ============ -->
+<section class="slide" data-label="Inmon vs Kimball">
+  <div class="top">
+    <div class="ey a-fade">A.4 · Deux écoles</div>
+    <h2 class="a-rise" style="--d:.06s">La querelle fondatrice — et son biais</h2>
+  </div>
+  <div class="body">
+    <div class="split">
+      <div class="pane centre a-slide" style="--d:.18s">
+        <div>
+          <div class="pane-h">William Inmon · 1992</div>
+          <div class="pane-t">L'entrepôt d'entreprise d'abord</div>
+          <ul>
+            <li>Un entrepôt <b>normalisé</b>, construit en premier</li>
+            <li>Les usages métiers en <b>dérivent ensuite</b></li>
+            <li>Cohérence garantie en amont, livraison lente</li>
+          </ul>
+        </div>
+        <div class="src" style="margin-top:12px"><b>Building the Data Warehouse</b>, QED, 1992 — <b>et non Wiley 1992</b>, comme le répètent la plupart des bibliographies.</div>
+      </div>
+      <div class="pane metier a-slide" style="--d:.3s">
+        <div>
+          <div class="pane-h">Ralph Kimball · 1996</div>
+          <div class="pane-t">Les processus métier d'abord</div>
+          <ul>
+            <li>Modélisation <b>dimensionnelle</b></li>
+            <li>Livrer vite, intégrer par <b>dimensions partagées</b></li>
+            <li>Valeur rapide, cohérence à construire</li>
+          </ul>
+        </div>
+        <div class="src" style="margin-top:12px"><b>The Data Warehouse Toolkit</b>, Wiley, 1996 — Margy Ross ne devient coautrice qu'à la <b>2ᵉ édition, en 2002</b>.</div>
+      </div>
+    </div>
+    <div class="warn a-fade" style="--d:.5s"><b>Précaution de méthode.</b> Cette querelle est abondamment documentée — mais par <b>un seul de ses deux camps</b>. Margy Ross réfute elle-même l'étiquette « bottom-up » que la littérature applique à son école (<i>Intelligent Enterprise</i>, 17 septembre 2003). Nous n'avons trouvé aucune réponse écrite équivalente du côté d'Inmon. Quand une controverse ne parle que d'une voix, ce n'est pas qu'un camp a raison : c'est qu'un camp écrit davantage.</div>
+  </div>
+  <div class="pageno">9<b>/27</b></div>
+</section>
+
+<!-- ============ 10 · OLAP ============ -->
+<section class="slide" data-label="OLAP : un livre blanc">
+  <div class="top">
+    <div class="ey a-fade">A.5 · Statut d'une source</div>
+    <h2 class="a-rise" style="--d:.06s">Comment un <em>livre blanc</em> devient un standard</h2>
+  </div>
+  <div class="body">
+    <div class="stack">
+      <div class="chain">
+        <div class="ch a-rise" style="--d:.2s"><div class="ch-t">1993</div><div class="ch-p">Edgar Codd — père du modèle relationnel — cosigne <i>Providing OLAP to User-analysts</i></div></div>
+        <div class="arw a-pop" style="--d:.3s"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14m0 0-5-5m5 5-5 5"/></svg></div>
+        <div class="ch a-rise" style="--d:.34s"><div class="ch-t">Le terme <b>OLAP</b> naît</div><div class="ch-p">26 pages, ni article de revue ni acte de conférence</div></div>
+        <div class="arw a-pop" style="--d:.44s"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14m0 0-5-5m5 5-5 5"/></svg></div>
+        <div class="ch acc a-rise" style="--d:.48s"><div class="ch-t">Hébergé chez Arbor Software</div><div class="ch-p">C'est-à-dire chez <b>l'éditeur commanditaire</b></div></div>
+      </div>
+      <div class="warn acc a-fade" style="--d:.64s">Ce n'est pas nous qui l'affirmons : <b>Chaudhuri et Dayal le signalent en note</b> de leur synthèse publiée dans <i>ACM SIGMOD Record</i> en 1997 — source à comité de lecture.</div>
+      <div class="quote a-rise" style="--d:.76s">Une notion enseignée pendant trente ans, portée par l'autorité scientifique de son signataire, entre au vocabulaire par un document commandité.<cite>Cela ne la rend pas fausse. Cela nous oblige à distinguer l'autorité d'un auteur de la solidité d'un support.</cite></div>
+    </div>
+  </div>
+  <div class="pageno">10<b>/27</b></div>
+</section>
+
+<!-- ============ 11 · L'UNIVERS SÉMANTIQUE ============ -->
+<section class="slide" data-label="L'univers sémantique">
+  <div class="top">
+    <div class="ey a-fade">A.6 · Une invention française</div>
+    <h2 class="a-rise" style="--d:.06s">L'<em>univers</em> — retenez ce nom, nous le reverrons</h2>
+    <p class="lede a-rise" style="--d:.12s">Novembre 1991 : <b>Jean-Michel Cambot et Bernard Liautaud</b> déposent le brevet US 5 555 403. Ils ont fondé <b>Business Objects</b> l'année précédente, en France.</p>
+  </div>
+  <div class="body">
+    <div class="split">
+      <div class="pane centre a-rise" style="--d:.22s">
+        <div>
+          <div class="pane-h">Ce que le brevet décrit</div>
+          <div class="pane-t">Une couche de traduction</div>
+        </div>
+        <div class="mod-p" style="margin-top:10px">« Une représentation partielle ou totale de la base de données, <b>facile à comprendre</b> ». Elle traduit tables et colonnes en termes que le métier emploie — chiffre d'affaires, client actif, marge — et masque les jointures.</div>
+      </div>
+      <div class="pane metier a-rise" style="--d:.34s">
+        <div>
+          <div class="pane-h">Ce qu'on lui fait dire à tort</div>
+          <div class="pane-t">Un dictionnaire figé</div>
+        </div>
+        <div class="mod-p" style="margin-top:10px">Le brevet décrit une <b>dynamique sémantique</b> : un même objet produit un résultat différent selon les objets avec lesquels on l'interroge. L'univers n'est <b>pas</b> le gel d'un sens unique — ceux qui le présentent ainsi, y compris pour le critiquer, lisent une caricature.</div>
+      </div>
+    </div>
+    <div class="warn acc a-fade" style="--d:.52s"><b>La couche sémantique est née en 1991, en France, dans le camp de la centralisation.</b> Le module 2 montrera qu'elle revient aujourd'hui — comme remède au désordre que sa disparition a produit.</div>
+  </div>
+  <div class="pageno">11<b>/27</b></div>
+</section>
+
+<!-- ============ 12 · LA SOURCE UNIQUE DE VÉRITÉ ============ -->
+<section class="slide" data-label="La source unique de vérité">
+  <div class="top">
+    <div class="ey a-fade">A.7 · La promesse</div>
+    <h2 class="a-rise" style="--d:.06s">« Client actif » veut dire <em>une seule chose</em></h2>
+  </div>
+  <div class="body">
+    <div class="split">
+      <div class="pane centre a-rise" style="--d:.16s">
+        <div>
+          <div class="pane-h">Ce qui est gagné</div>
+          <div class="pane-t">Un socle de discussion</div>
+          <ul>
+            <li>Un référentiel où chaque indicateur a <b>une définition</b></li>
+            <li>Cohérence des méthodes de calcul entre entités</li>
+            <li>Le comité de direction cesse de débattre de la <b>validité</b> des chiffres pour débattre de ce qu'il faut en faire</li>
+          </ul>
+        </div>
+        <div class="src" style="margin-top:10px">Le gain est réel, et il ne doit pas être minoré.</div>
+      </div>
+      <div class="pane metier a-rise" style="--d:.28s">
+        <div>
+          <div class="pane-h">Ce qui est perdu, et qu'on ne voit pas</div>
+          <div class="pane-t">Ce que la définition efface</div>
+          <ul>
+            <li>Toute classification <b>rend visible et efface</b> simultanément</li>
+            <li>Le coût de l'effacement est supporté par <b>ce qu'elle décrit mal</b></li>
+            <li>Décider que « client actif » = « ayant commandé dans les douze mois », c'est rendre invisible le <b>client saisonnier</b></li>
+          </ul>
+        </div>
+        <div class="src" style="margin-top:10px"><b>Bowker &amp; Star</b>, <i>Sorting Things Out</i>, MIT Press, 1999 — thèse développée à propos des nomenclatures médicales.</div>
+      </div>
+    </div>
+    <div class="warn acc a-fade" style="--d:.44s"><b>Première tension, et elle n'est pas technique :</b> une définition partagée est un instrument de coordination <b>et</b> un instrument d'effacement. Les deux à la fois, et il n'y a pas de version qui n'aurait que le premier effet.</div>
+  </div>
+  <div class="pageno">12<b>/27</b></div>
+</section>
+
+<!-- ============ 13 · L'OBJET-FRONTIÈRE ============ -->
+<section class="slide" data-label="L'objet-frontière">
+  <div class="top">
+    <div class="ey a-fade">A.7 · Une alternative conceptuelle</div>
+    <h2 class="a-rise" style="--d:.06s">Faut-il vraiment choisir entre l'unique et le multiple&nbsp;?</h2>
+  </div>
+  <div class="body">
+    <div class="stack">
+      <div class="quote a-rise" style="--d:.16s">Un objet assez <em style="color:var(--accent);font-style:normal">plastique</em> pour servir des usages locaux différents, assez <em style="color:var(--accent);font-style:normal">robuste</em> pour garder une identité commune.<cite>Susan Leigh Star &amp; James Griesemer, « Institutional Ecology, "Translations" and Boundary Objects », Social Studies of Science, 1989</cite></div>
+      <div class="mods">
+        <div class="mod a-rise" style="--d:.34s">
+          <div><div class="mod-n">L'idée</div><div class="mod-t">L'objet-frontière</div></div>
+          <div class="mod-p">Ni la définition unique imposée, ni la prolifération incontrôlée : un <b>noyau commun</b> et des marges négociables localement.</div>
+        </div>
+        <div class="mod a-rise" style="--d:.42s">
+          <div><div class="mod-n">L'intérêt</div><div class="mod-t">Un tiers désintéressé</div></div>
+          <div class="mod-p">La référence vient d'un champ <b>extérieur à l'informatique</b> — la sociologie des sciences. Ses auteurs n'ont aucun intérêt dans la querelle.</div>
+        </div>
+        <div class="mod acc a-rise" style="--d:.5s">
+          <div><div class="mod-n">La suite</div><div class="mod-t">Gardez-la en tête</div></div>
+          <div class="mod-p">C'est très exactement ce que la <b>couche sémantique contemporaine</b> tentera de faire, trente ans plus tard. Module 2.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="pageno">13<b>/27</b></div>
+</section>
+
+<!-- ============ 14 · LA LATENCE ============ -->
+<section class="slide" data-label="La latence décisionnelle">
+  <div class="top">
+    <div class="ey a-fade">A.8 · Le prix du contrôle</div>
+    <h2 class="a-rise" style="--d:.06s">Le défaut n'est pas la qualité — c'est le <em>délai</em></h2>
+    <p class="lede a-rise" style="--d:.12s"><b>Richard Hackathorn</b> décompose ce délai en 2003, dans « Minimizing Action Distance ».</p>
+  </div>
+  <div class="body">
+    <div class="stack">
+      <div class="chain">
+        <div class="ch a-rise" style="--d:.2s"><div class="ch-t">L'événement</div><div class="ch-p">Quelque chose se produit dans l'entreprise</div></div>
+        <div class="arw a-pop" style="--d:.28s"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14m0 0-5-5m5 5-5 5"/></svg></div>
+        <div class="ch a-rise" style="--d:.32s"><div class="ch-t">Latence de données</div><div class="ch-p">Le temps de les capter et de les charger</div></div>
+        <div class="arw a-pop" style="--d:.4s"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14m0 0-5-5m5 5-5 5"/></svg></div>
+        <div class="ch a-rise" style="--d:.44s"><div class="ch-t">Latence d'analyse</div><div class="ch-p">Le temps de produire l'information</div></div>
+        <div class="arw a-pop" style="--d:.52s"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14m0 0-5-5m5 5-5 5"/></svg></div>
+        <div class="ch acc a-rise" style="--d:.56s"><div class="ch-t">Latence de décision</div><div class="ch-p"><b>Seule celle-ci compte au résultat</b></div></div>
+      </div>
+      <div class="split">
+        <div class="pane centre a-fade" style="--d:.68s">
+          <div><div class="pane-h">Déclaration de fragilité</div></div>
+          <div class="mod-p" style="margin-top:8px">Tout ce que nous disons de la latence dans ce cours repose sur <b>un auteur unique</b>. Nous le déclarons plutôt que de le masquer par une multiplication de références secondaires qui n'ajouteraient rien.</div>
+        </div>
+        <div class="pane metier a-fade" style="--d:.78s">
+          <div><div class="pane-h">Et il borne lui-même sa thèse</div></div>
+          <div class="mod-p" style="margin-top:8px">Dans <i>DM Review</i> (janvier 2004), Hackathorn publie sa fameuse courbe de décroissance de la valeur — <b>puis trois courbes alternatives</b>. Ses commentateurs ne citent que la première.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="pageno">14<b>/27</b></div>
+</section>
+
+<!-- ============ 15 · LES QUATRE COURBES ============ -->
+<section class="slide" data-label="Les quatre courbes">
+  <div class="top">
+    <div class="ey a-fade">A.8 · Ce que la citation courante omet</div>
+    <h2 class="a-rise" style="--d:.06s">La valeur ne décroît pas toujours avec le temps</h2>
+  </div>
+  <div class="body">
+    <div class="figs four" style="display:grid;grid-template-columns:repeat(4,1fr);gap:15px">
+      <div class="fig a-rise" style="--d:.2s">
+        <svg viewBox="0 0 120 70" style="width:100%;height:auto">
+          <line x1="10" y1="60" x2="112" y2="60" stroke="rgba(11,37,69,.18)" stroke-width="1.5"/>
+          <line x1="10" y1="60" x2="10" y2="6" stroke="rgba(11,37,69,.18)" stroke-width="1.5"/>
+          <path class="a-draw" style="--len:130;--d:.5s" d="M12 12 C 40 16, 62 46, 110 56" fill="none" stroke="#0E9594" stroke-width="2.6" stroke-linecap="round"/>
+        </svg>
+        <div class="fig-l" style="margin-top:6px"><b>Décroissance</b><br>La courbe que tout le monde cite.</div>
+      </div>
+      <div class="fig a-rise" style="--d:.3s">
+        <svg viewBox="0 0 120 70" style="width:100%;height:auto">
+          <line x1="10" y1="60" x2="112" y2="60" stroke="rgba(11,37,69,.18)" stroke-width="1.5"/>
+          <line x1="10" y1="60" x2="10" y2="6" stroke="rgba(11,37,69,.18)" stroke-width="1.5"/>
+          <path class="a-draw" style="--len:130;--d:.6s" d="M12 56 C 50 52, 74 20, 110 12" fill="none" stroke="#1D4E89" stroke-width="2.6" stroke-linecap="round"/>
+        </svg>
+        <div class="fig-l" style="margin-top:6px"><b>Croissance inverse</b><br>Certaines analyses valent plus avec le recul.</div>
+      </div>
+      <div class="fig a-rise" style="--d:.4s">
+        <svg viewBox="0 0 120 70" style="width:100%;height:auto">
+          <line x1="10" y1="60" x2="112" y2="60" stroke="rgba(11,37,69,.18)" stroke-width="1.5"/>
+          <line x1="10" y1="60" x2="10" y2="6" stroke="rgba(11,37,69,.18)" stroke-width="1.5"/>
+          <path class="a-draw" style="--len:130;--d:.7s" d="M12 52 C 40 14, 74 12, 110 40" fill="none" stroke="#1D4E89" stroke-width="2.6" stroke-linecap="round"/>
+        </svg>
+        <div class="fig-l" style="margin-top:6px"><b>Valeur mûrissante</b><br>Un optimum, puis un déclin.</div>
+      </div>
+      <div class="fig a-rise" style="--d:.5s">
+        <svg viewBox="0 0 120 70" style="width:100%;height:auto">
+          <line x1="10" y1="60" x2="112" y2="60" stroke="rgba(11,37,69,.18)" stroke-width="1.5"/>
+          <line x1="10" y1="60" x2="10" y2="6" stroke="rgba(11,37,69,.18)" stroke-width="1.5"/>
+          <path class="a-draw" style="--len:130;--d:.8s" d="M12 12 L 58 12 L 60 58 L 110 58" fill="none" stroke="#1D4E89" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <div class="fig-l" style="margin-top:6px"><b>Bien périssable</b><br>Pleine valeur, puis effondrement brutal.</div>
+      </div>
+    </div>
+    <div class="warn acc a-fade" style="--d:.9s"><b>L'auteur le plus cité sur la latence est aussi celui qui en refuse l'universalité.</b> Retenez le geste autant que le contenu : lire une source jusqu'au bout, c'est souvent y trouver la nuance que ses commentateurs ont laissée tomber.</div>
+  </div>
+  <div class="pageno">15<b>/27</b></div>
+</section>
+
+<!-- ============ 16 · SHADOW BI ============ -->
+<section class="slide" data-label="Les systèmes de l'ombre">
+  <div class="top">
+    <div class="ey a-fade">A.9 · La réaction</div>
+    <h2 class="a-rise" style="--d:.06s">Quand le système officiel ne répond pas, on <em>contourne</em></h2>
+    <p class="lede a-rise" style="--d:.12s"><b>Behrens et Sedera</b> formalisent le phénomène en 2004 : une réplication partielle ou totale des données et des fonctions du système légitime, hors de son contrôle. Dans le décisionnel, il a un format — <b>le fichier tableur</b>.</p>
+  </div>
+  <div class="body">
+    <div class="figs two">
+      <div class="fig a-zoom" style="--d:.24s">
+        <div class="fig-n">1998</div>
+        <div class="fig-l"><b>Raymond Panko</b> réunit les travaux sur les taux d'erreur dans les tableurs — la seule base chiffrée solide dont nous disposions sur le risque réel.</div>
+      </div>
+      <div class="fig a-zoom" style="--d:.34s">
+        <div class="fig-n">1<small> seule</small></div>
+        <div class="fig-l">En 2000, Panko dresse son bilan de méthode : à cette date, <b>une seule technique de réduction des erreurs avait été démontrée efficace</b> — l'inspection cellule par cellule.</div>
+      </div>
+    </div>
+    <div class="warn a-fade" style="--d:.5s"><b>Conséquence directe, et elle est embarrassante pour l'époque.</b> Les remèdes procéduraux que les directions informatiques opposaient aux tableurs parallèles — chartes, formations, interdictions — étaient <b>sans effet démontré</b>. Le seul remède établi était aussi le plus coûteux, donc le moins appliqué.</div>
+  </div>
+  <div class="pageno">16<b>/27</b></div>
+</section>
+
+<!-- ============ 17 · CAS BUSINESS OBJECTS ============ -->
+<section class="slide" data-label="Cas · Business Objects">
+  <div class="top">
+    <div class="ey a-fade">A.10 · Cas d'étude</div>
+    <h2 class="a-rise" style="--d:.06s">Business Objects — ce que disent les <em>documents</em></h2>
+    <p class="lede a-rise" style="--d:.12s">La société, cotée aux États-Unis, a laissé des documents <b>opposables</b> : des rapports annuels déposés auprès du régulateur boursier.</p>
+  </div>
+  <div class="body">
+    <div class="split">
+      <div class="pane centre a-slide" style="--d:.2s">
+        <div>
+          <div class="pane-h">Rapport annuel · exercice 1997</div>
+          <div class="pane-t">« Decision support »</div>
+          <ul>
+            <li>Établit que la société est <b>constituée en France en 1990</b></li>
+            <li>Décrit son marché avec le vocabulaire du <b>decision support</b></li>
+            <li>L'expression « business intelligence » <b>n'y est pas</b> le terme de référence</li>
+          </ul>
+        </div>
+      </div>
+      <div class="pane metier a-slide" style="--d:.32s">
+        <div>
+          <div class="pane-h">Rapport annuel · exercice 2002</div>
+          <div class="pane-t">« Business intelligence »</div>
+          <ul>
+            <li>Le vocabulaire a <b>basculé</b></li>
+            <li>La société revendique explicitement sa <b>couche sémantique brevetée</b></li>
+            <li>Le marché s'est constitué entre les deux dates</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="warn a-fade" style="--d:.48s"><b>Ce que ce cas établit, et qui vaut mieux qu'une définition :</b> le basculement lexical vers « business intelligence » est daté, et observable dans les documents réglementaires d'une entreprise entre 1997 et 2002. Le mot s'impose au moment où <b>le marché se constitue</b>, non au moment où la technique apparaît. — <b>Réserve :</b> une part importante de notre documentation sur ce marché vient de dépôts et de communiqués, c'est-à-dire de la parole d'émetteurs. Juridiquement engageante sur les chiffres comptables ; intéressée sur tout le reste.</div>
+  </div>
+  <div class="pageno">17<b>/27</b></div>
+</section>
+
+<!-- ============ 18 · TRANSITION DIALECTIQUE ============ -->
+<section class="slide dark" data-label="La solution devient le problème">
+  <div class="dk-ey a-fade">A.11 · Transition</div>
+  <h2 class="dk-h a-rise" style="--d:.12s">La solution de la première génération<br>est <em>la cause</em> du problème de la seconde</h2>
+  <div class="dk-q">
+    <div class="dk-qi a-rise" style="--d:.34s">
+      <div class="dk-qn">01</div>
+      <div class="dk-qt">La stabilité s'est payée en <b>délai</b>.</div>
+    </div>
+    <div class="dk-qi a-rise" style="--d:.44s">
+      <div class="dk-qn">02</div>
+      <div class="dk-qt">Le contrôle, en <b>dépendance</b>.</div>
+    </div>
+    <div class="dk-qi a-rise" style="--d:.54s">
+      <div class="dk-qn">03</div>
+      <div class="dk-qt">L'unicité des définitions, en incapacité à répondre aux <b>questions non prévues</b>.</div>
+    </div>
+  </div>
+  <p class="dk-p a-fade" style="--d:.72s">Et parce que le système officiel ne répondait plus, les utilisateurs ont bâti à côté ce qu'il interdisait — reconstituant précisément le désordre qu'il devait supprimer. <b style="color:#17B3A3">Ce n'est pas un accident de mise en œuvre : c'est la logique même du mouvement.</b></p>
+</section>
+
+<!-- ============ 19 · DEUXIÈME GÉNÉRATION ============ -->
+<section class="slide" data-label="II · Déplacer le pouvoir">
+  <div class="top">
+    <div class="ey a-fade">A.12 · Deuxième génération · 2000-2010</div>
+    <h2 class="a-rise" style="--d:.06s">Elle ne propose pas une meilleure technique</h2>
+    <p class="lede a-rise" style="--d:.12s">Elle propose <b>un autre partage du pouvoir</b> : que l'utilisateur métier construise lui-même son analyse. Le geste commun est de remplacer l'écriture d'une requête par une manipulation visuelle.</p>
+  </div>
+  <div class="body">
+    <div class="split">
+      <div class="pane metier a-rise" style="--d:.2s">
+        <div>
+          <div class="pane-h">QlikTech · Lund, Suède</div>
+          <div class="pane-t">1993 — QlikView en 1996</div>
+        </div>
+        <div class="mod-p" style="margin-top:10px">Le <b>moteur associatif</b> charge l'ensemble des données en mémoire et conserve les associations entre toutes les valeurs. On voit non seulement ce qui est lié à une sélection, mais aussi <b>ce qui ne l'est pas</b>.</div>
+        <div class="src" style="margin-top:10px">Le support d'origine de ce cours datait QlikView de 2004. C'est faux.</div>
+      </div>
+      <div class="pane metier a-rise" style="--d:.32s">
+        <div>
+          <div class="pane-h">Tableau · Stanford</div>
+          <div class="pane-t">2003 — et une origine académique</div>
+        </div>
+        <div class="mod-p" style="margin-top:10px">Le système <b>Polaris</b>, décrit par Stolte, Tang et Hanrahan dans les <i>IEEE Transactions on Visualization and Computer Graphics</i> en 2002. <b>Deux des trois auteurs sont cofondateurs</b> de la société.</div>
+        <div class="src" style="margin-top:10px">C'est la pièce qui documente la filiation autrement que par le discours de l'entreprise.</div>
+      </div>
+    </div>
+  </div>
+  <div class="pageno">19<b>/27</b></div>
+</section>
+
+<!-- ============ 20 · L'ANALYSTE ORDINAIRE ============ -->
+<section class="slide" data-label="L'analyste ordinaire">
+  <div class="top">
+    <div class="ey a-fade">A.13 · La promesse, et son examen</div>
+    <h2 class="a-rise" style="--d:.06s">« Chaque employé devient analyste »</h2>
+  </div>
+  <div class="body">
+    <div class="mods">
+      <div class="mod a-rise" style="--d:.18s">
+        <div><div class="mod-n">La promesse</div><div class="mod-t">L'autonomie</div></div>
+        <div class="mod-p">L'utilisateur métier répond lui-même à ses questions, sans passer par un intermédiaire technique. Les délais s'effondrent.</div>
+      </div>
+      <div class="mod a-rise" style="--d:.28s">
+        <div><div class="mod-n">L'examen</div><div class="mod-t">Les obstacles réels</div></div>
+        <div class="mod-p"><b>Lennerholt, van Laere et Söderström</b> recensent les obstacles à l'adoption (2018, 2021). <b>Myron Weber</b> avait formulé dès 2013 les conditions de sa soutenabilité.</div>
+      </div>
+      <div class="mod ink a-rise" style="--d:.38s">
+        <div><div class="mod-n">Réserve</div><div class="mod-t">D'où viennent ces travaux ?</div></div>
+        <div class="mod-p">L'essentiel de la documentation empirique sur le libre-service vient d'<b>un seul organisme professionnel</b> — TDWI — et de l'institut BARC. Sources sérieuses ; <b>non indépendantes</b> de l'industrie décrite.</div>
+      </div>
+    </div>
+    <div class="warn acc a-fade" style="--d:.52s">Nous verrons en carte 22 un cas récent qui permet de <b>mesurer</b> ce que « chaque employé devient analyste » veut dire en pratique. Le résultat surprend.</div>
+  </div>
+  <div class="pageno">20<b>/27</b></div>
+</section>
+
+<!-- ============ 21 · LE CHAOS DE GOUVERNANCE ============ -->
+<section class="slide" data-label="Le désordre produit par la liberté">
+  <div class="top">
+    <div class="ey a-fade">A.14 · Le symétrique exact</div>
+    <h2 class="a-rise" style="--d:.06s">Ce n'est plus que la donnée manque — c'est qu'elle <em>abonde</em></h2>
+  </div>
+  <div class="body">
+    <div class="mods">
+      <div class="mod a-rise" style="--d:.18s">
+        <div><div class="mod-n">01</div><div class="mod-t">La guerre des chiffres</div></div>
+        <div class="mod-p">Chaque service définit ses indicateurs. Deux directions présentent, pour le <b>même concept</b>, deux chiffres différents. La réunion qui devait porter sur la décision porte à nouveau sur la validité des chiffres.</div>
+      </div>
+      <div class="mod a-rise" style="--d:.28s">
+        <div><div class="mod-n">02</div><div class="mod-t">La dette analytique</div></div>
+        <div class="mod-p">Des centaines de tableaux de bord créés pour un besoin ponctuel, sans documentation, deviennent inintelligibles au départ de leur auteur. Par analogie avec la <b>dette technique</b>, métaphore forgée par Ward Cunningham en 1992 — en deux pages.</div>
+      </div>
+      <div class="mod acc a-rise" style="--d:.38s">
+        <div><div class="mod-n">03</div><div class="mod-t">L'effet le moins discuté</div></div>
+        <div class="mod-p"><b>Espeland et Sauder</b> (2007) montrent qu'un indicateur ne se contente pas de mesurer : il <b>modifie ce qu'il mesure</b>, parce que les acteurs s'y adaptent. Multiplier les indicateurs sans gouvernance, c'est multiplier les comportements induits — <b>sans les avoir choisis</b>.</div>
+      </div>
+    </div>
+  </div>
+  <div class="pageno">21<b>/27</b></div>
+</section>
+
+<!-- ============ 22 · CAS VIRGIN MEDIA O2 ============ -->
+<section class="slide" data-label="Cas · ce que le self-service veut dire">
+  <div class="top">
+    <div class="ey a-fade">A.15 · Cas d'étude · 2023-2025</div>
+    <h2 class="a-rise" style="--d:.06s">Qui produit vraiment l'analyse&nbsp;?</h2>
+    <p class="lede a-rise" style="--d:.12s">Virgin Media O2 — société née le 1<sup>er</sup> juin 2021 — adopte Tableau Cloud en décembre 2023. Deux faits, rapportés par <b>Eric Avidon</b> dans <i>TechTarget</i> le 30 avril 2025.</p>
+  </div>
+  <div class="body">
+    <div class="split" style="grid-template-columns:.62fr 1fr">
+      <div class="pane centre a-zoom" style="--d:.22s">
+        <div style="text-align:center;margin:auto 0">
+          <div class="fig-n" style="font-size:64px;color:var(--blue)">7</div>
+          <div class="fig-l" style="margin-top:14px"><b>plateformes décisionnelles héritées</b> remplacées par une seule, en 2023. La dette analytique, rendue visible et chiffrée.</div>
+        </div>
+      </div>
+      <div class="pane metier a-rise" style="--d:.34s">
+        <div>
+          <div class="pane-h">Répartition des licences</div>
+          <div class="bars" style="margin-top:16px">
+            <div class="bar-row">
+              <div class="bar-lab">Créateurs<small>produisent l'analyse</small></div>
+              <div class="bar-tr"><div class="bar-fl a-grow" style="--d:.5s;width:3%"></div></div>
+              <div class="bar-v">3 %</div>
+            </div>
+            <div class="bar-row">
+              <div class="bar-lab">Explorateurs<small>manipulent</small></div>
+              <div class="bar-tr"><div class="bar-fl a-grow" style="--d:.62s;width:11%"></div></div>
+              <div class="bar-v">~11 %</div>
+            </div>
+            <div class="bar-row">
+              <div class="bar-lab">Consultateurs<small>lisent</small></div>
+              <div class="bar-tr"><div class="bar-fl dim a-grow" style="--d:.74s;width:86%"></div></div>
+              <div class="bar-v">~86 %</div>
+            </div>
+          </div>
+        </div>
+        <div class="src" style="margin-top:14px"><b>Conséquence.</b> Le libre-service ne transforme pas chaque salarié en analyste. Il <b>déplace la production analytique</b> d'un service technique central vers une petite minorité métier. Le pouvoir a changé de mains ; il ne s'est pas dispersé.</div>
+      </div>
+    </div>
+    <div class="warn a-fade" style="--d:.9s"><b>Note de méthode.</b> La formule qui circule sur ce cas — une lutte anti-fraude « à la vitesse de l'éclair » — provient du titre d'une page publiée par <b>l'éditeur du logiciel</b>. La détection de fraude y est un usage <i>envisagé</i>. Aucune donnée de performance n'est corroborée par une source indépendante. Un cas d'étude n'est pas un argumentaire commercial daté.</div>
+  </div>
+  <div class="pageno">22<b>/27</b></div>
+</section>
+
+<!-- ============ 23 · LE COMPTE ============ -->
+<section class="slide" data-label="Le compte">
+  <div class="top">
+    <div class="ey a-fade">A.16 · Où nous en sommes</div>
+    <h2 class="a-rise" style="--d:.06s">Chacune a résolu le problème de l'autre<br>en <em>recréant</em> celui qu'elle avait résolu</h2>
+  </div>
+  <div class="body">
+    <div class="split">
+      <div class="pane centre a-slide" style="--d:.2s">
+        <div>
+          <div class="pane-h">Première génération</div>
+          <div class="pane-t">A donné la cohérence</div>
+        </div>
+        <div class="mod-p" style="margin-top:12px">…et <b>pris le temps</b>. Un référentiel unique, des définitions stables, une chaîne contrôlée — au prix de la latence, de la dépendance, et de l'incapacité à répondre à ce qu'on n'avait pas prévu.</div>
+      </div>
+      <div class="pane metier a-slide" style="--d:.32s">
+        <div>
+          <div class="pane-h">Deuxième génération</div>
+          <div class="pane-t">A rendu le temps</div>
+        </div>
+        <div class="mod-p" style="margin-top:12px">…et <b>repris la cohérence</b>. L'autonomie, la visualisation, la réponse en quelques minutes — au prix de la guerre des chiffres, de la dette analytique, et des comportements induits par des indicateurs que personne n'a arbitrés.</div>
+      </div>
+    </div>
+    <div class="warn acc a-fade" style="--d:.46s">Aucune des deux n'a eu tort. Chacune a répondu <b>justement</b> à la question qui lui était posée — et c'est en y répondant qu'elle a posé la suivante.</div>
+  </div>
+  <div class="pageno">23<b>/27</b></div>
+</section>
+
+<!-- ============ 24 · TROIS QUESTIONS OUVERTES ============ -->
+<section class="slide dark" data-label="Trois questions ouvertes">
+  <div class="dk-ey a-fade">A.16 · Ce module ne les résout pas</div>
+  <h2 class="dk-h a-rise" style="--d:.12s">Trois questions restent <em>entières</em></h2>
+  <div class="dk-q">
+    <div class="dk-qi a-rise" style="--d:.34s">
+      <div class="dk-qn">?</div>
+      <div class="dk-qt">Si les définitions doivent être communes et les analyses libres, <b>où placer la frontière</b> ?</div>
+    </div>
+    <div class="dk-qi a-rise" style="--d:.44s">
+      <div class="dk-qn">?</div>
+      <div class="dk-qt">Gouvernance et agilité sont-elles <b>réellement opposées</b>, ou ne l'ont-elles été que par défaut d'outillage ?</div>
+    </div>
+    <div class="dk-qi a-rise" style="--d:.54s">
+      <div class="dk-qn">?</div>
+      <div class="dk-qt">Et lorsque le volume des données <b>change d'échelle</b>, ces deux réponses tiennent-elles encore ?</div>
+    </div>
+  </div>
+  <p class="dk-p a-fade" style="--d:.74s">Le module 2 part de là. Nous y verrons que la réponse contemporaine au désordre du libre-service porte un nom <b style="color:#17B3A3">que nous avons déjà rencontré dans ce module</b> — et qu'elle a été inventée en 1991.</p>
+</section>
+
+<!-- ============ 25 · CLÔTURE ============ -->
+<section class="slide" data-label="À retenir">
+  <div class="top">
+    <div class="ey a-fade">Synthèse</div>
+    <h2 class="a-rise" style="--d:.06s">Cinq acquis, et un réflexe</h2>
+  </div>
+  <div class="body">
+    <div class="mods">
+      <div class="mod a-rise" style="--d:.16s"><div><div class="mod-n">01</div><div class="mod-t">Le mot précède la chose</div></div><div class="mod-p">« Business intelligence » existe depuis 1864, l'objet depuis les années 1990. L'attribution courante à 1989 n'est pas documentée.</div></div>
+      <div class="mod a-rise" style="--d:.24s"><div><div class="mod-n">02</div><div class="mod-t">Deux écoles, une voix</div></div><div class="mod-p">Inmon et Kimball s'opposent réellement — mais la controverse n'est documentée que par l'un des deux camps.</div></div>
+      <div class="mod a-rise" style="--d:.32s"><div><div class="mod-n">03</div><div class="mod-t">Une définition efface</div></div><div class="mod-p">La source unique de vérité coordonne <b>et</b> rend invisible. Les deux à la fois, sans version bénigne.</div></div>
+      <div class="mod a-rise" style="--d:.4s"><div><div class="mod-n">04</div><div class="mod-t">Le libre-service concentre</div></div><div class="mod-p">3 % de créateurs sur un déploiement réel. Le pouvoir a changé de mains ; il ne s'est pas dispersé.</div></div>
+      <div class="mod a-rise" style="--d:.48s"><div><div class="mod-n">05</div><div class="mod-t">Le mouvement est cyclique</div></div><div class="mod-p">Chaque génération résout le problème de l'autre en recréant le sien. Ce n'est pas une maladresse : c'est la forme du mouvement.</div></div>
+      <div class="mod acc a-rise" style="--d:.56s"><div><div class="mod-n">Le réflexe</div><div class="mod-t">Remonter la source</div></div><div class="mod-p">Un livre blanc commandité, un éditeur qui date mal ses propres produits, un auteur cité à moitié. <b>Toujours aller voir le document.</b></div></div>
+    </div>
+  </div>
+  <div class="pageno">25<b>/27</b></div>
+</section>
+
+<!-- ============ 26 · RÉFÉRENCES I ============ -->
+<section class="slide" data-label="Références · les fondations">
+  <div class="top">
+    <div class="ey a-fade">Références · 1/2 — les fondations, 1864-1999</div>
+    <h2 class="a-rise" style="--d:.06s">Ce que vous pouvez contester, ce qui vous situe</h2>
+  </div>
+  <div class="body">
+    <div class="panelrow">
+      <div class="panel a-rise" style="--d:.16s">
+        <div class="panel-h">Sources primaires</div>
+        <div class="ref"><b>Devens, R. M.</b> (1864). <i>Cyclopædia of Commercial and Business Anecdotes</i>, vol. I. D. Appleton, p. 210.<span>Antériorité lexicale, vérifiée sur exemplaire océrisé.</span></div>
+        <div class="ref"><b>Luhn, H. P.</b> (1958). « A Business Intelligence System ». <i>IBM Journal of Research and Development</i>, 2(4), 314-319.<span>Lu intégralement : système documentaire, sans analyse chiffrée.</span></div>
+        <div class="ref"><b>Devlin, B. A. &amp; Murphy, P. T.</b> (1988). « An architecture for a business and information system ». <i>IBM Systems Journal</i>, 27(1), 60-80.</div>
+        <div class="ref"><b>Star, S. L. &amp; Griesemer, J. R.</b> (1989). « Institutional Ecology, "Translations" and Boundary Objects ». <i>Social Studies of Science</i>, 19(3), 387-420.<span>L'objet-frontière — une alternative à la source unique.</span></div>
+        <div class="ref"><b>Inmon, W. H.</b> (1992). <i>Building the Data Warehouse</i>. QED.<span>Édition princeps — la référence « Wiley 1992 » est erronée.</span></div>
+        <div class="ref"><b>Codd, E. F., Codd, S. B. &amp; Salley, C. T.</b> (1993). <i>Providing OLAP to User-analysts</i>. Codd &amp; Associates.<span>Livre blanc de cabinet, hébergé par l'éditeur commanditaire.</span></div>
+        <div class="ref"><b>Kimball, R.</b> (1996). <i>The Data Warehouse Toolkit</i>. Wiley. — 2ᵉ éd. avec <b>Ross, M.</b> (2002).<span>Margy Ross n'est pas coautrice de l'édition de 1996.</span></div>
+        <div class="ref"><b>Cambot, J.-M. &amp; Liautaud, B.</b> (1996). <i>Relational database access system using semantically dynamic objects</i>. Brevet US 5 555 403 A.<span>Dépôt 27 novembre 1991 — l'« univers » de Business Objects.</span></div>
+        <div class="ref"><b>Chaudhuri, S. &amp; Dayal, U.</b> (1997). « An Overview of Data Warehousing and OLAP Technology ». <i>ACM SIGMOD Record</i>, 26(1), 65-74.</div>
+        <div class="ref"><b>Panko, R. R.</b> (1998, 2000). Travaux sur les erreurs de tableur.<span>Seule base chiffrée solide sur le risque des spreadmarts.</span></div>
+        <div class="ref"><b>Bowker, G. C. &amp; Star, S. L.</b> (1999). <i>Sorting Things Out: Classification and Its Consequences</i>. MIT Press.</div>
+      </div>
+      <div class="panel tight a-rise" style="--d:.28s">
+        <div>
+          <div class="panel-h">Repères de contexte</div>
+          <div class="ref"><b>Gorry, G. A. &amp; Scott Morton, M. S.</b> (1971). <i>A Framework for Management Information Systems</i>. MIT Sloan, WP 510-71.<span>Interrogé en plein texte : aucune occurrence de « decision support ».</span></div>
+          <div class="ref"><b>Rockart, J. F.</b> (1978). <i>A New Approach to Defining the Chief Executive's Information Needs</i>. MIT Sloan, CISR 37.<span>Attribue les facteurs clés de succès à D. R. Daniel (1961).</span></div>
+          <div class="ref"><b>Cunningham, W.</b> (1992). « The WyCash portfolio management system ». <i>OOPSLA '92 Addendum</i>, 29-30.<span>Acte de baptême de la métaphore de la dette technique.</span></div>
+          <div class="ref"><b>Brynjolfsson, E.</b> (1993). « The Productivity Paradox of Information Technology ». <i>CACM</i>, 36(12), 66-77.</div>
+        </div>
+        <div class="src" style="margin-top:12px;padding-top:12px;border-top:1px solid var(--line)">Une source primaire est une source dont <b>une donnée peut être contestée</b>. Un repère de contexte situe sans mesurer : il ne se cite pas comme preuve.</div>
+      </div>
+    </div>
+  </div>
+  <div class="pageno">26<b>/27</b></div>
+</section>
+
+<!-- ============ 27 · RÉFÉRENCES II ============ -->
+<section class="slide" data-label="Références · l'époque du libre-service">
+  <div class="top">
+    <div class="ey a-fade">Références · 2/2 — l'époque du libre-service, 2002-2025</div>
+    <h2 class="a-rise" style="--d:.06s">Et ce que cet appareil ne permet pas d'affirmer</h2>
+  </div>
+  <div class="body">
+    <div class="panelrow">
+      <div class="panel a-rise" style="--d:.16s">
+        <div class="panel-h">Sources primaires</div>
+        <div class="ref"><b>Stolte, C., Tang, D. &amp; Hanrahan, P.</b> (2002). « Polaris: A System for Query, Analysis, and Visualization of Multidimensional Relational Databases ». <i>IEEE TVCG</i>, 8(1), 52-65.<span>Origine académique de la technologie revendiquée par Tableau.</span></div>
+        <div class="ref"><b>Hackathorn, R.</b> (2003). « Minimizing Action Distance ». <i>TDAN</i>, n° 25. — (2004). « The BI Watch: Real-Time to Real-Value ». <i>DM Review</i>.<span>Les deux textes lus intégralement sur archive. Le second contient les trois courbes qui bornent la thèse du premier.</span></div>
+        <div class="ref"><b>Behrens, S. &amp; Sedera, W.</b> (2004). « Why Do Shadow Systems Exist after an ERP Implementation? ». <i>PACIS Proceedings</i>, art. 136.</div>
+        <div class="ref"><b>Espeland, W. N. &amp; Sauder, M.</b> (2007). « Rankings and Reactivity: How Public Measures Recreate Social Worlds ». <i>American Journal of Sociology</i>.<span>Un indicateur modifie ce qu'il mesure.</span></div>
+        <div class="ref"><b>Weber, M.</b> (2013). « Keys to sustainable self-service business intelligence ». <i>Business Intelligence Journal</i>, 18(1), 18-24. TDWI.</div>
+        <div class="ref"><b>Avidon, E.</b> (2025). « Telecom giant uses Tableau Pulse to drive analytics adoption ». <i>TechTarget</i>, 30 avril 2025.<span>Seule corroboration indépendante du cas Virgin Media O2.</span></div>
+      </div>
+      <div class="panel tight a-rise" style="--d:.28s">
+        <div>
+          <div class="panel-h">Repères de contexte</div>
+          <div class="ref"><b>Business Objects S.A.</b> (1998, 2003). Rapports annuels, exercices 1997 et 2002.<span>Parole d'émetteur : engageante sur les comptes, intéressée ailleurs.</span></div>
+          <div class="ref"><b>Ross, M.</b> (2003). « The Bottom-Up Misnomer ». <i>Intelligent Enterprise</i>, 17 septembre 2003.</div>
+          <div class="ref"><b>Lennerholt, C., van Laere, J. &amp; Söderström, E.</b> (2018, 2021). Obstacles à l'adoption du libre-service.</div>
+          <div class="ref"><b>BARC</b> (2016) ; <b>BARC &amp; Eckerson Group</b> (2022). Enquêtes d'adoption.<span>Instituts liés à l'industrie décrite : à ne pas citer comme preuve.</span></div>
+        </div>
+        <div class="warn a-fade" style="--d:.44s;margin-top:12px"><b>Ce que cet appareil ne permet pas.</b> Gartner n'a jamais été consultée directement. La controverse Inmon / Kimball n'est documentée que par un camp. La latence repose sur un auteur unique, les erreurs de tableur sur un autre. <b>Ces limites sont déclarées, non masquées.</b></div>
+      </div>
+    </div>
+  </div>
+  <div class="pageno">27<b>/27</b></div>
+</section>
+
+    </div>
+
+    <div class="nav" id="nav">
+      <button id="prev" title="Précédent (←)">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+      </button>
+      <span class="count" id="count">1 / 27</span>
+      <button id="next" title="Suivant (→)">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+      </button>
+    </div>
+  </main>
+</div>
+
+<script>
+(function(){
+  const deck   = document.getElementById('deck');
+  const stage  = document.getElementById('stage');
+  const slides = Array.from(deck.querySelectorAll('.slide'));
+  const thumbs = document.getElementById('thumbs');
+  const count  = document.getElementById('count');
+  const N = slides.length;
+  let cur = 0;
+
+  slides.forEach((s, i) => {
+    const wrap = document.createElement('div');
+    wrap.className = 'thumb';
+    const clone = s.cloneNode(true);
+    clone.classList.remove('active');
+    clone.classList.add('tvis');
+    wrap.innerHTML =
+      '<div class="thumb-no">' + (i+1) + '</div>' +
+      '<div class="thumb-box"><div class="thumb-scale"></div></div>' +
+      '<div class="thumb-label">' + (s.dataset.label || ('Carte ' + (i+1))) + '</div>';
+    wrap.querySelector('.thumb-scale').appendChild(clone);
+    wrap.addEventListener('click', () => go(i));
+    thumbs.appendChild(wrap);
+  });
+  const thumbEls = Array.from(thumbs.querySelectorAll('.thumb'));
+
+  function go(i){
+    if(i < 0 || i > N-1) return;
+    const s = slides[i];
+    slides.forEach(x => x.classList.remove('active'));
+    void s.offsetWidth;
+    s.classList.add('active');
+    cur = i;
+    thumbEls.forEach((t,k) => t.classList.toggle('on', k === i));
+    count.textContent = (i+1) + ' / ' + N;
+    document.getElementById('prev').disabled = (i === 0);
+    document.getElementById('next').disabled = (i === N-1);
+    thumbEls[i].scrollIntoView({block:'nearest', behavior:'smooth'});
+  }
+  document.getElementById('prev').onclick = () => go(cur-1);
+  document.getElementById('next').onclick = () => go(cur+1);
+
+  function fit(){
+    const pad = document.fullscreenElement ? 0 : 56;
+    const r = stage.getBoundingClientRect();
+    const s = Math.min((r.width - pad) / 1280, (r.height - pad) / 720);
+    deck.style.transform = 'scale(' + s + ')';
+  }
+  window.addEventListener('resize', fit);
+
+  function toggleFs(){
+    if(document.fullscreenElement) document.exitFullscreen();
+    else stage.requestFullscreen && stage.requestFullscreen();
+  }
+  document.getElementById('btnFs').onclick = toggleFs;
+  document.addEventListener('fullscreenchange', () => {
+    fit(); setTimeout(fit, 130);
+    go(cur); wake();
+  });
+
+  let idleT;
+  function wake(){
+    stage.classList.remove('idle');
+    clearTimeout(idleT);
+    if(document.fullscreenElement) idleT = setTimeout(() => stage.classList.add('idle'), 2600);
+  }
+  stage.addEventListener('mousemove', wake);
+
+  function toPdf(){
+    const wasFs = !!document.fullscreenElement;
+    const finish = () => window.print();
+    if(wasFs) document.exitFullscreen().then(() => setTimeout(finish, 260));
+    else finish();
+  }
+  document.getElementById('btnPdf').onclick = toPdf;
+
+  document.addEventListener('keydown', e => {
+    if(e.metaKey || e.ctrlKey || e.altKey) return;
+    if(e.key === 'ArrowRight' || e.key === 'PageDown' || e.key === ' '){ e.preventDefault(); go(cur+1); }
+    else if(e.key === 'ArrowLeft' || e.key === 'PageUp'){ e.preventDefault(); go(cur-1); }
+    else if(e.key === 'Home'){ go(0); }
+    else if(e.key === 'End'){ go(N-1); }
+    else if(e.key === 'f' || e.key === 'F'){ toggleFs(); }
+    else if(e.key === 'p' || e.key === 'P'){ e.preventDefault(); toPdf(); }
+  });
+
+  fit();
+  go(0);
+})();
+</script>
