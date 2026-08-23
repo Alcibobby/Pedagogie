@@ -1,0 +1,1476 @@
+<!-- =============================================================
+     ÉCHAFAUDAGE — diaporama pédagogique Robert Voyer
+     =============================================================
+     Ce fichier porte la POLITIQUE (ce qui ne varie jamais) :
+     rail de miniatures, plein écran, export PDF, navigation clavier,
+     numérotation, lien de retour, métadonnées de publication.
+
+     Il ne porte PAS la MAQUETTE. Tout ce qui relève du dessin d'une
+     diapositive — échelle typographique, blocs graphiques, dégradés,
+     mise en page des cartes — s'écrit à chaque génération, sous le
+     repère « STYLES DE MAQUETTE ».
+
+     Les repères {{...}} sont à remplacer.
+     ============================================================= -->
+<meta charset="utf-8">
+<title>Vademecum — créer un cours, une formation, une conférence</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<!-- Métadonnées de publication — lues par l'étape de mise en ligne -->
+<meta name="pedago:chemin"  content="conferences/imt/vademecum">
+<meta name="pedago:famille" content="conference">
+<meta name="pedago:titre"   content="Vademecum — créer un cours, une formation, une conférence">
+<meta name="pedago:rang"    content="1">
+<meta name="pedago:mode"    content="conference">
+<meta name="pedago:cartes"  content="31">
+<meta name="pedago:resume"  content="Quoi faire, dans quel ordre, avec quelle phrase, et où atterrit le résultat : sept étapes, six skills et deux voies de mise en forme, déroulés de bout en bout sur une conférence réelle, du dossier de travail à l'URL publique.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+/* ============================================================
+   CHARTE — variables de couleur et de fonte
+   ============================================================ */
+:root{
+  --ink:#0B2545;          /* marine profond — texte principal */
+  --ink-2:#13315C;
+  --blue:#1D4E89;
+  --blue-soft:#6E9BD1;
+  --accent:#0E9594;       /* vert-sarcelle */
+  --accent-2:#17B3A3;
+  --accent-wash:rgba(14,149,148,.10);
+  --accent-glow:rgba(14,149,148,.22);
+  --bg:#EEF3F8;
+  --card:#FFFFFF;
+  --paper:#F7FAFC;
+  --line:rgba(11,37,69,.11);
+  --ink-70:rgba(11,37,69,.72);
+  --ink-50:rgba(11,37,69,.52);
+  --stage-bg:radial-gradient(1100px 620px at 50% 8%, #fff 0%, rgba(255,255,255,0) 62%), #EEF3F8;
+  --dark-bg:radial-gradient(900px 560px at 22% 12%, #1B4A7E 0%, rgba(27,74,126,0) 60%),
+            radial-gradient(700px 500px at 88% 92%, rgba(14,149,148,.34) 0%, rgba(14,149,148,0) 62%),
+            linear-gradient(150deg,#0B2545 0%,#0A1E3A 100%);
+  --serif:'Fraunces','Iowan Old Style',Georgia,'Times New Roman',serif;
+  --sans:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;
+  --W:1280px; --H:720px;
+}
+
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0; background:var(--bg); color:var(--ink);
+  font-family:var(--sans); -webkit-font-smoothing:antialiased;
+  overflow:hidden;
+}
+
+/* ============================================================
+   COQUE — colonne de miniatures + scène
+   ============================================================ */
+.app{display:flex; height:100vh; width:100vw}
+
+/* Largeur du rail = 16 (marge) + 22 (colonne du numéro) + 212 (vignette)
+   + 16 (marge) + 6 (barre de défilement) = 272. Toute autre valeur fait
+   déborder la vignette et sortir une barre de défilement horizontale. */
+.rail{
+  width:272px; flex:0 0 272px; height:100vh;
+  background:#fff; border-right:1px solid var(--line);
+  display:flex; flex-direction:column;
+  box-shadow:0 0 40px rgba(0,0,0,.06); z-index:5;
+}
+.rail-head{padding:20px 18px 14px; border-bottom:1px solid var(--line)}
+
+/* Lien de retour vers l'index du cours / de la formation / de la conférence.
+   Il vit dans le rail, jamais dans la scène : le rail est masqué en plein
+   écran et à l'impression, le lien n'apparaît donc pas en projection. */
+.rail-back{
+  display:inline-flex; align-items:center; gap:6px;
+  margin-bottom:12px;
+  font-size:10.5px; font-weight:500; letter-spacing:.02em;
+  color:var(--ink-50); text-decoration:none;
+  transition:color .18s;
+}
+.rail-back:hover{color:var(--accent)}
+.rail-back:focus-visible{outline:2px solid var(--accent); outline-offset:3px; border-radius:3px}
+.rail-back svg{width:11px; height:11px; flex:0 0 11px}
+
+.rail-kicker{
+  font-size:9.5px; letter-spacing:.18em; text-transform:uppercase;
+  color:var(--accent); font-weight:700
+}
+.rail-title{
+  font-family:var(--serif); font-size:17px; line-height:1.25;
+  font-weight:500; margin-top:7px; color:var(--ink)
+}
+.rail-meta{font-size:11px; color:var(--ink-50); margin-top:6px}
+
+.thumbs{flex:1; overflow-y:auto; overflow-x:hidden; padding:14px 16px 18px; scrollbar-width:thin}
+.thumbs::-webkit-scrollbar{width:6px}
+.thumbs::-webkit-scrollbar-thumb{background:rgba(0,0,0,.16); border-radius:3px}
+
+.thumb{
+  position:relative; margin-bottom:13px; cursor:pointer;
+  border-radius:8px; padding-left:22px;
+  transition:transform .22s cubic-bezier(.2,.7,.3,1);
+}
+.thumb:hover{transform:translateX(2px)}
+.thumb-no{
+  position:absolute; left:0; top:50%; transform:translateY(-50%);
+  font-size:10.5px; font-weight:600; color:var(--ink-50);
+  font-variant-numeric:tabular-nums; transition:color .2s
+}
+.thumb-box{
+  position:relative; width:212px; height:119.25px; overflow:hidden;
+  border-radius:7px; background:#fff;
+  border:1px solid var(--line);
+  box-shadow:0 2px 8px rgba(0,0,0,.07);
+  transition:box-shadow .25s, border-color .25s;
+}
+.thumb-box::after{
+  content:''; position:absolute; inset:0; border-radius:7px;
+  box-shadow:inset 0 0 0 2px transparent; transition:box-shadow .25s
+}
+.thumb.on .thumb-box::after{box-shadow:inset 0 0 0 2px var(--accent)}
+.thumb.on .thumb-box{box-shadow:0 6px 20px var(--accent-glow)}
+.thumb.on .thumb-no{color:var(--accent); font-weight:700}
+/* La miniature est un clone de la carte à l'échelle : le facteur vaut la
+   largeur de la vignette divisée par celle de la toile (212 / 1280). */
+.thumb-scale{
+  position:absolute; top:0; left:0; width:var(--W); height:var(--H);
+  transform:scale(.16563); transform-origin:0 0; pointer-events:none;
+}
+.thumb-label{
+  font-size:10.5px; color:var(--ink-50); margin-top:5px;
+  letter-spacing:.01em; white-space:nowrap; overflow:hidden; text-overflow:ellipsis
+}
+.thumb.on .thumb-label{color:var(--ink-70); font-weight:500}
+
+.rail-foot{padding:13px 16px 16px; border-top:1px solid var(--line); display:grid; gap:8px}
+.btn{
+  display:flex; align-items:center; gap:9px; width:100%;
+  padding:9px 12px; border-radius:8px; border:1px solid var(--line);
+  background:var(--paper); color:var(--ink-70);
+  font-family:var(--sans); font-size:12px; font-weight:500;
+  cursor:pointer; transition:all .18s;
+}
+.btn:hover{background:var(--ink); color:#fff; border-color:var(--ink)}
+.btn svg{width:14px; height:14px; flex:0 0 14px}
+.btn .k{margin-left:auto; font-size:9.5px; opacity:.5; letter-spacing:.06em}
+
+/* ---- Scène ---- */
+.stage{
+  flex:1; position:relative; display:flex; align-items:center; justify-content:center;
+  background:var(--stage-bg);
+  overflow:hidden;
+}
+/* « flex:0 0 auto » n'est pas décoratif : .deck est un élément flex de la
+   scène. Sans lui, dès que la fenêtre est plus étroite que la toile, la scène
+   le rétrécit et son overflow:hidden rogne la carte — d'autant plus que la
+   toile est large. */
+.deck{
+  position:relative; flex:0 0 auto; width:var(--W); height:var(--H);
+  transform-origin:center center;
+  border-radius:14px; overflow:hidden;
+  box-shadow:0 26px 70px rgba(0,0,0,.20), 0 2px 6px rgba(0,0,0,.08);
+}
+.stage:fullscreen{background:var(--ink)}
+.stage:fullscreen .deck{border-radius:0; box-shadow:none}
+
+.nav{
+  position:absolute; bottom:22px; left:50%; transform:translateX(-50%);
+  display:flex; align-items:center; gap:6px; z-index:10;
+  background:rgba(255,255,255,.86); backdrop-filter:blur(14px);
+  border:1px solid var(--line); border-radius:999px; padding:5px 6px;
+  box-shadow:0 6px 22px rgba(0,0,0,.14);
+  transition:opacity .4s;
+}
+.nav button{
+  width:30px; height:30px; border-radius:50%; border:0; background:transparent;
+  color:var(--ink-70); cursor:pointer; display:grid; place-items:center; transition:.16s
+}
+.nav button:hover{background:var(--ink); color:#fff}
+.nav button:disabled{opacity:.25; cursor:default; background:transparent; color:var(--ink-70)}
+.nav .count{
+  font-size:11.5px; font-weight:600; color:var(--ink-70);
+  font-variant-numeric:tabular-nums; padding:0 9px; letter-spacing:.04em
+}
+.stage.idle .nav{opacity:0}
+
+.hint{
+  position:absolute; top:16px; right:18px; z-index:10;
+  font-size:10.5px; color:var(--ink-50); letter-spacing:.05em;
+  background:rgba(255,255,255,.8); padding:5px 11px; border-radius:999px;
+  border:1px solid var(--line); transition:opacity .4s
+}
+.stage:not(:fullscreen) .hint{display:none}
+.stage.idle .hint{opacity:0}
+
+/* ============================================================
+   DIAPOSITIVES — socle structurel
+   ============================================================ */
+/* La carte est une colonne : une tête de hauteur naturelle, un corps qui
+   occupe toute la hauteur restante. Sans cela, le contenu s'arrête où il
+   s'arrête et laisse une bande morte en bas — le déséquilibre le plus
+   visible d'un diaporama, et le plus fréquent aux faibles densités.
+
+   L'ÉCHELLE DE LA CARTE (--e) est le vrai remède à ce déséquilibre. Une carte
+   qui porte peu de matière ne se remplit pas en écartant ses blocs : elle se
+   remplit en s'écrivant plus grand. Toutes les tailles de la maquette doivent
+   donc s'exprimer en calc(Npx * var(--e)), et --e se pose carte par carte,
+   à la mesure — style="--e:1.4" sur la <section>.
+
+   Les grandes tailles suivent --ed, une échelle amortie : sans cela un titre
+   de carte rejoint la taille du titre de couverture et la hiérarchie
+   s'effondre. */
+.slide{
+  --e:1;
+  --ed:calc(1 + (var(--e) - 1) * .45);
+  position:absolute; inset:0; width:var(--W); height:var(--H);
+  padding:52px 66px 48px; background:var(--card);
+  opacity:0; visibility:hidden; z-index:1;
+  transition:opacity .5s ease;
+  display:flex; flex-direction:column;
+}
+.slide.active{opacity:1; visibility:visible; z-index:2}
+.thumb-scale .slide{opacity:0; visibility:hidden}
+.thumb-scale .slide.tvis{opacity:1; visibility:visible}
+
+/* Le titre reste en haut ; c'est le corps qui se répartit. */
+.top{flex:0 0 auto}
+.body{
+  flex:1 1 auto; min-height:0;
+  display:flex; flex-direction:column;
+  gap:15px; padding-top:17px;
+  justify-content:center;   /* le résidu se partage, il ne s'accumule pas */
+}
+/* Seules les FIGURES occupent la place qu'on leur donne : une frise, une
+   chaîne, une table, des barres grandissent honnêtement, leurs éléments
+   grandissant avec elles. Ajouter ici les figures propres à la maquette.
+
+   Une boîte de TEXTE, jamais. L'étirer n'ajoute pas un mot ; cela creuse un
+   vide au bas de la boîte, ou pire — avec space-between — entre l'énoncé et
+   son explication, à l'endroit exact où le lien de lecture doit tenir. */
+.body > .frise,
+.body > .chain,
+.body > .panelrow,
+.body > .stack{flex:1 1 auto}
+.stack{display:flex; flex-direction:column; gap:15px; justify-content:center}
+.stack > .frise,
+.stack > .chain{flex:1 1 auto}
+
+/* Fond plein foncé : couverture, intertitres, clôture.
+   Le titre y est centré — c'est une règle de forme, pas une maquette.
+   Le dégradé lui-même relève de la charte. */
+.slide.dark{
+  background:var(--dark-bg);
+  color:#fff;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  text-align:center;
+}
+
+/* Numéro de carte — uniquement sur fond clair, jamais sur .dark.
+   Position, taille et style constants d'une vue à l'autre. */
+.pageno{
+  position:absolute; right:40px; bottom:30px;
+  font-size:11.5px; font-weight:600; letter-spacing:.1em;
+  color:var(--ink-50); font-variant-numeric:tabular-nums;
+}
+.pageno b{color:var(--accent); font-weight:700}
+
+/* ============================================================
+   ANIMATIONS — rejouées à chaque arrivée sur la carte
+   ============================================================
+   Les règles sont portées par « .slide.active » : quitter puis revenir
+   sur une carte relance la cascade. C'est ce qui rend l'animation
+   cinématique plutôt que jouée une seule fois au chargement.
+   Régler le décalage par l'attribut style="--d:.35s". */
+@keyframes rise{from{opacity:0; transform:translateY(26px)}}
+@keyframes fade{from{opacity:0}}
+@keyframes slideIn{from{opacity:0; transform:translateX(-30px)}}
+@keyframes zoomIn{from{opacity:0; transform:scale(.9)}}
+@keyframes grow{from{transform:scaleX(0)}}
+@keyframes growY{from{transform:scaleY(0)}}
+@keyframes draw{from{stroke-dashoffset:var(--len)}}
+@keyframes pop{from{opacity:0; transform:scale(.3)}}
+@keyframes sweep{from{opacity:0; clip-path:inset(0 100% 0 0)}}
+
+.slide.active .a-rise {animation:rise .82s var(--d,0s) both cubic-bezier(.18,.75,.25,1)}
+.slide.active .a-fade {animation:fade 1.05s var(--d,0s) both ease}
+.slide.active .a-slide{animation:slideIn .8s var(--d,0s) both cubic-bezier(.18,.75,.25,1)}
+.slide.active .a-zoom {animation:zoomIn .85s var(--d,0s) both cubic-bezier(.18,.8,.25,1)}
+.slide.active .a-grow {animation:grow 1.05s var(--d,0s) both cubic-bezier(.2,.75,.25,1); transform-origin:left center}
+.slide.active .a-growy{animation:growY .95s var(--d,0s) both cubic-bezier(.2,.75,.25,1); transform-origin:bottom center}
+.slide.active .a-draw {animation:draw 1.5s var(--d,0s) both cubic-bezier(.3,.7,.3,1)}
+.slide.active .a-pop  {animation:pop .6s var(--d,0s) both cubic-bezier(.2,1.5,.4,1)}
+.slide.active .a-sweep{animation:sweep 1.1s var(--d,0s) both cubic-bezier(.2,.75,.25,1)}
+.a-draw{stroke-dasharray:var(--len); stroke-dashoffset:0}
+
+/* ============================================================
+   STYLES DE MAQUETTE — propres à ce diaporama
+   ============================================================
+   Échelle typographique, blocs graphiques, figures chiffrées,
+   planche de références, couverture. Écrits à chaque génération.
+   ============================================================ */
+/* ---------- Tête de carte ---------- */
+.ey{
+  font-size:calc(10px * var(--e)); letter-spacing:.2em; text-transform:uppercase;
+  font-weight:700; color:var(--accent); margin-bottom:calc(9px * var(--e));
+  display:flex; align-items:center; gap:calc(9px * var(--e));
+}
+.ey::after{content:''; height:1px; flex:1; background:linear-gradient(90deg,var(--accent-glow),transparent)}
+h2{
+  font-family:var(--serif); font-weight:400; line-height:1.1; letter-spacing:-.015em;
+  font-size:calc(38px * var(--ed)); margin:0; color:var(--ink);
+}
+h2 em{font-style:normal; color:var(--accent)}
+.lede{
+  font-size:calc(14px * var(--e)); line-height:1.5; color:var(--ink-70);
+  margin:calc(11px * var(--e)) 0 0; max-width:calc(880px * var(--e));
+}
+
+/* ---------- Boîtes ---------- */
+.mod,.pane,.fig,.panel{display:flex; flex-direction:column; justify-content:flex-start}
+.mod{
+  background:var(--paper); border:1px solid var(--line); border-radius:calc(12px * var(--e));
+  padding:calc(17px * var(--e)) calc(19px * var(--e));
+  position:relative; overflow:hidden;
+}
+.mod::before{
+  content:''; position:absolute; left:0; top:0; bottom:0; width:calc(3px * var(--e));
+  background:linear-gradient(180deg,var(--accent),var(--accent-2));
+}
+.mod.plain::before{display:none}
+.mod-k{
+  font-size:calc(9.5px * var(--e)); letter-spacing:.16em; text-transform:uppercase;
+  font-weight:700; color:var(--accent); margin-bottom:calc(6px * var(--e));
+}
+.mod-h{
+  font-family:var(--serif); font-weight:500; line-height:1.18;
+  font-size:calc(19px * var(--ed)); color:var(--ink); margin:0 0 calc(8px * var(--e));
+}
+.mod-p{font-size:calc(13px * var(--e)); line-height:1.55; color:var(--ink-70); margin:0}
+.mod-p + .mod-p{margin-top:calc(8px * var(--e))}
+.mod-p b{color:var(--ink); font-weight:600}
+.mod-p code,.mono{
+  font-family:ui-monospace,'SF Mono',Menlo,monospace; font-size:.9em;
+  background:var(--accent-wash); color:var(--ink-2); padding:0 calc(4px * var(--e));
+  border-radius:calc(4px * var(--e));
+}
+
+/* ---------- Grilles ---------- */
+.g2{display:grid; grid-template-columns:1fr 1fr; gap:calc(14px * var(--e))}
+.g3{display:grid; grid-template-columns:repeat(3,1fr); gap:calc(13px * var(--e))}
+.g21{display:grid; grid-template-columns:1.35fr 1fr; gap:calc(14px * var(--e))}
+.panelrow{display:grid; grid-template-columns:1fr 1fr; gap:calc(14px * var(--e))}
+
+/* ---------- La fiche : le bloc signature du vademecum ---------- */
+.fiche{
+  border:1px solid var(--line); border-radius:calc(12px * var(--e)); overflow:hidden;
+  background:var(--card);
+}
+.fr{
+  display:grid; grid-template-columns:calc(148px * var(--e)) 1fr;
+  border-top:1px solid var(--line);
+}
+.fr:first-child{border-top:0}
+.fr-k{
+  background:var(--paper); padding:calc(9px * var(--e)) calc(13px * var(--e));
+  font-size:calc(10.5px * var(--e)); font-weight:700; letter-spacing:.06em;
+  text-transform:uppercase; color:var(--ink-50); line-height:1.35;
+  border-right:1px solid var(--line);
+}
+.fr.hi .fr-k{color:var(--accent)}
+.fr-v{
+  padding:calc(9px * var(--e)) calc(14px * var(--e));
+  font-size:calc(12.5px * var(--e)); line-height:1.5; color:var(--ink-70);
+}
+.fr-v b{color:var(--ink); font-weight:600}
+
+/* ---------- Chaîne d'étapes ---------- */
+.chain{display:flex; align-items:stretch; gap:calc(7px * var(--e))}
+.ch{
+  flex:1; display:flex; flex-direction:column; justify-content:flex-start;
+  background:var(--paper); border:1px solid var(--line);
+  border-radius:calc(11px * var(--e)); padding:calc(13px * var(--e)) calc(12px * var(--e));
+  position:relative;
+}
+.ch-n{
+  font-size:calc(11px * var(--e)); font-weight:700; color:var(--accent);
+  font-variant-numeric:tabular-nums; letter-spacing:.1em; margin-bottom:calc(6px * var(--e));
+}
+.ch-t{
+  font-family:var(--serif); font-size:calc(14px * var(--ed)); line-height:1.2;
+  color:var(--ink); font-weight:500; margin-bottom:calc(6px * var(--e));
+}
+.ch-d{font-size:calc(11px * var(--e)); line-height:1.45; color:var(--ink-50)}
+.ch.on{background:linear-gradient(160deg,#fff,var(--accent-wash)); border-color:var(--accent-glow)}
+.arw{display:grid; place-items:center; color:var(--blue-soft); flex:0 0 calc(15px * var(--e))}
+.arw svg{width:calc(14px * var(--e)); height:calc(14px * var(--e))}
+
+/* ---------- Frise verticale ---------- */
+.frise{display:flex; flex-direction:column; gap:calc(9px * var(--e)); position:relative}
+.fp{
+  display:grid; grid-template-columns:calc(30px * var(--e)) 1fr; gap:calc(13px * var(--e));
+  align-items:start; position:relative;
+}
+.fp-n{
+  width:calc(26px * var(--e)); height:calc(26px * var(--e)); border-radius:50%;
+  display:grid; place-items:center; background:var(--accent); color:#fff;
+  font-size:calc(11.5px * var(--e)); font-weight:700; font-variant-numeric:tabular-nums;
+  box-shadow:0 0 0 calc(4px * var(--e)) var(--accent-wash);
+}
+.fp-b{padding-top:calc(2px * var(--e))}
+.fp-t{
+  font-family:var(--serif); font-size:calc(15px * var(--ed)); font-weight:500;
+  color:var(--ink); line-height:1.25;
+}
+.fp-d{font-size:calc(12px * var(--e)); line-height:1.5; color:var(--ink-70); margin-top:calc(3px * var(--e))}
+
+/* ---------- Table comparative ---------- */
+.tbl{width:100%; border-collapse:collapse; font-size:calc(12px * var(--e))}
+.tbl th{
+  text-align:left; padding:calc(8px * var(--e)) calc(11px * var(--e));
+  font-size:calc(9.5px * var(--e)); letter-spacing:.14em; text-transform:uppercase;
+  color:var(--accent); font-weight:700; border-bottom:calc(1.5px * var(--e)) solid var(--accent-glow);
+}
+.tbl td{
+  padding:calc(9px * var(--e)) calc(11px * var(--e)); border-bottom:1px solid var(--line);
+  color:var(--ink-70); line-height:1.45; vertical-align:top;
+}
+.tbl tr:last-child td{border-bottom:0}
+.tbl td.k{color:var(--ink); font-weight:600; white-space:nowrap}
+.tbl td b{color:var(--ink); font-weight:600}
+
+/* ---------- Figures chiffrées ---------- */
+.stats{display:grid; grid-template-columns:repeat(4,1fr); gap:calc(13px * var(--e))}
+.stat{
+  background:var(--paper); border:1px solid var(--line); border-radius:calc(12px * var(--e));
+  padding:calc(15px * var(--e)) calc(13px * var(--e)); text-align:center;
+}
+.stat-n{
+  font-family:var(--serif); font-size:calc(40px * var(--ed)); line-height:1;
+  color:var(--accent); font-weight:400; font-variant-numeric:tabular-nums;
+}
+.stat-n small{font-size:.44em; color:var(--ink-50); font-family:var(--sans); font-weight:600}
+.stat-l{font-size:calc(11px * var(--e)); color:var(--ink-70); margin-top:calc(7px * var(--e)); line-height:1.35}
+
+/* ---------- Arborescence ---------- */
+.tree{
+  font-family:ui-monospace,'SF Mono',Menlo,monospace;
+  font-size:calc(11.5px * var(--e)); line-height:1.72; color:var(--ink-2);
+  background:var(--paper); border:1px solid var(--line);
+  border-radius:calc(11px * var(--e)); padding:calc(14px * var(--e)) calc(16px * var(--e));
+  white-space:pre; overflow:hidden;
+}
+.tree b{color:var(--accent); font-weight:700}
+.tree i{color:var(--ink-50); font-style:normal}
+
+/* ---------- Encadré d'interdit ---------- */
+.warn{
+  border:1px solid rgba(11,37,69,.2); border-left:calc(3px * var(--e)) solid var(--ink);
+  background:linear-gradient(100deg,rgba(11,37,69,.055),rgba(11,37,69,.015));
+  border-radius:calc(11px * var(--e)); padding:calc(15px * var(--e)) calc(18px * var(--e));
+}
+.warn-h{
+  font-size:calc(9.5px * var(--e)); letter-spacing:.16em; text-transform:uppercase;
+  font-weight:700; color:var(--ink); margin-bottom:calc(6px * var(--e));
+}
+.warn-p{font-size:calc(13px * var(--e)); line-height:1.55; color:var(--ink-70); margin:0}
+.warn-p b{color:var(--ink); font-weight:600}
+
+/* ---------- Citation encadrée ---------- */
+.quote{
+  font-family:var(--serif); font-size:calc(20px * var(--ed)); line-height:1.35;
+  color:var(--ink); font-weight:400; text-align:center;
+  padding:calc(15px * var(--e)) calc(30px * var(--e));
+  border-top:1px solid var(--line); border-bottom:1px solid var(--line);
+}
+.quote b{color:var(--accent); font-weight:500}
+
+/* ---------- Note de bas de carte ---------- */
+.note{
+  font-size:calc(11px * var(--e)); line-height:1.5; color:var(--ink-50);
+  padding-top:calc(9px * var(--e)); border-top:1px solid var(--line);
+}
+.note b{color:var(--ink-70); font-weight:600}
+
+/* ---------- Cartes foncées ---------- */
+.dk-k{
+  font-size:calc(10.5px * var(--e)); letter-spacing:.26em; text-transform:uppercase;
+  font-weight:700; color:var(--accent-2); margin-bottom:calc(16px * var(--e));
+}
+.dk-h{
+  font-family:var(--serif); font-weight:300; line-height:1.08; letter-spacing:-.02em;
+  font-size:calc(38px * var(--e)); color:#fff; margin:0; max-width:calc(900px * var(--e));
+}
+.dk-h b{font-weight:500; color:var(--accent-2)}
+.dk-s{
+  font-size:calc(14px * var(--e)); line-height:1.55; color:rgba(255,255,255,.68);
+  margin:calc(18px * var(--e)) auto 0; max-width:calc(620px * var(--e));
+}
+.dk-rule{
+  width:calc(58px * var(--e)); height:calc(2px * var(--e)); margin:calc(20px * var(--e)) auto 0;
+  background:linear-gradient(90deg,var(--accent-2),transparent);
+}
+
+/* ---------- Couverture ---------- */
+.cov-k{
+  font-size:calc(11px * var(--e)); letter-spacing:.3em; text-transform:uppercase;
+  font-weight:700; color:var(--accent-2); margin-bottom:calc(22px * var(--e));
+}
+.cov-h{
+  font-family:var(--serif); font-weight:300; line-height:1.04; letter-spacing:-.025em;
+  font-size:calc(62px * var(--e)); color:#fff; margin:0; max-width:calc(960px * var(--e));
+}
+.cov-h b{font-weight:500; color:var(--accent-2)}
+.cov-s{
+  font-size:calc(17px * var(--e)); line-height:1.5; color:rgba(255,255,255,.72);
+  margin:calc(22px * var(--e)) auto 0; max-width:calc(640px * var(--e));
+}
+.cov-m{
+  margin-top:calc(30px * var(--e)); padding-top:calc(18px * var(--e));
+  border-top:1px solid rgba(255,255,255,.16);
+  font-size:calc(12px * var(--e)); letter-spacing:.1em; text-transform:uppercase;
+  color:rgba(255,255,255,.52); font-weight:600;
+}
+
+.pane.gapped{gap:calc(12px * var(--e))}
+
+
+/* ============================================================
+   IMPRESSION / EXPORT PDF
+   ============================================================ */
+@page{ size:1280px 720px; margin:0 }
+@media print{
+  html,body{overflow:visible; background:#fff; height:auto}
+  .rail,.nav,.hint{display:none !important}
+  .app{display:block; height:auto}
+  .stage{display:block; height:auto; background:#fff; overflow:visible}
+  .deck{
+    width:auto; height:auto; transform:none !important;
+    box-shadow:none; border-radius:0; position:static
+  }
+  .slide{
+    position:relative; inset:auto; display:block;
+    width:1280px; height:720px; opacity:1 !important; visibility:visible !important;
+    page-break-after:always; break-after:page; overflow:hidden;
+    -webkit-print-color-adjust:exact; print-color-adjust:exact;
+  }
+  .slide.dark{display:flex}
+  .slide:last-child{page-break-after:auto; break-after:auto}
+  .slide *{animation:none !important; transition:none !important}
+}
+</style>
+
+<div class="app" id="app">
+
+  <!-- ================= COLONNE MINIATURES ================= -->
+  <aside class="rail">
+    <div class="rail-head">
+      <a class="rail-back" href="index.html">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18 9 12l6-6"/></svg>
+        Retour à la conférence
+      </a>
+      <div class="rail-kicker">Vademecum · IMT-BS</div>
+      <div class="rail-title">Créer un cours, une formation, une conférence</div>
+      <div class="rail-meta">31 cartes · mode conférence</div>
+    </div>
+    <div class="thumbs" id="thumbs"></div>
+    <div class="rail-foot">
+      <button class="btn" id="btnFs">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M8 3H5a2 2 0 0 0-2 2v3M16 3h3a2 2 0 0 1 2 2v3M8 21H5a2 2 0 0 1-2-2v-3M16 21h3a2 2 0 0 0 2-2v-3"/></svg>
+        Plein écran <span class="k">F</span>
+      </button>
+      <button class="btn" id="btnPdf">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0 4-4m-4 4-4-4M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg>
+        Exporter en PDF <span class="k">P</span>
+      </button>
+    </div>
+  </aside>
+
+  <!-- ================= SCÈNE ================= -->
+  <main class="stage" id="stage">
+    <div class="hint">Échap pour quitter le plein écran</div>
+    <div class="deck" id="deck">
+
+<!-- Structure attendue de chaque carte claire : la tête en haut, le corps qui
+     remplit le reste. Les cartes à fond foncé n'ont pas besoin du découpage,
+     elles sont centrées.
+
+     <section class="slide" data-label="Libellé court de la miniature">
+       <div class="top">
+         <div class="ey">Surtitre</div>
+         <h2>Titre de la carte</h2>
+         <p class="lede">Chapô facultatif.</p>
+       </div>
+       <div class="body">
+         … bloc principal : grille de boîtes, figures chiffrées, comparatif …
+         … note de bas de carte facultative : réserve, source, question …
+       </div>
+       <div class="pageno">N<b>/T</b></div>
+     </section>                                                            -->
+
+<!-- 1 . Couverture -->
+<section class="slide dark active" data-label="Couverture">
+  <div class="cov-k a-fade" style="--d:.1s">Vademecum · Procédure opératoire</div>
+  <h1 class="cov-h a-rise" style="--d:.25s">Créer un cours,<br>une formation,<br>une <b>conférence</b>.</h1>
+  <p class="cov-s a-rise" style="--d:.5s">Quoi faire, dans quel ordre, avec quelle phrase — et où atterrit le résultat. Sept étapes, six skills, un cas déroulé de bout en bout.</p>
+  <div class="cov-m a-fade" style="--d:.75s">Robert Voyer · IMT Business School</div>
+</section>
+
+<!-- 2 . Objet -->
+<section class="slide" style="--e:1.8" data-label="Objet et périmètre">
+  <div class="top">
+    <div class="ey a-fade">Ouverture · Programme</div>
+    <h2 class="a-rise" style="--d:.08s">Une procédure, pas un manifeste</h2>
+    <p class="lede a-rise" style="--d:.16s">Ce document ne défend pas le dispositif : il l'exécute. Pour chaque étape, il donne le skill exact, la manière de le déclencher, ce qu'il exige, ce qu'il infère, et le dossier de sortie.</p>
+  </div>
+  <div class="body">
+    <div class="g3">
+      <div class="mod a-rise" style="--d:.26s">
+        <div class="mod-k">Ce qu'il donne</div>
+        <div class="mod-h">Une phrase par étape</div>
+        <p class="mod-p">Chaque étape porte sa <b>phrase déclenchante</b>, ses entrées obligatoires, sa sortie et son dossier. Rien n'y est laissé au jugement du moment.</p>
+      </div>
+      <div class="mod a-rise" style="--d:.36s">
+        <div class="mod-k">Ce qu'il déroule</div>
+        <div class="mod-h">Un cas réel, entier</div>
+        <p class="mod-p">La conférence donnée au <b>Fonds de Garantie des Victimes</b> — « L'IA générative au cœur du développement logiciel » — du devis à l'URL publique.</p>
+      </div>
+      <div class="mod a-rise" style="--d:.46s">
+        <div class="mod-k">Son périmètre</div>
+        <div class="mod-h">La création neuve</div>
+        <p class="mod-p">La reprise d'un support ancien est une <b>autre chaîne</b>. Les deux se rejoignent au format pivot ; à partir de là, la procédure est commune.</p>
+      </div>
+    </div>
+  </div>
+  <div class="pageno">2<b>/31</b></div>
+</section>
+
+<!-- 3 . La chaîne -->
+<section class="slide" style="--e:1.8" data-label="La chaîne, d'un coup d'œil">
+  <div class="top">
+    <div class="ey a-fade">Ouverture · Programme</div>
+    <h2 class="a-rise" style="--d:.08s">La chaîne, d'un coup d'œil</h2>
+  </div>
+  <div class="body">
+    <div class="chain">
+      <div class="ch a-rise" style="--d:.2s">
+        <div class="ch-n">ÉTAPE 1</div>
+        <div class="ch-t">Le programme</div>
+        <div class="ch-d">Thème + genre → Markdown hiérarchisé, hypothèses déclarées en tête.</div>
+      </div>
+      <div class="arw a-fade" style="--d:.3s"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg></div>
+      <div class="ch a-rise" style="--d:.34s">
+        <div class="ch-n">ÉTAPE 2</div>
+        <div class="ch-t">Sa forme</div>
+        <div class="ch-d">Un <code>.docx</code> paysage à quatre colonnes, à envoyer au client.</div>
+      </div>
+      <div class="arw a-fade" style="--d:.44s"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg></div>
+      <div class="ch on a-rise" style="--d:.48s">
+        <div class="ch-n">ÉTAPE 3</div>
+        <div class="ch-t">Le fond</div>
+        <div class="ch-d">Le <b>format pivot</b> : Ouverture / A / B / C. Le point de jonction de toutes les voies.</div>
+      </div>
+      <div class="arw a-fade" style="--d:.58s"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg></div>
+      <div class="ch a-rise" style="--d:.62s">
+        <div class="ch-n">ÉTAPE 4</div>
+        <div class="ch-t">La forme</div>
+        <div class="ch-d">Deux voies, plus une variante — toutes aboutissent au même HTML autonome.</div>
+      </div>
+      <div class="arw a-fade" style="--d:.72s"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg></div>
+      <div class="ch a-rise" style="--d:.76s">
+        <div class="ch-n">ÉTAPES 5–6</div>
+        <div class="ch-t">Publier, rejouer</div>
+        <div class="ch-d">Vérifier, pousser, annoncer l'URL — puis reprendre le même module dans un second genre.</div>
+      </div>
+    </div>
+    <div class="note a-fade" style="--d:.9s">L'étape <b>0</b> ne déclenche rien : elle crée le dossier de travail, pour que les skills aient où écrire.</div>
+  </div>
+  <div class="pageno">3<b>/31</b></div>
+</section>
+
+<!-- 4 . Intertitre -->
+<section class="slide dark" style="--e:1.55" data-label="Préambule">
+  <div class="dk-k a-fade" style="--d:.1s">Préambule</div>
+  <h2 class="dk-h a-rise" style="--d:.22s">Trois choses à savoir<br>avant de commencer</h2>
+  <div class="dk-rule a-grow" style="--d:.5s"></div>
+  <p class="dk-s a-fade" style="--d:.6s">Comment un skill se déclenche · ce qui se demande et ce qui s'infère · où les choses se rangent.</p>
+</section>
+
+<!-- 5 . Déclenchement -->
+<section class="slide" style="--e:1.55" data-label="Un skill se déclenche par sa description">
+  <div class="top">
+    <div class="ey a-fade">Préambule · 1</div>
+    <h2 class="a-rise" style="--d:.08s">Un skill se déclenche par sa <em>description</em>, pas par son nom</h2>
+    <p class="lede a-rise" style="--d:.16s">Il ne s'invoque pas. On formule une demande en langage ordinaire, et c'est la description du skill qui décide s'il doit s'activer. D'où la phrase déclenchante donnée à chaque étape : non pas une formule magique, mais une demande dont le vocabulaire tombe dans le champ que la description revendique.</p>
+  </div>
+  <div class="body">
+    <div class="g2">
+      <div class="mod a-rise" style="--d:.3s">
+        <div class="mod-k">Conséquence 1</div>
+        <div class="mod-h">Nommer le skill fonctionne aussi</div>
+        <p class="mod-p">Et cela lève toute ambiguïté quand deux skills sont voisins. C'est <b>le recours, pas la règle</b> : si le nom est indispensable, c'est la description qu'il faudrait revoir.</p>
+      </div>
+      <div class="mod a-rise" style="--d:.42s">
+        <div class="mod-k">Conséquence 2</div>
+        <div class="mod-h">Une phrase trop vague active le mauvais skill</div>
+        <p class="mod-p">« Fais-moi quelque chose sur l'IA et le code » ne dit ni le genre, ni l'étape. Les phrases de ce vademecum portent toujours <b>le geste</b> — concevoir, détailler, mettre en forme — et <b>l'objet</b> : programme, module, diaporama.</p>
+      </div>
+    </div>
+  </div>
+  <div class="pageno">5<b>/31</b></div>
+</section>
+
+<!-- 6 . Demandé / inféré -->
+<section class="slide" style="--e:1.7" data-label="Ce qui se demande, ce qui s'infère">
+  <div class="top">
+    <div class="ey a-fade">Préambule · 2</div>
+    <h2 class="a-rise" style="--d:.08s">Ce qui se demande, ce qui s'infère</h2>
+  </div>
+  <div class="body">
+    <div class="quote a-rise" style="--d:.22s">On demande ce dont l'absence rendrait le travail <b>faux</b> ;<br>on infère ce dont l'absence le rendrait seulement <b>plus large</b> — et l'on annonce l'inférence.</div>
+    <div class="g2">
+      <div class="mod a-rise" style="--d:.42s">
+        <div class="mod-k">Jamais inféré</div>
+        <div class="mod-h">Le genre</div>
+        <p class="mod-p">Cours, formation, conférence, keynote. Le même thème se traite dans les quatre régimes, et <b>le régime change tout</b> — la granularité, la densité, le mode rhétorique, jusqu'à l'endroit où le support est publié.</p>
+      </div>
+      <div class="mod a-rise" style="--d:.54s">
+        <div class="mod-k">Inféré et déclaré</div>
+        <div class="mod-h">Public, durée, périmètre, charte</div>
+        <p class="mod-p">Proposés en <b>bloc d'hypothèses</b> visible en tête, ou annoncés avant de produire. L'annonce compte autant que le choix : elle laisse la possibilité de corriger avant qu'un travail long ne soit engagé.</p>
+      </div>
+    </div>
+  </div>
+  <div class="pageno">6<b>/31</b></div>
+</section>
+
+<!-- 7 . Rangement -->
+<section class="slide" style="--e:1.4" data-label="Deux arborescences, deux logiques">
+  <div class="top">
+    <div class="ey a-fade">Préambule · 3</div>
+    <h2 class="a-rise" style="--d:.08s">Deux arborescences, et elles ne suivent pas la même logique</h2>
+  </div>
+  <div class="body">
+    <div class="g2">
+      <div class="pane a-rise" style="--d:.24s">
+        <div class="mod-k">Sur le disque</div>
+        <div class="mod-h">On range par client ou par matière</div>
+        <div class="tree" style="margin-top:calc(9px * var(--e))">~/_Local/__Pedagogie/<b>3_cours-formations</b>/
+├── cours/<i>&lt;matiere&gt;</i>/
+└── formations/<i>&lt;client ou contenu&gt;</i>/</div>
+        <p class="mod-p" style="margin-top:calc(9px * var(--e))">C'est le dossier de travail : il porte le devis, les programmes, les fonds, les formes.</p>
+      </div>
+      <div class="pane a-rise" style="--d:.4s">
+        <div class="mod-k">Dans le portail publié</div>
+        <div class="mod-h">On range par genre</div>
+        <div class="tree" style="margin-top:calc(9px * var(--e))">~/_Local/__Pedagogie/<b>2_code/Pedagogie</b>/
+├── cours/<i>&lt;matiere&gt;</i>/
+├── formations/<i>&lt;contenu&gt;</i>/
+└── conferences/<i>&lt;client&gt;</i>/<i>&lt;conference&gt;</i>/</div>
+        <p class="mod-p" style="margin-top:calc(9px * var(--e))">C'est ce que voit le public. Un même module peut donc exister <b>deux fois en ligne</b>, sous deux genres.</p>
+      </div>
+    </div>
+    <div class="warn a-rise" style="--d:.58s">
+      <div class="warn-h">Le principe directeur</div>
+      <p class="warn-p">Une URL partagée à des étudiants ou à un client <b>ne doit plus jamais changer</b>. En cas d'hésitation sur un nom, demander plutôt que renommer.</p>
+    </div>
+  </div>
+  <div class="pageno">7<b>/31</b></div>
+</section>
+
+<!-- 8 . Le cas FGV -->
+<section class="slide" style="--e:1.8" data-label="Le cas déroulé — FGV">
+  <div class="top">
+    <div class="ey a-fade">Le cas déroulé</div>
+    <h2 class="a-rise" style="--d:.08s">Fonds de Garantie des Victimes — équipes IT</h2>
+    <p class="lede a-rise" style="--d:.16s">« L'IA générative au cœur du développement logiciel — État de l'art, ruptures et pratiques ». Tout ce qui suit renvoie à des fichiers réels, à une exception près, signalée à l'étape 4b : la voie du canevas n'a pas encore été parcourue de bout en bout.</p>
+  </div>
+  <div class="body">
+    <div class="stats">
+      <div class="stat a-pop" style="--d:.3s"><div class="stat-n">4<small> h</small></div><div class="stat-l">Une session unique, de 09h00 à 13h00, en conférence d'acculturation</div></div>
+      <div class="stat a-pop" style="--d:.4s"><div class="stat-n">135</div><div class="stat-l">Lignes de programme, quatre modules horodatés, hypothèses déclarées en tête</div></div>
+      <div class="stat a-pop" style="--d:.5s"><div class="stat-n">2</div><div class="stat-l">Genres tirés du même programme, sans le reconcevoir : conférence et formation</div></div>
+      <div class="stat a-pop" style="--d:.6s"><div class="stat-n">11<small> + 12</small></div><div class="stat-l">Cartes publiées en ligne, une version par genre, à deux adresses distinctes</div></div>
+    </div>
+    <div class="mod a-rise" style="--d:.72s">
+      <div class="mod-k">Ce que le cas démontre, et qui n'est pas une anomalie</div>
+      <p class="mod-p">Le fond « formation » compte <b>136 lignes</b> quand le fond « conférence » en compte <b>123</b> — alors que les deux supports font presque le même nombre de cartes. La densité par carte n'est pas la même : en conférence, la diapositive soutient un propos parlé ; en formation, elle est distribuée et doit se comprendre seule. <b>C'est exactement ce que le genre commande</b>, et c'est pourquoi il ne s'infère jamais.</p>
+    </div>
+  </div>
+  <div class="pageno">8<b>/31</b></div>
+</section>
+
+<!-- 9 . Intertitre -->
+<section class="slide dark" style="--e:1.55" data-label="I — Du programme au fond">
+  <div class="dk-k a-fade" style="--d:.1s">Première partie · Étapes 0 à 3</div>
+  <h2 class="dk-h a-rise" style="--d:.22s">Du programme<br>au <b>fond</b></h2>
+  <div class="dk-rule a-grow" style="--d:.5s"></div>
+  <p class="dk-s a-fade" style="--d:.6s">Préparer le terrain · concevoir le programme · le mettre en forme pour le client · rédiger le contenu détaillé.</p>
+</section>
+
+<!-- 10 . Étape 0 -->
+<section class="slide" style="--e:1.3" data-label="Étape 0 — préparer le terrain">
+  <div class="top">
+    <div class="ey a-fade">Étape 0 · rien à déclencher</div>
+    <h2 class="a-rise" style="--d:.08s">Préparer le terrain</h2>
+    <p class="lede a-rise" style="--d:.16s">Créer le dossier de travail <em>avant</em> la première demande, pour que les skills aient où écrire.</p>
+  </div>
+  <div class="body">
+    <div class="g21">
+      <div class="tree a-rise" style="--d:.26s">3_cours-formations/formations/<b>formation-FGV</b>/
+├── <b>1_devis</b>/          <i>la commande</i>
+├── <b>2_Programme</b>/      <i>étapes 1 et 2</i>
+└── <b>Module-1</b>/
+    ├── <b>1_fond</b>/       <i>étape 3 — le pivot</i>
+    └── <b>2_forme</b>/      <i>étape 4 — le support</i></div>
+      <div class="mod a-rise" style="--d:.4s">
+        <div class="mod-k">Ce que dit la numérotation</div>
+        <div class="mod-h">Le fond avant la forme, rendu visible</div>
+        <p class="mod-p">La convention <code>1_</code> <code>2_</code> n'est pas décorative : elle <b>impose l'ordre du fond avant la forme</b> dans tout affichage de dossier. C'est le premier principe du dispositif, inscrit dans le rangement plutôt que rappelé dans une consigne.</p>
+        <p class="mod-p">Un dossier <code>Module-N/</code> par module, créé <b>au moment où l'on s'attaque à ce module</b> — pas avant. Une arborescence complète créée d'emblée annonce un travail qui n'a pas commencé.</p>
+      </div>
+    </div>
+  </div>
+  <div class="pageno">10<b>/31</b></div>
+</section>
+
+<!-- 11 . Étape 1 fiche -->
+<section class="slide" style="--e:1.15" data-label="Étape 1 — le programme">
+  <div class="top">
+    <div class="ey a-fade">Étape 1 · la fiche</div>
+    <h2 class="a-rise" style="--d:.08s">Le programme</h2>
+  </div>
+  <div class="body">
+    <div class="g21">
+      <div class="fiche a-rise" style="--d:.24s">
+        <div class="fr hi"><div class="fr-k">Skill</div><div class="fr-v"><b>profil-pedagogique-programme-bob</b></div></div>
+        <div class="fr hi"><div class="fr-k">Phrase déclenchante</div><div class="fr-v">« Fais-moi le programme d'une <b>conférence</b> de 4 heures sur l'IA générative dans le développement logiciel, pour les équipes IT du FGV. »</div></div>
+        <div class="fr"><div class="fr-k">Exigé</div><div class="fr-v">Le <b>thème</b> et le <b>genre</b>. Si l'un manque, le skill demande.</div></div>
+        <div class="fr"><div class="fr-k">Inféré, déclaré</div><div class="fr-v">Public, durée, objectifs, prérequis — en bloc d'hypothèses en tête.</div></div>
+        <div class="fr"><div class="fr-k">Sortie</div><div class="fr-v">Un <b>Markdown hiérarchisé unique</b> : un module par section, avec horaire, objectifs et contenu attendu.</div></div>
+        <div class="fr"><div class="fr-k">Dossier</div><div class="fr-v"><code>formation-FGV/2_Programme/</code></div></div>
+      </div>
+      <div class="mod a-rise" style="--d:.42s">
+        <div class="mod-k">Comment ça se passe</div>
+        <div class="mod-h">Pas de questionnaire</div>
+        <p class="mod-p">Le skill ne pose aucune question préalable : il propose un programme, précédé du bloc explicite des hypothèses qu'il a dû faire pour l'écrire.</p>
+        <p class="mod-p"><b>Ces hypothèses sont le premier objet de correction — avant le séquencement.</b> Corriger l'ordre des modules d'un programme fondé sur un public mal supposé, c'est réparer la façade d'un bâtiment mal implanté.</p>
+        <p class="mod-p">Le skill n'appelle aucun autre skill : c'est l'entrée de la chaîne, et il n'attend aucune ressource.</p>
+        <p class="mod-p">Résultat FGV : <code>Programme_Conference_IA_FGV.md</code> — 135 lignes, quatre modules horodatés, chacun avec ses objectifs d'apprentissage rédigés.</p>
+      </div>
+    </div>
+  </div>
+  <div class="pageno">11<b>/31</b></div>
+</section>
+
+<!-- 12 . La fausse prémisse -->
+<section class="slide" style="--e:1.6" data-label="La fausse prémisse silencieuse">
+  <div class="top">
+    <div class="ey a-fade">Étape 1 · ce que le bloc d'hypothèses rattrape</div>
+    <h2 class="a-rise" style="--d:.08s">La fausse prémisse silencieuse</h2>
+    <p class="lede a-rise" style="--d:.16s">L'hypothèse tacite qui vicie tout l'édifice sans jamais s'énoncer. Sur FGV, elle portait sur le <em>niveau de contrainte réglementaire connu</em> — et elle a été corrigée en cadrage explicite, visible en tête du programme livré.</p>
+  </div>
+  <div class="body">
+    <div class="quote a-rise" style="--d:.3s">Conférence d'acculturation. Les points confidentialité, souveraineté et RGPD–AI&nbsp;Act sont traités <b>au niveau des principes</b>, ne disposant pas des contraintes propres au FGV.</div>
+    <div class="mod a-rise" style="--d:.48s">
+      <div class="mod-h">Cette phrase n'est pas du remplissage : elle protège</div>
+      <p class="mod-p">Elle dit au client ce que l'intervention <b>ne couvrira pas</b>, avant qu'il ne le découvre le jour même. Et elle fixe le périmètre de tout ce qui suit : le programme est la définition du travail des quatre étapes suivantes. Une erreur ici se paie quatre étapes plus loin.</p>
+    </div>
+  </div>
+  <div class="pageno">12<b>/31</b></div>
+</section>
+
+<!-- 13 . Granularité -->
+<section class="slide" style="--e:1.6" data-label="Le genre commande la granularité">
+  <div class="top">
+    <div class="ey a-fade">Étape 1 · le point où l'on se trompe le plus</div>
+    <h2 class="a-rise" style="--d:.08s">Le genre commande la granularité</h2>
+  </div>
+  <div class="body">
+    <div class="panel a-rise" style="--d:.22s">
+      <table class="tbl">
+        <tr><th>Genre</th><th>Ce qu'un « module » y désigne</th><th>Ordre de grandeur</th></tr>
+        <tr><td class="k">Cours</td><td>Une séance, dans un cursus diplômant</td><td>Plusieurs modules, un semestre</td></tr>
+        <tr><td class="k">Formation</td><td>Une demi-journée, ou une séquence de compétence</td><td>Quelques modules, une à quelques journées</td></tr>
+        <tr><td class="k">Conférence</td><td>Une partie du fil — <b>non une séance</b></td><td>Deux à quatre parties, une heure</td></tr>
+        <tr><td class="k">Keynote</td><td>Un temps de la démonstration</td><td>Trois à cinq temps, vingt à quarante minutes</td></tr>
+      </table>
+    </div>
+    <div class="warn a-rise" style="--d:.5s">
+      <div class="warn-h">L'erreur la plus fréquente à ce stade</div>
+      <p class="warn-p">Découper une conférence en modules de cours produit un programme <b>juste sur le papier et inapplicable à l'oral</b>.</p>
+    </div>
+  </div>
+  <div class="pageno">13<b>/31</b></div>
+</section>
+
+<!-- 14 . Étape 2 -->
+<section class="slide" style="--e:1.3" data-label="Étape 2 — la forme du programme">
+  <div class="top">
+    <div class="ey a-fade">Étape 2 · la fiche</div>
+    <h2 class="a-rise" style="--d:.08s">La forme du programme</h2>
+  </div>
+  <div class="body">
+    <div class="g21">
+      <div class="fiche a-rise" style="--d:.24s">
+        <div class="fr hi"><div class="fr-k">Skill</div><div class="fr-v"><b>mise-en-forme-programme-bob</b></div></div>
+        <div class="fr hi"><div class="fr-k">Phrase déclenchante</div><div class="fr-v">« Mets-moi ce programme en forme pour l'envoyer au client. »</div></div>
+        <div class="fr"><div class="fr-k">Exigé</div><div class="fr-v">Le programme en Markdown. Rien d'autre.</div></div>
+        <div class="fr"><div class="fr-k">Sortie</div><div class="fr-v">Un <b><code>.docx</code> en orientation paysage</b> — quatre colonnes, charte marine et vert-sarcelle, en-tête répété en cas de débordement.</div></div>
+        <div class="fr"><div class="fr-k">Mécanisme</div><div class="fr-v">Le programme se transcrit en <b>JSON</b>, qu'un générateur sans dépendance transforme en OOXML.</div></div>
+      </div>
+      <div class="pane a-rise" style="--d:.42s">
+        <div class="mod plain a-rise" style="--d:.46s">
+          <div class="mod-k">Les deux garde-fous</div>
+          <p class="mod-p"><b>Ne jamais inventer un horaire.</b> Un tableau public qui annonce des durées fausses engage devant un client.</p>
+          <p class="mod-p"><b>Ne jamais réordonner les modules</b>, même si l'ordre paraît illogique. La progression relève du fond : le skill signale, il ne tranche pas.</p>
+          <p class="mod-p">Les objectifs d'apprentissage sont repris <b>tels qu'écrits</b> : ils ont été validés à l'étape 1, et l'étape de forme n'est pas l'endroit où l'on retouche le fond.</p>
+        </div>
+      </div>
+    </div>
+    <div class="note a-fade" style="--d:.62s">Un <code>.docx</code> mal formé se signale <b>à l'ouverture, jamais à l'écriture</b> : contrôler avec <code>textutil -convert txt</code> puis <code>qlmanage -t</code> avant de livrer.</div>
+  </div>
+  <div class="pageno">14<b>/31</b></div>
+</section>
+
+<!-- 15 . Programme ≠ diaporama -->
+<section class="slide" style="--e:1.8" data-label="Un programme n'est jamais un diaporama">
+  <div class="top">
+    <div class="ey a-fade">Étape 2 · une confusion à éviter</div>
+    <h2 class="a-rise" style="--d:.08s">Un programme n'est jamais un diaporama</h2>
+  </div>
+  <div class="body">
+    <div class="quote a-rise" style="--d:.24s">Il se lit de près, s'annote, se joint à une proposition.<br><b>Il vit sur une page, pas sur un écran.</b></div>
+    <div class="g2">
+      <div class="mod a-rise" style="--d:.44s">
+        <div class="mod-k">La demande ambiguë</div>
+        <div class="mod-h">« Fais-moi un diaporama du programme »</div>
+        <p class="mod-p">C'est presque toujours qu'on veut <b>la carte d'ouverture d'un support de contenu</b>. Le skill le dit et renvoie à l'étape 4.</p>
+      </div>
+      <div class="mod a-rise" style="--d:.56s">
+        <div class="mod-k">Pourquoi il ne produit pas</div>
+        <div class="mod-h">Un objet hybride ne sert à rien</div>
+        <p class="mod-p">Deux skills distincts, deux formats, deux usages. Céder ici produirait un document que personne ne lit et que personne ne projette.</p>
+      </div>
+    </div>
+  </div>
+  <div class="pageno">15<b>/31</b></div>
+</section>
+
+<!-- 16 . Étape 3 fiche -->
+<section class="slide" style="--e:1.15" data-label="Étape 3 — le contenu détaillé">
+  <div class="top">
+    <div class="ey a-fade">Étape 3 · la fiche — l'étape la plus déterminante</div>
+    <h2 class="a-rise" style="--d:.08s">Le contenu détaillé</h2>
+  </div>
+  <div class="body">
+    <div class="g21">
+      <div class="fiche a-rise" style="--d:.22s">
+        <div class="fr hi"><div class="fr-k">Skill</div><div class="fr-v"><b>profil-pedagogique-contenu-bob</b></div></div>
+        <div class="fr hi"><div class="fr-k">Phrase déclenchante</div><div class="fr-v">« Développe le <b>module 1</b> de ce programme, en mode <b>conférence</b>. »</div></div>
+        <div class="fr"><div class="fr-k">Exigé — 1</div><div class="fr-v">Le <b>programme</b>. Sans lui, le skill inventerait le périmètre qu'il est censé recevoir.</div></div>
+        <div class="fr"><div class="fr-k">Exigé — 2</div><div class="fr-v">Le <b>genre</b>, parmi les quatre. Jamais inféré du thème.</div></div>
+        <div class="fr"><div class="fr-k">Sortie</div><div class="fr-v">Le <b>format pivot</b> : Ouverture / A / B / C.</div></div>
+        <div class="fr"><div class="fr-k">Appelle</div><div class="fr-v"><code>style-redaction-bob</code> pour la voix, et <code>contenu-scientifique-bob</code> <b>de façon sélective</b>, là où le contenu convoque la recherche.</div></div>
+      </div>
+      <div class="mod a-rise" style="--d:.4s">
+        <div class="mod-k">La convention qui rend l'étape 6 possible</div>
+        <div class="mod-h">Le genre est dans le nom du fichier</div>
+        <div class="tree" style="margin-top:calc(9px * var(--e))">Module1_Contenu_Detaille_<b>mode-conference</b>.md
+Module1_Contenu_Detaille_<b>mode-formation</b>.md</div>
+        <p class="mod-p" style="margin-top:calc(10px * var(--e))">Deux fonds coexistent sans se recouvrir, et l'on sait toujours lequel alimente quel diaporama.</p>
+        <p class="mod-p">Sur FGV, les quatre sections de la partie A sont <b>exactement</b> les quatre points du contenu attendu du programme : le pivot ne réinvente pas le périmètre, il le remplit.</p>
+        <p class="mod-p"><b>Ne rien alléger « pour que ça tienne ».</b> La richesse du fond est ce qui donne à la mise en forme de quoi hiérarchiser — un fond maigre produit un support maigre.</p>
+      </div>
+    </div>
+  </div>
+  <div class="pageno">16<b>/31</b></div>
+</section>
+
+<!-- 17 . Les quatre genres -->
+<section class="slide" style="--e:1.45" data-label="Le genre, concrètement">
+  <div class="top">
+    <div class="ey a-fade">Étape 3 · le genre, concrètement</div>
+    <h2 class="a-rise" style="--d:.08s">Quatre régimes pour un même thème</h2>
+  </div>
+  <div class="body">
+    <div class="panel a-rise" style="--d:.2s">
+      <table class="tbl">
+        <tr><th>Genre</th><th>Mode rhétorique</th><th>Formalisme</th><th>Ouverture</th><th>Densité</th></tr>
+        <tr><td class="k">Cours</td><td>Aporétique</td><td>Le plus assumé</td><td>Développée et séquencée</td><td>Maximale, déroulé complet</td></tr>
+        <tr><td class="k">Formation</td><td>Aporétique, orienté décision</td><td>Réduit, applicabilité</td><td>Objectifs opérationnels</td><td>Appliquée et resserrée</td></tr>
+        <tr><td class="k">Conférence</td><td>Mixte</td><td>Vulgarisation exigeante</td><td>Brève</td><td>Maîtrisée pour l'oral</td></tr>
+        <tr><td class="k">Keynote</td><td>Démonstratif, thèse unique</td><td>Minimal</td><td>Réduite à la thèse</td><td>Pleine mais tenue</td></tr>
+      </table>
+    </div>
+    <div class="mod a-rise" style="--d:.46s">
+      <div class="mod-k">Le cas keynote est contre-intuitif</div>
+      <p class="mod-p">L'écran n'y portera presque rien. Le réflexe serait de produire un fond maigre — c'est l'inverse : puisque rien ne soutiendra l'orateur, <b>le fond doit porter ce qu'il va dire</b>. Un texte tenu, rythmé, qui s'entend : le seul genre où le fond se rapproche d'une partition orale. <b>La carte sera nue parce que le propos est plein.</b></p>
+    </div>
+  </div>
+  <div class="pageno">17<b>/31</b></div>
+</section>
+
+<!-- 18 . Le format pivot -->
+<section class="slide" style="--e:1.5" data-label="Le format pivot">
+  <div class="top">
+    <div class="ey a-fade">Étape 3 · le format pivot</div>
+    <h2 class="a-rise" style="--d:.08s">Ce qui sort — et ce qui n'en sortira jamais</h2>
+  </div>
+  <div class="body">
+    <div class="panel a-rise" style="--d:.2s">
+      <table class="tbl">
+        <tr><th>Partie</th><th>Contenu</th><th>Deviendra</th></tr>
+        <tr><td class="k">Ouverture — Programme</td><td>L'annonce <b>problématisée</b> du parcours, dérivée du programme</td><td>Les premières cartes</td></tr>
+        <tr><td class="k">A. Contenu détaillé</td><td>La matière rédigée, attribution au fil du texte</td><td>Le corps du support</td></tr>
+        <tr><td class="k">B. Références</td><td>Bibliographie qualifiée — sources primaires / repères de contexte</td><td>La planche Références</td></tr>
+        <tr><td class="k">C. Contrôle du sourçage</td><td>L'annexe d'audit : traces, ratio, fragilités déclarées</td><td><b>Rien</b></td></tr>
+      </table>
+    </div>
+    <div class="warn a-rise" style="--d:.5s">
+      <div class="warn-h">L'interdit le plus strict du dispositif</div>
+      <p class="warn-p">La partie C <b>ne paraît jamais</b> : ni intégrale, ni condensée, ni résumée, ni reformulée. Elle expose la probité du travail à la vérification ; elle ne s'affiche pas devant un public, où un ratio de non-vérifié détruirait la crédibilité du support — alors qu'elle existe précisément pour la garantir.</p>
+    </div>
+  </div>
+  <div class="pageno">18<b>/31</b></div>
+</section>
+
+<!-- 19 . Intertitre -->
+<section class="slide dark" style="--e:1.55" data-label="II — De la forme à l'URL">
+  <div class="dk-k a-fade" style="--d:.1s">Seconde partie · Étapes 4 à 6</div>
+  <h2 class="dk-h a-rise" style="--d:.22s">De la forme<br>à l'<b>URL</b></h2>
+  <div class="dk-rule a-grow" style="--d:.5s"></div>
+  <p class="dk-s a-fade" style="--d:.6s">Deux voies plus une variante · vérifier et publier · rejouer le même module dans un second genre.</p>
+</section>
+
+<!-- 20 . Deux voies -->
+<section class="slide" style="--e:1.75" data-label="Deux voies, plus une variante">
+  <div class="top">
+    <div class="ey a-fade">Étape 4 · l'embranchement</div>
+    <h2 class="a-rise" style="--d:.08s">Du même pivot, plusieurs chemins — un seul livrable</h2>
+  </div>
+  <div class="body">
+    <div class="frise">
+      <svg viewBox="0 0 1140 246" style="width:100%; height:auto" aria-hidden="true">
+        <defs><marker id="hd" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0 0 L7 3.5 L0 7 z" fill="var(--blue-soft)"/></marker></defs>
+        <g font-family="var(--sans)">
+          <rect class="a-pop" style="--d:.2s" x="2" y="94" width="156" height="58" rx="12" fill="var(--accent-wash)" stroke="var(--accent)" stroke-width="1.4"/>
+          <text x="80" y="117" text-anchor="middle" font-size="14" font-weight="700" fill="var(--ink)">Format pivot</text>
+          <text x="80" y="136" text-anchor="middle" font-size="12" fill="var(--ink-50)">Ouverture / A / B / C</text>
+
+          <path class="a-draw" style="--d:.4s;--len:340" d="M164 123 H236 V40 H300" fill="none" stroke="var(--blue-soft)" stroke-width="1.6" marker-end="url(#hd)"/>
+          <path class="a-draw" style="--d:.5s;--len:150" d="M164 123 H300" fill="none" stroke="var(--blue-soft)" stroke-width="1.6" marker-end="url(#hd)"/>
+          <path class="a-draw" style="--d:.6s;--len:340" d="M164 123 H236 V206 H300" fill="none" stroke="var(--blue-soft)" stroke-width="1.6" marker-end="url(#hd)"/>
+
+          <rect class="a-rise" style="--d:.5s" x="308" y="12" width="336" height="56" rx="11" fill="#fff" stroke="var(--accent)" stroke-width="1.6"/>
+          <text x="326" y="34" font-size="11" font-weight="700" letter-spacing="1.6" fill="var(--accent)">4A · LE DÉFAUT</text>
+          <text x="326" y="54" font-size="14" fill="var(--ink)">mise-en-forme-diaporama-bob</text>
+
+          <rect class="a-rise" style="--d:.6s" x="308" y="95" width="336" height="56" rx="11" fill="#fff" stroke="var(--line)" stroke-width="1.4"/>
+          <text x="326" y="117" font-size="11" font-weight="700" letter-spacing="1.6" fill="var(--blue)">4B · LE CANEVAS</text>
+          <text x="326" y="137" font-size="14" fill="var(--ink)">mise-en-forme-diaporama-design-bob</text>
+
+          <rect class="a-rise" style="--d:.7s" x="308" y="178" width="336" height="56" rx="11" fill="var(--paper)" stroke="var(--line)" stroke-width="1.4" stroke-dasharray="5 4"/>
+          <text x="326" y="200" font-size="11" font-weight="700" letter-spacing="1.6" fill="var(--ink-50)">4B′ · LA VARIANTE</text>
+          <text x="326" y="220" font-size="14" fill="var(--ink-70)">remise → Claude Design → portage</text>
+
+          <path class="a-draw" style="--d:.85s;--len:340" d="M650 40 H720 V123 H790" fill="none" stroke="var(--blue-soft)" stroke-width="1.6" marker-end="url(#hd)"/>
+          <path class="a-draw" style="--d:.9s;--len:150" d="M650 123 H790" fill="none" stroke="var(--blue-soft)" stroke-width="1.6" marker-end="url(#hd)"/>
+          <path class="a-draw" style="--d:.95s;--len:340" d="M650 206 H720 V123 H790" fill="none" stroke="var(--blue-soft)" stroke-width="1.6" marker-end="url(#hd)"/>
+
+          <rect class="a-pop" style="--d:1.05s" x="796" y="88" width="342" height="70" rx="13" fill="var(--ink)"/>
+          <text x="967" y="115" text-anchor="middle" font-size="14" font-weight="700" fill="#fff">Un HTML strictement autonome</text>
+          <text x="967" y="137" text-anchor="middle" font-size="12" fill="rgba(255,255,255,.68)">publié au portail, déployé par Vercel</text>
+        </g>
+      </svg>
+    </div>
+    <div class="note a-fade" style="--d:1.2s"><b>4a est le défaut.</b> 4b ajoute deux temps ; elle se justifie quand l'arbitrage visuel a une valeur — pas pour un cours de trente cartes qu'on ne compte pas retoucher.</div>
+  </div>
+  <div class="pageno">20<b>/31</b></div>
+</section>
+
+<!-- 21 . Choisir la voie -->
+<section class="slide" style="--e:1.75" data-label="Choisir la voie">
+  <div class="top">
+    <div class="ey a-fade">Étape 4 · l'arbitrage</div>
+    <h2 class="a-rise" style="--d:.08s">Choisir la voie</h2>
+  </div>
+  <div class="body">
+    <div class="g2">
+      <div class="mod a-rise" style="--d:.24s">
+        <div class="mod-k">Prendre 4a — Claude Code</div>
+        <div class="mod-h">Quand la forme n'est pas la question</div>
+        <p class="mod-p">Le support est standard et doit sortir vite. Le contenu est long — cours, formation. La maquette est arrêtée. Chaque carte n'appelle pas d'arbitrage.</p>
+        <p class="mod-p">Le skill lit ses propres références — densité, chartes, sourçage, mesure d'équilibre — sans qu'on ait à les fournir.</p>
+      </div>
+      <div class="mod a-rise" style="--d:.38s">
+        <div class="mod-k">Prendre 4b — le canevas</div>
+        <div class="mod-h">Quand chaque carte compte</div>
+        <p class="mod-p">Bob veut <b>retoucher les cartes lui-même</b>. Le contenu est court et démonstratif — conférence, keynote. La direction visuelle n'est pas tranchée, et le canevas sert précisément à la choisir.</p>
+        <p class="mod-p">Ce que la voie apporte tient en une phrase : elle ajoute <b>une étape d'arbitrage visuel</b> entre la composition et la publication.</p>
+      </div>
+    </div>
+  </div>
+  <div class="pageno">21<b>/31</b></div>
+</section>
+
+<!-- 22 . Étape 4a fiche -->
+<section class="slide" style="--e:1.25" data-label="Étape 4a — voie Claude Code">
+  <div class="top">
+    <div class="ey a-fade">Étape 4a · la fiche</div>
+    <h2 class="a-rise" style="--d:.08s">Voie Claude Code</h2>
+  </div>
+  <div class="body">
+    <div class="g21">
+      <div class="fiche a-rise" style="--d:.22s">
+        <div class="fr hi"><div class="fr-k">Skill</div><div class="fr-v"><b>mise-en-forme-diaporama-bob</b></div></div>
+        <div class="fr hi"><div class="fr-k">Phrase déclenchante</div><div class="fr-v">« Mets-moi ce contenu en forme — mode <b>conférence</b>, <b>11 cartes</b>. »</div></div>
+        <div class="fr"><div class="fr-k">Exigé — 1</div><div class="fr-v">Le contenu au format pivot.</div></div>
+        <div class="fr"><div class="fr-k">Exigé — 2</div><div class="fr-v">Le <b>mode</b> : keynote, conférence, cours ou formation.</div></div>
+        <div class="fr"><div class="fr-k">Exigé — 3</div><div class="fr-v">Le <b>nombre de cartes</b> — ou une durée, ou « auto ». Sur « auto », le skill le détermine et <b>l'annonce avant de produire</b>.</div></div>
+        <div class="fr"><div class="fr-k">Sortie</div><div class="fr-v">Un HTML <b>strictement autonome</b> : ouvrable depuis le Finder, envoyable par courriel. Seules les polices viennent du réseau.</div></div>
+      </div>
+      <div class="mod a-rise" style="--d:.4s">
+        <div class="mod-k">Ce qu'il refuse, et pourquoi</div>
+        <div class="mod-h">Il appelle <code>frontend-design</code>, jamais <code>frontend-slides</code></div>
+        <p class="mod-p">Le modèle d'une diapositive par hauteur d'écran est <b>incompatible</b> avec la toile fixe de 1280 × 720 dont dépendent le rail de vignettes et l'export PDF — et ses limites de densité contredisent les modes cours et formation.</p>
+        <p class="mod-p">Mode et nombre de cartes se fixent <b>avant</b> de produire : après coup, tout est à refaire.</p>
+      </div>
+    </div>
+  </div>
+  <div class="pageno">22<b>/31</b></div>
+</section>
+
+<!-- 23 . Politique / maquette -->
+<section class="slide" style="--e:1.55" data-label="Politique figée, maquette libre">
+  <div class="top">
+    <div class="ey a-fade">Étape 4a · le principe qui commande tout le reste</div>
+    <h2 class="a-rise" style="--d:.08s">Politique figée, maquette libre</h2>
+  </div>
+  <div class="body">
+    <div class="g2">
+      <div class="mod a-rise" style="--d:.24s">
+        <div class="mod-k">La politique — figée</div>
+        <div class="mod-h">Elle vit dans l'échafaudage</div>
+        <p class="mod-p">Rail de vignettes, plein écran, export PDF, navigation clavier, numérotation, lien de retour, métadonnées. Elle ne se réinvente pas : <b>sa constance fait l'unité du portail</b>.</p>
+      </div>
+      <div class="mod a-rise" style="--d:.36s">
+        <div class="mod-k">La maquette — libre</div>
+        <div class="mod-h">Elle s'invente à chaque diaporama</div>
+        <p class="mod-p">Échelle typographique, blocs graphiques, figures chiffrées, mise en page des cartes. Recopier la maquette du support précédent produirait <b>vingt diaporamas identiques</b>.</p>
+      </div>
+    </div>
+    <div class="pane a-rise" style="--d:.5s">
+      <div class="mod-k">Les métadonnées, qui rendent la publication mécanique</div>
+      <div class="tree" style="margin-top:calc(8px * var(--e))">&lt;meta name="<b>pedago:chemin</b>"  content="conferences/fgv/ia-dev-logiciel"&gt;
+&lt;meta name="<b>pedago:famille</b>" content="conference"&gt;      &lt;meta name="<b>pedago:rang</b>"   content="1"&gt;
+&lt;meta name="<b>pedago:mode</b>"    content="conference"&gt;      &lt;meta name="<b>pedago:cartes</b>" content="11"&gt;</div>
+      <p class="mod-p" style="margin-top:calc(9px * var(--e))">Le fichier <b>déclare lui-même son rangement</b> — c'est ce qui rend l'étape 5 mécanique.</p>
+    </div>
+  </div>
+  <div class="pageno">23<b>/31</b></div>
+</section>
+
+<!-- 24 . Étape 4b -->
+<section class="slide" style="--e:1.35" data-label="Étape 4b — le canevas, six temps">
+  <div class="top">
+    <div class="ey a-fade">Étape 4b · voie canevas <code>/design</code></div>
+    <h2 class="a-rise" style="--d:.08s">Six temps, et un seul livrable</h2>
+  </div>
+  <div class="body">
+    <div class="frise">
+      <div class="fp a-slide" style="--d:.2s"><div class="fp-n">1</div><div class="fp-b"><div class="fp-t">Un artboard par carte</div><div class="fp-d">Format Design Components, 1280 × 720. Texte <b>littéral</b>, styles <b>en ligne</b> — c'est ce qui permet à Bob de retaper en place.</div></div></div>
+      <div class="fp a-slide" style="--d:.3s"><div class="fp-n">2</div><div class="fp-b"><div class="fp-t">Une seule molette : <code>--e</code></div><div class="fp-d">L'échelle typographique de la carte — le réglage le plus coûteux à trouver. En déclarer d'autres transformerait l'artboard en formulaire.</div></div></div>
+      <div class="fp a-slide" style="--d:.4s"><div class="fp-n">3</div><div class="fp-b"><div class="fp-t">Semer et publier le canevas</div><div class="fp-d">Bob ajuste au clic — texte, couleurs, densité — puis enregistre.</div></div></div>
+      <div class="fp a-slide" style="--d:.5s"><div class="fp-n">4</div><div class="fp-b"><div class="fp-t">Relire avant toute reprise</div><div class="fp-d">Dès qu'il a enregistré, <b>le canevas fait foi, pas les fichiers du dépôt</b>. Ressemer depuis des fichiers obsolètes écrase son travail.</div></div></div>
+      <div class="fp a-slide" style="--d:.6s"><div class="fp-n">5</div><div class="fp-b"><div class="fp-t">Porter dans l'échafaudage</div><div class="fp-d">Transformation mécanique. Numérotation, lien de retour, rail et métadonnées s'ajoutent ici : <b>cela appartient à l'application, pas à la carte</b>.</div></div></div>
+      <div class="fp a-slide" style="--d:.7s"><div class="fp-n">6</div><div class="fp-b"><div class="fp-t">Mesurer, contrôler, publier</div><div class="fp-d">Strictement la procédure de la voie 4a. Rien n'est propre à cette voie.</div></div></div>
+    </div>
+    <div class="note a-fade" style="--d:.85s"><b>Le canevas porte la maquette. L'échafaudage porte la politique. Le canevas n'est jamais le livrable</b> — il n'a ni rail, ni plein écran, ni URL publique stable, et son export rastérise.</div>
+  </div>
+  <div class="pageno">24<b>/31</b></div>
+</section>
+
+<!-- 25 . Premier passage -->
+<section class="slide" style="--e:1.5" data-label="Ce que le premier aller-retour a établi">
+  <div class="top">
+    <div class="ey a-fade">Étape 4b · éprouvé le 22 août 2026, sur cinq cartes du module 1 FGV</div>
+    <h2 class="a-rise" style="--d:.08s">Ce que le premier aller-retour a établi</h2>
+  </div>
+  <div class="body">
+    <div class="stats">
+      <div class="stat a-pop" style="--d:.26s"><div class="stat-n">100<small> %</small></div><div class="stat-l">L'extraction rend les artboards identiques <b>octet pour octet</b> aux sources du dépôt</div></div>
+      <div class="stat a-pop" style="--d:.36s"><div class="stat-n">4<small>/4</small></div><div class="stat-l">Cartes claires dans les cibles d'équilibre après portage dans l'échafaudage</div></div>
+      <div class="stat a-pop" style="--d:.46s"><div class="stat-n">71<small> %</small></div><div class="stat-l">Encre médiane mesurée sur le support porté — la cible est d'au moins 62 %</div></div>
+      <div class="stat a-pop" style="--d:.56s"><div class="stat-n">50<small> %</small></div><div class="stat-l">Le zoom d'ouverture du canevas — à 100 %, une carte fait ses 1280 px réels</div></div>
+    </div>
+    <div class="g2">
+      <div class="mod a-rise" style="--d:.7s">
+        <div class="mod-k">La mécanique tient</div>
+        <p class="mod-p">Le portage, désormais scripté, produit un HTML qui s'ouvre dans le châssis, rail et export compris. Ce qui avait d'abord paru un blocage de l'arbitrage visuel était un <b>malentendu d'affichage</b> : il faut ouvrir le canevas dans le navigateur plutôt que dans le panneau étroit de Claude Code, et savoir que le zoom par défaut vaut 50 %. Le nombre de cartes n'y entre pas en compte.</p>
+      </div>
+      <div class="mod a-rise" style="--d:.82s">
+        <div class="mod-k">Trois réserves à énoncer</div>
+        <p class="mod-p">C'est une <b>préversion</b> : l'éditeur est figé dans chaque canevas publié et ne recevra aucun correctif. Le canevas <b>ne se partage qu'au sein de l'organisation</b> — sans conséquence, le livrable partant sur Vercel. Et son export n'embarque pas les polices : pour un PDF propre, c'est l'export du lecteur publié qui sert.</p>
+      </div>
+    </div>
+    <div class="note a-fade" style="--d:.95s">Les animations restent inertes dans le canevas, et c'est voulu : écrites avec les classes de l'échafaudage, elles se raccordent au portage au lieu d'être réécrites. <b>Le caractère cinématique se juge après portage, dans le lecteur</b> — à dire chaque fois qu'on montre un canevas.</div>
+  </div>
+  <div class="pageno">25<b>/31</b></div>
+</section>
+
+<!-- 26 . 4b prime -->
+<section class="slide" style="--e:1.4" data-label="Étape 4b′ — la variante externe">
+  <div class="top">
+    <div class="ey a-fade">Étape 4b′ · la voie externe historique</div>
+    <h2 class="a-rise" style="--d:.08s">Quand le générateur ne lit pas les skills</h2>
+    <p class="lede a-rise" style="--d:.16s">Antérieure à <code>/design</code>, et conservée : elle reste la bonne voie quand on passe par l'interface web de Claude Design, ou par tout autre générateur externe.</p>
+  </div>
+  <div class="body">
+    <div class="g2">
+      <div class="mod a-rise" style="--d:.28s">
+        <div class="mod-k">Préparer la remise</div>
+        <div class="mod-h"><code>remise-claude-design-bob</code></div>
+        <p class="mod-p">Trois retraits, et ce sont tous des retraits : <b>la partie C</b>, les chemins de travail, les liens relatifs — les fichiers déposés dans une conversation sont tous au même niveau, un <code>../images/</code> y est un lien mort.</p>
+        <p class="mod-p">Le prompt ne transcrit pas les règles de forme : <b>contraindre un outil sur son terrain de compétence le dessert.</b> Cinq choses seulement, dont l'intention d'animation figure par figure.</p>
+      </div>
+      <div class="mod a-rise" style="--d:.42s">
+        <div class="mod-k">Porter l'export</div>
+        <div class="mod-h"><code>portage-export-diaporama-bob</code></div>
+        <p class="mod-p">Le script intègre les polices en <code>data:</code> URI — le support ne dépend plus du réseau, ce qui vaut cher dans une salle sans wifi —, découpe les cartes, recâble les animations et remplit l'échafaudage.</p>
+        <p class="mod-p"><b>L'export porte la maquette. L'échafaudage porte la politique. Le portage ne redessine rien</b> : une carte mal équilibrée se signale, elle ne se corrige pas ici.</p>
+      </div>
+    </div>
+    <div class="note a-fade" style="--d:.56s">Ne jamais confier l'interdit à un outil qui ne peut pas l'honorer : <b>la partie C se retire avant la remise</b>, par script, et le manifeste le signale.</div>
+  </div>
+  <div class="pageno">26<b>/31</b></div>
+</section>
+
+<!-- 27 . Étape 5 -->
+<section class="slide" style="--e:1.45" data-label="Étape 5 — vérifier et publier">
+  <div class="top">
+    <div class="ey a-fade">Étape 5 · commune à toutes les voies</div>
+    <h2 class="a-rise" style="--d:.08s">Vérifier, puis publier</h2>
+  </div>
+  <div class="body">
+    <div class="g3">
+      <div class="mod a-rise" style="--d:.24s">
+        <div class="mod-k">Contrôle 1</div>
+        <div class="mod-h">Tous les liens relatifs pointent vers un fichier existant</div>
+        <p class="mod-p">L'erreur type : un index parent dont le compteur a été mis à jour, mais dont la carte pointe vers un dossier jamais créé.</p>
+      </div>
+      <div class="mod a-rise" style="--d:.36s">
+        <div class="mod-k">Contrôle 2</div>
+        <div class="mod-h">Le rendu, de visu</div>
+        <p class="mod-p">Lien de retour présent, vignettes générées, numérotation continue et absente des fonds foncés. Le débordement de texte ne se voit pas dans le code.</p>
+      </div>
+      <div class="mod a-rise" style="--d:.48s">
+        <div class="mod-k">Contrôle 3</div>
+        <div class="mod-h">La partie C n'a laissé aucune trace</div>
+        <p class="mod-p">Dans le HTML produit, pas seulement dans ce qui s'affiche.</p>
+      </div>
+    </div>
+    <div class="warn a-rise" style="--d:.62s">
+      <div class="warn-h">Le fichier déclare son rangement, et l'annonce close l'étape</div>
+      <p class="warn-p">Le dossier existe → c'est un <b>ajout</b> : écrire, ajouter la carte à l'index, mettre à jour les compteurs parents. Il n'existe pas → c'est une <b>création</b> : arborescence, index du dossier, puis une carte dans chaque index parent jusqu'à la racine. Vercel déploie seul, en une trentaine de secondes. <b>Annoncer l'URL publique complète, pas le succès de la poussée</b> — ce qui intéresse est l'adresse, pas l'opération.</p>
+    </div>
+  </div>
+  <div class="pageno">27<b>/31</b></div>
+</section>
+
+<!-- 28 . Étape 6 -->
+<section class="slide" style="--e:1.45" data-label="Étape 6 — un second genre">
+  <div class="top">
+    <div class="ey a-fade">Étape 6 · le meilleur argument du dispositif</div>
+    <h2 class="a-rise" style="--d:.08s">Le même module dans un second genre</h2>
+    <p class="lede a-rise" style="--d:.16s">On ne refait pas le programme. On relance l'<b>étape 3</b> avec un autre genre, puis l'étape 4. La phrase à dire, une fois le premier genre publié : « Reprends le module 1 du programme FGV, cette fois en mode formation. »</p>
+  </div>
+  <div class="body">
+    <div class="panel a-rise" style="--d:.3s">
+      <table class="tbl">
+        <tr><th></th><th>Version conférence</th><th>Version formation</th></tr>
+        <tr><td class="k">Programme source</td><td colspan="2" style="text-align:center; background:var(--accent-wash); color:var(--ink); font-weight:600">Le même — <code>Programme_Conference_IA_FGV.md</code>, inchangé</td></tr>
+        <tr><td class="k">Fond</td><td>123 lignes</td><td>136 lignes</td></tr>
+        <tr><td class="k">Mode rhétorique</td><td>Mixte</td><td>Aporétique orienté décision</td></tr>
+        <tr><td class="k">Ouverture</td><td>Brève</td><td>Orientée objectifs opérationnels</td></tr>
+        <tr><td class="k">Publié en</td><td><code>conferences/&lt;client&gt;/</code></td><td><code>formations/&lt;contenu&gt;/</code></td></tr>
+        <tr><td class="k">Cartes</td><td><b>11</b></td><td><b>12</b></td></tr>
+      </table>
+    </div>
+  </div>
+  <div class="pageno">28<b>/31</b></div>
+</section>
+
+<!-- 29 . Récapitulatif -->
+<section class="slide" style="--e:1.25" data-label="Récapitulatif">
+  <div class="top">
+    <div class="ey a-fade">Récapitulatif</div>
+    <h2 class="a-rise" style="--d:.08s">Une ligne par étape</h2>
+  </div>
+  <div class="body">
+    <div class="panel a-rise" style="--d:.2s">
+      <table class="tbl">
+        <tr><th>Ét.</th><th>Skill</th><th>Phrase déclenchante</th><th>Sortie</th></tr>
+        <tr><td class="k">1</td><td><code>profil-pedagogique-programme-bob</code></td><td>« fais-moi le programme d'une <b>conférence</b> sur X pour Y »</td><td>Markdown hiérarchisé</td></tr>
+        <tr><td class="k">2</td><td><code>mise-en-forme-programme-bob</code></td><td>« mets ce programme en forme pour l'envoyer »</td><td><code>.docx</code> paysage</td></tr>
+        <tr><td class="k">3</td><td><code>profil-pedagogique-contenu-bob</code></td><td>« développe le module N en mode <b>G</b> »</td><td>Pivot Ouverture / A / B / C</td></tr>
+        <tr><td class="k">4a</td><td><code>mise-en-forme-diaporama-bob</code></td><td>« mets ce contenu en forme — mode <b>G</b>, <b>N</b> cartes »</td><td>HTML autonome publié</td></tr>
+        <tr><td class="k">4b</td><td><code>mise-en-forme-diaporama-design-bob</code></td><td>« … <b>avec /design</b>, que je puisse retoucher »</td><td>Canevas, puis HTML publié</td></tr>
+        <tr><td class="k">4b′</td><td><code>remise-claude-design-bob</code> → <code>portage-export-diaporama-bob</code></td><td>« prépare la remise » · « voilà l'export »</td><td>HTML autonome publié</td></tr>
+        <tr><td class="k">6</td><td>retour à <b>3</b></td><td>« reprends le module N, cette fois en mode <b>G′</b> »</td><td>Second pivot</td></tr>
+      </table>
+    </div>
+  </div>
+  <div class="pageno">29<b>/31</b></div>
+</section>
+
+<!-- 30 . Les pièges -->
+<section class="slide" style="--e:1.2" data-label="Les pièges, en un coup d'œil">
+  <div class="top">
+    <div class="ey a-fade">Les pièges, en un coup d'œil</div>
+    <h2 class="a-rise" style="--d:.08s">Huit fautes qui coûtent une étape entière</h2>
+  </div>
+  <div class="body">
+    <div class="g2">
+      <div class="pane gapped a-rise" style="--d:.22s">
+        <div class="mod a-rise" style="--d:.26s"><div class="mod-h">Le genre ne s'infère jamais</div><p class="mod-p">Ni du thème, ni du client, ni du dossier. Deux skills le demandent explicitement, et c'est délibéré.</p></div>
+        <div class="mod a-rise" style="--d:.34s"><div class="mod-h">Mode et nombre de cartes se fixent avant</div><p class="mod-p">Après coup, tout est à refaire.</p></div>
+        <div class="mod a-rise" style="--d:.42s"><div class="mod-h">Un programme n'est pas un diaporama</div><p class="mod-p">Deux skills distincts, deux formats, deux usages.</p></div>
+        <div class="mod a-rise" style="--d:.5s"><div class="mod-h">La partie C ne sort jamais</div><p class="mod-p">Ni en ligne, ni chez un générateur externe. Le script de remise la retire et le signale.</p></div>
+      </div>
+      <div class="pane gapped a-rise" style="--d:.3s">
+        <div class="mod a-rise" style="--d:.34s"><div class="mod-h">Une URL publiée ne se renomme pas</div><p class="mod-p">Demander le chemin plutôt que réorganiser plus tard.</p></div>
+        <div class="mod a-rise" style="--d:.42s"><div class="mod-h">Pas de consigne de forme à l'étape 3</div><p class="mod-p">Une étape censée aider un outil aval le contraint dès qu'elle empiète sur sa compétence.</p></div>
+        <div class="mod a-rise" style="--d:.5s"><div class="mod-h">Pas de correction du fond aux étapes 2 et 4</div><p class="mod-p">Les skills de forme signalent, ils ne tranchent pas. Un ordre de modules illogique se remonte à l'étape 1.</p></div>
+        <div class="mod a-rise" style="--d:.58s"><div class="mod-h">Lire les comptes rendus des scripts</div><p class="mod-p">Ils sont le livrable de leur étape ; le fichier n'en est que la conséquence.</p></div>
+      </div>
+    </div>
+  </div>
+  <div class="pageno">30<b>/31</b></div>
+</section>
+
+<!-- 31 . Clôture -->
+<section class="slide dark" style="--e:1.55" data-label="Clôture">
+  <div class="dk-k a-fade" style="--d:.1s">Pour finir</div>
+  <h2 class="dk-h a-rise" style="--d:.22s">Un dispositif ne vaut<br>que par l'endroit où<br>il <b>rend la main</b></h2>
+  <div class="dk-rule a-grow" style="--d:.55s"></div>
+  <p class="dk-s a-fade" style="--d:.65s">Sept étapes, six skills, deux voies. Chacune demande ce dont l'absence rendrait le travail faux, infère le reste, et l'annonce. Le reste — le genre, le périmètre, l'arbitrage — reste au concepteur.</p>
+</section>
+
+
+    </div>
+
+    <div class="nav" id="nav">
+      <button id="prev" title="Précédent (←)">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+      </button>
+      <span class="count" id="count">1 / 31</span>
+      <button id="next" title="Suivant (→)">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+      </button>
+    </div>
+  </main>
+</div>
+
+<script>
+(function(){
+  const deck   = document.getElementById('deck');
+  const stage  = document.getElementById('stage');
+  const slides = Array.from(deck.querySelectorAll('.slide'));
+  const thumbs = document.getElementById('thumbs');
+  const count  = document.getElementById('count');
+  const N = slides.length;
+  let cur = 0;
+
+  /* ---------- Miniatures : véritables clones à l'échelle ---------- */
+  slides.forEach((s, i) => {
+    const wrap = document.createElement('div');
+    wrap.className = 'thumb';
+    const clone = s.cloneNode(true);
+    clone.classList.remove('active');
+    clone.classList.add('tvis');
+    // Les animations ne s'appliquent que sous « .slide.active » : le clone,
+    // jamais actif, affiche donc d'emblée l'état final. Rien à neutraliser.
+    wrap.innerHTML =
+      '<div class="thumb-no">' + (i+1) + '</div>' +
+      '<div class="thumb-box"><div class="thumb-scale"></div></div>' +
+      '<div class="thumb-label">' + (s.dataset.label || ('Carte ' + (i+1))) + '</div>';
+    wrap.querySelector('.thumb-scale').appendChild(clone);
+    wrap.addEventListener('click', () => go(i));
+    thumbs.appendChild(wrap);
+  });
+  const thumbEls = Array.from(thumbs.querySelectorAll('.thumb'));
+
+  /* ---------- Navigation + relance des animations ---------- */
+  function go(i){
+    if(i < 0 || i > N-1) return;
+    const s = slides[i];
+    slides.forEach(x => x.classList.remove('active'));
+    void s.offsetWidth;              // reflow : rejoue les animations en cascade
+    s.classList.add('active');
+    cur = i;
+    thumbEls.forEach((t,k) => t.classList.toggle('on', k === i));
+    count.textContent = (i+1) + ' / ' + N;
+    document.getElementById('prev').disabled = (i === 0);
+    document.getElementById('next').disabled = (i === N-1);
+    thumbEls[i].scrollIntoView({block:'nearest', behavior:'smooth'});
+  }
+  document.getElementById('prev').onclick = () => go(cur-1);
+  document.getElementById('next').onclick = () => go(cur+1);
+
+  /* ---------- Mise à l'échelle de la carte ---------- */
+  function fit(){
+    const pad = document.fullscreenElement ? 0 : 56;
+    const r = stage.getBoundingClientRect();
+    const s = Math.min((r.width - pad) / 1280, (r.height - pad) / 720);
+    deck.style.transform = 'scale(' + s + ')';
+  }
+  window.addEventListener('resize', fit);
+
+  /* ---------- Plein écran (Échap pour sortir) ---------- */
+  function toggleFs(){
+    if(document.fullscreenElement) document.exitFullscreen();
+    else stage.requestFullscreen && stage.requestFullscreen();
+  }
+  document.getElementById('btnFs').onclick = toggleFs;
+  document.addEventListener('fullscreenchange', () => {
+    fit(); setTimeout(fit, 130);          // la scène n'a pas fini de se redimensionner
+    go(cur); wake();
+  });
+
+  /* ---------- Masquage de l'interface au repos (plein écran) ---------- */
+  let idleT;
+  function wake(){
+    stage.classList.remove('idle');
+    clearTimeout(idleT);
+    if(document.fullscreenElement) idleT = setTimeout(() => stage.classList.add('idle'), 2600);
+  }
+  stage.addEventListener('mousemove', wake);
+
+  /* ---------- Export PDF ---------- */
+  function toPdf(){
+    const wasFs = !!document.fullscreenElement;
+    const finish = () => window.print();
+    if(wasFs) document.exitFullscreen().then(() => setTimeout(finish, 260));
+    else finish();
+  }
+  document.getElementById('btnPdf').onclick = toPdf;
+
+  /* ---------- Clavier ---------- */
+  document.addEventListener('keydown', e => {
+    if(e.metaKey || e.ctrlKey || e.altKey) return;   // laisse passer Cmd+P natif
+    if(e.key === 'ArrowRight' || e.key === 'PageDown' || e.key === ' '){ e.preventDefault(); go(cur+1); }
+    else if(e.key === 'ArrowLeft' || e.key === 'PageUp'){ e.preventDefault(); go(cur-1); }
+    else if(e.key === 'Home'){ go(0); }
+    else if(e.key === 'End'){ go(N-1); }
+    else if(e.key === 'f' || e.key === 'F'){ toggleFs(); }
+    else if(e.key === 'p' || e.key === 'P'){ e.preventDefault(); toPdf(); }
+  });
+
+  fit();
+  go(0);
+})();
+</script>
