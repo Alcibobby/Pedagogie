@@ -1,0 +1,929 @@
+<!DOCTYPE html>
+<html lang="fr">
+<meta charset="utf-8">
+<title>Module 5 — Panorama & enjeux stratégiques</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<!-- Métadonnées de publication — lues par l'étape de mise en ligne -->
+<meta name="pedago:chemin"  content="conferences/fgv/ia-dev-logiciel">
+<meta name="pedago:famille" content="conference">
+<meta name="pedago:titre"   content="Panorama & enjeux stratégiques">
+<meta name="pedago:rang"    content="5">
+<meta name="pedago:mode"    content="conference">
+<meta name="pedago:cartes"  content="11">
+<meta name="pedago:resume"  content="Quatre trajectoires plutôt que trente produits, les questions à poser au fournisseur, la règle d'arbitrage local / frontière, et les deux mouvements à surveiller.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+/* ============================================================
+   CHARTE — variables de couleur et de fonte
+   ============================================================ */
+:root{
+  --ink:#0B2545;          /* marine profond — texte principal */
+  --ink-2:#13315C;
+  --blue:#1D4E89;
+  --blue-soft:#6E9BD1;
+  --accent:#0E9594;       /* vert-sarcelle */
+  --accent-2:#17B3A3;
+  --accent-wash:rgba(14,149,148,.10);
+  --accent-glow:rgba(14,149,148,.22);
+  --bg:#EEF3F8;
+  --card:#FFFFFF;
+  --paper:#F7FAFC;
+  --line:rgba(11,37,69,.11);
+  --ink-70:rgba(11,37,69,.72);
+  --ink-50:rgba(11,37,69,.52);
+  --stage-bg:radial-gradient(1100px 620px at 50% 8%, #fff 0%, rgba(255,255,255,0) 62%), #EEF3F8;
+  --dark-bg:radial-gradient(900px 560px at 22% 12%, #1B4A7E 0%, rgba(27,74,126,0) 60%),
+            radial-gradient(700px 500px at 88% 92%, rgba(14,149,148,.34) 0%, rgba(14,149,148,0) 62%),
+            linear-gradient(150deg,#0B2545 0%,#0A1E3A 100%);
+  --serif:'Fraunces','Iowan Old Style',Georgia,'Times New Roman',serif;
+  --sans:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;
+  --W:1280px; --H:720px;
+}
+
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0; background:var(--bg); color:var(--ink);
+  font-family:var(--sans); -webkit-font-smoothing:antialiased;
+  overflow:hidden;
+}
+
+/* ============================================================
+   COQUE — colonne de miniatures + scène
+   ============================================================ */
+.app{display:flex; height:100vh; width:100vw}
+
+/* Largeur du rail = 16 (marge) + 22 (colonne du numéro) + 212 (vignette)
+   + 16 (marge) + 6 (barre de défilement) = 272. Toute autre valeur fait
+   déborder la vignette et sortir une barre de défilement horizontale. */
+.rail{
+  width:272px; flex:0 0 272px; height:100vh;
+  background:#fff; border-right:1px solid var(--line);
+  display:flex; flex-direction:column;
+  box-shadow:0 0 40px rgba(0,0,0,.06); z-index:5;
+}
+.rail-head{padding:20px 18px 14px; border-bottom:1px solid var(--line)}
+
+/* Lien de retour vers l'index du cours / de la formation / de la conférence.
+   Il vit dans le rail, jamais dans la scène : le rail est masqué en plein
+   écran et à l'impression, le lien n'apparaît donc pas en projection. */
+.rail-back{
+  display:inline-flex; align-items:center; gap:6px;
+  margin-bottom:12px;
+  font-size:10.5px; font-weight:500; letter-spacing:.02em;
+  color:var(--ink-50); text-decoration:none;
+  transition:color .18s;
+}
+.rail-back:hover{color:var(--accent)}
+.rail-back:focus-visible{outline:2px solid var(--accent); outline-offset:3px; border-radius:3px}
+.rail-back svg{width:11px; height:11px; flex:0 0 11px}
+
+.rail-kicker{
+  font-size:9.5px; letter-spacing:.18em; text-transform:uppercase;
+  color:var(--accent); font-weight:700
+}
+.rail-title{
+  font-family:var(--serif); font-size:17px; line-height:1.25;
+  font-weight:500; margin-top:7px; color:var(--ink)
+}
+.rail-meta{font-size:11px; color:var(--ink-50); margin-top:6px}
+
+.thumbs{flex:1; overflow-y:auto; overflow-x:hidden; padding:14px 16px 18px; scrollbar-width:thin}
+.thumbs::-webkit-scrollbar{width:6px}
+.thumbs::-webkit-scrollbar-thumb{background:rgba(0,0,0,.16); border-radius:3px}
+
+.thumb{
+  position:relative; margin-bottom:13px; cursor:pointer;
+  border-radius:8px; padding-left:22px;
+  transition:transform .22s cubic-bezier(.2,.7,.3,1);
+}
+.thumb:hover{transform:translateX(2px)}
+.thumb-no{
+  position:absolute; left:0; top:50%; transform:translateY(-50%);
+  font-size:10.5px; font-weight:600; color:var(--ink-50);
+  font-variant-numeric:tabular-nums; transition:color .2s
+}
+.thumb-box{
+  position:relative; width:212px; height:119.25px; overflow:hidden;
+  border-radius:7px; background:#fff;
+  border:1px solid var(--line);
+  box-shadow:0 2px 8px rgba(0,0,0,.07);
+  transition:box-shadow .25s, border-color .25s;
+}
+.thumb-box::after{
+  content:''; position:absolute; inset:0; border-radius:7px;
+  box-shadow:inset 0 0 0 2px transparent; transition:box-shadow .25s
+}
+.thumb.on .thumb-box::after{box-shadow:inset 0 0 0 2px var(--accent)}
+.thumb.on .thumb-box{box-shadow:0 6px 20px var(--accent-glow)}
+.thumb.on .thumb-no{color:var(--accent); font-weight:700}
+/* La miniature est un clone de la carte à l'échelle : le facteur vaut la
+   largeur de la vignette divisée par celle de la toile (212 / 1280). */
+.thumb-scale{
+  position:absolute; top:0; left:0; width:var(--W); height:var(--H);
+  transform:scale(.16563); transform-origin:0 0; pointer-events:none;
+}
+.thumb-label{
+  font-size:10.5px; color:var(--ink-50); margin-top:5px;
+  letter-spacing:.01em; white-space:nowrap; overflow:hidden; text-overflow:ellipsis
+}
+.thumb.on .thumb-label{color:var(--ink-70); font-weight:500}
+
+.rail-foot{padding:13px 16px 16px; border-top:1px solid var(--line); display:grid; gap:8px}
+.btn{
+  display:flex; align-items:center; gap:9px; width:100%;
+  padding:9px 12px; border-radius:8px; border:1px solid var(--line);
+  background:var(--paper); color:var(--ink-70);
+  font-family:var(--sans); font-size:12px; font-weight:500;
+  cursor:pointer; transition:all .18s;
+}
+.btn:hover{background:var(--ink); color:#fff; border-color:var(--ink)}
+.btn svg{width:14px; height:14px; flex:0 0 14px}
+.btn .k{margin-left:auto; font-size:9.5px; opacity:.5; letter-spacing:.06em}
+
+/* ---- Scène ---- */
+.stage{
+  flex:1; position:relative; display:flex; align-items:center; justify-content:center;
+  background:var(--stage-bg);
+  overflow:hidden;
+}
+/* « flex:0 0 auto » n'est pas décoratif : .deck est un élément flex de la
+   scène. Sans lui, dès que la fenêtre est plus étroite que la toile, la scène
+   le rétrécit et son overflow:hidden rogne la carte — d'autant plus que la
+   toile est large. */
+.deck{
+  position:relative; flex:0 0 auto; width:var(--W); height:var(--H);
+  transform-origin:center center;
+  border-radius:14px; overflow:hidden;
+  box-shadow:0 26px 70px rgba(0,0,0,.20), 0 2px 6px rgba(0,0,0,.08);
+}
+.stage:fullscreen{background:var(--ink)}
+.stage:fullscreen .deck{border-radius:0; box-shadow:none}
+
+.nav{
+  position:absolute; bottom:22px; left:50%; transform:translateX(-50%);
+  display:flex; align-items:center; gap:6px; z-index:10;
+  background:rgba(255,255,255,.86); backdrop-filter:blur(14px);
+  border:1px solid var(--line); border-radius:999px; padding:5px 6px;
+  box-shadow:0 6px 22px rgba(0,0,0,.14);
+  transition:opacity .4s;
+}
+.nav button{
+  width:30px; height:30px; border-radius:50%; border:0; background:transparent;
+  color:var(--ink-70); cursor:pointer; display:grid; place-items:center; transition:.16s
+}
+.nav button:hover{background:var(--ink); color:#fff}
+.nav button:disabled{opacity:.25; cursor:default; background:transparent; color:var(--ink-70)}
+.nav .count{
+  font-size:11.5px; font-weight:600; color:var(--ink-70);
+  font-variant-numeric:tabular-nums; padding:0 9px; letter-spacing:.04em
+}
+.stage.idle .nav{opacity:0}
+
+.hint{
+  position:absolute; top:16px; right:18px; z-index:10;
+  font-size:10.5px; color:var(--ink-50); letter-spacing:.05em;
+  background:rgba(255,255,255,.8); padding:5px 11px; border-radius:999px;
+  border:1px solid var(--line); transition:opacity .4s
+}
+.stage:not(:fullscreen) .hint{display:none}
+.stage.idle .hint{opacity:0}
+
+/* ============================================================
+   DIAPOSITIVES — socle structurel
+   ============================================================ */
+/* La carte est une colonne : une tête de hauteur naturelle, un corps qui
+   occupe toute la hauteur restante. Sans cela, le contenu s'arrête où il
+   s'arrête et laisse une bande morte en bas — le déséquilibre le plus
+   visible d'un diaporama, et le plus fréquent aux faibles densités.
+
+   L'ÉCHELLE DE LA CARTE (--e) est le vrai remède à ce déséquilibre. Une carte
+   qui porte peu de matière ne se remplit pas en écartant ses blocs : elle se
+   remplit en s'écrivant plus grand. Toutes les tailles de la maquette doivent
+   donc s'exprimer en calc(Npx * var(--e)), et --e se pose carte par carte,
+   à la mesure — style="--e:1.4" sur la <section>.
+
+   Les grandes tailles suivent --ed, une échelle amortie : sans cela un titre
+   de carte rejoint la taille du titre de couverture et la hiérarchie
+   s'effondre. */
+.slide{
+  --e:1;
+  --ed:calc(1 + (var(--e) - 1) * .45);
+  position:absolute; inset:0; width:var(--W); height:var(--H);
+  padding:52px 66px 48px; background:var(--card);
+  opacity:0; visibility:hidden; z-index:1;
+  transition:opacity .5s ease;
+  display:flex; flex-direction:column;
+}
+.slide.active{opacity:1; visibility:visible; z-index:2}
+.thumb-scale .slide{opacity:0; visibility:hidden}
+.thumb-scale .slide.tvis{opacity:1; visibility:visible}
+
+/* Le titre reste en haut ; c'est le corps qui se répartit. */
+.top{flex:0 0 auto}
+.body{
+  flex:1 1 auto; min-height:0;
+  display:flex; flex-direction:column;
+  gap:15px; padding-top:17px;
+  justify-content:center;   /* le résidu se partage, il ne s'accumule pas */
+}
+/* Seules les FIGURES occupent la place qu'on leur donne : une frise, une
+   chaîne, une table, des barres grandissent honnêtement, leurs éléments
+   grandissant avec elles. Ajouter ici les figures propres à la maquette.
+
+   Une boîte de TEXTE, jamais. L'étirer n'ajoute pas un mot ; cela creuse un
+   vide au bas de la boîte, ou pire — avec space-between — entre l'énoncé et
+   son explication, à l'endroit exact où le lien de lecture doit tenir. */
+.body > .frise,
+.body > .chain,
+.body > .panelrow,
+.body > .stack{flex:1 1 auto}
+.stack{display:flex; flex-direction:column; gap:15px; justify-content:center}
+.stack > .frise,
+.stack > .chain{flex:1 1 auto}
+
+/* Fond plein foncé : couverture, intertitres, clôture.
+   Le titre y est centré — c'est une règle de forme, pas une maquette.
+   Le dégradé lui-même relève de la charte. */
+.slide.dark{
+  background:var(--dark-bg);
+  color:#fff;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  text-align:center;
+}
+
+/* Numéro de carte — uniquement sur fond clair, jamais sur .dark.
+   Position, taille et style constants d'une vue à l'autre. */
+.pageno{
+  position:absolute; right:40px; bottom:30px;
+  font-size:11.5px; font-weight:600; letter-spacing:.1em;
+  color:var(--ink-50); font-variant-numeric:tabular-nums;
+}
+.pageno b{color:var(--accent); font-weight:700}
+
+/* ============================================================
+   ANIMATIONS — rejouées à chaque arrivée sur la carte
+   ============================================================
+   Les règles sont portées par « .slide.active » : quitter puis revenir
+   sur une carte relance la cascade. C'est ce qui rend l'animation
+   cinématique plutôt que jouée une seule fois au chargement.
+   Régler le décalage par l'attribut style="--d:.35s". */
+@keyframes rise{from{opacity:0; transform:translateY(26px)}}
+@keyframes fade{from{opacity:0}}
+@keyframes slideIn{from{opacity:0; transform:translateX(-30px)}}
+@keyframes zoomIn{from{opacity:0; transform:scale(.9)}}
+@keyframes grow{from{transform:scaleX(0)}}
+@keyframes growY{from{transform:scaleY(0)}}
+@keyframes draw{from{stroke-dashoffset:var(--len)}}
+@keyframes pop{from{opacity:0; transform:scale(.3)}}
+@keyframes sweep{from{opacity:0; clip-path:inset(0 100% 0 0)}}
+
+.slide.active .a-rise {animation:rise .82s var(--d,0s) both cubic-bezier(.18,.75,.25,1)}
+.slide.active .a-fade {animation:fade 1.05s var(--d,0s) both ease}
+.slide.active .a-slide{animation:slideIn .8s var(--d,0s) both cubic-bezier(.18,.75,.25,1)}
+.slide.active .a-zoom {animation:zoomIn .85s var(--d,0s) both cubic-bezier(.18,.8,.25,1)}
+.slide.active .a-grow {animation:grow 1.05s var(--d,0s) both cubic-bezier(.2,.75,.25,1); transform-origin:left center}
+.slide.active .a-growy{animation:growY .95s var(--d,0s) both cubic-bezier(.2,.75,.25,1); transform-origin:bottom center}
+.slide.active .a-draw {animation:draw 1.5s var(--d,0s) both cubic-bezier(.3,.7,.3,1)}
+.slide.active .a-pop  {animation:pop .6s var(--d,0s) both cubic-bezier(.2,1.5,.4,1)}
+.slide.active .a-sweep{animation:sweep 1.1s var(--d,0s) both cubic-bezier(.2,.75,.25,1)}
+.a-draw{stroke-dasharray:var(--len); stroke-dashoffset:0}
+
+/* ============================================================
+   STYLES DE MAQUETTE — propres à ce diaporama
+   ============================================================
+   Échelle typographique, blocs graphiques, figures chiffrées,
+   planche de références, couverture. Écrits à chaque génération.
+   ============================================================ */
+
+/* ---- Titres ---- */
+h1{font-family:var(--serif); font-weight:400; font-size:calc(62px * var(--ed)); line-height:1.06;
+   letter-spacing:-.022em; margin:calc(26px * var(--e)) 0 0; max-width:1000px}
+h2{font-family:var(--serif); font-weight:400; font-size:calc(39px * var(--ed)); line-height:1.13;
+   letter-spacing:-.018em; margin:calc(15px * var(--e)) 0 0; color:var(--ink); max-width:1070px}
+.lede{font-size:calc(16px * var(--e)); line-height:1.6; font-weight:300; color:var(--ink-70);
+   margin:calc(14px * var(--e)) 0 0; max-width:1000px}
+.lede b{font-weight:600; color:var(--ink)}
+.lede em{font-style:italic; color:var(--ink)}
+
+/* ---- Fonds foncés ---- */
+.dark h1{font-size:calc(62px * var(--ed)); max-width:1010px}
+.dark .sub{font-size:calc(18px * var(--e)); color:rgba(255,255,255,.74); margin-top:calc(22px * var(--e));
+   font-weight:300; max-width:840px; line-height:1.55}
+.dark .who{margin-top:calc(40px * var(--e)); padding-top:calc(20px * var(--e));
+   border-top:1px solid rgba(255,255,255,.16); font-size:calc(13.4px * var(--e));
+   color:rgba(255,255,255,.62); letter-spacing:.04em}
+.dark .who b{color:#fff; font-weight:600}
+.dk-h{font-family:var(--serif); font-weight:400; font-size:calc(50px * var(--ed)); line-height:1.12;
+   color:#fff; max-width:960px; margin:calc(20px * var(--e)) 0 0; letter-spacing:-.018em}
+.dk-p{font-size:calc(17px * var(--e)); color:rgba(255,255,255,.72); font-weight:300;
+   margin-top:calc(20px * var(--e)); max-width:800px; line-height:1.55}
+.dk-p b{color:var(--accent-2); font-weight:600}
+.dark .closer{margin-top:calc(30px * var(--e)); font-family:var(--serif);
+   font-size:calc(22px * var(--ed)); font-weight:300; font-style:italic; color:var(--accent-2);
+   max-width:820px; line-height:1.4}
+
+/* ---- Note de bas de carte ---- */
+.note{margin-top:calc(14px * var(--e)); font-size:calc(12.4px * var(--e)); color:var(--ink-50);
+  font-weight:300; font-style:italic; border-left:2px solid var(--accent-wash);
+  padding-left:calc(13px * var(--e)); line-height:1.5}
+.note b{color:var(--ink-70); font-weight:600; font-style:normal}
+.src{font-size:calc(11.4px * var(--e)); color:var(--ink-50); font-weight:400; font-style:normal;
+  letter-spacing:.02em}
+
+/* ---- Les FIGURES occupent la place donnée ; les boîtes de texte, jamais ---- */
+.body > .figrow, .body > .quant, .body > .asym, .body > .hub{flex:1 1 auto}
+
+/* ---- Planche Références ---- */
+.refs{display:grid; grid-template-columns:1.75fr 1fr; gap:calc(24px * var(--e)); margin:auto 0}
+.panel{border:1px solid var(--line); border-radius:calc(12px * var(--e)); background:var(--paper);
+  padding:calc(18px * var(--e)) calc(20px * var(--e)); display:flex; flex-direction:column}
+.panel .pk{font-size:calc(10.4px * var(--e)); font-weight:700; letter-spacing:.15em;
+  text-transform:uppercase; color:var(--accent); margin-bottom:calc(12px * var(--e))}
+.panel .rf{font-size:calc(11.9px * var(--e)); line-height:1.48; color:var(--ink-70);
+  font-weight:300; padding-bottom:calc(8px * var(--e))}
+.panel .rf b{color:var(--ink); font-weight:600}
+.panel.short{justify-content:space-between}
+
+/* ---- Surtitre : cap ---- */
+.eyebrow{font-size:calc(10.5px * var(--e)); font-weight:700; letter-spacing:.24em; text-transform:uppercase;
+  color:var(--accent); display:flex; align-items:center; gap:calc(11px * var(--e))}
+.eyebrow::before{content:'▸'; color:var(--accent); font-size:calc(11px * var(--e)); line-height:1}
+.eyebrow::after{content:''; flex:1; height:1px;
+  background:linear-gradient(90deg,rgba(14,149,148,.5),rgba(14,149,148,0))}
+.dark .eyebrow{color:var(--accent-2); justify-content:center}
+.dark .eyebrow::after{flex:0 0 calc(56px * var(--e))}
+
+/* ---- Trois questions ---- */
+.qrow{display:grid; grid-template-columns:repeat(3,1fr); gap:calc(20px * var(--e))}
+.q{border-top:2px solid var(--accent); padding-top:calc(13px * var(--e))}
+.q .qn{font-size:calc(10.5px * var(--e)); font-weight:700; letter-spacing:.16em; color:var(--accent);
+  font-variant-numeric:tabular-nums}
+.q .qt{font-size:calc(14.4px * var(--e)); line-height:1.45; color:var(--ink-2);
+  margin-top:calc(7px * var(--e)); font-weight:500}
+
+/* ---- Quatre trajectoires ---- */
+.quad{display:grid; grid-template-columns:1fr 1fr; gap:calc(15px * var(--e)) calc(18px * var(--e))}
+.tj{border:1px solid var(--line); border-radius:calc(12px * var(--e)); background:var(--card);
+  padding:calc(16px * var(--e)) calc(19px * var(--e));
+  display:flex; flex-direction:column; justify-content:flex-start; position:relative;
+  box-shadow:0 calc(2px * var(--e)) calc(11px * var(--e)) rgba(11,37,69,.05)}
+.tj::before{content:''; position:absolute; left:0; top:calc(16px * var(--e));
+  bottom:calc(16px * var(--e)); width:calc(3px * var(--e));
+  background:linear-gradient(180deg,var(--accent),rgba(14,149,148,.15));
+  border-radius:0 calc(3px * var(--e)) calc(3px * var(--e)) 0}
+.tj .tk{font-size:calc(10.4px * var(--e)); font-weight:700; letter-spacing:.15em;
+  text-transform:uppercase; color:var(--ink-50)}
+.tj .tt{font-family:var(--serif); font-size:calc(21px * var(--ed)); font-weight:500; color:var(--ink);
+  margin-top:calc(6px * var(--e)); line-height:1.16}
+.tj .tt em{color:var(--accent); font-style:normal}
+.tj .tx{font-size:calc(12.5px * var(--e)); line-height:1.5; color:var(--ink-70);
+  margin-top:calc(8px * var(--e)); font-weight:300}
+.tj .tx b{color:var(--ink); font-weight:600}
+
+/* ---- Zoom sur deux trajectoires ---- */
+.zoom{display:grid; grid-template-columns:1fr 1fr; gap:calc(22px * var(--e))}
+.col{border-radius:calc(13px * var(--e)); padding:calc(19px * var(--e)) calc(22px * var(--e));
+  border:1px solid var(--line); background:var(--paper);
+  display:flex; flex-direction:column; justify-content:flex-start}
+.col.open{background:linear-gradient(140deg,rgba(14,149,148,.10),rgba(14,149,148,.02));
+  border-color:rgba(14,149,148,.30)}
+.col .ck2{font-size:calc(10.6px * var(--e)); font-weight:700; letter-spacing:.15em;
+  text-transform:uppercase; color:var(--accent)}
+.col .ct{font-family:var(--serif); font-size:calc(24px * var(--ed)); font-weight:500;
+  margin-top:calc(7px * var(--e)); color:var(--ink); line-height:1.2}
+.col .cp{font-size:calc(12.8px * var(--e)); line-height:1.55; color:var(--ink-70);
+  margin-top:calc(9px * var(--e)); font-weight:300}
+.col .cp b{color:var(--ink); font-weight:600}
+.col .cq{margin-top:calc(11px * var(--e)); font-size:calc(12.4px * var(--e)); font-style:italic;
+  color:var(--ink-2); border-left:2px solid var(--accent); padding-left:calc(11px * var(--e));
+  line-height:1.5}
+
+/* ---- Cinq questions numérotées ---- */
+.asks{display:grid; grid-template-columns:1fr 1fr; gap:calc(12px * var(--e)) calc(24px * var(--e))}
+.ask{display:flex; gap:calc(13px * var(--e)); align-items:flex-start}
+.ask .an{flex:0 0 calc(26px * var(--e)); height:calc(26px * var(--e)); border-radius:calc(7px * var(--e));
+  background:var(--accent-wash); color:var(--accent); display:grid; place-items:center;
+  font-size:calc(12px * var(--e)); font-weight:700; font-variant-numeric:tabular-nums}
+.ask .ax{font-size:calc(13px * var(--e)); line-height:1.5; color:var(--ink-70); font-weight:300}
+.ask .ax b{color:var(--ink); font-weight:600; display:block; font-size:calc(13.8px * var(--e));
+  margin-bottom:calc(2px * var(--e))}
+
+/* ---- Le partage local / frontière ---- */
+.split3{display:grid; grid-template-columns:repeat(3,1fr); gap:calc(16px * var(--e))}
+.sp{border-radius:calc(12px * var(--e)); padding:calc(17px * var(--e)) calc(19px * var(--e));
+  display:flex; flex-direction:column; justify-content:flex-start; border:1px solid var(--line);
+  background:var(--paper)}
+.sp.lock{background:linear-gradient(150deg,rgba(14,149,148,.13),rgba(14,149,148,.02));
+  border-color:rgba(14,149,148,.36)}
+.sp .sk{font-size:calc(10.4px * var(--e)); font-weight:700; letter-spacing:.14em;
+  text-transform:uppercase; color:var(--ink-50)}
+.sp.lock .sk{color:var(--accent)}
+.sp .st{font-family:var(--serif); font-size:calc(20px * var(--ed)); font-weight:500; color:var(--ink);
+  margin-top:calc(6px * var(--e)); line-height:1.16}
+.sp .sx{font-size:calc(12.4px * var(--e)); line-height:1.5; color:var(--ink-70);
+  margin-top:calc(8px * var(--e)); font-weight:300}
+.sp .sv{margin-top:calc(11px * var(--e)); align-self:flex-start;
+  padding:calc(5px * var(--e)) calc(11px * var(--e)); border-radius:calc(6px * var(--e));
+  font-size:calc(11.4px * var(--e)); font-weight:700; letter-spacing:.04em;
+  background:rgba(29,78,137,.09); color:var(--blue)}
+.sp.lock .sv{background:var(--accent-wash); color:var(--accent)}
+.rule-box{padding:calc(20px * var(--e)) calc(28px * var(--e)); border-radius:calc(13px * var(--e));
+  background:linear-gradient(120deg,rgba(14,149,148,.10),rgba(29,78,137,.05));
+  border-left:3px solid var(--accent)}
+.rule-box p{margin:0; font-family:var(--serif); font-size:calc(23px * var(--ed)); font-weight:400;
+  line-height:1.34; color:var(--ink)}
+
+/* ---- Cinq recommandations ---- */
+.recos{display:flex; flex-direction:column; gap:calc(10px * var(--e))}
+.reco{display:grid; grid-template-columns:calc(30px * var(--e)) 1fr; gap:calc(14px * var(--e));
+  align-items:baseline; padding-bottom:calc(9px * var(--e)); border-bottom:1px solid var(--line)}
+.reco:last-child{border-bottom:0; padding-bottom:0}
+.reco .rn{font-family:var(--serif); font-size:calc(22px * var(--ed)); font-weight:500;
+  color:var(--accent); font-variant-numeric:tabular-nums}
+.reco .rx{font-size:calc(13.2px * var(--e)); line-height:1.52; color:var(--ink-70); font-weight:300}
+.reco .rx b{color:var(--ink); font-weight:600}
+
+/* ---- Deux mouvements ---- */
+.moves{display:grid; grid-template-columns:1fr 1fr; gap:calc(22px * var(--e))}
+.mv{border-radius:calc(13px * var(--e)); border:1px solid var(--line); background:var(--paper);
+  padding:calc(19px * var(--e)) calc(22px * var(--e));
+  display:flex; flex-direction:column; justify-content:flex-start}
+.mv .mk{font-size:calc(10.6px * var(--e)); font-weight:700; letter-spacing:.15em;
+  text-transform:uppercase; color:var(--accent)}
+.mv .mt{font-family:var(--serif); font-size:calc(23px * var(--ed)); font-weight:500;
+  margin-top:calc(7px * var(--e)); color:var(--ink); line-height:1.2}
+.mv .mp{font-size:calc(12.7px * var(--e)); line-height:1.55; color:var(--ink-70);
+  margin-top:calc(9px * var(--e)); font-weight:300}
+.mv .mp b{color:var(--ink); font-weight:600}
+.mv .md{margin-top:calc(11px * var(--e)); font-size:calc(11.6px * var(--e)); color:var(--ink-50);
+  letter-spacing:.02em; line-height:1.5}
+
+
+/* ============================================================
+   IMPRESSION / EXPORT PDF
+   ============================================================ */
+@page{ size:1280px 720px; margin:0 }
+@media print{
+  html,body{overflow:visible; background:#fff; height:auto}
+  .rail,.nav,.hint{display:none !important}
+  .app{display:block; height:auto}
+  .stage{display:block; height:auto; background:#fff; overflow:visible}
+  .deck{
+    width:auto; height:auto; transform:none !important;
+    box-shadow:none; border-radius:0; position:static
+  }
+  .slide{
+    position:relative; inset:auto; display:block;
+    width:1280px; height:720px; opacity:1 !important; visibility:visible !important;
+    page-break-after:always; break-after:page; overflow:hidden;
+    -webkit-print-color-adjust:exact; print-color-adjust:exact;
+  }
+  .slide.dark{display:flex}
+  .slide:last-child{page-break-after:auto; break-after:auto}
+  .slide *{animation:none !important; transition:none !important}
+}
+</style>
+
+<div class="app" id="app">
+
+  <!-- ================= COLONNE MINIATURES ================= -->
+  <aside class="rail">
+    <div class="rail-head">
+      <a class="rail-back" href="index.html">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18 9 12l6-6"/></svg>
+        Retour à la conférence
+      </a>
+      <div class="rail-kicker">Conférence · FGV</div>
+      <div class="rail-title">Module 5 — Panorama & enjeux</div>
+      <div class="rail-meta">11 cartes · conférence · 30 min</div>
+    </div>
+    <div class="thumbs" id="thumbs"></div>
+    <div class="rail-foot">
+      <button class="btn" id="btnFs">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M8 3H5a2 2 0 0 0-2 2v3M16 3h3a2 2 0 0 1 2 2v3M8 21H5a2 2 0 0 1-2-2v-3M16 21h3a2 2 0 0 0 2-2v-3"/></svg>
+        Plein écran <span class="k">F</span>
+      </button>
+      <button class="btn" id="btnPdf">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0 4-4m-4 4-4-4M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg>
+        Exporter en PDF <span class="k">P</span>
+      </button>
+    </div>
+  </aside>
+
+  <!-- ================= SCÈNE ================= -->
+  <main class="stage" id="stage">
+    <div class="hint">Échap pour quitter le plein écran</div>
+    <div class="deck" id="deck">
+
+<section class="slide dark active" data-label="Couverture">
+  <div class="eyebrow a-fade" style="--d:.1s">Module 5 · Conférence FGV</div>
+  <h1 class="a-rise" style="--d:.25s">Panorama &amp; enjeux stratégiques</h1>
+  <p class="sub a-rise" style="--d:.5s">Ce module ne cherche pas à couvrir un marché — il aura changé
+     avant l'été. Il cherche à vous donner des <b>critères qui survivent au marché</b>.</p>
+  <div class="who a-fade" style="--d:.85s"><b>Robert Voyer</b> · MCF IA &amp; Éthique, IMT-BS · 30 min</div>
+</section>
+
+<section class="slide" data-label="Ouverture — Programme" style="--e:1.6">
+  <div class="top">
+    <div class="eyebrow a-fade">Ouverture</div>
+    <h2 class="a-rise" style="--d:.12s">Nous avons vu ce que ces outils font. Reste la question du décideur.</h2>
+    <p class="lede a-rise" style="--d:.22s">D'où viennent-ils, à quelles conditions les employer, comment
+       ils se branchent, ce qu'ils font réellement — tout cela est posé. <b>Et maintenant ?</b></p>
+  </div>
+  <div class="body">
+    <div class="qrow">
+      <div class="q a-rise" style="--d:.42s"><div class="qn">01 — LIRE</div>
+        <div class="qt">Comment lire un paysage qui bouge tous les trimestres, sans avoir à en suivre
+           chaque annonce ?</div></div>
+      <div class="q a-rise" style="--d:.54s"><div class="qn">02 — DÉCIDER</div>
+        <div class="qt">Quelles décisions une équipe IT peut-elle prendre dès maintenant, sans attendre
+           une clarification qui ne viendra pas ?</div></div>
+      <div class="q a-rise" style="--d:.66s"><div class="qn">03 — SURVEILLER</div>
+        <div class="qt">Sur quoi porter le regard pour 2027 ?</div></div>
+    </div>
+    <div class="note a-fade" style="--d:.85s">Trente produits se disputent ce marché, et il en paraîtra
+       dix de plus d'ici Noël. <b>Suivre les produits est une stratégie perdante.</b></div>
+  </div>
+  <div class="pageno">2<b>/11</b></div>
+</section>
+
+<section class="slide" data-label="Quatre trajectoires" style="--e:1.5">
+  <div class="top">
+    <div class="eyebrow a-fade">Le paysage 2026</div>
+    <h2 class="a-rise" style="--d:.12s">Quatre trajectoires, non trente produits</h2>
+  </div>
+  <div class="body">
+    <div class="quad">
+      <div class="tj a-rise" style="--d:.3s"><div class="tk">GitHub Copilot</div>
+        <div class="tt">La trajectoire de <em>l'intégration</em></div>
+        <div class="tx">L'outil s'inscrit dans une chaîne existante — dépôt, revue, intégration continue,
+           identités — et s'y rend indispensable. Sa force n'est pas technique, <b>c'est la continuité
+           administrative</b> : une facture, un contrat, un fournisseur déjà référencé. C'est aussi
+           l'argument le plus dangereux.</div></div>
+      <div class="tj a-rise" style="--d:.42s"><div class="tk">Cursor</div>
+        <div class="tt">La trajectoire de <em>la spécialisation</em></div>
+        <div class="tx">L'outil accepte d'être un produit à part et mise sur une qualité d'usage qui
+           justifie le changement d'habitude. <b>Le pari de la qualité pure</b> — l'histoire du secteur
+           montre qu'il se gagne, et qu'il se perd tout aussi souvent.</div></div>
+      <div class="tj a-rise" style="--d:.54s"><div class="tk">Kiro (AWS)</div>
+        <div class="tt">La trajectoire de <em>la méthode</em></div>
+        <div class="tx">Certains outils ne cherchent pas à coder plus vite : ils cherchent à
+           <b>imposer une discipline avant de coder</b>. La plus intéressante pour un organisme comme
+           le vôtre, et la moins commentée.</div></div>
+      <div class="tj a-rise" style="--d:.66s"><div class="tk">OpenCode</div>
+        <div class="tt">La trajectoire de <em>l'ouverture</em></div>
+        <div class="tx">Une famille d'outils libres refuse le couplage à un fournisseur de modèle.
+           <b>C'est la jonction avec le Module 2</b> : un agent libre branché sur un modèle ouvert
+           exécuté chez vous.</div></div>
+    </div>
+  </div>
+  <div class="pageno">3<b>/11</b></div>
+</section>
+
+<section class="slide" data-label="Les deux à examiner de près" style="--e:1.4">
+  <div class="top">
+    <div class="eyebrow a-fade">Le paysage 2026 · zoom</div>
+    <h2 class="a-rise" style="--d:.12s">Les deux trajectoires qui vous concernent en propre</h2>
+  </div>
+  <div class="body">
+    <div class="zoom">
+      <div class="col a-rise" style="--d:.3s">
+        <div class="ck2">La méthode · Kiro, AWS, 14 juillet 2025</div>
+        <div class="ct">La valeur n'est plus la vitesse, mais la traçabilité</div>
+        <div class="cp">Avant toute implémentation, l'agent produit une <b>spécification</b> —
+           exigences, conception, tâches — que l'humain valide. Une spécification écrite, validée,
+           versionnée, à laquelle le code produit se rapporte : <b>c'est exactement ce qu'exige un
+           audit.</b></div>
+        <div class="cq">« Kiro sait faire du développement à l'intuition, mais sa force est d'amener ces
+           prototypes jusqu'à des systèmes de production. »</div>
+      </div>
+      <div class="col open a-rise" style="--d:.46s">
+        <div class="ck2">L'ouverture · OpenCode</div>
+        <div class="ct">Aucune donnée ne sort</div>
+        <div class="cp">« Un agent libre qui vous aide à écrire du code dans votre terminal, votre
+           environnement de développement ou votre application de bureau. » Il donne accès à
+           <b>plus de 75 fournisseurs de modèles, y compris des modèles locaux</b>.</div>
+        <div class="cq">Il « ne stocke aucun de vos codes ni de vos données de contexte, afin de pouvoir
+           fonctionner dans des environnements sensibles à la confidentialité ».</div>
+      </div>
+    </div>
+    <div class="note a-fade" style="--d:.68s">Un agent libre, branché sur un modèle ouvert exécuté chez
+       vous, ne fait sortir <b>aucune donnée</b>. Ce n'était pas une option praticable il y a dix-huit
+       mois. <b>C'en est une aujourd'hui.</b>
+       <span class="src">Sources : kiro.dev, 14 juillet 2025 ; page officielle OpenCode, 2026.</span></div>
+  </div>
+  <div class="pageno">4<b>/11</b></div>
+</section>
+
+<section class="slide" data-label="Cinq questions au fournisseur" style="--e:1.3">
+  <div class="top">
+    <div class="eyebrow a-fade">Registre opérationnel</div>
+    <h2 class="a-rise" style="--d:.12s">Cinq questions qui appellent une réponse écrite</h2>
+    <p class="lede a-rise" style="--d:.22s">Quel que soit l'outil retenu, et <b>avant tout déploiement</b>.
+       Nous les donnons dans l'ordre où elles se posent.</p>
+  </div>
+  <div class="body">
+    <div class="asks">
+      <div class="ask a-rise" style="--d:.34s"><div class="an">1</div>
+        <div class="ax"><b>Que voit l'outil ?</b>Le fichier ouvert seulement ? Le projet indexé en
+           entier ? L'historique du dépôt ? La réponse varie selon le mode d'usage au sein d'un même
+           produit.</div></div>
+      <div class="ask a-rise" style="--d:.42s"><div class="an">2</div>
+        <div class="ax"><b>Où va ce qui est vu ?</b>Quelle juridiction, quel opérateur, quelle
+           nationalité de l'opérateur. La localisation ne fait pas la souveraineté.</div></div>
+      <div class="ask a-rise" style="--d:.50s"><div class="an">3</div>
+        <div class="ax"><b>Combien de temps, et à quelle fin ?</b>Distinguez conservation d'exploitation,
+           journalisation de sécurité et réutilisation pour l'entraînement — trois régimes différents.</div></div>
+      <div class="ask a-rise" style="--d:.58s"><div class="an">4</div>
+        <div class="ax"><b>Qui peut y accéder chez le fournisseur ?</b>Une revue humaine existe-t-elle,
+           au titre de la modération ou de la qualité ?</div></div>
+      <div class="ask a-rise" style="--d:.66s"><div class="an">5</div>
+        <div class="ax"><b>Que récupérez-vous en partant ?</b>Configurations, compétences, fichiers de
+           contexte : ou bien vous les emportez, ou bien vous avez constitué une dépendance coûteuse à
+           dénouer.</div></div>
+    </div>
+  </div>
+  <div class="pageno">5<b>/11</b></div>
+</section>
+
+<section class="slide dark" data-label="La règle d'arbitrage" style="--e:1.4">
+  <div class="eyebrow a-fade">L'arbitrage local / frontière</div>
+  <h2 class="dk-h a-rise" style="--d:.2s">Ce qui ne doit pas sortir ne sort pas,<br>quel qu'en soit le coût en qualité.<br>Ce qui peut sortir va au meilleur outil.</h2>
+  <p class="dk-p a-rise" style="--d:.5s">Le critère de partage n'est pas la difficulté de la tâche.
+     C'est la <b>sensibilité de la donnée</b>. L'avantage de cette règle est qu'elle est
+     <b>décidable</b> : elle ne demande pas d'évaluer la qualité comparée de deux modèles — évaluation
+     périmée dans six mois —, mais de classer vos données. Ce que vous devez faire de toute façon.</p>
+</section>
+
+<section class="slide" data-label="Le schéma hybride" style="--e:1.4">
+  <div class="top">
+    <div class="eyebrow a-fade">L'arbitrage · en pratique</div>
+    <h2 class="a-rise" style="--d:.12s">Ni « tout local », ni « tout externe » : le schéma hybride</h2>
+    <p class="lede a-rise" style="--d:.22s">Les modèles frontière restent supérieurs sur les tâches
+       difficiles. Les modèles locaux sont désormais bons sur les tâches courantes — et
+       <b>structurellement supérieurs sur un point qu'aucun contrat ne compensera : ils ne font rien
+       sortir.</b> Ces deux constats se combinent.</p>
+  </div>
+  <div class="body">
+    <div class="split3">
+      <div class="sp lock a-rise" style="--d:.34s"><div class="sk">Périmètre sensible</div>
+        <div class="st">Données de victimes, règles de gestion, dispositifs de sécurité</div>
+        <div class="sx">Aucune sortie, quel que soit le gain de qualité que l'on renonce à obtenir.</div>
+        <div class="sv">Local, sans exception</div></div>
+      <div class="sp a-rise" style="--d:.46s"><div class="sk">Périmètre banal</div>
+        <div class="st">Infrastructure, outils internes, scripts sans portée métier</div>
+        <div class="sx">Le meilleur outil disponible, sur le seul critère de l'efficacité.</div>
+        <div class="sv">Arbitrage libre</div></div>
+      <div class="sp a-rise" style="--d:.58s"><div class="sk">Périmètre ouvert</div>
+        <div class="st">Code destiné à être publié</div>
+        <div class="sx">La question de la confidentialité ne se pose pas — elle a déjà été tranchée.</div>
+        <div class="sv">Arbitrage libre</div></div>
+    </div>
+    <div class="note a-fade" style="--d:.74s">Notons que le périmètre sensible est souvent
+       <b>minoritaire en volume</b> — ce qui répond d'avance à l'objection du budget : le schéma hybride
+       ne réclame pas d'équiper toute l'équipe en infrastructure locale.</div>
+  </div>
+  <div class="pageno">7<b>/11</b></div>
+</section>
+
+<section class="slide" data-label="Cinq recommandations" style="--e:1.3">
+  <div class="top">
+    <div class="eyebrow a-fade">Pour une équipe IT</div>
+    <h2 class="a-rise" style="--d:.12s">Cinq décisions, prenables dès demain</h2>
+    <p class="lede a-rise" style="--d:.2s">Indépendantes du produit retenu — donc insensibles à vos
+       futurs changements d'avis.</p>
+  </div>
+  <div class="body">
+    <div class="recos">
+      <div class="reco a-rise" style="--d:.32s"><div class="rn">1</div>
+        <div class="rx"><b>Cartographiez l'usage réel avant d'écrire la moindre politique.</b>
+           Vous ne partez pas de zéro : l'usage existe déjà. Une politique écrite contre un usage qu'on
+           ne connaît pas est une politique qui ne sera pas appliquée.</div></div>
+      <div class="reco a-rise" style="--d:.42s"><div class="rn">2</div>
+        <div class="rx"><b>Ouvrez une voie officielle plutôt que d'interdire.</b>
+           L'interdiction sans alternative ne supprime pas l'usage, elle le rend invisible.
+           Ni « non » ni « oui » : <i>voici par où</i>.</div></div>
+      <div class="reco a-rise" style="--d:.52s"><div class="rn">3</div>
+        <div class="rx"><b>Investissez le fichier de contexte de projet avant l'outil.</b>
+           Le meilleur rapport effort/résultat du dispositif — et il est portable d'un outil à l'autre.</div></div>
+      <div class="reco a-rise" style="--d:.62s"><div class="rn">4</div>
+        <div class="rx"><b>Faites de la relecture un dispositif, non une intention.</b>
+           Qui relit, sur quels critères, avec quelle trace ? Sans réponse écrite à ces trois questions,
+           la supervision humaine est nominale.</div></div>
+      <div class="reco a-rise" style="--d:.72s"><div class="rn">5</div>
+        <div class="rx"><b>Traitez la littératie comme un investissement, pas comme une case à cocher.</b>
+           L'article 4 de l'AI Act vous y oblige depuis le 2 février 2025 — mais l'obligation n'est pas
+           la raison. La raison est que <b>46 % des développeurs se méfient de l'exactitude des sorties,
+           33 % leur font confiance, 3 % seulement expriment une confiance élevée.</b>
+           Cette méfiance est saine ; elle n'est efficace que si elle est <i>informée</i>.</div></div>
+    </div>
+  </div>
+  <div class="pageno">8<b>/11</b></div>
+</section>
+
+<section class="slide" data-label="Perspectives 2026-2027" style="--e:1.3">
+  <div class="top">
+    <div class="eyebrow a-fade">Perspectives</div>
+    <h2 class="a-rise" style="--d:.12s">Deux mouvements structurants, et deux seulement</h2>
+  </div>
+  <div class="body">
+    <div class="moves">
+      <div class="mv a-rise" style="--d:.32s">
+        <div class="mk">Mouvement 1</div>
+        <div class="mt">L'ingénierie du contexte</div>
+        <div class="mp">La discipline succède au « prompt engineering », et le déplacement est plus
+           profond qu'un changement de vocabulaire : <b>« l'ensemble des stratégies permettant de
+           sélectionner et de maintenir l'ensemble optimal de jetons pendant l'inférence »</b>.
+           Là où l'on formulait bien une question, il s'agit désormais d'<b>organiser tout ce que
+           l'agent voit</b> — instructions, documents, mémoire, résultats d'outils, état de la tâche.</div>
+        <div class="mp">La compétence rare ne sera pas de savoir parler à un modèle, mais de savoir
+           <b>construire l'environnement informationnel</b> dans lequel un agent travaille bien. Un
+           métier d'architecte, non de rédacteur.</div>
+        <div class="md">Formulation Anthropic, 29 septembre 2025.</div>
+      </div>
+      <div class="mv a-rise" style="--d:.48s">
+        <div class="mk">Mouvement 2</div>
+        <div class="mt">La communication entre agents</div>
+        <div class="mp">Le MCP relie un agent à ses <i>outils</i>. Il ne dit rien de la façon dont deux
+           agents se parlent. Deux protocoles concurrents s'en sont saisis en 2025 : <b>ACP</b> (IBM,
+           mars) et <b>A2A</b> (Google, avril). Le second est confié à la Linux Foundation le
+           23 juin 2025 ; le 29 août, <b>ACP annonce sa fusion dans A2A</b> sous la même égide.</div>
+        <div class="mp">Retenons la leçon de gouvernance : en moins d'un an, deux standards concurrents
+           ont convergé sous une fondation neutre — comme le MCP quelques mois plus tôt.
+           <b>Le secteur se normalise plus vite qu'il ne s'unifie sur les produits.</b></div>
+        <div class="md">Linux Foundation, 23 juin 2025 · LF AI &amp; Data, 29 août 2025.</div>
+      </div>
+    </div>
+  </div>
+  <div class="pageno">9<b>/11</b></div>
+</section>
+
+<section class="slide dark" data-label="Clôture — sur quoi parier" style="--e:1.4">
+  <div class="eyebrow a-fade">Ce qu'il faut emporter</div>
+  <h2 class="dk-h a-rise" style="--d:.2s">Ne pariez pas sur un produit.<br>Vous vous tromperez.</h2>
+  <p class="dk-p a-rise" style="--d:.5s">Pariez sur ce qui vous reste quand le produit change :
+     <b>vos données classées, votre contexte versionné, vos protocoles ouverts, et vos gens formés.</b></p>
+  <p class="closer a-fade" style="--d:.8s">Miser sur les protocoles est nettement moins risqué que miser
+     sur les éditeurs — c'est le pari le plus sûr qu'un acheteur public puisse faire.</p>
+</section>
+
+<section class="slide" data-label="Références" style="--e:1.25">
+  <div class="top">
+    <div class="eyebrow a-fade">Module 5</div>
+    <h2 class="a-rise" style="--d:.12s">Références</h2>
+  </div>
+  <div class="body">
+    <div class="refs">
+      <div class="panel a-rise" style="--d:.3s">
+        <div class="pk">Sources primaires</div>
+        <div class="rf"><b>Kiro (AWS), 14 juillet 2025</b> — « Introducing Kiro » : environnement
+           agentique fondé sur les <i>specs</i> (exigences, conception, tâches) et les <i>hooks</i>.</div>
+        <div class="rf"><b>OpenCode, page officielle (2026)</b> — agent libre en terminal, plus de
+           75 fournisseurs de modèles via Models.dev « y compris des modèles locaux » ; non-conservation
+           du code et des données de contexte.</div>
+        <div class="rf"><b>Anthropic, 29 septembre 2025</b> — « Effective context engineering for AI
+           agents » : définition de l'ingénierie du contexte et distinction d'avec le
+           <i>prompt engineering</i>.</div>
+        <div class="rf"><b>Linux Foundation, 23 juin 2025</b> — lancement du projet Agent2Agent (A2A) ;
+           fondateurs Google, AWS, Cisco, Salesforce, SAP, Microsoft, ServiceNow, et plus de
+           100 entreprises associées.</div>
+        <div class="rf"><b>LF AI &amp; Data, 29 août 2025</b> — « ACP Joins Forces with A2A » : fusion du
+           protocole ACP (IBM, mars 2025) dans A2A.</div>
+        <div class="rf"><b>Stack Overflow, Developer Survey 2025</b> — méfiance 46 %, confiance 33 %,
+           confiance élevée 3 % (plus de 49 000 répondants, 177 pays).</div>
+      </div>
+      <div class="panel short a-rise" style="--d:.46s">
+        <div class="pk">Repères de contexte</div>
+        <div class="rf"><b>GitHub Copilot</b> — trajectoire de l'intégration à une chaîne existante.</div>
+        <div class="rf"><b>Cursor</b> — trajectoire de la spécialisation produit.</div>
+        <div class="rf"><b>Models.dev</b> — catalogue de fournisseurs employé par OpenCode ; permet le
+           branchement d'un modèle local au même titre qu'un modèle distant.</div>
+        <div class="rf"><b>MCP</b> — protocole agent ↔ outils, distinct d'A2A qui traite de la
+           communication agent ↔ agent. Voir Module 3.</div>
+        <div class="rf"><b>AI Act, art. 4</b> — littératie, en application depuis le 2 février 2025.
+           Voir Module 2.</div>
+      </div>
+    </div>
+  </div>
+  <div class="pageno">11<b>/11</b></div>
+</section>
+
+    </div>
+
+    <div class="nav" id="nav">
+      <button id="prev" title="Précédent (←)">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+      </button>
+      <span class="count" id="count">1 / 11</span>
+      <button id="next" title="Suivant (→)">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+      </button>
+    </div>
+  </main>
+</div>
+
+<script>
+(function(){
+  const deck   = document.getElementById('deck');
+  const stage  = document.getElementById('stage');
+  const slides = Array.from(deck.querySelectorAll('.slide'));
+  const thumbs = document.getElementById('thumbs');
+  const count  = document.getElementById('count');
+  const N = slides.length;
+  let cur = 0;
+
+  /* ---------- Miniatures : véritables clones à l'échelle ---------- */
+  slides.forEach((s, i) => {
+    const wrap = document.createElement('div');
+    wrap.className = 'thumb';
+    const clone = s.cloneNode(true);
+    clone.classList.remove('active');
+    clone.classList.add('tvis');
+    // Les animations ne s'appliquent que sous « .slide.active » : le clone,
+    // jamais actif, affiche donc d'emblée l'état final. Rien à neutraliser.
+    wrap.innerHTML =
+      '<div class="thumb-no">' + (i+1) + '</div>' +
+      '<div class="thumb-box"><div class="thumb-scale"></div></div>' +
+      '<div class="thumb-label">' + (s.dataset.label || ('Carte ' + (i+1))) + '</div>';
+    wrap.querySelector('.thumb-scale').appendChild(clone);
+    wrap.addEventListener('click', () => go(i));
+    thumbs.appendChild(wrap);
+  });
+  const thumbEls = Array.from(thumbs.querySelectorAll('.thumb'));
+
+  /* ---------- Navigation + relance des animations ---------- */
+  function go(i){
+    if(i < 0 || i > N-1) return;
+    const s = slides[i];
+    slides.forEach(x => x.classList.remove('active'));
+    void s.offsetWidth;              // reflow : rejoue les animations en cascade
+    s.classList.add('active');
+    cur = i;
+    thumbEls.forEach((t,k) => t.classList.toggle('on', k === i));
+    count.textContent = (i+1) + ' / ' + N;
+    document.getElementById('prev').disabled = (i === 0);
+    document.getElementById('next').disabled = (i === N-1);
+    thumbEls[i].scrollIntoView({block:'nearest', behavior:'smooth'});
+  }
+  document.getElementById('prev').onclick = () => go(cur-1);
+  document.getElementById('next').onclick = () => go(cur+1);
+
+  /* ---------- Mise à l'échelle de la carte ---------- */
+  function fit(){
+    const pad = document.fullscreenElement ? 0 : 56;
+    const r = stage.getBoundingClientRect();
+    const s = Math.min((r.width - pad) / 1280, (r.height - pad) / 720);
+    deck.style.transform = 'scale(' + s + ')';
+  }
+  window.addEventListener('resize', fit);
+
+  /* ---------- Plein écran (Échap pour sortir) ---------- */
+  function toggleFs(){
+    if(document.fullscreenElement) document.exitFullscreen();
+    else stage.requestFullscreen && stage.requestFullscreen();
+  }
+  document.getElementById('btnFs').onclick = toggleFs;
+  document.addEventListener('fullscreenchange', () => {
+    fit(); setTimeout(fit, 130);          // la scène n'a pas fini de se redimensionner
+    go(cur); wake();
+  });
+
+  /* ---------- Masquage de l'interface au repos (plein écran) ---------- */
+  let idleT;
+  function wake(){
+    stage.classList.remove('idle');
+    clearTimeout(idleT);
+    if(document.fullscreenElement) idleT = setTimeout(() => stage.classList.add('idle'), 2600);
+  }
+  stage.addEventListener('mousemove', wake);
+
+  /* ---------- Export PDF ---------- */
+  function toPdf(){
+    const wasFs = !!document.fullscreenElement;
+    const finish = () => window.print();
+    if(wasFs) document.exitFullscreen().then(() => setTimeout(finish, 260));
+    else finish();
+  }
+  document.getElementById('btnPdf').onclick = toPdf;
+
+  /* ---------- Clavier ---------- */
+  document.addEventListener('keydown', e => {
+    if(e.metaKey || e.ctrlKey || e.altKey) return;   // laisse passer Cmd+P natif
+    if(e.key === 'ArrowRight' || e.key === 'PageDown' || e.key === ' '){ e.preventDefault(); go(cur+1); }
+    else if(e.key === 'ArrowLeft' || e.key === 'PageUp'){ e.preventDefault(); go(cur-1); }
+    else if(e.key === 'Home'){ go(0); }
+    else if(e.key === 'End'){ go(N-1); }
+    else if(e.key === 'f' || e.key === 'F'){ toggleFs(); }
+    else if(e.key === 'p' || e.key === 'P'){ e.preventDefault(); toPdf(); }
+  });
+
+  fit();
+  go(0);
+})();
+</script>

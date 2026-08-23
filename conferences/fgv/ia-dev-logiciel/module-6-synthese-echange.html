@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+<html lang="fr">
+<meta charset="utf-8">
+<title>Module 6 — Synthèse & échange</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<!-- Métadonnées de publication — lues par l'étape de mise en ligne -->
+<meta name="pedago:chemin"  content="conferences/fgv/ia-dev-logiciel">
+<meta name="pedago:famille" content="conference">
+<meta name="pedago:titre"   content="Synthèse & échange">
+<meta name="pedago:rang"    content="6">
+<meta name="pedago:mode"    content="conference">
+<meta name="pedago:cartes"  content="8">
+<meta name="pedago:resume"  content="Trois messages à emporter, les ressources pour poursuivre, et l'ouverture de la discussion : des amplificateurs, jamais des sauveurs ni des menaces.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+/* ============================================================
+   CHARTE — variables de couleur et de fonte
+   ============================================================ */
+:root{
+  --ink:#0B2545;          /* marine profond — texte principal */
+  --ink-2:#13315C;
+  --blue:#1D4E89;
+  --blue-soft:#6E9BD1;
+  --accent:#0E9594;       /* vert-sarcelle */
+  --accent-2:#17B3A3;
+  --accent-wash:rgba(14,149,148,.10);
+  --accent-glow:rgba(14,149,148,.22);
+  --bg:#EEF3F8;
+  --card:#FFFFFF;
+  --paper:#F7FAFC;
+  --line:rgba(11,37,69,.11);
+  --ink-70:rgba(11,37,69,.72);
+  --ink-50:rgba(11,37,69,.52);
+  --stage-bg:radial-gradient(1100px 620px at 50% 8%, #fff 0%, rgba(255,255,255,0) 62%), #EEF3F8;
+  --dark-bg:radial-gradient(900px 560px at 22% 12%, #1B4A7E 0%, rgba(27,74,126,0) 60%),
+            radial-gradient(700px 500px at 88% 92%, rgba(14,149,148,.34) 0%, rgba(14,149,148,0) 62%),
+            linear-gradient(150deg,#0B2545 0%,#0A1E3A 100%);
+  --serif:'Fraunces','Iowan Old Style',Georgia,'Times New Roman',serif;
+  --sans:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;
+  --W:1280px; --H:720px;
+}
+
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0; background:var(--bg); color:var(--ink);
+  font-family:var(--sans); -webkit-font-smoothing:antialiased;
+  overflow:hidden;
+}
+
+/* ============================================================
+   COQUE — colonne de miniatures + scène
+   ============================================================ */
+.app{display:flex; height:100vh; width:100vw}
+
+/* Largeur du rail = 16 (marge) + 22 (colonne du numéro) + 212 (vignette)
+   + 16 (marge) + 6 (barre de défilement) = 272. Toute autre valeur fait
+   déborder la vignette et sortir une barre de défilement horizontale. */
+.rail{
+  width:272px; flex:0 0 272px; height:100vh;
+  background:#fff; border-right:1px solid var(--line);
+  display:flex; flex-direction:column;
+  box-shadow:0 0 40px rgba(0,0,0,.06); z-index:5;
+}
+.rail-head{padding:20px 18px 14px; border-bottom:1px solid var(--line)}
+
+/* Lien de retour vers l'index du cours / de la formation / de la conférence.
+   Il vit dans le rail, jamais dans la scène : le rail est masqué en plein
+   écran et à l'impression, le lien n'apparaît donc pas en projection. */
+.rail-back{
+  display:inline-flex; align-items:center; gap:6px;
+  margin-bottom:12px;
+  font-size:10.5px; font-weight:500; letter-spacing:.02em;
+  color:var(--ink-50); text-decoration:none;
+  transition:color .18s;
+}
+.rail-back:hover{color:var(--accent)}
+.rail-back:focus-visible{outline:2px solid var(--accent); outline-offset:3px; border-radius:3px}
+.rail-back svg{width:11px; height:11px; flex:0 0 11px}
+
+.rail-kicker{
+  font-size:9.5px; letter-spacing:.18em; text-transform:uppercase;
+  color:var(--accent); font-weight:700
+}
+.rail-title{
+  font-family:var(--serif); font-size:17px; line-height:1.25;
+  font-weight:500; margin-top:7px; color:var(--ink)
+}
+.rail-meta{font-size:11px; color:var(--ink-50); margin-top:6px}
+
+.thumbs{flex:1; overflow-y:auto; overflow-x:hidden; padding:14px 16px 18px; scrollbar-width:thin}
+.thumbs::-webkit-scrollbar{width:6px}
+.thumbs::-webkit-scrollbar-thumb{background:rgba(0,0,0,.16); border-radius:3px}
+
+.thumb{
+  position:relative; margin-bottom:13px; cursor:pointer;
+  border-radius:8px; padding-left:22px;
+  transition:transform .22s cubic-bezier(.2,.7,.3,1);
+}
+.thumb:hover{transform:translateX(2px)}
+.thumb-no{
+  position:absolute; left:0; top:50%; transform:translateY(-50%);
+  font-size:10.5px; font-weight:600; color:var(--ink-50);
+  font-variant-numeric:tabular-nums; transition:color .2s
+}
+.thumb-box{
+  position:relative; width:212px; height:119.25px; overflow:hidden;
+  border-radius:7px; background:#fff;
+  border:1px solid var(--line);
+  box-shadow:0 2px 8px rgba(0,0,0,.07);
+  transition:box-shadow .25s, border-color .25s;
+}
+.thumb-box::after{
+  content:''; position:absolute; inset:0; border-radius:7px;
+  box-shadow:inset 0 0 0 2px transparent; transition:box-shadow .25s
+}
+.thumb.on .thumb-box::after{box-shadow:inset 0 0 0 2px var(--accent)}
+.thumb.on .thumb-box{box-shadow:0 6px 20px var(--accent-glow)}
+.thumb.on .thumb-no{color:var(--accent); font-weight:700}
+/* La miniature est un clone de la carte à l'échelle : le facteur vaut la
+   largeur de la vignette divisée par celle de la toile (212 / 1280). */
+.thumb-scale{
+  position:absolute; top:0; left:0; width:var(--W); height:var(--H);
+  transform:scale(.16563); transform-origin:0 0; pointer-events:none;
+}
+.thumb-label{
+  font-size:10.5px; color:var(--ink-50); margin-top:5px;
+  letter-spacing:.01em; white-space:nowrap; overflow:hidden; text-overflow:ellipsis
+}
+.thumb.on .thumb-label{color:var(--ink-70); font-weight:500}
+
+.rail-foot{padding:13px 16px 16px; border-top:1px solid var(--line); display:grid; gap:8px}
+.btn{
+  display:flex; align-items:center; gap:9px; width:100%;
+  padding:9px 12px; border-radius:8px; border:1px solid var(--line);
+  background:var(--paper); color:var(--ink-70);
+  font-family:var(--sans); font-size:12px; font-weight:500;
+  cursor:pointer; transition:all .18s;
+}
+.btn:hover{background:var(--ink); color:#fff; border-color:var(--ink)}
+.btn svg{width:14px; height:14px; flex:0 0 14px}
+.btn .k{margin-left:auto; font-size:9.5px; opacity:.5; letter-spacing:.06em}
+
+/* ---- Scène ---- */
+.stage{
+  flex:1; position:relative; display:flex; align-items:center; justify-content:center;
+  background:var(--stage-bg);
+  overflow:hidden;
+}
+/* « flex:0 0 auto » n'est pas décoratif : .deck est un élément flex de la
+   scène. Sans lui, dès que la fenêtre est plus étroite que la toile, la scène
+   le rétrécit et son overflow:hidden rogne la carte — d'autant plus que la
+   toile est large. */
+.deck{
+  position:relative; flex:0 0 auto; width:var(--W); height:var(--H);
+  transform-origin:center center;
+  border-radius:14px; overflow:hidden;
+  box-shadow:0 26px 70px rgba(0,0,0,.20), 0 2px 6px rgba(0,0,0,.08);
+}
+.stage:fullscreen{background:var(--ink)}
+.stage:fullscreen .deck{border-radius:0; box-shadow:none}
+
+.nav{
+  position:absolute; bottom:22px; left:50%; transform:translateX(-50%);
+  display:flex; align-items:center; gap:6px; z-index:10;
+  background:rgba(255,255,255,.86); backdrop-filter:blur(14px);
+  border:1px solid var(--line); border-radius:999px; padding:5px 6px;
+  box-shadow:0 6px 22px rgba(0,0,0,.14);
+  transition:opacity .4s;
+}
+.nav button{
+  width:30px; height:30px; border-radius:50%; border:0; background:transparent;
+  color:var(--ink-70); cursor:pointer; display:grid; place-items:center; transition:.16s
+}
+.nav button:hover{background:var(--ink); color:#fff}
+.nav button:disabled{opacity:.25; cursor:default; background:transparent; color:var(--ink-70)}
+.nav .count{
+  font-size:11.5px; font-weight:600; color:var(--ink-70);
+  font-variant-numeric:tabular-nums; padding:0 9px; letter-spacing:.04em
+}
+.stage.idle .nav{opacity:0}
+
+.hint{
+  position:absolute; top:16px; right:18px; z-index:10;
+  font-size:10.5px; color:var(--ink-50); letter-spacing:.05em;
+  background:rgba(255,255,255,.8); padding:5px 11px; border-radius:999px;
+  border:1px solid var(--line); transition:opacity .4s
+}
+.stage:not(:fullscreen) .hint{display:none}
+.stage.idle .hint{opacity:0}
+
+/* ============================================================
+   DIAPOSITIVES — socle structurel
+   ============================================================ */
+/* La carte est une colonne : une tête de hauteur naturelle, un corps qui
+   occupe toute la hauteur restante. Sans cela, le contenu s'arrête où il
+   s'arrête et laisse une bande morte en bas — le déséquilibre le plus
+   visible d'un diaporama, et le plus fréquent aux faibles densités.
+
+   L'ÉCHELLE DE LA CARTE (--e) est le vrai remède à ce déséquilibre. Une carte
+   qui porte peu de matière ne se remplit pas en écartant ses blocs : elle se
+   remplit en s'écrivant plus grand. Toutes les tailles de la maquette doivent
+   donc s'exprimer en calc(Npx * var(--e)), et --e se pose carte par carte,
+   à la mesure — style="--e:1.4" sur la <section>.
+
+   Les grandes tailles suivent --ed, une échelle amortie : sans cela un titre
+   de carte rejoint la taille du titre de couverture et la hiérarchie
+   s'effondre. */
+.slide{
+  --e:1;
+  --ed:calc(1 + (var(--e) - 1) * .45);
+  position:absolute; inset:0; width:var(--W); height:var(--H);
+  padding:52px 66px 48px; background:var(--card);
+  opacity:0; visibility:hidden; z-index:1;
+  transition:opacity .5s ease;
+  display:flex; flex-direction:column;
+}
+.slide.active{opacity:1; visibility:visible; z-index:2}
+.thumb-scale .slide{opacity:0; visibility:hidden}
+.thumb-scale .slide.tvis{opacity:1; visibility:visible}
+
+/* Le titre reste en haut ; c'est le corps qui se répartit. */
+.top{flex:0 0 auto}
+.body{
+  flex:1 1 auto; min-height:0;
+  display:flex; flex-direction:column;
+  gap:15px; padding-top:17px;
+  justify-content:center;   /* le résidu se partage, il ne s'accumule pas */
+}
+/* Seules les FIGURES occupent la place qu'on leur donne : une frise, une
+   chaîne, une table, des barres grandissent honnêtement, leurs éléments
+   grandissant avec elles. Ajouter ici les figures propres à la maquette.
+
+   Une boîte de TEXTE, jamais. L'étirer n'ajoute pas un mot ; cela creuse un
+   vide au bas de la boîte, ou pire — avec space-between — entre l'énoncé et
+   son explication, à l'endroit exact où le lien de lecture doit tenir. */
+.body > .frise,
+.body > .chain,
+.body > .panelrow,
+.body > .stack{flex:1 1 auto}
+.stack{display:flex; flex-direction:column; gap:15px; justify-content:center}
+.stack > .frise,
+.stack > .chain{flex:1 1 auto}
+
+/* Fond plein foncé : couverture, intertitres, clôture.
+   Le titre y est centré — c'est une règle de forme, pas une maquette.
+   Le dégradé lui-même relève de la charte. */
+.slide.dark{
+  background:var(--dark-bg);
+  color:#fff;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  text-align:center;
+}
+
+/* Numéro de carte — uniquement sur fond clair, jamais sur .dark.
+   Position, taille et style constants d'une vue à l'autre. */
+.pageno{
+  position:absolute; right:40px; bottom:30px;
+  font-size:11.5px; font-weight:600; letter-spacing:.1em;
+  color:var(--ink-50); font-variant-numeric:tabular-nums;
+}
+.pageno b{color:var(--accent); font-weight:700}
+
+/* ============================================================
+   ANIMATIONS — rejouées à chaque arrivée sur la carte
+   ============================================================
+   Les règles sont portées par « .slide.active » : quitter puis revenir
+   sur une carte relance la cascade. C'est ce qui rend l'animation
+   cinématique plutôt que jouée une seule fois au chargement.
+   Régler le décalage par l'attribut style="--d:.35s". */
+@keyframes rise{from{opacity:0; transform:translateY(26px)}}
+@keyframes fade{from{opacity:0}}
+@keyframes slideIn{from{opacity:0; transform:translateX(-30px)}}
+@keyframes zoomIn{from{opacity:0; transform:scale(.9)}}
+@keyframes grow{from{transform:scaleX(0)}}
+@keyframes growY{from{transform:scaleY(0)}}
+@keyframes draw{from{stroke-dashoffset:var(--len)}}
+@keyframes pop{from{opacity:0; transform:scale(.3)}}
+@keyframes sweep{from{opacity:0; clip-path:inset(0 100% 0 0)}}
+
+.slide.active .a-rise {animation:rise .82s var(--d,0s) both cubic-bezier(.18,.75,.25,1)}
+.slide.active .a-fade {animation:fade 1.05s var(--d,0s) both ease}
+.slide.active .a-slide{animation:slideIn .8s var(--d,0s) both cubic-bezier(.18,.75,.25,1)}
+.slide.active .a-zoom {animation:zoomIn .85s var(--d,0s) both cubic-bezier(.18,.8,.25,1)}
+.slide.active .a-grow {animation:grow 1.05s var(--d,0s) both cubic-bezier(.2,.75,.25,1); transform-origin:left center}
+.slide.active .a-growy{animation:growY .95s var(--d,0s) both cubic-bezier(.2,.75,.25,1); transform-origin:bottom center}
+.slide.active .a-draw {animation:draw 1.5s var(--d,0s) both cubic-bezier(.3,.7,.3,1)}
+.slide.active .a-pop  {animation:pop .6s var(--d,0s) both cubic-bezier(.2,1.5,.4,1)}
+.slide.active .a-sweep{animation:sweep 1.1s var(--d,0s) both cubic-bezier(.2,.75,.25,1)}
+.a-draw{stroke-dasharray:var(--len); stroke-dashoffset:0}
+
+/* ============================================================
+   STYLES DE MAQUETTE — propres à ce diaporama
+   ============================================================
+   Échelle typographique, blocs graphiques, figures chiffrées,
+   planche de références, couverture. Écrits à chaque génération.
+   ============================================================ */
+
+/* ---- Titres ---- */
+h1{font-family:var(--serif); font-weight:400; font-size:calc(62px * var(--ed)); line-height:1.06;
+   letter-spacing:-.022em; margin:calc(26px * var(--e)) 0 0; max-width:1000px}
+h2{font-family:var(--serif); font-weight:400; font-size:calc(39px * var(--ed)); line-height:1.13;
+   letter-spacing:-.018em; margin:calc(15px * var(--e)) 0 0; color:var(--ink); max-width:1070px}
+.lede{font-size:calc(16px * var(--e)); line-height:1.6; font-weight:300; color:var(--ink-70);
+   margin:calc(14px * var(--e)) 0 0; max-width:1000px}
+.lede b{font-weight:600; color:var(--ink)}
+.lede em{font-style:italic; color:var(--ink)}
+
+/* ---- Fonds foncés ---- */
+.dark h1{font-size:calc(62px * var(--ed)); max-width:1010px}
+.dark .sub{font-size:calc(18px * var(--e)); color:rgba(255,255,255,.74); margin-top:calc(22px * var(--e));
+   font-weight:300; max-width:840px; line-height:1.55}
+.dark .who{margin-top:calc(40px * var(--e)); padding-top:calc(20px * var(--e));
+   border-top:1px solid rgba(255,255,255,.16); font-size:calc(13.4px * var(--e));
+   color:rgba(255,255,255,.62); letter-spacing:.04em}
+.dark .who b{color:#fff; font-weight:600}
+.dk-h{font-family:var(--serif); font-weight:400; font-size:calc(50px * var(--ed)); line-height:1.12;
+   color:#fff; max-width:960px; margin:calc(20px * var(--e)) 0 0; letter-spacing:-.018em}
+.dk-p{font-size:calc(17px * var(--e)); color:rgba(255,255,255,.72); font-weight:300;
+   margin-top:calc(20px * var(--e)); max-width:800px; line-height:1.55}
+.dk-p b{color:var(--accent-2); font-weight:600}
+.dark .closer{margin-top:calc(30px * var(--e)); font-family:var(--serif);
+   font-size:calc(22px * var(--ed)); font-weight:300; font-style:italic; color:var(--accent-2);
+   max-width:820px; line-height:1.4}
+
+/* ---- Note de bas de carte ---- */
+.note{margin-top:calc(14px * var(--e)); font-size:calc(12.4px * var(--e)); color:var(--ink-50);
+  font-weight:300; font-style:italic; border-left:2px solid var(--accent-wash);
+  padding-left:calc(13px * var(--e)); line-height:1.5}
+.note b{color:var(--ink-70); font-weight:600; font-style:normal}
+.src{font-size:calc(11.4px * var(--e)); color:var(--ink-50); font-weight:400; font-style:normal;
+  letter-spacing:.02em}
+
+/* ---- Les FIGURES occupent la place donnée ; les boîtes de texte, jamais ---- */
+.body > .figrow, .body > .quant, .body > .asym, .body > .hub{flex:1 1 auto}
+
+/* ---- Planche Références ---- */
+.refs{display:grid; grid-template-columns:1.75fr 1fr; gap:calc(24px * var(--e)); margin:auto 0}
+.panel{border:1px solid var(--line); border-radius:calc(12px * var(--e)); background:var(--paper);
+  padding:calc(18px * var(--e)) calc(20px * var(--e)); display:flex; flex-direction:column}
+.panel .pk{font-size:calc(10.4px * var(--e)); font-weight:700; letter-spacing:.15em;
+  text-transform:uppercase; color:var(--accent); margin-bottom:calc(12px * var(--e))}
+.panel .rf{font-size:calc(11.9px * var(--e)); line-height:1.48; color:var(--ink-70);
+  font-weight:300; padding-bottom:calc(8px * var(--e))}
+.panel .rf b{color:var(--ink); font-weight:600}
+.panel.short{justify-content:space-between}
+
+/* ---- Surtitre : chiffre de message ---- */
+.eyebrow{font-size:calc(10.5px * var(--e)); font-weight:700; letter-spacing:.24em; text-transform:uppercase;
+  color:var(--accent); display:flex; align-items:center; gap:calc(12px * var(--e))}
+.eyebrow::after{content:''; flex:1; height:1px;
+  background:linear-gradient(90deg,var(--accent),rgba(14,149,148,0))}
+.dark .eyebrow{color:var(--accent-2); justify-content:center}
+.dark .eyebrow::after{flex:0 0 calc(56px * var(--e))}
+.dark .eyebrow::before{content:''; flex:0 0 calc(56px * var(--e)); height:1px;
+  background:linear-gradient(270deg,var(--accent-2),rgba(23,179,163,0))}
+
+/* ---- Le pharmakon : deux faces d'une même chose ---- */
+.pharma{display:grid; grid-template-columns:1fr calc(64px * var(--e)) 1fr; align-items:stretch;
+  gap:calc(6px * var(--e))}
+.face{border-radius:calc(13px * var(--e)); padding:calc(20px * var(--e)) calc(23px * var(--e));
+  display:flex; flex-direction:column; justify-content:flex-start; border:1px solid var(--line)}
+.face.a{background:linear-gradient(140deg,rgba(14,149,148,.11),rgba(14,149,148,.02));
+  border-color:rgba(14,149,148,.30)}
+.face.b{background:linear-gradient(220deg,rgba(179,84,30,.10),rgba(179,84,30,.02));
+  border-color:rgba(179,84,30,.30)}
+.face .fk{font-size:calc(10.6px * var(--e)); font-weight:700; letter-spacing:.15em;
+  text-transform:uppercase; color:var(--accent)}
+.face.b .fk{color:#B3541E}
+.face .ft{font-family:var(--serif); font-size:calc(23px * var(--ed)); font-weight:500;
+  margin-top:calc(7px * var(--e)); color:var(--ink); line-height:1.2}
+.face .fp{font-size:calc(12.8px * var(--e)); line-height:1.55; color:var(--ink-70);
+  margin-top:calc(9px * var(--e)); font-weight:300}
+.face .fp b{color:var(--ink); font-weight:600}
+.pivot{display:flex; flex-direction:column; align-items:center; justify-content:center;
+  font-family:var(--serif); font-size:calc(17px * var(--ed)); color:var(--accent); font-style:italic}
+.pivot span{writing-mode:vertical-rl; text-orientation:mixed; letter-spacing:.06em}
+
+/* ---- Un message : énoncé + développement ---- */
+.msg{display:grid; grid-template-columns:calc(78px * var(--e)) 1fr; gap:calc(24px * var(--e));
+  align-items:start}
+.msg .num{font-family:var(--serif); font-size:calc(78px * var(--ed)); font-weight:400;
+  color:var(--accent-wash); line-height:.9; font-variant-numeric:tabular-nums;
+  -webkit-text-stroke:1px var(--accent)}
+.msg .txt{display:flex; flex-direction:column; justify-content:flex-start}
+.msg .claim{font-family:var(--serif); font-size:calc(27px * var(--ed)); font-weight:500;
+  color:var(--ink); line-height:1.24}
+.msg .devel{font-size:calc(13.6px * var(--e)); line-height:1.6; color:var(--ink-70);
+  margin-top:calc(13px * var(--e)); font-weight:300}
+.msg .devel b{color:var(--ink); font-weight:600}
+.msg .devel + .devel{margin-top:calc(10px * var(--e))}
+.punch{margin-top:calc(15px * var(--e)); padding:calc(14px * var(--e)) calc(20px * var(--e));
+  border-radius:calc(11px * var(--e)); background:linear-gradient(120deg,rgba(14,149,148,.10),rgba(29,78,137,.05));
+  border-left:3px solid var(--accent); font-family:var(--serif);
+  font-size:calc(19px * var(--ed)); line-height:1.34; color:var(--ink); font-weight:400}
+
+/* ---- Jauges de confiance ---- */
+.mini{display:flex; gap:calc(11px * var(--e)); margin-top:calc(13px * var(--e)); flex-wrap:wrap}
+.mn{padding:calc(9px * var(--e)) calc(15px * var(--e)); border-radius:calc(9px * var(--e));
+  background:var(--paper); border:1px solid var(--line);
+  display:flex; flex-direction:column; align-items:flex-start}
+.mn .mv2{font-family:var(--serif); font-size:calc(25px * var(--ed)); font-weight:500;
+  color:var(--accent); line-height:1; font-variant-numeric:tabular-nums}
+.mn .ml{font-size:calc(11px * var(--e)); color:var(--ink-50); margin-top:calc(4px * var(--e))}
+
+/* ---- Ressources, classées par usage ---- */
+.res{display:grid; grid-template-columns:repeat(3,1fr); gap:calc(14px * var(--e)) calc(18px * var(--e))}
+.rc{border:1px solid var(--line); border-radius:calc(11px * var(--e)); background:var(--paper);
+  padding:calc(15px * var(--e)) calc(17px * var(--e));
+  display:flex; flex-direction:column; justify-content:flex-start}
+.rc .rk{font-size:calc(10.2px * var(--e)); font-weight:700; letter-spacing:.14em;
+  text-transform:uppercase; color:var(--accent)}
+.rc .rl{font-size:calc(12.3px * var(--e)); line-height:1.52; color:var(--ink-70);
+  margin-top:calc(8px * var(--e)); font-weight:300}
+.rc .rl b{color:var(--ink); font-weight:600}
+
+
+/* ============================================================
+   IMPRESSION / EXPORT PDF
+   ============================================================ */
+@page{ size:1280px 720px; margin:0 }
+@media print{
+  html,body{overflow:visible; background:#fff; height:auto}
+  .rail,.nav,.hint{display:none !important}
+  .app{display:block; height:auto}
+  .stage{display:block; height:auto; background:#fff; overflow:visible}
+  .deck{
+    width:auto; height:auto; transform:none !important;
+    box-shadow:none; border-radius:0; position:static
+  }
+  .slide{
+    position:relative; inset:auto; display:block;
+    width:1280px; height:720px; opacity:1 !important; visibility:visible !important;
+    page-break-after:always; break-after:page; overflow:hidden;
+    -webkit-print-color-adjust:exact; print-color-adjust:exact;
+  }
+  .slide.dark{display:flex}
+  .slide:last-child{page-break-after:auto; break-after:auto}
+  .slide *{animation:none !important; transition:none !important}
+}
+</style>
+
+<div class="app" id="app">
+
+  <!-- ================= COLONNE MINIATURES ================= -->
+  <aside class="rail">
+    <div class="rail-head">
+      <a class="rail-back" href="index.html">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18 9 12l6-6"/></svg>
+        Retour à la conférence
+      </a>
+      <div class="rail-kicker">Conférence · FGV</div>
+      <div class="rail-title">Module 6 — Synthèse & échange</div>
+      <div class="rail-meta">8 cartes · conférence · 20 min</div>
+    </div>
+    <div class="thumbs" id="thumbs"></div>
+    <div class="rail-foot">
+      <button class="btn" id="btnFs">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M8 3H5a2 2 0 0 0-2 2v3M16 3h3a2 2 0 0 1 2 2v3M8 21H5a2 2 0 0 1-2-2v-3M16 21h3a2 2 0 0 0 2-2v-3"/></svg>
+        Plein écran <span class="k">F</span>
+      </button>
+      <button class="btn" id="btnPdf">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0 4-4m-4 4-4-4M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg>
+        Exporter en PDF <span class="k">P</span>
+      </button>
+    </div>
+  </aside>
+
+  <!-- ================= SCÈNE ================= -->
+  <main class="stage" id="stage">
+    <div class="hint">Échap pour quitter le plein écran</div>
+    <div class="deck" id="deck">
+
+<section class="slide dark active" data-label="Couverture">
+  <div class="eyebrow a-fade" style="--d:.1s">Module 6 · Conférence FGV</div>
+  <h1 class="a-rise" style="--d:.25s">Synthèse &amp; échange</h1>
+  <p class="sub a-rise" style="--d:.5s">Quatre heures, six modules, et un fil unique. Ce dernier temps ne
+     résume pas la matinée — <b>il en extrait trois messages, et trois seulement</b>.</p>
+  <div class="who a-fade" style="--d:.85s"><b>Robert Voyer</b> · MCF IA &amp; Éthique, IMT-BS · 20 min</div>
+</section>
+
+<section class="slide" data-label="Le fil — un pharmakon" style="--e:1.6">
+  <div class="top">
+    <div class="eyebrow a-fade">Le fil de la matinée</div>
+    <h2 class="a-rise" style="--d:.12s">Nous avons refusé deux facilités symétriques</h2>
+  </div>
+  <div class="body">
+    <div class="pharma">
+      <div class="face a a-rise" style="--d:.3s">
+        <div class="fk">Le remède</div>
+        <div class="ft">L'enthousiasme</div>
+        <div class="fp">Présenter ces outils comme une révolution sans revers. C'est le discours des
+           fournisseurs, et il n'est pas entièrement faux — <b>le gain existe, et il est mesurable</b>.
+           Mais il ne dit rien de la dette, de la sécurité, ni de la compétence qui s'émousse.</div>
+      </div>
+      <div class="pivot a-fade" style="--d:.5s"><span>φάρμακον</span></div>
+      <div class="face b a-rise" style="--d:.42s">
+        <div class="fk">Le poison</div>
+        <div class="ft">La défiance</div>
+        <div class="fp">Les traiter comme une menace à contenir. C'est le réflexe des organisations
+           prudentes, et il n'est pas non plus entièrement faux — <b>les risques sont documentés</b>.
+           Mais l'interdiction ne supprime pas l'usage : elle le rend invisible.</div>
+      </div>
+    </div>
+    <div class="note a-fade" style="--d:.68s">Ce n'est pas une prudence de langage, c'est une position —
+       et elle a des conséquences. <b>Elle interdit la question « faut-il y aller ? », qui n'a pas de
+       réponse. Elle impose la question « à quelles conditions ? », qui en a plusieurs — et qui sont les
+       vôtres à formuler.</b> Toute la matinée a consisté à instruire cette seconde question. Rien d'autre.</div>
+  </div>
+  <div class="pageno">2<b>/8</b></div>
+</section>
+
+<section class="slide" data-label="Message 1 — le transfert d'initiative" style="--e:1.45">
+  <div class="top">
+    <div class="eyebrow a-fade">Premier message essentiel</div>
+  </div>
+  <div class="body">
+    <div class="msg">
+      <div class="num a-pop" style="--d:.2s">1</div>
+      <div class="txt">
+        <div class="claim a-rise" style="--d:.3s">D'assistant à agent : un changement de paradigme,
+           non une amélioration incrémentale.</div>
+        <div class="devel a-rise" style="--d:.44s">Entre l'outil qui complétait vos lignes en 2022 et
+           celui qui accomplit une tâche entière en 2026, il n'y a pas une différence de puissance :
+           <b>il y a une différence de nature</b>. Dans la complétion, l'initiative reste au développeur
+           et le contrôle s'exerce ligne à ligne. Dans la délégation, l'initiative se déplace et le
+           contrôle devient rétrospectif.</div>
+        <div class="devel a-rise" style="--d:.56s">Ce <b>transfert d'initiative</b> est le fait central
+           de la matinée — et vous l'avez vu s'accomplir au Module 4 : entre l'objectif donné et le
+           résultat rendu, des dizaines de décisions que personne n'a validées.</div>
+        <div class="punch a-rise" style="--d:.7s">Le transfert est <b>asymétrique</b> : l'initiative se
+           déplace, la responsabilité ne bouge pas d'un pouce. Celui qui met en production répond de ce
+           qu'il met en production, qu'il l'ait écrit ou fait écrire.</div>
+      </div>
+    </div>
+  </div>
+  <div class="pageno">3<b>/8</b></div>
+</section>
+
+<section class="slide" data-label="Message 2 — à quelles conditions" style="--e:1.4">
+  <div class="top">
+    <div class="eyebrow a-fade">Deuxième message essentiel</div>
+  </div>
+  <div class="body">
+    <div class="msg">
+      <div class="num a-pop" style="--d:.2s">2</div>
+      <div class="txt">
+        <div class="claim a-rise" style="--d:.3s">En service public : non pas « est-ce possible ? »,
+           mais « à quelles conditions ? »</div>
+        <div class="devel a-rise" style="--d:.44s">La confidentialité ne se règle ni par un contrat, ni
+           par une localisation : <b>le CLOUD Act rappelle que la nationalité de l'opérateur prime sur
+           l'emplacement du serveur</b>. Le RGPD et l'AI Act se cumulent. Et le <i>Shadow AI</i>
+           progresse d'autant plus vite qu'on interdit sans proposer.</div>
+        <div class="devel a-rise" style="--d:.56s">Mais il existe désormais une <b>réponse technique</b>,
+           et c'est ce que ce programme aurait manqué sans y prendre garde : faire venir le calcul à la
+           donnée. L'exécution locale de modèles ouverts n'était pas sérieuse il y a dix-huit mois ;
+           les progrès de 2026 en ont fait une option praticable — avec ses limites, que nous n'avons
+           pas dissimulées.</div>
+        <div class="punch a-rise" style="--d:.7s">Ce qui ne doit pas sortir ne sort pas, quel qu'en soit
+           le coût en qualité ; ce qui peut sortir va au meilleur outil disponible. <b>Cette règle ne
+           vous demande pas d'évaluer des modèles : elle vous demande de classer vos données.</b></div>
+      </div>
+    </div>
+  </div>
+  <div class="pageno">4<b>/8</b></div>
+</section>
+
+<section class="slide" data-label="Message 3 — la littératie" style="--e:1.4">
+  <div class="top">
+    <div class="eyebrow a-fade">Troisième message essentiel</div>
+  </div>
+  <div class="body">
+    <div class="msg">
+      <div class="num a-pop" style="--d:.2s">3</div>
+      <div class="txt">
+        <div class="claim a-rise" style="--d:.3s">La littératie de l'IA : une obligation autant qu'un
+           investissement — et l'humain dans la boucle.</div>
+        <div class="devel a-rise" style="--d:.44s">L'article 4 de l'AI Act vous y oblige depuis le
+           <b>2 février 2025</b>, et cette conférence relève elle-même de cette obligation. Mais réduire
+           la littératie à une conformité serait passer à côté. Voici la raison de fond — et c'est le
+           chiffre le plus intéressant de la matinée.</div>
+        <div class="mini a-fade" style="--d:.56s">
+          <div class="mn"><div class="mv2">84 %</div><div class="ml">utilisent ou envisagent</div></div>
+          <div class="mn"><div class="mv2">46 %</div><div class="ml">se méfient de l'exactitude</div></div>
+          <div class="mn"><div class="mv2">33 %</div><div class="ml">font confiance</div></div>
+          <div class="mn"><div class="mv2">3 %</div><div class="ml">confiance élevée</div></div>
+        </div>
+        <div class="devel a-rise" style="--d:.68s">La profession a massivement adopté un outil auquel
+           elle ne fait pas confiance — et les plus expérimentés sont les plus méfiants. Ce n'est pas
+           une incohérence : <b>c'est la posture normale d'un ingénieur devant un instrument faillible.</b>
+           On se sert d'un thermomètre approximatif ; on ne le croit pas sur parole.
+           <span class="src">Stack Overflow, Developer Survey 2025.</span></div>
+        <div class="punch a-rise" style="--d:.82s">Garder l'humain dans la boucle ne signifie pas garder
+           un humain qui approuve. Cela signifie garder <b>un humain qui comprend</b>. Un clic n'est pas
+           un contrôle.</div>
+      </div>
+    </div>
+  </div>
+  <div class="pageno">5<b>/8</b></div>
+</section>
+
+<section class="slide" data-label="Ressources pour poursuivre" style="--e:1.35">
+  <div class="top">
+    <div class="eyebrow a-fade">Pour poursuivre</div>
+    <h2 class="a-rise" style="--d:.12s">Une conférence ne vaut que par la suite qu'on lui donne</h2>
+  </div>
+  <div class="body">
+    <div class="res">
+      <div class="rc a-rise" style="--d:.28s"><div class="rk">Le cadre juridique</div>
+        <div class="rl">Le règlement <b>(UE) 2024/1689</b>, articles 4 et 50 ; le portail de suivi
+           <i>artificialintelligenceact.eu</i>, article par article. Côté RGPD : les fiches pratiques de
+           la <b>CNIL</b> et sa recommandation du 19 juin 2025 sur l'intérêt légitime.</div></div>
+      <div class="rc a-rise" style="--d:.36s"><div class="rk">La voie souveraine</div>
+        <div class="rl"><b>Albert API</b>, opérée par Etalab au sein de la DINUM, sur infrastructure
+           qualifiée SecNumCloud. Le point d'entrée naturel pour une administration française — non par
+           principe, mais parce qu'il élimine d'emblée les questions les plus lourdes.</div></div>
+      <div class="rc a-rise" style="--d:.44s"><div class="rk">La voie locale</div>
+        <div class="rl"><b>LM Studio</b> pour évaluer sans engagement, <b>Ollama</b> pour déployer.
+           Les familles ouvertes <b>Gemma 4</b> et <b>Qwen 3.8</b> (Apache 2.0) pour les essais. Et
+           <b>OpenCode</b> pour brancher l'un sur l'autre sans dépendance à un fournisseur.</div></div>
+      <div class="rc a-rise" style="--d:.52s"><div class="rk">La sécurité des agents</div>
+        <div class="rl">Le <b>MCP Top 10</b> de l'OWASP, édition 2025, entrée MCP03. La notification
+           d'<b>Invariant Labs</b> du 1ᵉʳ avril 2025, démonstration de référence. Le banc d'essai
+           <b>MCPTox</b> pour l'ordre de grandeur du risque.</div></div>
+      <div class="rc a-rise" style="--d:.60s"><div class="rk">Garder la mesure</div>
+        <div class="rl">Deux études, <b>à lire ensemble et non séparément</b> : GitHub 2022 (~55 % plus
+           vite) et METR, juillet 2025 (+19 % de temps sur des projets réels et matures). Ensemble,
+           elles disent que <b>le sentiment de vitesse n'est pas la vitesse</b>.</div></div>
+      <div class="rc a-rise" style="--d:.68s"><div class="rk">Suivre sans se noyer</div>
+        <div class="rl">Ne suivez pas les produits, suivez les <b>protocoles</b> : MCP pour la relation
+           agent ↔ outils, A2A pour la relation agent ↔ agent. Les deux sont désormais sous gouvernance
+           de la Linux Foundation. <b>Le pari le moins risqué qu'un acheteur public puisse faire.</b></div></div>
+    </div>
+  </div>
+  <div class="pageno">6<b>/8</b></div>
+</section>
+
+<section class="slide dark" data-label="Clôture — des amplificateurs" style="--e:1.4">
+  <div class="eyebrow a-fade">Mot de clôture</div>
+  <h2 class="dk-h a-rise" style="--d:.2s">Ni des sauveurs, ni des menaces :<br>de formidables <b>amplificateurs</b></h2>
+  <p class="dk-p a-rise" style="--d:.5s">Ils amplifient la compétence d'une équipe qui garde la main, la
+     lucidité et le jugement. Ils amplifient tout autant l'imprudence de celle qui s'en remet à eux les
+     yeux fermés.</p>
+  <p class="closer a-fade" style="--d:.8s">Non pas « en avons-nous le droit ? », mais « comment le
+     faisons-nous, et qu'avons-nous prévu quand cela se passera mal ? »</p>
+  <div class="who a-fade" style="--d:1.05s">Je vous remercie. <b>La parole est à vous.</b></div>
+</section>
+
+<section class="slide" data-label="Références" style="--e:1.2">
+  <div class="top">
+    <div class="eyebrow a-fade">Module 6 · bibliographie de sortie</div>
+    <h2 class="a-rise" style="--d:.12s">Références</h2>
+  </div>
+  <div class="body">
+    <div class="refs">
+      <div class="panel a-rise" style="--d:.3s">
+        <div class="pk">Sources primaires</div>
+        <div class="rf"><b>Stack Overflow, Developer Survey 2025</b> — plus de 49 000 répondants,
+           177 pays : 84 % d'usage ou d'intention ; méfiance 46 % / confiance 33 % / confiance élevée 3 %.</div>
+        <div class="rf"><b>METR, 10 juillet 2025</b> — arXiv 2507.09089 : +19 % de temps avec l'IA ;
+           24 % d'accélération attendue, 20 % encore perçue après coup.</div>
+        <div class="rf"><b>GitHub (Kalliamvakou et al.), 2022</b> — tâche accomplie ~55 % plus vite ;
+           étude conduite par le fournisseur de l'outil.</div>
+        <div class="rf"><b>Règlement (UE) 2024/1689 (AI Act), art. 4 et 50</b> — littératie
+           (2 février 2025) ; transparence (2 août 2026).</div>
+        <div class="rf"><b>CNIL, 19 juin 2025</b> — intérêt légitime comme base légale du développement
+           des systèmes d'IA.</div>
+        <div class="rf"><b>Invariant Labs, 1ᵉʳ avril 2025</b> — empoisonnement d'outil et ombrage.
+           <b>MCPTox, 2025</b> — arXiv 2508.14925 : 45 serveurs, 20 modèles, succès maximal 72,8 %.</div>
+        <div class="rf"><b>Gartner, 2025</b> — 69 % de responsables cyber constatant ou soupçonnant
+           l'usage de GenAI publique ; prévision de plus de 40 % d'organisations touchées d'ici 2030.</div>
+      </div>
+      <div class="panel short a-rise" style="--d:.46s">
+        <div class="pk">Repères de contexte</div>
+        <div class="rf"><b>Albert API</b> — Etalab / DINUM, infrastructure SecNumCloud (ANSSI).</div>
+        <div class="rf"><b>Gemma 4</b> (Google, avril 2026) et <b>Qwen 3.8 / 27B</b> (Alibaba,
+           août 2026) — modèles ouverts sous Apache 2.0.</div>
+        <div class="rf"><b>Ollama</b>, <b>LM Studio</b>, <b>OpenCode</b> — exécution locale et agent
+           libre indépendant du fournisseur.</div>
+        <div class="rf"><b>OWASP, MCP Top 10 2025</b> — entrée MCP03, <i>Tool Poisoning</i>.</div>
+        <div class="rf"><b>MCP</b> (Agentic AI Foundation, décembre 2025) et <b>A2A</b> (Linux
+           Foundation, juin 2025 ; fusion d'ACP en août 2025).</div>
+        <div class="rf"><b>CLOUD Act</b> (2018), <b>Schrems II</b> (2020), <b>Data Privacy
+           Framework</b> (2023).</div>
+      </div>
+    </div>
+  </div>
+  <div class="pageno">8<b>/8</b></div>
+</section>
+
+    </div>
+
+    <div class="nav" id="nav">
+      <button id="prev" title="Précédent (←)">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+      </button>
+      <span class="count" id="count">1 / 8</span>
+      <button id="next" title="Suivant (→)">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+      </button>
+    </div>
+  </main>
+</div>
+
+<script>
+(function(){
+  const deck   = document.getElementById('deck');
+  const stage  = document.getElementById('stage');
+  const slides = Array.from(deck.querySelectorAll('.slide'));
+  const thumbs = document.getElementById('thumbs');
+  const count  = document.getElementById('count');
+  const N = slides.length;
+  let cur = 0;
+
+  /* ---------- Miniatures : véritables clones à l'échelle ---------- */
+  slides.forEach((s, i) => {
+    const wrap = document.createElement('div');
+    wrap.className = 'thumb';
+    const clone = s.cloneNode(true);
+    clone.classList.remove('active');
+    clone.classList.add('tvis');
+    // Les animations ne s'appliquent que sous « .slide.active » : le clone,
+    // jamais actif, affiche donc d'emblée l'état final. Rien à neutraliser.
+    wrap.innerHTML =
+      '<div class="thumb-no">' + (i+1) + '</div>' +
+      '<div class="thumb-box"><div class="thumb-scale"></div></div>' +
+      '<div class="thumb-label">' + (s.dataset.label || ('Carte ' + (i+1))) + '</div>';
+    wrap.querySelector('.thumb-scale').appendChild(clone);
+    wrap.addEventListener('click', () => go(i));
+    thumbs.appendChild(wrap);
+  });
+  const thumbEls = Array.from(thumbs.querySelectorAll('.thumb'));
+
+  /* ---------- Navigation + relance des animations ---------- */
+  function go(i){
+    if(i < 0 || i > N-1) return;
+    const s = slides[i];
+    slides.forEach(x => x.classList.remove('active'));
+    void s.offsetWidth;              // reflow : rejoue les animations en cascade
+    s.classList.add('active');
+    cur = i;
+    thumbEls.forEach((t,k) => t.classList.toggle('on', k === i));
+    count.textContent = (i+1) + ' / ' + N;
+    document.getElementById('prev').disabled = (i === 0);
+    document.getElementById('next').disabled = (i === N-1);
+    thumbEls[i].scrollIntoView({block:'nearest', behavior:'smooth'});
+  }
+  document.getElementById('prev').onclick = () => go(cur-1);
+  document.getElementById('next').onclick = () => go(cur+1);
+
+  /* ---------- Mise à l'échelle de la carte ---------- */
+  function fit(){
+    const pad = document.fullscreenElement ? 0 : 56;
+    const r = stage.getBoundingClientRect();
+    const s = Math.min((r.width - pad) / 1280, (r.height - pad) / 720);
+    deck.style.transform = 'scale(' + s + ')';
+  }
+  window.addEventListener('resize', fit);
+
+  /* ---------- Plein écran (Échap pour sortir) ---------- */
+  function toggleFs(){
+    if(document.fullscreenElement) document.exitFullscreen();
+    else stage.requestFullscreen && stage.requestFullscreen();
+  }
+  document.getElementById('btnFs').onclick = toggleFs;
+  document.addEventListener('fullscreenchange', () => {
+    fit(); setTimeout(fit, 130);          // la scène n'a pas fini de se redimensionner
+    go(cur); wake();
+  });
+
+  /* ---------- Masquage de l'interface au repos (plein écran) ---------- */
+  let idleT;
+  function wake(){
+    stage.classList.remove('idle');
+    clearTimeout(idleT);
+    if(document.fullscreenElement) idleT = setTimeout(() => stage.classList.add('idle'), 2600);
+  }
+  stage.addEventListener('mousemove', wake);
+
+  /* ---------- Export PDF ---------- */
+  function toPdf(){
+    const wasFs = !!document.fullscreenElement;
+    const finish = () => window.print();
+    if(wasFs) document.exitFullscreen().then(() => setTimeout(finish, 260));
+    else finish();
+  }
+  document.getElementById('btnPdf').onclick = toPdf;
+
+  /* ---------- Clavier ---------- */
+  document.addEventListener('keydown', e => {
+    if(e.metaKey || e.ctrlKey || e.altKey) return;   // laisse passer Cmd+P natif
+    if(e.key === 'ArrowRight' || e.key === 'PageDown' || e.key === ' '){ e.preventDefault(); go(cur+1); }
+    else if(e.key === 'ArrowLeft' || e.key === 'PageUp'){ e.preventDefault(); go(cur-1); }
+    else if(e.key === 'Home'){ go(0); }
+    else if(e.key === 'End'){ go(N-1); }
+    else if(e.key === 'f' || e.key === 'F'){ toggleFs(); }
+    else if(e.key === 'p' || e.key === 'P'){ e.preventDefault(); toPdf(); }
+  });
+
+  fit();
+  go(0);
+})();
+</script>
