@@ -1,0 +1,1377 @@
+<!-- =============================================================
+     ÉCHAFAUDAGE — diaporama pédagogique Robert Voyer
+     =============================================================
+     Ce fichier porte la POLITIQUE (ce qui ne varie jamais) :
+     rail de miniatures, plein écran, export PDF, navigation clavier,
+     numérotation, lien de retour, métadonnées de publication.
+
+     Il ne porte PAS la MAQUETTE. Tout ce qui relève du dessin d'une
+     diapositive — échelle typographique, blocs graphiques, dégradés,
+     mise en page des cartes — s'écrit à chaque génération, sous le
+     repère « STYLES DE MAQUETTE ».
+
+     Les repères {{...}} sont à remplacer.
+     ============================================================= -->
+<meta charset="utf-8">
+<title>Écrits professionnels et IA générative — formation</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<!-- Métadonnées de publication — lues par l'étape de mise en ligne -->
+<meta name="pedago:chemin"  content="formations/ecrits-professionnels-ia">
+<meta name="pedago:famille" content="formation">
+<meta name="pedago:titre"   content="Gagner du temps dans les écrits professionnels grâce aux IA génératives">
+<meta name="pedago:rang"    content="1">
+<meta name="pedago:mode"    content="formation">
+<meta name="pedago:cartes"  content="44">
+<meta name="pedago:resume"  content="Formation d'une journée : ce qu'une IA générative sait et ne sait pas faire, ce qu'on peut lui confier, comment lui demander, comment vérifier. Huit exercices avec leurs solutions.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+/* ============================================================
+   CHARTE — variables de couleur et de fonte
+   ============================================================ */
+:root{
+  --ink:#0B2545;          /* marine profond — texte principal */
+  --ink-2:#13315C;
+  --blue:#1D4E89;
+  --blue-soft:#6E9BD1;
+  --accent:#0E9594;       /* vert-sarcelle */
+  --accent-2:#17B3A3;
+  --accent-wash:rgba(14,149,148,.10);
+  --accent-glow:rgba(14,149,148,.22);
+  --bg:#EEF3F8;
+  --card:#FFFFFF;
+  --paper:#F7FAFC;
+  --line:rgba(11,37,69,.11);
+  --ink-70:rgba(11,37,69,.72);
+  --ink-50:rgba(11,37,69,.52);
+  --stage-bg:radial-gradient(1100px 620px at 50% 8%, #fff 0%, rgba(255,255,255,0) 62%), #EEF3F8;
+  --dark-bg:radial-gradient(900px 560px at 22% 12%, #1B4A7E 0%, rgba(27,74,126,0) 60%),
+            radial-gradient(700px 500px at 88% 92%, rgba(14,149,148,.34) 0%, rgba(14,149,148,0) 62%),
+            linear-gradient(150deg,#0B2545 0%,#0A1E3A 100%);
+  --serif:'Fraunces','Iowan Old Style',Georgia,'Times New Roman',serif;
+  --sans:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;
+
+  --W:1280px; --H:720px;
+}
+
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0; background:var(--bg); color:var(--ink);
+  font-family:var(--sans); -webkit-font-smoothing:antialiased;
+  overflow:hidden;
+}
+
+/* ============================================================
+   COQUE — colonne de miniatures + scène
+   ============================================================ */
+.app{display:flex; height:100vh; width:100vw}
+
+/* Largeur du rail = 16 (marge) + 22 (colonne du numéro) + 212 (vignette)
+   + 16 (marge) + 6 (barre de défilement) = 272. Toute autre valeur fait
+   déborder la vignette et sortir une barre de défilement horizontale. */
+.rail{
+  width:272px; flex:0 0 272px; height:100vh;
+  background:#fff; border-right:1px solid var(--line);
+  display:flex; flex-direction:column;
+  box-shadow:0 0 40px rgba(0,0,0,.06); z-index:5;
+}
+.rail-head{padding:20px 18px 14px; border-bottom:1px solid var(--line)}
+
+/* Lien de retour vers l'index du cours / de la formation / de la conférence.
+   Il vit dans le rail, jamais dans la scène : le rail est masqué en plein
+   écran et à l'impression, le lien n'apparaît donc pas en projection. */
+.rail-back{
+  display:inline-flex; align-items:center; gap:6px;
+  margin-bottom:12px;
+  font-size:10.5px; font-weight:500; letter-spacing:.02em;
+  color:var(--ink-50); text-decoration:none;
+  transition:color .18s;
+}
+.rail-back:hover{color:var(--accent)}
+.rail-back:focus-visible{outline:2px solid var(--accent); outline-offset:3px; border-radius:3px}
+.rail-back svg{width:11px; height:11px; flex:0 0 11px}
+
+.rail-kicker{
+  font-size:9.5px; letter-spacing:.18em; text-transform:uppercase;
+  color:var(--accent); font-weight:700
+}
+.rail-title{
+  font-family:var(--serif); font-size:17px; line-height:1.25;
+  font-weight:500; margin-top:7px; color:var(--ink)
+}
+.rail-meta{font-size:11px; color:var(--ink-50); margin-top:6px}
+
+.thumbs{flex:1; overflow-y:auto; overflow-x:hidden; padding:14px 16px 18px; scrollbar-width:thin}
+.thumbs::-webkit-scrollbar{width:6px}
+.thumbs::-webkit-scrollbar-thumb{background:rgba(0,0,0,.16); border-radius:3px}
+
+.thumb{
+  position:relative; margin-bottom:13px; cursor:pointer;
+  border-radius:8px; padding-left:22px;
+  transition:transform .22s cubic-bezier(.2,.7,.3,1);
+}
+.thumb:hover{transform:translateX(2px)}
+.thumb-no{
+  position:absolute; left:0; top:50%; transform:translateY(-50%);
+  font-size:10.5px; font-weight:600; color:var(--ink-50);
+  font-variant-numeric:tabular-nums; transition:color .2s
+}
+.thumb-box{
+  position:relative; width:212px; height:119.25px; overflow:hidden;
+  border-radius:7px; background:#fff;
+  border:1px solid var(--line);
+  box-shadow:0 2px 8px rgba(0,0,0,.07);
+  transition:box-shadow .25s, border-color .25s;
+}
+.thumb-box::after{
+  content:''; position:absolute; inset:0; border-radius:7px;
+  box-shadow:inset 0 0 0 2px transparent; transition:box-shadow .25s
+}
+.thumb.on .thumb-box::after{box-shadow:inset 0 0 0 2px var(--accent)}
+.thumb.on .thumb-box{box-shadow:0 6px 20px var(--accent-glow)}
+.thumb.on .thumb-no{color:var(--accent); font-weight:700}
+/* La miniature est un clone de la carte à l'échelle : le facteur vaut la
+   largeur de la vignette divisée par celle de la toile (212 / 1280). */
+.thumb-scale{
+  position:absolute; top:0; left:0; width:var(--W); height:var(--H);
+  transform:scale(.16563); transform-origin:0 0; pointer-events:none;
+}
+.thumb-label{
+  font-size:10.5px; color:var(--ink-50); margin-top:5px;
+  letter-spacing:.01em; white-space:nowrap; overflow:hidden; text-overflow:ellipsis
+}
+.thumb.on .thumb-label{color:var(--ink-70); font-weight:500}
+
+.rail-foot{padding:13px 16px 16px; border-top:1px solid var(--line); display:grid; gap:8px}
+.btn{
+  display:flex; align-items:center; gap:9px; width:100%;
+  padding:9px 12px; border-radius:8px; border:1px solid var(--line);
+  background:var(--paper); color:var(--ink-70);
+  font-family:var(--sans); font-size:12px; font-weight:500;
+  cursor:pointer; transition:all .18s;
+}
+.btn:hover{background:var(--ink); color:#fff; border-color:var(--ink)}
+.btn svg{width:14px; height:14px; flex:0 0 14px}
+.btn .k{margin-left:auto; font-size:9.5px; opacity:.5; letter-spacing:.06em}
+
+/* ---- Scène ---- */
+.stage{
+  flex:1; position:relative; display:flex; align-items:center; justify-content:center;
+  background:var(--stage-bg);
+  overflow:hidden;
+}
+/* « flex:0 0 auto » n'est pas décoratif : .deck est un élément flex de la
+   scène. Sans lui, dès que la fenêtre est plus étroite que la toile, la scène
+   le rétrécit et son overflow:hidden rogne la carte — d'autant plus que la
+   toile est large. */
+.deck{
+  position:relative; flex:0 0 auto; width:var(--W); height:var(--H);
+  transform-origin:center center;
+  border-radius:14px; overflow:hidden;
+  box-shadow:0 26px 70px rgba(0,0,0,.20), 0 2px 6px rgba(0,0,0,.08);
+}
+.stage:fullscreen{background:var(--ink)}
+.stage:fullscreen .deck{border-radius:0; box-shadow:none}
+
+.nav{
+  position:absolute; bottom:22px; left:50%; transform:translateX(-50%);
+  display:flex; align-items:center; gap:6px; z-index:10;
+  background:rgba(255,255,255,.86); backdrop-filter:blur(14px);
+  border:1px solid var(--line); border-radius:999px; padding:5px 6px;
+  box-shadow:0 6px 22px rgba(0,0,0,.14);
+  transition:opacity .4s;
+}
+.nav button{
+  width:30px; height:30px; border-radius:50%; border:0; background:transparent;
+  color:var(--ink-70); cursor:pointer; display:grid; place-items:center; transition:.16s
+}
+.nav button:hover{background:var(--ink); color:#fff}
+.nav button:disabled{opacity:.25; cursor:default; background:transparent; color:var(--ink-70)}
+.nav .count{
+  font-size:11.5px; font-weight:600; color:var(--ink-70);
+  font-variant-numeric:tabular-nums; padding:0 9px; letter-spacing:.04em
+}
+.stage.idle .nav{opacity:0}
+
+.hint{
+  position:absolute; top:16px; right:18px; z-index:10;
+  font-size:10.5px; color:var(--ink-50); letter-spacing:.05em;
+  background:rgba(255,255,255,.8); padding:5px 11px; border-radius:999px;
+  border:1px solid var(--line); transition:opacity .4s
+}
+.stage:not(:fullscreen) .hint{display:none}
+.stage.idle .hint{opacity:0}
+
+/* ============================================================
+   DIAPOSITIVES — socle structurel
+   ============================================================ */
+/* La carte est une colonne : une tête de hauteur naturelle, un corps qui
+   occupe toute la hauteur restante. Sans cela, le contenu s'arrête où il
+   s'arrête et laisse une bande morte en bas — le déséquilibre le plus
+   visible d'un diaporama, et le plus fréquent aux faibles densités.
+
+   L'ÉCHELLE DE LA CARTE (--e) est le vrai remède à ce déséquilibre. Une carte
+   qui porte peu de matière ne se remplit pas en écartant ses blocs : elle se
+   remplit en s'écrivant plus grand. Toutes les tailles de la maquette doivent
+   donc s'exprimer en calc(Npx * var(--e)), et --e se pose carte par carte,
+   à la mesure — style="--e:1.4" sur la <section>.
+
+   Les grandes tailles suivent --ed, une échelle amortie : sans cela un titre
+   de carte rejoint la taille du titre de couverture et la hiérarchie
+   s'effondre. */
+.slide{
+  --e:1;
+  --ed:calc(1 + (var(--e) - 1) * .45);
+  position:absolute; inset:0; width:var(--W); height:var(--H);
+  padding:52px 66px 48px; background:var(--card);
+  opacity:0; visibility:hidden; z-index:1;
+  transition:opacity .5s ease;
+  display:flex; flex-direction:column;
+}
+.slide.active{opacity:1; visibility:visible; z-index:2}
+.thumb-scale .slide{opacity:0; visibility:hidden}
+.thumb-scale .slide.tvis{opacity:1; visibility:visible}
+
+/* Le titre reste en haut ; c'est le corps qui se répartit. */
+.top{flex:0 0 auto}
+.body{
+  flex:1 1 auto; min-height:0;
+  display:flex; flex-direction:column;
+  gap:15px; padding-top:17px;
+  justify-content:center;   /* le résidu se partage, il ne s'accumule pas */
+}
+/* Seules les FIGURES occupent la place qu'on leur donne : une frise, une
+   chaîne, une table, des barres grandissent honnêtement, leurs éléments
+   grandissant avec elles. Ajouter ici les figures propres à la maquette.
+
+   Une boîte de TEXTE, jamais. L'étirer n'ajoute pas un mot ; cela creuse un
+   vide au bas de la boîte, ou pire — avec space-between — entre l'énoncé et
+   son explication, à l'endroit exact où le lien de lecture doit tenir. */
+.body > .frise,
+.body > .chain,
+.body > .panelrow,
+.body > .stack{flex:1 1 auto}
+.stack{display:flex; flex-direction:column; gap:15px; justify-content:center}
+.stack > .frise,
+.stack > .chain{flex:1 1 auto}
+
+/* Fond plein foncé : couverture, intertitres, clôture.
+   Le titre y est centré — c'est une règle de forme, pas une maquette.
+   Le dégradé lui-même relève de la charte. */
+.slide.dark{
+  background:var(--dark-bg);
+  color:#fff;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  text-align:center;
+}
+
+/* Numéro de carte — uniquement sur fond clair, jamais sur .dark.
+   Position, taille et style constants d'une vue à l'autre. */
+.pageno{
+  position:absolute; right:40px; bottom:30px;
+  font-size:11.5px; font-weight:600; letter-spacing:.1em;
+  color:var(--ink-50); font-variant-numeric:tabular-nums;
+}
+.pageno b{color:var(--accent); font-weight:700}
+
+/* ============================================================
+   ANIMATIONS — rejouées à chaque arrivée sur la carte
+   ============================================================
+   Les règles sont portées par « .slide.active » : quitter puis revenir
+   sur une carte relance la cascade. C'est ce qui rend l'animation
+   cinématique plutôt que jouée une seule fois au chargement.
+   Régler le décalage par l'attribut style="--d:.35s". */
+@keyframes rise{from{opacity:0; transform:translateY(26px)}}
+@keyframes fade{from{opacity:0}}
+@keyframes slideIn{from{opacity:0; transform:translateX(-30px)}}
+@keyframes zoomIn{from{opacity:0; transform:scale(.9)}}
+@keyframes grow{from{transform:scaleX(0)}}
+@keyframes growY{from{transform:scaleY(0)}}
+@keyframes draw{from{stroke-dashoffset:var(--len)}}
+@keyframes pop{from{opacity:0; transform:scale(.3)}}
+@keyframes sweep{from{opacity:0; clip-path:inset(0 100% 0 0)}}
+
+.slide.active .a-rise {animation:rise .82s var(--d,0s) both cubic-bezier(.18,.75,.25,1)}
+.slide.active .a-fade {animation:fade 1.05s var(--d,0s) both ease}
+.slide.active .a-slide{animation:slideIn .8s var(--d,0s) both cubic-bezier(.18,.75,.25,1)}
+.slide.active .a-zoom {animation:zoomIn .85s var(--d,0s) both cubic-bezier(.18,.8,.25,1)}
+.slide.active .a-grow {animation:grow 1.05s var(--d,0s) both cubic-bezier(.2,.75,.25,1); transform-origin:left center}
+.slide.active .a-growy{animation:growY .95s var(--d,0s) both cubic-bezier(.2,.75,.25,1); transform-origin:bottom center}
+.slide.active .a-draw {animation:draw 1.5s var(--d,0s) both cubic-bezier(.3,.7,.3,1)}
+.slide.active .a-pop  {animation:pop .6s var(--d,0s) both cubic-bezier(.2,1.5,.4,1)}
+.slide.active .a-sweep{animation:sweep 1.1s var(--d,0s) both cubic-bezier(.2,.75,.25,1)}
+.a-draw{stroke-dasharray:var(--len); stroke-dashoffset:0}
+
+/* ============================================================
+   STYLES DE MAQUETTE — propres à ce diaporama
+   ============================================================
+   Échelle typographique, blocs graphiques, figures chiffrées,
+   planche de références, couverture. Écrits à chaque génération.
+   ============================================================ */
+
+/* ---- tête de carte ---- */
+.ey{font-size:calc(11px * var(--e)); letter-spacing:.17em; text-transform:uppercase;
+    color:var(--accent); font-weight:700}
+h2{font-family:var(--serif); font-weight:400; margin:.16em 0 0;
+   font-size:calc(37px * var(--ed)); line-height:1.1; color:var(--ink);
+   letter-spacing:-.005em}
+.lede{margin:.55em 0 0; font-size:calc(15px * var(--e)); line-height:1.5;
+      color:var(--ink-70); max-width:74ch}
+
+/* ---- boîtes de texte : jamais étirées ---- */
+.mod,.pane,.fig,.panel{display:flex; flex-direction:column; justify-content:flex-start}
+.mod{background:var(--paper); border:1px solid var(--line); border-radius:11px;
+     padding:calc(17px * var(--e)) calc(19px * var(--e))}
+.mod-ac{background:var(--accent-wash); border-color:rgba(14,149,148,.34)}
+.mod-h{font-size:calc(15px * var(--e)); font-weight:700; color:var(--ink); line-height:1.25;
+       margin:0 0 calc(7px * var(--e))}
+.mod-h .n{color:var(--accent); font-weight:700; margin-right:.45em}
+.mod-p{font-size:calc(13px * var(--e)); line-height:1.52; color:var(--ink-70); margin:0}
+.mod-p + .mod-p{margin-top:calc(7px * var(--e))}
+.mod-p b,.mod-p strong{color:var(--ink); font-weight:600}
+
+/* ---- grilles ---- */
+.g2{display:grid; grid-template-columns:1fr 1fr; gap:calc(14px * var(--e))}
+.g3{display:grid; grid-template-columns:1fr 1fr 1fr; gap:calc(13px * var(--e))}
+.g4{display:grid; grid-template-columns:repeat(4,1fr); gap:calc(12px * var(--e))}
+.split{display:grid; grid-template-columns:1fr 1fr; gap:calc(16px * var(--e)); position:relative}
+.split-13{display:grid; grid-template-columns:1.35fr 1fr; gap:calc(16px * var(--e))}
+
+/* ---- table ---- */
+.tbl{width:100%; border-collapse:collapse; font-size:calc(13px * var(--e))}
+.tbl th{background:var(--ink); color:#fff; font-weight:600; text-align:left;
+        padding:calc(9px * var(--e)) calc(13px * var(--e)); font-size:calc(11.5px * var(--e));
+        letter-spacing:.06em; text-transform:uppercase}
+.tbl td{border-bottom:1px solid var(--line); padding:calc(10px * var(--e)) calc(13px * var(--e));
+        color:var(--ink-70); line-height:1.45; vertical-align:top}
+.tbl tr:last-child td{border-bottom:none}
+.tbl td b{color:var(--ink); font-weight:600}
+.tbl .c1{color:var(--ink); font-weight:600; white-space:nowrap}
+
+/* ---- chaîne / étapes ---- */
+.chain{display:flex; align-items:stretch; gap:calc(10px * var(--e))}
+.chain .lk{flex:1 1 0; background:var(--paper); border:1px solid var(--line);
+           border-radius:11px; padding:calc(15px * var(--e)) calc(15px * var(--e));
+           display:flex; flex-direction:column; justify-content:flex-start}
+.chain .ar{flex:0 0 auto; align-self:center; color:var(--blue-soft); font-size:calc(20px * var(--e))}
+
+/* ---- chiffres ---- */
+.figs{display:grid; grid-template-columns:repeat(3,1fr); gap:calc(14px * var(--e))}
+.fig{background:var(--paper); border:1px solid var(--line); border-radius:11px;
+     padding:calc(16px * var(--e)) calc(18px * var(--e)); align-items:flex-start}
+.fig .num{font-family:var(--serif); font-size:calc(40px * var(--ed)); line-height:1;
+          color:var(--accent); font-weight:500}
+.fig .lb{font-size:calc(12.5px * var(--e)); color:var(--ink-70); line-height:1.45;
+         margin-top:calc(7px * var(--e))}
+.fig .src{font-size:calc(10.5px * var(--e)); color:var(--ink-50); margin-top:calc(6px * var(--e))}
+
+/* ---- bloc prompt ---- */
+.pr{background:#fff; border:1px solid var(--line); border-left:3px solid var(--accent);
+    border-radius:8px; padding:calc(14px * var(--e)) calc(16px * var(--e))}
+.pr-l{font-size:calc(12.5px * var(--e)); line-height:1.55; color:var(--ink-70); margin:0}
+.pr-l + .pr-l{margin-top:calc(4px * var(--e))}
+.pr-l .f{color:var(--accent); font-weight:700; text-transform:uppercase;
+         font-size:calc(10.5px * var(--e)); letter-spacing:.08em; margin-right:.5em}
+.pr-l .br{color:var(--blue); font-weight:600}
+
+/* ---- exercice ---- */
+.exo{background:var(--paper); border:1px solid var(--line); border-radius:11px;
+     padding:calc(16px * var(--e)) calc(18px * var(--e));
+     display:flex; flex-direction:column; justify-content:flex-start}
+.exo-n{font-size:calc(10.5px * var(--e)); letter-spacing:.14em; text-transform:uppercase;
+       color:var(--accent); font-weight:700}
+.exo-t{font-size:calc(15px * var(--e)); font-weight:700; color:var(--ink);
+       margin:calc(5px * var(--e)) 0 calc(8px * var(--e)); line-height:1.25}
+.exo-p{font-size:calc(12.5px * var(--e)); line-height:1.55; color:var(--ink-70); margin:0}
+.exo-d{font-size:calc(12px * var(--e)); color:var(--ink); font-weight:600;
+       margin-top:calc(9px * var(--e)); padding-top:calc(9px * var(--e));
+       border-top:1px solid var(--line)}
+
+/* ---- critères ---- */
+.crit{background:var(--accent-wash); border:1px solid rgba(14,149,148,.30);
+      border-radius:11px; padding:calc(14px * var(--e)) calc(17px * var(--e));
+      display:flex; flex-direction:column; justify-content:flex-start}
+.crit-h{font-size:calc(10.5px * var(--e)); letter-spacing:.14em; text-transform:uppercase;
+        color:var(--accent); font-weight:700; margin-bottom:calc(6px * var(--e))}
+.crit-p{font-size:calc(12.5px * var(--e)); line-height:1.55; color:var(--ink-70); margin:0}
+
+/* ---- note de bas de carte ---- */
+.note{flex:0 0 auto; font-size:calc(12px * var(--e)); color:var(--ink-50);
+      line-height:1.5; padding-top:calc(2px * var(--e))}
+.note b{color:var(--ink-70); font-weight:600}
+
+/* ---- cartes foncées ---- */
+.slide.dark{background:var(--dark-bg); color:#fff; justify-content:center;
+            padding:52px 90px 48px}
+.dk-ey{font-size:calc(12px * var(--e)); letter-spacing:.2em; text-transform:uppercase;
+       color:var(--accent-2); font-weight:700}
+.dk-h{font-family:var(--serif); font-weight:400; font-size:calc(56px * var(--ed));
+      line-height:1.06; margin:.2em 0 0; color:#fff; letter-spacing:-.01em}
+.dk-p{font-size:calc(16px * var(--e)); line-height:1.55; color:rgba(255,255,255,.76);
+      margin:calc(16px * var(--e)) 0 0; max-width:70ch}
+.dk-m{font-size:calc(12.5px * var(--e)); color:rgba(255,255,255,.5);
+      margin-top:calc(22px * var(--e)); letter-spacing:.03em}
+.slide.cover .dk-h{font-size:calc(62px * var(--ed))}
+
+/* ---- planche références ---- */
+.refs{display:grid; grid-template-columns:1.75fr 1fr; gap:calc(18px * var(--e)); margin:auto 0}
+.panel{background:var(--paper); border:1px solid var(--line); border-radius:11px;
+       padding:calc(16px * var(--e)) calc(18px * var(--e))}
+.panel-h{font-size:calc(11px * var(--e)); letter-spacing:.14em; text-transform:uppercase;
+         color:var(--accent); font-weight:700; margin-bottom:calc(9px * var(--e))}
+.ref{font-size:calc(11.5px * var(--e)); line-height:1.48; color:var(--ink-70);
+     margin:0 0 calc(7px * var(--e))}
+.ref:last-child{margin-bottom:0}
+.ref b{color:var(--ink); font-weight:600}
+
+/* ---- figure RAG ---- */
+.fig-rag{display:flex; align-items:center; min-height:0}
+.fig-rag svg{width:100%; height:100%}
+.bx{fill:var(--paper); stroke:var(--line); stroke-width:1.5}
+.bx-ac{fill:var(--accent-wash); stroke:var(--accent); stroke-width:1.8}
+.bx-ix{fill:#fff; stroke:var(--accent); stroke-width:2.4}
+.tx{font-family:var(--sans); font-size:14.5px; font-weight:500; fill:var(--ink); text-anchor:middle}
+.tx-s{font-family:var(--sans); font-size:11.5px; font-weight:400; fill:var(--ink-50); text-anchor:middle}
+.tx-ix{font-family:var(--sans); font-size:16.5px; font-weight:700; fill:var(--accent);
+       text-anchor:middle; letter-spacing:.04em}
+.lane{font-family:var(--sans); font-size:11.5px; font-weight:700; letter-spacing:.15em;
+      text-transform:uppercase; fill:var(--accent)}
+.lane-s{font-family:var(--sans); font-size:11.5px; font-weight:400; fill:var(--ink-50);
+        letter-spacing:.02em; text-transform:none}
+.arw{fill:none; stroke:var(--blue); stroke-width:2.2; stroke-linecap:round; stroke-linejoin:round}
+.arw-ac{fill:none; stroke:var(--accent); stroke-width:2.4; stroke-linecap:round; stroke-linejoin:round}
+.rule{stroke:var(--line); stroke-width:1; stroke-dasharray:4 5}
+svg .a-pop,svg .a-rise{transform-box:fill-box; transform-origin:center}
+
+
+/* ============================================================
+   IMPRESSION / EXPORT PDF
+   ============================================================ */
+@page{ size:1280px 720px; margin:0 }
+@media print{
+  html,body{overflow:visible; background:#fff; height:auto}
+  .rail,.nav,.hint{display:none !important}
+  .app{display:block; height:auto}
+  .stage{display:block; height:auto; background:#fff; overflow:visible}
+  .deck{
+    width:auto; height:auto; transform:none !important;
+    box-shadow:none; border-radius:0; position:static
+  }
+  .slide{
+    position:relative; inset:auto; display:block;
+    width:1280px; height:720px; opacity:1 !important; visibility:visible !important;
+    page-break-after:always; break-after:page; overflow:hidden;
+    -webkit-print-color-adjust:exact; print-color-adjust:exact;
+  }
+  .slide.dark{display:flex}
+  .slide:last-child{page-break-after:auto; break-after:auto}
+  .slide *{animation:none !important; transition:none !important}
+}
+</style>
+
+<div class="app" id="app">
+
+  <!-- ================= COLONNE MINIATURES ================= -->
+  <aside class="rail">
+    <div class="rail-head">
+      <a class="rail-back" href="index.html">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18 9 12l6-6"/></svg>
+        Retour à la formation
+      </a>
+      <div class="rail-kicker">Formation · une journée</div>
+      <div class="rail-title">Écrits professionnels et IA générative</div>
+      <div class="rail-meta">Rédacteurs en entreprise · 44 cartes</div>
+    </div>
+    <div class="thumbs" id="thumbs"></div>
+    <div class="rail-foot">
+      <button class="btn" id="btnFs">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M8 3H5a2 2 0 0 0-2 2v3M16 3h3a2 2 0 0 1 2 2v3M8 21H5a2 2 0 0 1-2-2v-3M16 21h3a2 2 0 0 0 2-2v-3"/></svg>
+        Plein écran <span class="k">F</span>
+      </button>
+      <button class="btn" id="btnPdf">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0 4-4m-4 4-4-4M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg>
+        Exporter en PDF <span class="k">P</span>
+      </button>
+    </div>
+  </aside>
+
+  <!-- ================= SCÈNE ================= -->
+  <main class="stage" id="stage">
+    <div class="hint">Échap pour quitter le plein écran</div>
+    <div class="deck" id="deck">
+
+<!-- Structure attendue de chaque carte claire : la tête en haut, le corps qui
+     remplit le reste. Les cartes à fond foncé n'ont pas besoin du découpage,
+     elles sont centrées.
+
+     <section class="slide" data-label="Libellé court de la miniature">
+       <div class="top">
+         <div class="ey">Surtitre</div>
+         <h2>Titre de la carte</h2>
+         <p class="lede">Chapô facultatif.</p>
+       </div>
+       <div class="body">
+         … bloc principal : grille de boîtes, figures chiffrées, comparatif …
+         … note de bas de carte facultative : réserve, source, question …
+       </div>
+       <div class="pageno">N<b>/T</b></div>
+     </section>                                                            -->
+
+<section class="slide dark cover active" data-label="Couverture">
+  <div class="dk-ey a-fade" style="--d:.1s">Formation · une journée</div>
+  <h1 class="dk-h a-rise" style="--d:.2s">Gagner du temps<br>dans les écrits professionnels<br>grâce aux IA génératives</h1>
+  <p class="dk-p a-fade" style="--d:.5s">Non pas se convaincre que l'outil sert, mais devenir capable de décider,
+    écrit par écrit, s'il sert ou s'il encombre.</p>
+  <div class="dk-m a-fade" style="--d:.75s">Robert Voyer · septembre 2026</div>
+</section>
+
+<section class="slide" style="--e:1.35" data-label="Ce que vous saurez faire">
+  <div class="top">
+    <div class="ey a-fade" style="--d:0.05s">Ouverture</div>
+    <h2 class="a-rise" style="--d:0.12s">Gagner du temps sur quoi, exactement&nbsp;?</h2>
+    <p class="lede a-fade" style="--d:0.27s">La promesse ne pose jamais cette question. Nous ne perdons pas notre temps au même endroit — et certains croient en gagner alors qu'ils en perdent. Voici ce que vous saurez faire en repartant.</p>
+  </div>
+  <div class="body">
+    <div class="g3">
+      <div class="mod a-rise" style="--d:0.45s"><div class="mod-h">Situer</div><p class="mod-p">Ce qu'une IA générative sait faire, et ce qu'elle ne sait pas faire, dans le cadre précis de vos écrits.</p></div>
+      <div class="mod a-rise" style="--d:0.55s"><div class="mod-h">Décider</div><p class="mod-p">Ce que vous pouvez lui confier et ce que vous ne devez pas : confidentialité, fiabilité, responsabilité.</p></div>
+      <div class="mod a-rise" style="--d:0.65s"><div class="mod-h">Choisir</div><p class="mod-p">L'outil adapté à un besoin donné — et savoir justifier ce choix devant votre direction.</p></div>
+    </div>
+    <div class="g3">
+      <div class="mod mod-ac a-rise" style="--d:0.78s"><div class="mod-h">Rédiger</div><p class="mod-p">Vous-même une demande complète, et conduire son amélioration jusqu'à un texte exploitable.</p></div>
+      <div class="mod a-rise" style="--d:0.88s"><div class="mod-h">Automatiser</div><p class="mod-p">Ce qui, dans vos écrits, se répète — sans automatiser ce qui ne le doit pas.</p></div>
+      <div class="mod a-rise" style="--d:0.98s"><div class="mod-h">Vérifier</div><p class="mod-p">Un texte produit par une machine, avant de le signer de votre nom.</p></div>
+    </div>
+    <div class="note a-fade" style="--d:1.15s">Six compétences, et une seule finalité&nbsp;: <b>le discernement, non l'enthousiasme.</b></div>
+  </div>
+  <div class="pageno">2<b>/44</b></div>
+</section>
+
+<section class="slide" style="--e:1.3" data-label="Le fil de la journée">
+  <div class="top">
+    <div class="ey a-fade" style="--d:0.05s">Ouverture</div>
+    <h2 class="a-rise" style="--d:0.12s">Quatre temps, quatre questions</h2>
+    <p class="lede a-fade" style="--d:0.27s">Chaque moment de la journée répond à une question que vous vous posez déjà.</p>
+  </div>
+  <div class="body">
+    <div class="g2">
+      <div class="mod a-rise" style="--d:0.45s"><div class="mod-h"><span class="n">Matin</span>À quoi ai-je affaire&nbsp;?</div><p class="mod-p">Ce qu'est une IA générative et ce qu'elle produit réellement. Puis le cadre d'usage : ce qu'on peut lui confier, comment vérifier, qui répond de l'écrit signé. Enfin, comparer les outils pour que le choix se déduise du besoin.</p></div>
+      <div class="mod mod-ac a-rise" style="--d:0.55s"><div class="mod-h"><span class="n">Séquence</span>Et mes propres documents&nbsp;?</div><p class="mod-p">Un modèle écrit bien, mais il ne connaît ni vos procédures, ni vos dossiers. Comment lui donner accès au corpus de l'entreprise — et ce que cela change à l'écrit produit.</p></div>
+    </div>
+    <div class="g2">
+      <div class="mod a-rise" style="--d:0.68s"><div class="mod-h"><span class="n">Après-midi</span>Comment lui demander&nbsp;?</div><p class="mod-p">Le cœur de la journée. Construire une demande complète, en écrire soi-même, et comparer ses formulations à ce qu'un outil d'optimisation en fait.</p></div>
+      <div class="mod a-rise" style="--d:0.78s"><div class="mod-h"><span class="n">Fin de journée</span>Industrialiser, puis vérifier</div><p class="mod-p">Ce qui se répète dans vos écrits peut se modéliser. Puis vous produirez seul un écrit complet, et le relirez avec la méthode acquise le matin.</p></div>
+    </div>
+    <div class="note a-fade" style="--d:.95s"><b>Une remarque de méthode.</b> L'IA générative est ce que les Grecs appelaient un <i>pharmakon</i>&nbsp;:
+      le même mot désignait le remède et le poison. Produire vite un texte plausible fait le service et le danger.
+      Vite, c'est le remède&nbsp;; plausible, c'est le poison.</div>
+  </div>
+  <div class="pageno">3<b>/44</b></div>
+</section>
+
+<section class="slide" style="--e:1.55" data-label="Trois confusions">
+  <div class="top">
+    <div class="ey a-fade" style="--d:0.05s">Module 1 · 9 h 00</div>
+    <h2 class="a-rise" style="--d:0.12s">Ce n'est ni un moteur de recherche, ni un correcteur</h2>
+    <p class="lede a-fade" style="--d:0.27s">Écartons d'abord trois confusions courantes — elles commandent tout ce qui suivra.</p>
+  </div>
+  <div class="body">
+    <div class="g3">
+      <div class="mod a-rise" style="--d:0.45s"><div class="mod-h">Pas un moteur de recherche</div><p class="mod-p">Il ne va pas <b>chercher</b> une information. Il la <b>produit</b>.</p></div>
+      <div class="mod a-rise" style="--d:0.55s"><div class="mod-h">Pas un correcteur</div><p class="mod-p">Il ne compare pas votre texte à une norme. Il en écrit un autre.</p></div>
+      <div class="mod a-rise" style="--d:0.65s"><div class="mod-h">Pas un traducteur</div><p class="mod-p">Un traducteur est tenu par le texte source. Lui ne l'est pas.</p></div>
+    </div>
+    <div class="mod mod-ac a-rise" style="--d:0.8s"><div class="mod-h">Alors qu'est-ce&nbsp;?</div><p class="mod-p">Un <b>modèle de langue</b> : un système qui a appris, sur d'immenses quantités de textes, quelle suite de mots est la plus vraisemblable après une autre. Voilà tout.</p><p class="mod-p">Cette phrase paraît réductrice&nbsp;; elle est la clé de la journée. Si le système produit ce qui est <b>vraisemblable</b>, alors il produit un texte <b>plausible</b> — non un texte vrai. Le plausible et le vrai coïncident souvent : c'est pourquoi l'outil est utile. Ils ne coïncident pas toujours : c'est pourquoi il est dangereux.</p></div>
+  </div>
+  <div class="pageno">4<b>/44</b></div>
+</section>
+
+<section class="slide" style="--e:1.55" data-label="Les quatre notions">
+  <div class="top">
+    <div class="ey a-fade" style="--d:0.05s">Module 1</div>
+    <h2 class="a-rise" style="--d:0.12s">Quatre notions suffisent pour tenir la journée</h2>
+    <p class="lede a-fade" style="--d:0.27s">Nous n'irons pas plus loin dans la technique.</p>
+  </div>
+  <div class="body">
+    <div class="g4">
+      <div class="mod a-rise" style="--d:0.45s"><div class="mod-h">Le modèle</div><p class="mod-p">Le système lui-même, entraîné une fois puis figé. Il ne se souvient pas de vous d'une session à l'autre, sauf si l'outil ajoute cette mémoire par-dessus. Il n'apprend rien de vos échanges.</p></div>
+      <div class="mod a-rise" style="--d:0.55s"><div class="mod-h">La génération</div><p class="mod-p">La production du texte, mot après mot. Rien n'est recopié d'une base&nbsp;: tout est reconstruit. D'où deux réponses différentes à deux demandes identiques — ce n'est pas une panne.</p></div>
+      <div class="mod mod-ac a-rise" style="--d:0.65s"><div class="mod-h">Le contexte</div><p class="mod-p">Tout ce que vous placez dans la conversation&nbsp;: votre demande, les documents joints, les échanges précédents. C'est la seule chose qu'il connaisse de votre situation, et rien d'autre.</p></div>
+      <div class="mod a-rise" style="--d:0.75s"><div class="mod-h">L'itération</div><p class="mod-p">Reprendre, corriger, préciser. Le premier jet n'est pas le livrable&nbsp;: il est la matière première. Réussir du premier coup est l'exception, non la règle — et ce n'est pas un défaut.</p></div>
+    </div>
+    <div class="note a-fade" style="--d:.95s">La formule à retenir, car elle commande la journée&nbsp;:
+      <b>le modèle ne sait pas, il continue.</b></div>
+  </div>
+  <div class="pageno">5<b>/44</b></div>
+</section>
+
+<section class="slide" style="--e:1.05" data-label="Garanti / non garanti">
+  <div class="top">
+    <div class="ey a-fade" style="--d:0.05s">Module 1</div>
+    <h2 class="a-rise" style="--d:0.12s">Ce que l'outil garantit, ce qu'il ne garantit pas</h2>
+    <p class="lede a-fade" style="--d:0.27s">Vous demandez une note sur un sujet que vous connaissez. Le texte revient : structure correcte, ton juste, phrases nettes. Et deux erreurs de fait. Ce n'est pas un accident, c'est le fonctionnement normal.</p>
+  </div>
+  <div class="body">
+    <table class="tbl a-rise" style="--d:.45s">
+      <tr><th>Ce qu'il garantit</th><th>Ce qu'il ne garantit pas</th></tr>
+      <tr><td>la <b>forme</b>, la structure, le registre</td><td>l'exactitude d'un <b>chiffre</b>, d'une <b>date</b>, d'un <b>nom</b></td></tr>
+      <tr><td>la fluidité et la <b>régularité du ton</b></td><td>la conformité à <b>vos procédures</b> internes</td></tr>
+      <tr><td>la <b>rapidité</b> du premier jet</td><td>la pertinence pour <b>votre destinataire</b></td></tr>
+    </table>
+    <div class="g2">
+      <div class="mod mod-ac a-rise" style="--d:0.75s"><div class="mod-h">Le gain est réel</div><p class="mod-p">Quand l'écrit est structuré, répétitif dans sa forme, et que son contenu vous est déjà connu : trame d'une présentation, première version d'un compte rendu, reformulation d'un texte trop long, déclinaison d'un message pour trois destinataires.</p></div>
+      <div class="mod a-rise" style="--d:0.85s"><div class="mod-h">Le gain est illusoire</div><p class="mod-p">Quand l'écrit est bref et engageant, quand il suppose une connaissance fine du contexte, ou quand sa vérification coûte plus cher que sa rédaction. Un courriel de trois lignes : écrivez-le.</p></div>
+    </div>
+  </div>
+  <div class="pageno">6<b>/44</b></div>
+</section>
+
+<section class="slide" style="--e:1.25" data-label="La règle du tri">
+  <div class="top">
+    <div class="ey a-fade" style="--d:0.05s">Module 2 · 9 h 45</div>
+    <h2 class="a-rise" style="--d:0.12s">Que puis-je lui donner&nbsp;?</h2>
+    <p class="lede a-fade" style="--d:0.27s">Trois questions gouvernent ce module, et il faut y répondre <b>avant</b> d'ouvrir un outil. Voici la première, et son outil opératoire.</p>
+  </div>
+  <div class="body">
+    <table class="tbl a-rise" style="--d:.45s">
+      <tr><th>Nature</th><th>Exemples</th><th>Règle</th></tr>
+      <tr><td class="c1">Donnée publique</td><td>plaquette, site, communiqué déjà diffusé</td><td><b>libre</b></td></tr>
+      <tr><td class="c1">Donnée interne</td><td>note d'organisation, trame de procédure</td><td><b>offre professionnelle seulement</b></td></tr>
+      <tr><td class="c1">Donnée personnelle</td><td>nom, adresse, situation d'un salarié ou d'un client</td><td><b>anonymiser d'abord</b>, systématiquement</td></tr>
+      <tr><td class="c1">Donnée sensible</td><td>santé, contentieux, secret des affaires, négociation en cours</td><td><b>ne pas déposer</b></td></tr>
+    </table>
+    <div class="note a-fade" style="--d:.85s"><b>« Mais alors l'outil ne sert plus à rien pour mes vrais dossiers. »</b>
+      L'objection est juste — et c'est elle qui appelle la séquence sur le corpus d'entreprise, en fin de matinée.
+      Retenons pour l'instant qu'anonymiser n'est pas renoncer : un courriel de réclamation se traite très bien
+      avec « le client » à la place du nom, puis se repersonnalise à la main.</div>
+  </div>
+  <div class="pageno">7<b>/44</b></div>
+</section>
+
+<section class="slide" style="--e:1.35" data-label="Pourquoi il se trompe avec aplomb">
+  <div class="top">
+    <div class="ey a-fade" style="--d:0.05s">Module 2</div>
+    <h2 class="a-rise" style="--d:0.12s">L'assurance du ton n'est pas un indice de fiabilité</h2>
+    <p class="lede a-fade" style="--d:0.27s">Pourquoi un modèle produit-il des énoncés faux avec assurance&nbsp;? Parce qu'il n'a pas de registre séparé où loger le doute. Une date fausse mais plausible lui coûte exactement autant qu'une date vraie.</p>
+  </div>
+  <div class="body">
+    <div class="g2">
+      <div class="mod mod-ac a-rise" style="--d:0.45s"><div class="mod-h">Où cela se voit, dans un écrit professionnel</div><p class="mod-p">Toujours aux mêmes cinq endroits, et ils se repèrent d'un coup d'œil.</p><p class="mod-p"><b>Les chiffres. Les dates. Les citations. Les références réglementaires. Les noms propres.</b></p><p class="mod-p">Ce sont les cinq points où la vérification n'est pas négociable.</p></div>
+      <div class="mod a-rise" style="--d:0.6s"><div class="mod-h">La méthode, en trois gestes</div><p class="mod-p"><b>Surligner</b> les cinq types d'éléments à risque.</p><p class="mod-p"><b>Vérifier</b> chacun à une source que vous auriez citée vous-même.</p><p class="mod-p"><b>Supprimer</b> ce qui n'est pas vérifiable — plutôt que de l'atténuer par un « environ ».</p></div>
+    </div>
+    <div class="note a-fade" style="--d:.85s">Deux minutes par document. C'est le seul rempart contre l'erreur signée de votre nom.</div>
+  </div>
+  <div class="pageno">8<b>/44</b></div>
+</section>
+
+<section class="slide" style="--e:1.55" data-label="Les deux relectures">
+  <div class="top">
+    <div class="ey a-fade" style="--d:0.05s">Module 2</div>
+    <h2 class="a-rise" style="--d:0.12s">Deux relectures que l'habitude confond</h2>
+  </div>
+  <div class="body">
+    <div class="split">
+      <div class="mod a-rise" style="--d:0.45s"><div class="mod-h">La relecture de style</div><p class="mod-p">Elle demande&nbsp;: <b>est-ce bien écrit, bien tourné, bien adapté au destinataire&nbsp;?</b></p><p class="mod-p">Vous la pratiquez déjà, et vous la pratiquez bien. Elle porte sur l'ensemble du texte, elle se fait à la lecture continue, et elle repère ce qui sonne faux.</p><p class="mod-p"><i>Exemple.</i> « Nous accusons réception de votre courrier et vous informons que celui-ci fait l'objet d'un traitement. » Le style corrige&nbsp;: « Nous avons bien reçu votre courrier. »</p></div>
+      <div class="mod mod-ac a-rise" style="--d:0.58s"><div class="mod-h">La relecture de vérification</div><p class="mod-p">Elle demande&nbsp;: <b>d'où vient cette affirmation, et puis-je la retrouver ailleurs&nbsp;?</b></p><p class="mod-p">Elle ne porte que sur les cinq points à risque, elle prend deux minutes — et c'est elle qui manque presque toujours, parce qu'un texte bien tourné donne le sentiment d'être exact.</p><p class="mod-p"><i>Exemple.</i> « Le délai légal de rétractation est de quinze jours. » La vérification ouvre le texte applicable — et découvre quatorze.</p></div>
+    </div>
+    <div class="note a-fade" style="--d:.8s">Les confondre, c'est croire qu'un texte bien tourné est un texte exact.
+      Or l'outil garantit exactement le premier et jamais le second.</div>
+  </div>
+  <div class="pageno">9<b>/44</b></div>
+</section>
+
+<section class="slide" style="--e:1.2" data-label="Le cadre européen">
+  <div class="top">
+    <div class="ey a-fade" style="--d:0.05s">Module 2</div>
+    <h2 class="a-rise" style="--d:0.12s">Ce que la règle européenne dit — et ce qu'on lui fait dire</h2>
+    <p class="lede a-fade" style="--d:0.27s">Depuis février 2025, l'employeur dont les salariés utilisent des systèmes d'IA doit <b>soutenir le développement de leur maîtrise de l'IA</b>. Le texte a été réécrit en juillet 2026 : l'obligation n'est plus de garantir un niveau, elle est de prendre des mesures.</p>
+  </div>
+  <div class="body">
+    <div class="g3">
+      <div class="mod a-rise" style="--d:0.45s"><div class="mod-h">Aucun certificat requis</div><p class="mod-p">La Commission européenne l'écrit explicitement : un <b>registre interne</b> des actions de formation suffit.</p></div>
+      <div class="mod a-rise" style="--d:0.55s"><div class="mod-h">Aucune amende propre</div><p class="mod-p">L'obligation ne figure pas dans la liste des dispositions dont la violation est sanctionnée par le règlement.</p></div>
+      <div class="mod a-rise" style="--d:0.65s"><div class="mod-h">La notice ne suffit pas</div><p class="mod-p">Renvoyer les salariés au mode d'emploi de l'outil « peut être inefficace », toujours selon la Commission.</p></div>
+    </div>
+    <div class="mod mod-ac a-rise" style="--d:0.8s"><div class="mod-h">Pourquoi le dire ici</div><p class="mod-p">Parce que vous entendrez le contraire. Plusieurs organismes de formation vendent leurs stages en annonçant une obligation légale assortie d'amendes de plusieurs millions d'euros. <b>C'est faux</b>, et le vérifier prend dix minutes.</p><p class="mod-p">Voilà une première application de la relecture de vérification — appliquée cette fois à ce qu'on vous dit, non à ce que la machine écrit.</p></div>
+    <div class="note a-fade" style="--d:1s">Sources&nbsp;: règlement (UE) 2024/1689, art. 4, 99 et 113&nbsp;; règlement (UE) 2026/1744, en vigueur le 27 juillet 2026&nbsp;;
+      Commission européenne, <i>AI Literacy — Questions &amp; Answers</i>.</div>
+  </div>
+  <div class="pageno">10<b>/44</b></div>
+</section>
+
+<section class="slide" style="--e:1.7" data-label="Qui signe répond">
+  <div class="top">
+    <div class="ey a-fade" style="--d:0.05s">Module 2</div>
+    <h2 class="a-rise" style="--d:0.12s">Un écrit assisté engage celui qui le signe, non l'outil</h2>
+  </div>
+  <div class="body">
+    <div class="mod a-rise" style="--d:0.45s"><div class="mod-h">L'illusion de partage</div><p class="mod-p">La phrase paraît évidente. Elle ne l'est pas dans les faits, car l'assistance crée une illusion de partage&nbsp;: <i>j'ai écrit avec la machine, donc l'erreur est un peu la sienne.</i></p><p class="mod-p">Non. Le destinataire reçoit un document <b>à votre nom</b>. Le client, la direction, le tribunal s'adressent à vous.</p></div>
+    <div class="mod mod-ac a-rise" style="--d:0.6s"><div class="mod-h">La conséquence pratique</div><p class="mod-p"><b>Le temps gagné à la rédaction doit être en partie réinvesti dans la vérification.</b></p><p class="mod-p">Une formation honnête ne promet pas cent pour cent de gain. Elle promet un <b>déplacement de l'effort</b>, de la production vers le contrôle — et ce déplacement est avantageux, à condition d'être consenti.</p></div>
+  </div>
+  <div class="pageno">11<b>/44</b></div>
+</section>
+
+<section class="slide" style="--e:1.4" data-label="Trois familles d'outils">
+  <div class="top">
+    <div class="ey a-fade" style="--d:0.05s">Module 3 · 10 h 45</div>
+    <h2 class="a-rise" style="--d:0.12s">Trois familles, et non trente outils</h2>
+    <p class="lede a-fade" style="--d:0.27s">L'offre paraît illisible parce qu'on la présente comme une liste. Présentons-la comme une taxonomie : le choix se joue entre les familles bien plus qu'à l'intérieur de chacune.</p>
+  </div>
+  <div class="body">
+    <div class="g3">
+      <div class="mod a-rise" style="--d:0.45s"><div class="mod-h">Assistants conversationnels généralistes</div><p class="mod-p">Vous ouvrez une fenêtre, vous écrivez, l'outil répond.</p><p class="mod-p">Les plus puissants et les plus souples&nbsp;; ils ignorent tout de votre poste de travail.</p></div>
+      <div class="mod mod-ac a-rise" style="--d:0.55s"><div class="mod-h">Assistants intégrés à la suite bureautique</div><p class="mod-p">Ils vivent dans votre traitement de texte et votre messagerie.</p><p class="mod-p">Moins souples, mais ils voient le document ouvert et le fil de courriels. Le gain n'est pas la puissance&nbsp;: c'est la suppression du copier-coller.</p></div>
+      <div class="mod a-rise" style="--d:0.65s"><div class="mod-h">Outils spécialisés</div><p class="mod-p">Rédaction commerciale, génération de présentations, correction avancée.</p><p class="mod-p">Ils font une chose et la font bien. Leur intérêt se mesure à la <b>fréquence</b> de votre besoin.</p></div>
+    </div>
+  </div>
+  <div class="pageno">12<b>/44</b></div>
+</section>
+
+<section class="slide" style="--e:1.2" data-label="La grille de comparaison">
+  <div class="top">
+    <div class="ey a-fade" style="--d:0.05s">Module 3</div>
+    <h2 class="a-rise" style="--d:0.12s">Cinq critères, dans l'ordre où ils décident</h2>
+    <p class="lede a-fade" style="--d:0.27s">Comparer suppose des critères déclarés. Le dernier vient en dernier, et c'est délibéré.</p>
+  </div>
+  <div class="body">
+    <table class="tbl a-rise" style="--d:.45s">
+      <tr><th>&nbsp;</th><th>Critère</th><th>Ce qu'il tranche</th></tr>
+      <tr><td class="c1">1</td><td class="c1">Le traitement des données</td><td>Que devient ce que je dépose&nbsp;? <b>Critère éliminatoire</b> : un outil qui ne répond pas clairement est écarté, quelles que soient ses qualités.</td></tr>
+      <tr><td class="c1">2</td><td class="c1">L'intégration au flux de travail</td><td>Combien de manipulations entre mon document et le résultat&nbsp;? Chaque copier-coller est un coût et un risque d'erreur.</td></tr>
+      <tr><td class="c1">3</td><td class="c1">La qualité en français</td><td>Plus le problème qu'elle était, mais encore inégale sur les registres soutenus et les tournures administratives.</td></tr>
+      <tr><td class="c1">4</td><td class="c1">Le tarif — et les limites du gratuit</td><td>Elles portent sur le volume, la taille des documents joints, l'accès aux modèles récents.</td></tr>
+      <tr><td class="c1">5</td><td class="c1">La notoriété</td><td>Elle informe sur la <b>pérennité du fournisseur</b>, jamais sur l'adéquation à votre besoin.</td></tr>
+    </table>
+  </div>
+  <div class="pageno">13<b>/44</b></div>
+</section>
+
+<section class="slide" style="--e:1.3" data-label="Le choix se déduit de l'écrit">
+  <div class="top">
+    <div class="ey a-fade" style="--d:0.05s">Module 3</div>
+    <h2 class="a-rise" style="--d:0.12s">La question n'est pas « quel est le meilleur outil ? »</h2>
+    <p class="lede a-fade" style="--d:0.27s">Elle est&nbsp;: <b>quel écrit dois-je produire, et dans quel cadre&nbsp;?</b> De la réponse se déduit l'outil.</p>
+  </div>
+  <div class="body">
+    <div class="g3">
+      <div class="mod a-rise" style="--d:0.45s"><div class="mod-h">Un courriel de réponse client</div><p class="mod-p">À partir d'un fil d'échanges → <b>l'assistant intégré à la messagerie</b>, parce que le fil est déjà là.</p></div>
+      <div class="mod a-rise" style="--d:0.55s"><div class="mod-h">Une note de synthèse</div><p class="mod-p">À partir de quatre documents internes → <b>l'assistant généraliste en offre professionnelle</b>, parce qu'il faut joindre les documents.</p></div>
+      <div class="mod a-rise" style="--d:0.65s"><div class="mod-h">Une présentation hebdomadaire</div><p class="mod-p">Sur un modèle fixe → <b>un outil spécialisé</b>, ou mieux, un modèle réutilisable — nous y viendrons.</p></div>
+    </div>
+    <div class="mod mod-ac a-rise" style="--d:0.8s"><div class="mod-h">Ce que change un assistant intégré</div><p class="mod-p">Il accède <b>au document ouvert</b>, <b>au fil de courriels</b>, et selon la configuration <b>aux fichiers de l'organisation</b>.</p><p class="mod-p">Ce que cela change n'est pas la qualité de la prose : c'est la <b>quantité de contexte</b> que vous n'avez plus à fournir à la main. L'assistant intégré n'écrit pas mieux&nbsp;; il en sait davantage.</p><p class="mod-p">Une nuance, pour éviter la confusion de tout à l'heure : il accède à <b>vos</b> fichiers, ceux auxquels vous avez droit. Pas au corpus documentaire de l'organisation. C'est un autre dispositif.</p></div>
+  </div>
+  <div class="pageno">14<b>/44</b></div>
+</section>
+
+<section class="slide" style="--e:1.45" data-label="Il écrit bien, il ne sait rien">
+  <div class="top">
+    <div class="ey a-fade" style="--d:0.05s">Séquence · 11 h 30</div>
+    <h2 class="a-rise" style="--d:0.12s">Un modèle écrit bien. Il ne sait rien de vous.</h2>
+    <p class="lede a-fade" style="--d:0.27s">Il n'a jamais lu votre convention collective, votre catalogue, vos comptes rendus de comité. Ni vos procédures, ni votre historique commercial.</p>
+  </div>
+  <div class="body">
+    <div class="split">
+      <div class="mod a-rise" style="--d:0.45s"><div class="mod-h">Le problème pratique</div><p class="mod-p">Vous voulez répondre à un client en vous appuyant sur trois échanges antérieurs, une fiche produit et une procédure interne.</p><p class="mod-p"><b>Deux voies.</b> Coller les documents à chaque demande — fastidieux, et limité en volume. Ou donner à l'outil un <b>accès permanent</b> au corpus.</p></div>
+      <div class="mod mod-ac a-rise" style="--d:0.58s"><div class="mod-h">C'est cette seconde voie qu'on appelle un RAG</div><p class="mod-p"><b>RAG</b> : <i>retrieval-augmented generation</i>, soit <b>génération augmentée par la recherche</b>.</p><p class="mod-p">Le principe tient en une phrase : avant d'écrire, l'outil va chercher dans un corpus documentaire les passages utiles à la demande, et il rédige à partir d'eux.</p></div>
+    </div>
+    <div class="note a-fade" style="--d:.8s">C'est aussi la réponse à l'objection du module 2 — « l'outil ne sert à rien pour mes vrais dossiers ».</div>
+  </div>
+  <div class="pageno">15<b>/44</b></div>
+</section>
+
+<section class="slide" data-label="Le RAG en deux temps">
+  <div class="top">
+    <div class="ey a-fade" style="--d:0.05s">Séquence</div>
+    <h2 class="a-rise" style="--d:0.12s">Le RAG, en deux temps</h2>
+    <p class="lede a-fade" style="--d:0.27s">L'enregistrement a lieu une fois, en amont. L'interrogation a lieu à chaque demande. Les confondre est l'erreur la plus fréquente.</p>
+  </div>
+  <div class="body">
+    <div class="fig-rag"><svg viewBox="0 0 1120 470" preserveAspectRatio="xMidYMid meet" role="img"
+           aria-label="Architecture RAG : enregistrement des documents dans un corpus indexé, puis interrogation à chaque demande">
+        <text class="lane a-fade" x="30" y="20" style="--d:.45s">Enregistrement <tspan class="lane-s">— une fois, en amont</tspan></text>
+        <g class="a-fade" style="--d:.6s"><rect class="bx" x="30" y="34" width="200" height="74" rx="9"/>
+          <text class="tx" x="130" y="66">Documents</text><text class="tx-s" x="130" y="86">procédures, fiches, courriers</text></g>
+        <path class="arw a-draw" style="--d:.9s; --len:58" d="M232,71 L266,71 M258,66 L266,71 L258,76"/>
+        <g class="a-fade" style="--d:1s"><rect class="bx" x="270" y="34" width="190" height="74" rx="9"/>
+          <text class="tx" x="365" y="66">Découpage</text><text class="tx-s" x="365" y="86">en passages de taille utile</text></g>
+        <path class="arw a-draw" style="--d:1.3s; --len:58" d="M462,71 L496,71 M488,66 L496,71 L488,76"/>
+        <g class="a-fade" style="--d:1.4s"><rect class="bx" x="500" y="34" width="170" height="74" rx="9"/>
+          <text class="tx" x="585" y="66">Indexation</text><text class="tx-s" x="585" y="86">retrouvables par le sens</text></g>
+        <path class="arw-ac a-draw" style="--d:1.7s; --len:82" d="M585,110 L585,171 M580,163 L585,171 L590,163"/>
+        <g class="a-pop" style="--d:1.95s"><rect class="bx-ix" x="470" y="175" width="200" height="96" rx="11"/>
+          <text class="tx-ix" x="570" y="212">CORPUS INDEXÉ</text>
+          <text class="tx-s" x="570" y="236">ce que l'entreprise</text><text class="tx-s" x="570" y="253">a choisi d'y verser</text></g>
+        <line class="rule a-fade" style="--d:2.3s" x1="30" y1="305" x2="1090" y2="305"/>
+        <text class="lane a-fade" x="30" y="332" style="--d:2.45s">Interrogation <tspan class="lane-s">— à chaque demande</tspan></text>
+        <g class="a-fade" style="--d:2.6s"><rect class="bx" x="30" y="346" width="190" height="74" rx="9"/>
+          <text class="tx" x="125" y="378">Votre demande</text><text class="tx-s" x="125" y="398">« réponds à ce client »</text></g>
+        <path class="arw a-draw" style="--d:2.9s; --len:58" d="M222,383 L256,383 M248,378 L256,383 L248,388"/>
+        <g class="a-fade" style="--d:3s"><rect class="bx" x="260" y="346" width="170" height="74" rx="9"/>
+          <text class="tx" x="345" y="378">Recherche</text><text class="tx-s" x="345" y="398">des passages utiles</text></g>
+        <path class="arw-ac a-draw" style="--d:3.3s; --len:262" d="M345,344 L345,223 L464,223 M456,218 L464,223 L456,228"/>
+        <text class="tx-s a-fade" style="--d:3.5s" x="400" y="212">cherche</text>
+        <path class="arw-ac a-draw" style="--d:3.75s; --len:92" d="M570,273 L570,342 M565,334 L570,342 L575,334"/>
+        <text class="tx-s a-fade" style="--d:3.9s" x="638" y="312" text-anchor="start">rend les passages</text>
+        <g class="a-fade" style="--d:4.05s"><rect class="bx-ac" x="470" y="346" width="200" height="74" rx="9"/>
+          <text class="tx" x="570" y="378">Demande + passages</text><text class="tx-s" x="570" y="398">le contexte est constitué</text></g>
+        <path class="arw a-draw" style="--d:4.35s; --len:58" d="M672,383 L706,383 M698,378 L706,383 L698,388"/>
+        <g class="a-fade" style="--d:4.45s"><rect class="bx" x="710" y="346" width="170" height="74" rx="9"/>
+          <text class="tx" x="795" y="378">Modèle</text><text class="tx-s" x="795" y="398">rédige à partir d'eux</text></g>
+        <path class="arw a-draw" style="--d:4.75s; --len:58" d="M882,383 L916,383 M908,378 L916,383 L908,388"/>
+        <g class="a-fade" style="--d:4.85s"><rect class="bx-ac" x="920" y="346" width="170" height="74" rx="9"/>
+          <text class="tx" x="1005" y="378">Écrit produit</text><text class="tx-s" x="1005" y="398">références justes, ton maison</text></g>
+      </svg></div>
+    <div class="note a-fade" style="--d:5.2s">Chaque passage est indexé — converti en une représentation qui permet de le retrouver
+      par le sens et non par le mot exact, ce qu'on appelle un <i>plongement</i>, ou <i>embedding</i>.
+      Ce que le modèle ne trouve pas dans le corpus, <b>il ne l'invente plus</b>&nbsp;: il dit qu'il ne le trouve pas.</div>
+  </div>
+  <div class="pageno">16<b>/44</b></div>
+</section>
+
+<section class="slide" style="--e:1.35" data-label="Assistant intégré ≠ RAG">
+  <div class="top">
+    <div class="ey a-fade" style="--d:0.05s">Séquence</div>
+    <h2 class="a-rise" style="--d:0.12s">La distinction à ne pas manquer</h2>
+    <p class="lede a-fade" style="--d:0.27s">Le second n'est pas une version améliorée du premier.</p>
+  </div>
+  <div class="body">
+    <table class="tbl a-rise" style="--d:.45s">
+      <tr><th>&nbsp;</th><th>Assistant intégré</th><th>Corpus indexé (RAG)</th></tr>
+      <tr><td class="c1">Accède à</td><td><b>vos</b> fichiers, vos courriels</td><td>le corpus de <b>l'organisation</b></td></tr>
+      <tr><td class="c1">Périmètre</td><td>ce à quoi vous avez droit, individuellement</td><td>ce que l'entreprise a décidé d'indexer</td></tr>
+      <tr><td class="c1">Mise en place</td><td>activation d'un abonnement</td><td>un projet, avec un choix de documents</td></tr>
+    </table>
+    <div class="mod mod-ac a-rise" style="--d:0.75s"><div class="mod-h">Ce que cela change dans l'écrit produit</div><p class="mod-p">Trois effets — exactement les trois manques relevés au module 1. L'écrit <b>cite les bonnes références</b>. Il <b>reprend les formulations de la maison</b>, puisqu'il les a sous les yeux. Et <b>ce que le modèle ignore n'est plus inventé</b>.</p></div>
+  </div>
+  <div class="pageno">17<b>/44</b></div>
+</section>
+
+<section class="slide" style="--e:1.55" data-label="Une méthode, pas des astuces">
+  <div class="top">
+    <div class="ey a-fade" style="--d:0.05s">Module 4 · 11 h 45</div>
+    <h2 class="a-rise" style="--d:0.12s">Une méthode sert à ne rien oublier</h2>
+    <p class="lede a-fade" style="--d:0.27s">C'est sa seule fonction, et elle est suffisante.</p>
+  </div>
+  <div class="body">
+    <div class="split">
+      <div class="mod a-rise" style="--d:0.45s"><div class="mod-h">Pourquoi pas des astuces</div><p class="mod-p">La circulation d'« astuces de prompt » est considérable, et elle vieillit vite.</p><p class="mod-p">Les demandes ratées le sont presque toujours pour la même raison&nbsp;: non parce que la formule était maladroite, mais parce qu'<b>un élément décisif n'a pas été dit</b>.</p></div>
+      <div class="mod mod-ac a-rise" style="--d:0.58s"><div class="mod-h">Ce qui manque, presque toujours</div><p class="mod-p">Le destinataire. La longueur. Le fait que ce client est <b>déjà</b> mécontent. La contrainte qu'on croyait évidente.</p><p class="mod-p">La méthode est une <b>liste de vérification</b>, pas une incantation.</p></div>
+    </div>
+    <div class="note a-fade" style="--d:.8s">Nous allons écrire nos demandes <b>à la main</b>. Non par purisme&nbsp;:
+      parce qu'on ne juge pas un outil d'optimisation sans savoir ce qu'il optimise.</div>
+  </div>
+  <div class="pageno">18<b>/44</b></div>
+</section>
+
+<section class="slide" style="--e:1.3" data-label="La méthode RTFCT">
+  <div class="top">
+    <div class="ey a-fade" style="--d:0.05s">Module 4</div>
+    <h2 class="a-rise" style="--d:0.12s">RTFCT — cinq champs, un acronyme qui se retient</h2>
+  </div>
+  <div class="body">
+    <div class="g3">
+      <div class="mod a-rise" style="--d:0.45s"><div class="mod-h"><span class="n">R</span>Rôle</div><p class="mod-p">Qui l'outil doit-il être&nbsp;? « Tu es responsable du service après-vente d'un fabricant de matériel professionnel. »</p><p class="mod-p">Le rôle n'est pas un déguisement&nbsp;: il sélectionne un registre, un vocabulaire, des réflexes.</p></div>
+      <div class="mod a-rise" style="--d:0.55s"><div class="mod-h"><span class="n">T</span>Tâche</div><p class="mod-p">Que doit-il produire, exactement&nbsp;? Un verbe d'action et un objet. « Rédige une réponse. »</p><p class="mod-p">Non&nbsp;: « occupe-toi de ce client. » <b>La tâche vague est le premier défaut, et de loin le plus fréquent.</b></p></div>
+      <div class="mod a-rise" style="--d:0.65s"><div class="mod-h"><span class="n">F</span>Format</div><p class="mod-p">Sous quelle forme&nbsp;? Longueur, structure, présence ou absence de titres, de listes, de formule de politesse.</p><p class="mod-p">« Quinze lignes, un seul paragraphe, pas de liste à puces. »</p></div>
+    </div>
+    <div class="g2">
+      <div class="mod mod-ac a-rise" style="--d:0.78s"><div class="mod-h"><span class="n">C</span>Contexte</div><p class="mod-p">Ce que l'outil ne peut pas deviner&nbsp;: l'historique, les contraintes, ce qui s'est passé avant, ce qu'il ne faut surtout pas écrire.</p><p class="mod-p"><b>C'est le champ le plus souvent bâclé, et c'est le plus rentable.</b></p></div>
+      <div class="mod a-rise" style="--d:0.88s"><div class="mod-h"><span class="n">T</span>Ton</div><p class="mod-p">Ferme, cordial, factuel, conciliant. Précisez-le&nbsp;: à défaut, l'outil produira un ton moyen, poli et sans caractère —</p><p class="mod-p">celui que vos destinataires reconnaîtront comme « écrit par une machine ».</p></div>
+    </div>
+  </div>
+  <div class="pageno">19<b>/44</b></div>
+</section>
+
+<section class="slide" style="--e:1.25" data-label="Le champ qui manque : D">
+  <div class="top">
+    <div class="ey a-fade" style="--d:0.05s">Module 4</div>
+    <h2 class="a-rise" style="--d:0.12s">Dans « Rôle », de qui parlons-nous&nbsp;? De l'IA. Et le lecteur&nbsp;?</h2>
+    <p class="lede a-fade" style="--d:0.27s">Nulle part. Or dans un écrit professionnel, c'est le destinataire qui commande tout.</p>
+  </div>
+  <div class="body">
+    <div class="mod mod-ac a-rise" style="--d:0.45s"><div class="mod-h"><span class="n">D</span>Destinataire — le sixième champ</div><p class="mod-p"><b>Qui lit&nbsp;? Que sait-il déjà&nbsp;? Qu'attend-il de cet écrit&nbsp;? Dans quelle disposition le reçoit-il&nbsp;?</b></p><p class="mod-p">La même information s'écrit de trois manières différentes selon qu'elle s'adresse à un client mécontent, à un comité de direction ou à un collègue. La méthode de cette journée sera donc <b>RTFCT + D</b>.</p></div>
+    <div class="mod a-rise" style="--d:0.6s"><div class="mod-h">Pour les écrits à enjeu&nbsp;: CO-STAR</div><p class="mod-p">Contexte, objectif, style, ton, audience, format de réponse. Publié par l'équipe science des données et IA de <b>GovTech Singapour</b> dans son guide de prompt engineering (août 2023), popularisé par la lauréate de son concours.</p><p class="mod-p">Sa particularité mérite d'être relevée&nbsp;: <b>trois de ses six champs portent sur la manière de communiquer</b> — style, ton, audience. C'est exactement ce dont un écrit professionnel a besoin.</p><p class="mod-p"><b>Quand employer l'un ou l'autre&nbsp;?</b> RTFCT + D pour le courant. CO-STAR quand la production compte : un texte diffusé largement, un document contractuel, une communication sensible.</p></div>
+    <div class="note a-fade" style="--d:.85s">Retenons la raison plutôt que l'acronyme&nbsp;: <b>on n'écrit pas pour un sujet, on écrit pour quelqu'un.</b></div>
+  </div>
+  <div class="pageno">20<b>/44</b></div>
+</section>
+
+<section class="slide" style="--e:1.4" data-label="Le contexte fait la qualité">
+  <div class="top">
+    <div class="ey a-fade" style="--d:0.05s">Module 4</div>
+    <h2 class="a-rise" style="--d:0.12s">Ce qui a changé — et qui vaut mieux qu'un acronyme de plus</h2>
+    <p class="lede a-fade" style="--d:0.27s">Il faut le dire clairement, car cela déplace tout ce qui précède.</p>
+  </div>
+  <div class="body">
+    <div class="mod mod-ac a-rise" style="--d:0.45s"><div class="mod-h">Le gain ne vient plus de la formule, il vient du contexte fourni</div><p class="mod-p">Les échafaudages élaborés d'il y a deux ans — enchaînements d'instructions destinés à guider le raisonnement pas à pas — sont devenus inutiles, et parfois nuisibles&nbsp;: les modèles récents organisent leur travail eux-mêmes.</p><p class="mod-p">Ce qui produit aujourd'hui l'écart entre un résultat médiocre et un résultat exploitable, c'est <b>ce qu'on met dans la demande</b>&nbsp;: les documents joints, deux exemples de vos propres écrits, les données de l'entreprise — ce que nous avons vu avec le corpus indexé.</p></div>
+    <div class="mod a-rise" style="--d:0.62s"><div class="mod-h">D'où la conclusion, qui est le fil de la journée</div><p class="mod-p"><b>La méthode sert à n'oublier aucun champ&nbsp;; le contexte fait la qualité.</b></p><p class="mod-p">Nous ne cherchons pas la formule magique — elle n'existe pas, et l'idée qu'elle existe est le meilleur moyen de perdre du temps.</p></div>
+  </div>
+  <div class="pageno">21<b>/44</b></div>
+</section>
+
+<section class="slide" style="--e:1.2" data-label="Conduire l'itération">
+  <div class="top">
+    <div class="ey a-fade" style="--d:0.05s">Module 4</div>
+    <h2 class="a-rise" style="--d:0.12s">Le premier jet n'est pas le livrable</h2>
+    <p class="lede a-fade" style="--d:0.27s">Trois gestes, dans cet ordre — puis ce qui reste à vous, et que la machine ne fera pas.</p>
+  </div>
+  <div class="body">
+    <div class="g3">
+      <div class="mod a-rise" style="--d:0.45s"><div class="mod-h">Demander une correction</div><p class="mod-p">« Reprends le troisième paragraphe, il est trop long » vaut mieux que relancer la demande entière&nbsp;: vous perdriez ce qui allait bien.</p></div>
+      <div class="mod a-rise" style="--d:0.55s"><div class="mod-h">Faire produire des variantes</div><p class="mod-p">« Donne-moi trois formules d'accroche, de la plus neutre à la plus engageante. » Choisir est plus rapide qu'écrire — et le choix reste vôtre.</p></div>
+      <div class="mod a-rise" style="--d:0.65s"><div class="mod-h">Faire justifier</div><p class="mod-p">« Sur quoi t'appuies-tu pour affirmer ce délai&nbsp;? » La réponse dit si l'affirmation vient d'un document joint ou d'une reconstruction.</p></div>
+    </div>
+    <div class="mod mod-ac a-rise" style="--d:0.8s"><div class="mod-h">Ce que la machine ne peut pas apporter</div><p class="mod-p"><b>La sensibilité</b> — savoir que cette phrase, exacte, blessera. <b>La connaissance du destinataire</b> — savoir qu'il ne lira que les trois premières lignes. <b>La pertinence contextuelle</b> — savoir que le sujet est clos depuis mardi.</p><p class="mod-p">Ce ne sont pas des suppléments d'âme&nbsp;: ce sont les éléments qui font qu'un écrit atteint son but. L'outil produit un texte correct&nbsp;; vous produisez un texte qui marche.</p></div>
+    <div class="note a-fade" style="--d:1s">Il existe aussi des <b>plateformes en ligne</b> qui guident la rédaction d'un prompt par formulaire.
+      Utiles à qui reste bloqué devant la page blanche&nbsp;; limitées, car elles produisent une demande générique là où le contexte fait la qualité.</div>
+  </div>
+  <div class="pageno">22<b>/44</b></div>
+</section>
+
+<section class="slide" style="--e:1.2" data-label="Ce qu'est un skill">
+  <div class="top">
+    <div class="ey a-fade" style="--d:0.05s">Séquence · 15 h 00</div>
+    <h2 class="a-rise" style="--d:0.12s">De l'expertise emballée</h2>
+    <p class="lede a-fade" style="--d:0.27s">Vous venez d'écrire des prompts à la main. C'est maintenant, et pas avant, qu'on peut vous montrer ce qu'un outil en fait — car vous savez ce qu'il y a à faire.</p>
+  </div>
+  <div class="body">
+    <div class="split-13">
+      <div class="mod mod-ac a-rise" style="--d:0.45s"><div class="mod-h">Un skill, c'est quoi</div><p class="mod-p">Une <b>expertise emballée</b>&nbsp;: des instructions, une méthode, parfois des ressources documentaires, qu'on ajoute à un assistant et qui s'activent quand la tâche s'y prête.</p><p class="mod-p"><b>Quelle différence avec un bon prompt&nbsp;?</b> Un prompt vaut pour une demande&nbsp;; un skill vaut pour toutes les demandes d'un même genre. Le prompt est un geste, <b>le skill est une compétence installée</b>.</p></div>
+      <div class="figs" style="grid-template-columns:1fr">
+        <div class="fig a-rise" style="--d:.6s"><div class="num">1,33 M</div>
+          <div class="lb">skills recensés sur un seul registre public</div>
+          <div class="src">skills.sh, 6 septembre 2026</div></div>
+        <div class="fig a-rise" style="--d:.72s"><div class="num">3,3 M</div>
+          <div class="lb">installations du plus téléchargé — un skill dont la fonction est d'aider à trouver les autres</div>
+          <div class="src">skills.sh, 6 septembre 2026</div></div>
+      </div>
+    </div>
+    <div class="note a-fade" style="--d:.95s">Ces chiffres disent une chose et une seule&nbsp;:
+      <b>la difficulté n'est plus d'en trouver un, c'est de choisir.</b></div>
+  </div>
+  <div class="pageno">23<b>/44</b></div>
+</section>
+
+<section class="slide" style="--e:1.45" data-label="Choisir un skill">
+  <div class="top">
+    <div class="ey a-fade" style="--d:0.05s">Séquence</div>
+    <h2 class="a-rise" style="--d:0.12s">Quatre critères — et le dernier prime sur les trois autres</h2>
+  </div>
+  <div class="body">
+    <div class="g4">
+      <div class="mod a-rise" style="--d:0.45s"><div class="mod-h"><span class="n">1</span>Installations</div><p class="mod-p">Un indice de robustesse, pas de qualité.</p></div>
+      <div class="mod a-rise" style="--d:0.53s"><div class="mod-h"><span class="n">2</span>Réputation de l'éditeur</div><p class="mod-p">Un éditeur connu engage sa signature.</p></div>
+      <div class="mod a-rise" style="--d:0.61s"><div class="mod-h"><span class="n">3</span>Activité du dépôt</div><p class="mod-p">Un skill non mis à jour depuis un an décrit des outils qui ont changé.</p></div>
+      <div class="mod mod-ac a-rise" style="--d:0.69s"><div class="mod-h"><span class="n">4</span>Adéquation au besoin</div><p class="mod-p"><b>C'est celui-ci qui décide.</b></p></div>
+    </div>
+    <div class="mod a-rise" style="--d:0.85s"><div class="mod-h">Le contre-exemple, et il instruit</div><p class="mod-p">Le skill d'optimisation de prompt <b>le plus installé</b> du registre — plus de <b>55 000</b> installations, publié par un laboratoire de Google — est spécialisé dans la <b>conception d'interfaces graphiques</b>. Il est excellent, et parfaitement inutile pour rédiger un courriel.</p><p class="mod-p">Celui que nous utilisons dans cette formation compte dix fois moins d'installations, mais son dépôt public réunit plus de <b>12 000</b> marques d'intérêt, il est sous licence libre, et sa version est récente. Sa crédibilité vient de là, non du classement.</p><p class="mod-p"><b>Un skill très installé peut être fait pour un tout autre métier que le vôtre.</b></p></div>
+  </div>
+  <div class="pageno">24<b>/44</b></div>
+</section>
+
+<section class="slide" style="--e:1.3" data-label="Ce qu'un optimiseur ajoute">
+  <div class="top">
+    <div class="ey a-fade" style="--d:0.05s">Séquence</div>
+    <h2 class="a-rise" style="--d:0.12s">Ce qu'un skill d'optimisation fait d'un prompt</h2>
+    <p class="lede a-fade" style="--d:0.27s">Trois choses — et vous les retrouverez à l'exercice 1.</p>
+  </div>
+  <div class="body">
+    <div class="g3">
+      <div class="mod a-rise" style="--d:0.45s"><div class="mod-h">Il complète les champs manquants</div><p class="mod-p">Il repère que le destinataire n'est pas décrit, que la longueur n'est pas dite, que le ton n'est pas fixé.</p></div>
+      <div class="mod a-rise" style="--d:0.55s"><div class="mod-h">Il réclame les critères de réussite</div><p class="mod-p">À quoi saurez-vous que le texte est bon&nbsp;? Sans réponse, l'outil ne sait pas quand il a fini.</p></div>
+      <div class="mod mod-ac a-rise" style="--d:0.65s"><div class="mod-h">Il choisit un cadre adapté</div><p class="mod-p">Les outils sérieux en embarquent une douzaine — dont les deux que nous avons vus ce matin.</p></div>
+    </div>
+    <div class="mod a-rise" style="--d:0.8s"><div class="mod-h">Un cas particulier, et la question qu'il pose</div><p class="mod-p">Il existe des skills qui retravaillent un texte pour qu'il <b>ne se signale plus comme produit par une IA</b>. L'usage est légitime pour une publication sur les réseaux, où personne n'attend une déclaration d'origine.</p><p class="mod-p">Mais la question doit être posée, et nous ne la trancherons pas à votre place&nbsp;: <b>dans quels contextes l'effacement de cette trace est-il légitime, et dans lesquels votre lecteur est-il en droit de savoir&nbsp;?</b> Un billet de blog n'est pas un rapport d'expertise. La technique est la même&nbsp;; le régime moral ne l'est pas.</p></div>
+    <div class="note a-fade" style="--d:1s"><b>L'outil ne vous dispense pas de savoir.</b> Il vous demande ce que vous n'aviez pas pensé à dire —
+      et à une demande vide, il ne peut opposer que des questions.</div>
+  </div>
+  <div class="pageno">25<b>/44</b></div>
+</section>
+
+<section class="slide" style="--e:1.6" data-label="On automatise la forme">
+  <div class="top">
+    <div class="ey a-fade" style="--d:0.05s">Module 5 · 15 h 15</div>
+    <h2 class="a-rise" style="--d:0.12s">On n'automatise pas un texte, on automatise sa forme</h2>
+    <p class="lede a-fade" style="--d:0.27s">Une confusion à lever d'entrée : automatiser des écrits n'est pas « produire automatiquement des textes ». Ce ne serait pas souhaitable.</p>
+  </div>
+  <div class="body">
+    <div class="split">
+      <div class="mod mod-ac a-rise" style="--d:0.45s"><div class="mod-h">Ce qui se répète</div><p class="mod-p"><b>La trame. Le ton. Les formules. La structure.</b></p><p class="mod-p">Tout cela peut se figer une fois pour toutes.</p></div>
+      <div class="mod a-rise" style="--d:0.58s"><div class="mod-h">Ce qui ne se répète jamais</div><p class="mod-p"><b>Le fond</b>&nbsp;: le dossier, le destinataire, la circonstance.</p><p class="mod-p">Automatiser consiste donc à figer le premier pour se consacrer au second.</p></div>
+    </div>
+    <div class="note a-fade" style="--d:.8s">Le geste est simple et son rendement considérable&nbsp;:
+      chaque fois que vous écrivez un prompt qui fonctionne, <b>conservez-le</b>. Non le texte produit&nbsp;: la demande.</div>
+  </div>
+  <div class="pageno">26<b>/44</b></div>
+</section>
+
+<section class="slide" style="--e:1.25" data-label="Trois niveaux d'automatisation">
+  <div class="top">
+    <div class="ey a-fade" style="--d:0.05s">Module 5</div>
+    <h2 class="a-rise" style="--d:0.12s">Trois manières de conserver ses demandes</h2>
+    <p class="lede a-fade" style="--d:0.27s">De la plus rustique à la plus intégrée. Commencez par la première.</p>
+  </div>
+  <div class="body">
+    <div class="chain">
+      <div class="lk a-rise" style="--d:.45s"><div class="mod-h">Le fichier de demandes</div>
+        <p class="mod-p">Un simple document où vous collez vos prompts réussis, avec un titre qui dit quand l'utiliser.
+          Rustique, gratuit, immédiat. <b>C'est par là qu'il faut commencer.</b></p></div>
+      <div class="ar a-fade" style="--d:.58s">→</div>
+      <div class="lk a-rise" style="--d:.62s"><div class="mod-h">Les instructions permanentes</div>
+        <p class="mod-p">La plupart des outils permettent de fixer une fois pour toutes qui vous êtes, ce que vous faites
+          et comment vous voulez qu'on vous réponde. Cela dispense de réécrire le rôle et le ton à chaque demande.</p></div>
+      <div class="ar a-fade" style="--d:.75s">→</div>
+      <div class="lk a-rise" style="--d:.79s"><div class="mod-h">L'assistant personnalisé</div>
+        <p class="mod-p">Un assistant dédié à une tâche — la relance de facture, la réponse aux demandes d'information —
+          configuré une fois, appelé ensuite d'un mot. <b>Ne se justifie que si la tâche revient chaque semaine.</b></p></div>
+    </div>
+    <div class="mod a-rise" style="--d:0.95s"><div class="mod-h">Et après la génération, pour un document long</div><p class="mod-p"><b>L'homogénéité de ton</b> — un document produit en plusieurs fois change de registre sans prévenir. <b>Les redites</b> — un outil sollicité section par section répétera les mêmes idées, formulées autrement. <b>L'enchaînement</b> — les transitions manquent, parce que chaque section a été produite isolément.</p><p class="mod-p">Ces trois défauts ont une cause commune&nbsp;: <b>le découpage de la production</b>. Ils disparaissent en partie si l'on demande le document entier plutôt que ses parties — au prix d'un contrôle moins fin. Il y a là un arbitrage, et il vous appartient.</p></div>
+  </div>
+  <div class="pageno">27<b>/44</b></div>
+</section>
+
+<section class="slide" style="--e:1.6" data-label="Vous travaillez seuls">
+  <div class="top">
+    <div class="ey a-fade" style="--d:0.05s">Module 6 · 16 h 00</div>
+    <h2 class="a-rise" style="--d:0.12s">Une heure, et le formateur ne montre plus</h2>
+    <p class="lede a-fade" style="--d:0.27s">C'est le moment où l'on vérifie que la journée a pris.</p>
+  </div>
+  <div class="body">
+    <div class="split">
+      <div class="mod a-rise" style="--d:0.45s"><div class="mod-h">Ce que vous produisez</div><p class="mod-p">Deux écrits, choisis dans votre propre activité — ceux que vous avez listés ce matin.</p><p class="mod-p"><b>L'un est court et engageant</b>&nbsp;: un courriel. <b>L'autre est structuré</b>&nbsp;: une présentation ou une note.</p><p class="mod-p">Pour chacun&nbsp;: vous écrivez la demande, vous générez, vous itérez, et vous relisez selon la méthode de vérification du module 2.</p></div>
+      <div class="mod mod-ac a-rise" style="--d:0.58s"><div class="mod-h">Le vrai livrable de l'exercice</div><p class="mod-p">Ce n'est pas le texte produit. C'est le <b>relevé de ce que vous avez dû corriger</b>.</p><p class="mod-p"><b>Critère de réussite</b>&nbsp;: vous pouvez nommer au moins une chose que l'outil a produite et que vous avez corrigée. Si vous n'en trouvez aucune, c'est presque toujours que vous n'avez pas vérifié.</p></div>
+    </div>
+  </div>
+  <div class="pageno">28<b>/44</b></div>
+</section>
+
+<section class="slide" style="--e:1.2" data-label="Les cinq contrôles">
+  <div class="top">
+    <div class="ey a-fade" style="--d:0.05s">Module 6</div>
+    <h2 class="a-rise" style="--d:0.12s">Avant de diffuser&nbsp;: cinq contrôles, deux minutes</h2>
+    <p class="lede a-fade" style="--d:0.27s">La liste que vous emportez.</p>
+  </div>
+  <div class="body">
+    <div class="g3">
+      <div class="mod a-rise" style="--d:0.45s"><div class="mod-h"><span class="n">1</span>Les chiffres</div><p class="mod-p">Chacun retrouvé à une source que vous auriez citée vous-même.</p></div>
+      <div class="mod a-rise" style="--d:0.53s"><div class="mod-h"><span class="n">2</span>Les dates</div><p class="mod-p">Mêmes exigences — et défiance particulière sur les dates réglementaires.</p></div>
+      <div class="mod a-rise" style="--d:0.61s"><div class="mod-h"><span class="n">3</span>Les noms propres</div><p class="mod-p">Personnes, entreprises, produits&nbsp;: l'orthographe et l'existence.</p></div>
+    </div>
+    <div class="g2">
+      <div class="mod a-rise" style="--d:0.7s"><div class="mod-h"><span class="n">4</span>Les références</div><p class="mod-p">Une norme, un article, une procédure interne&nbsp;: vérifiés, jamais supposés.</p></div>
+      <div class="mod mod-ac a-rise" style="--d:0.78s"><div class="mod-h"><span class="n">5</span>Le non-dit</div><p class="mod-p">Ce que le texte affirme et que vous ne pouvez pas soutenir. Le plus difficile à voir&nbsp;: il ne s'agit pas d'une erreur, mais d'un <b>excès d'assurance</b>.</p></div>
+    </div>
+    <div class="mod a-rise" style="--d:0.92s"><div class="mod-h">Et une dernière question, qui n'est pas de vérification mais de responsabilité</div><p class="mod-p"><b>Suis-je prêt à défendre chaque phrase de ce texte comme si je l'avais écrite&nbsp;?</b> Puisque, en droit comme en fait, vous l'avez écrite.</p><p class="mod-p">Nous avons commencé par une question&nbsp;: gagner du temps sur quoi&nbsp;? Vous en gagnerez sur le premier jet, la mise en forme, la déclinaison d'un message. Vous en perdrez si vous confiez à l'outil ce qui suppose de connaître votre contexte, ou si vous omettez de vérifier. Et vous en gagnerez d'autant plus que vous saurez dire ce que vous voulez — ce qui était déjà vrai avant l'IA générative.</p></div>
+  </div>
+  <div class="pageno">29<b>/44</b></div>
+</section>
+
+<section class="slide dark" data-label="Exercices">
+  <div class="dk-ey a-fade" style="--d:.1s">Première partie</div>
+  <h2 class="dk-h a-rise" style="--d:.18s">Les énoncés</h2>
+  <p class="dk-p a-fade" style="--d:.45s">Huit exercices, déclinés par type d'écrit et par domaine métier.
+    Les prompts se rédigent <b>à la main</b>, selon RTFCT + D&nbsp;: c'est la compréhension de la structure
+    qui est visée, non la production d'un texte.</p>
+  <div class="dk-m a-fade" style="--d:.7s">Les solutions sont regroupées en seconde partie, à la fin du support.</div>
+</section>
+
+<section class="slide" style="--e:1.5" data-label="Exercices 1 et 2">
+  <div class="top">
+    <div class="ey a-fade" style="--d:0.05s">Énoncés</div>
+    <h2 class="a-rise" style="--d:0.12s">Relation client &nbsp;·&nbsp; Gestion de projet</h2>
+  </div>
+  <div class="body">
+    <div class="g2">
+      <div class="exo a-rise" style="--d:0.45s"><div class="exo-n">Exercice 1 · Relation client</div><div class="exo-t">Le courriel de réponse à une réclamation</div><p class="exo-p">Vous êtes responsable du service relation client d'un fabricant de matériel professionnel. Le référent achats d'un de vos plus gros comptes vous écrit&nbsp;: sa commande a trois semaines de retard. C'est le <b>deuxième retard en six mois</b>, et il l'avait déjà signalé par écrit la première fois. Le retard est de votre fait. Aucun geste commercial n'a été arbitré.</p><div class="exo-d">Rédigez le prompt qui produira ce courriel de réponse.</div></div>
+      <div class="exo a-rise" style="--d:0.6s"><div class="exo-n">Exercice 2 · Gestion de projet</div><div class="exo-t">La note d'avancement</div><p class="exo-p">Vous pilotez la refonte d'un outil interne. Le comité de suivi se réunit jeudi. Vous devez produire une note d'une page&nbsp;: <b>deux jalons tenus</b>, <b>un jalon glissé de trois semaines</b>, <b>un risque nouveau</b> sur la reprise des données. Le comité comprend le directeur financier, qui n'a jamais suivi le détail technique.</p><div class="exo-d">Rédigez le prompt.</div></div>
+    </div>
+  </div>
+  <div class="pageno">31<b>/44</b></div>
+</section>
+
+<section class="slide" style="--e:1.65" data-label="Exercices 3 et 4">
+  <div class="top">
+    <div class="ey a-fade" style="--d:0.05s">Énoncés</div>
+    <h2 class="a-rise" style="--d:0.12s">Direction &nbsp;·&nbsp; Assistanat administratif</h2>
+  </div>
+  <div class="body">
+    <div class="g2">
+      <div class="exo a-rise" style="--d:0.45s"><div class="exo-n">Exercice 3 · Direction</div><div class="exo-t">La trame d'une présentation</div><p class="exo-p">Votre direction vous demande de présenter en comité de direction, <b>en dix minutes</b>, le bilan d'une expérimentation menée pendant six mois. Le comité doit décider s'il <b>généralise ou arrête</b>. Il n'a pas lu le dossier.</p><div class="exo-d">Rédigez le prompt qui produira la trame&nbsp;: les diapositives, leur ordre, et le message de chacune.</div></div>
+      <div class="exo a-rise" style="--d:0.6s"><div class="exo-n">Exercice 4 · Assistanat administratif</div><div class="exo-t">Le compte rendu de réunion</div><p class="exo-p">Vous avez pris des notes pendant une réunion de service d'une heure. Le compte rendu sera diffusé à <b>douze personnes dont trois absentes</b>. Trois décisions ont été prises, une question reste ouverte, et un échange a été tendu entre deux participants.</p><div class="exo-d">Rédigez le prompt.</div></div>
+    </div>
+  </div>
+  <div class="pageno">32<b>/44</b></div>
+</section>
+
+<section class="slide" style="--e:1.6" data-label="Exercices 5 et 6">
+  <div class="top">
+    <div class="ey a-fade" style="--d:0.05s">Énoncés</div>
+    <h2 class="a-rise" style="--d:0.12s">Comptabilité et administration &nbsp;·&nbsp; Direction</h2>
+  </div>
+  <div class="body">
+    <div class="g2">
+      <div class="exo a-rise" style="--d:0.45s"><div class="exo-n">Exercice 5 · Comptabilité et administration</div><div class="exo-t">Le modèle de relance</div><p class="exo-p">Vous relancez chaque semaine une dizaine de clients pour des factures impayées. Les situations varient — premier rappel, deuxième rappel, client habituellement ponctuel, client récidiviste — mais <b>la trame est la même</b>.</p><div class="exo-d">Construisez un modèle de demande <b>réutilisable</b>&nbsp;: un prompt paramétré que vous n'aurez plus qu'à compléter.</div></div>
+      <div class="exo a-rise" style="--d:0.6s"><div class="exo-n">Exercice 6 · Direction</div><div class="exo-t">Un message, trois destinataires</div><p class="exo-p">Une décision vient d'être prise&nbsp;: le déménagement du site dans six mois. Vous devez l'annoncer à trois publics — le <b>comité de direction</b>, les <b>équipes concernées</b>, les <b>clients</b> dont les livraisons seront affectées. Même information, trois écrits.</p><div class="exo-d">Rédigez le prompt qui produira les trois versions en une fois.</div></div>
+    </div>
+  </div>
+  <div class="pageno">33<b>/44</b></div>
+</section>
+
+<section class="slide" style="--e:1.7" data-label="Exercices 7 et 8">
+  <div class="top">
+    <div class="ey a-fade" style="--d:0.05s">Énoncés</div>
+    <h2 class="a-rise" style="--d:0.12s">En autonomie &nbsp;·&nbsp; module 6</h2>
+  </div>
+  <div class="body">
+    <div class="g2">
+      <div class="exo a-rise" style="--d:0.45s"><div class="exo-n">Exercice 7 · Votre activité</div><div class="exo-t">Le courriel, en autonomie</div><p class="exo-p">Reprenez la liste établie ce matin et choisissez-y <b>un courriel que vous avez réellement à écrire cette semaine</b>. Rédigez le prompt selon RTFCT + D, générez, itérez jusqu'à un texte que vous accepteriez d'envoyer.</p><div class="exo-d">Puis appliquez la relecture de vérification et <b>notez ce que vous avez dû corriger</b>.</div></div>
+      <div class="exo a-rise" style="--d:0.6s"><div class="exo-n">Exercice 8 · Votre activité</div><div class="exo-t">La présentation, à partir d'une note</div><p class="exo-p">Vous disposez d'une note de deux pages — la vôtre, ou celle que le formateur fournit. Elle doit être comprise <b>en dix minutes</b> par des personnes qui ne l'ont pas lue.</p><div class="exo-d">Produisez la trame d'une présentation de huit diapositives.</div></div>
+    </div>
+  </div>
+  <div class="pageno">34<b>/44</b></div>
+</section>
+
+<section class="slide dark" data-label="Solutions">
+  <div class="dk-ey a-fade" style="--d:.1s">Seconde partie</div>
+  <h2 class="dk-h a-rise" style="--d:.18s">Les solutions</h2>
+  <p class="dk-p a-fade" style="--d:.45s">Pour chaque exercice&nbsp;: le prompt attendu, puis les critères qui font
+    la réussite ou l'échec. Les prompts sont écrits <b>indépendamment de l'outil</b> — les six champs ne changent pas,
+    seul leur emballage change.</p>
+  <div class="dk-m a-fade" style="--d:.7s">Pour un assistant de la famille Claude, le même contenu se présente en balises
+    &lt;contexte&gt;, &lt;tâche&gt;, &lt;contraintes&gt;. Pour la famille GPT, en quatre sections courtes.</div>
+</section>
+
+<section class="slide" style="--e:1.25" data-label="Solution 1">
+  <div class="top">
+    <div class="ey a-fade" style="--d:0.05s">Solution · exercice 1</div>
+    <h2 class="a-rise" style="--d:0.12s">Relation client — le courriel de réclamation</h2>
+  </div>
+  <div class="body"><div class="pr a-rise" style="--d:0.45s"><p class="pr-l"><span class="f">Rôle</span>Tu es responsable du service relation client d'un fabricant de matériel professionnel.</p><p class="pr-l"><span class="f">Destinataire</span>Le référent achats d'un compte majeur. Il a déjà subi un retard il y a six mois et l'a signalé par écrit. <b>Il attend une date, pas des excuses.</b></p><p class="pr-l"><span class="f">Tâche</span>Rédige le courriel de réponse à sa réclamation, objet compris.</p><p class="pr-l"><span class="f">Contexte</span>Le retard est de trois semaines et il est de notre fait. Nouvelle date d'expédition&nbsp;: <span class="br">[DATE]</span>. Motif réel&nbsp;: <span class="br">[MOTIF]</span>. Aucun geste commercial n'a été arbitré à ce jour.</p><p class="pr-l"><span class="f">Format</span>12 à 15 lignes, un seul écran, aucune liste à puces.</p><p class="pr-l"><span class="f">Ton</span>Ferme sur les faits, respectueux, sans excès d'excuses&nbsp;: une phrase d'excuse au maximum.</p><p class="pr-l"><span class="f">Interdits</span>Ne promets aucun dédommagement, remise ou avoir, même conditionnel. N'emploie aucune formule toute faite du type « nous vous prions de bien vouloir nous excuser pour la gêne occasionnée ». N'invente aucun fait&nbsp;: si une information manque, laisse un champ entre crochets.</p></div><div class="crit a-rise" style="--d:0.65s"><div class="crit-h">Ce qui fait la réussite</div><p class="crit-p">Le prompt porte les six champs, il <b>nomme les deux pièges du cas</b> — la promesse de dédommagement et la formule creuse — et il ferme l'invention par des champs à remplir. Il est raté s'il se contente de « réponds à ce client mécontent », qui produira un texte poli, générique et inutilisable.</p></div>
+  </div>
+  <div class="pageno">36<b>/44</b></div>
+</section>
+
+<section class="slide" style="--e:1.25" data-label="Solution 2">
+  <div class="top">
+    <div class="ey a-fade" style="--d:0.05s">Solution · exercice 2</div>
+    <h2 class="a-rise" style="--d:0.12s">Gestion de projet — la note d'avancement</h2>
+  </div>
+  <div class="body"><div class="pr a-rise" style="--d:0.45s"><p class="pr-l"><span class="f">Rôle</span>Tu es chef de projet dans une direction des systèmes d'information.</p><p class="pr-l"><span class="f">Destinataire</span>Un comité de suivi comprenant le directeur financier, qui <b>ne connaît pas le détail technique</b> et qui lit en diagonale. Il veut savoir&nbsp;: est-ce que ça tient, et combien ça coûte.</p><p class="pr-l"><span class="f">Tâche</span>Rédige une note d'avancement pour la réunion de jeudi.</p><p class="pr-l"><span class="f">Contexte</span>Jalons tenus&nbsp;: <span class="br">[J1]</span>, <span class="br">[J2]</span>. Jalon glissé de trois semaines&nbsp;: <span class="br">[J3]</span>, cause&nbsp;: <span class="br">[CAUSE]</span>. Risque nouveau&nbsp;: la reprise des données depuis l'ancien système, dont la qualité est inférieure à l'estimation initiale. Aucune décision n'est demandée au comité à ce stade.</p><p class="pr-l"><span class="f">Format</span>Une page. Trois parties&nbsp;: où nous en sommes&nbsp;; ce qui a glissé et pourquoi&nbsp;; ce qui nous inquiète. Chaque partie tient en un paragraphe. Pas de vocabulaire technique non expliqué.</p><p class="pr-l"><span class="f">Ton</span>Factuel, sans optimisme de façade. <b>Le glissement est annoncé dans les trois premières lignes.</b></p><p class="pr-l"><span class="f">Interdits</span>Ne minimise pas le retard. N'invente ni chiffre, ni date, ni pourcentage d'avancement.</p></div><div class="crit a-rise" style="--d:0.65s"><div class="crit-h">Deux points font la réussite</div><p class="crit-p"><b>Le destinataire est caractérisé par ce qu'il ignore</b> — c'est ce qui interdira le jargon. Et <b>la mauvaise nouvelle est placée en tête</b>, ce qui est une décision d'écriture, non une consigne de forme&nbsp;: une note qui enterre le glissement en page deux sera relue comme une dissimulation.</p></div>
+  </div>
+  <div class="pageno">37<b>/44</b></div>
+</section>
+
+<section class="slide" style="--e:1.25" data-label="Solution 3">
+  <div class="top">
+    <div class="ey a-fade" style="--d:0.05s">Solution · exercice 3</div>
+    <h2 class="a-rise" style="--d:0.12s">Direction — la trame d'une présentation</h2>
+  </div>
+  <div class="body"><div class="pr a-rise" style="--d:0.45s"><p class="pr-l"><span class="f">Rôle</span>Tu es consultant en communication d'entreprise, spécialiste des présentations de décision.</p><p class="pr-l"><span class="f">Destinataire</span>Un comité de direction de six personnes, qui doit trancher entre généraliser et arrêter. Il dispose de dix minutes et <b>n'a pas lu le dossier</b>.</p><p class="pr-l"><span class="f">Tâche</span>Produis la trame d'une présentation&nbsp;: la liste ordonnée des diapositives, et pour chacune, le message unique qu'elle doit faire passer.</p><p class="pr-l"><span class="f">Contexte</span>Expérimentation de six mois sur <span class="br">[PÉRIMÈTRE]</span>. Résultats&nbsp;: <span class="br">[RÉSULTAT 1]</span>, <span class="br">[RÉSULTAT 2]</span>. Difficulté rencontrée&nbsp;: <span class="br">[DIFFICULTÉ]</span>. Ma recommandation&nbsp;: <span class="br">[RECOMMANDATION]</span>.</p><p class="pr-l"><span class="f">Format</span>Huit diapositives au maximum. Pour chacune&nbsp;: un titre, et une phrase qui énonce le message. Pas de contenu rédigé, pas de puces.</p><p class="pr-l"><span class="f">Ton</span>Orienté décision. <b>La recommandation apparaît à la deuxième diapositive</b>, pas à la dernière.</p><p class="pr-l"><span class="f">Interdits</span>Ne produis pas de diapositive « sommaire » ni de diapositive « remerciements ». N'invente aucun résultat chiffré.</p></div><div class="crit a-rise" style="--d:0.65s"><div class="crit-h">Une consigne contre-intuitive décide de tout</div><p class="crit-p"><b>La recommandation en deuxième position.</b> Un comité qui doit décider en dix minutes n'a pas le temps d'un suspense. Le prompt est raté s'il demande « une présentation sur le bilan de l'expérimentation »&nbsp;: l'outil produira le plan chronologique attendu, qui est précisément celui qu'il ne faut pas.</p></div>
+  </div>
+  <div class="pageno">38<b>/44</b></div>
+</section>
+
+<section class="slide" style="--e:1.2" data-label="Solution 4">
+  <div class="top">
+    <div class="ey a-fade" style="--d:0.05s">Solution · exercice 4</div>
+    <h2 class="a-rise" style="--d:0.12s">Assistanat administratif — le compte rendu</h2>
+  </div>
+  <div class="body"><div class="pr a-rise" style="--d:0.45s"><p class="pr-l"><span class="f">Rôle</span>Tu es assistant de direction, chargé des comptes rendus de réunion de service.</p><p class="pr-l"><span class="f">Destinataire</span>Les douze participants, <b>dont trois absents</b> qui découvriront les décisions par ce document. Ce sont eux qui commandent le niveau de détail.</p><p class="pr-l"><span class="f">Tâche</span>Rédige le compte rendu à partir de mes notes, que je te fournis ci-dessous.</p><p class="pr-l"><span class="f">Contexte</span>Réunion de service du <span class="br">[DATE]</span>, une heure. Mes notes brutes&nbsp;: <span class="br">[NOTES]</span>.</p><p class="pr-l"><span class="f">Format</span>Trois sections&nbsp;: décisions prises (avec, pour chacune, qui fait quoi et pour quand)&nbsp;; question restée ouverte&nbsp;; points d'information. Une page maximum.</p><p class="pr-l"><span class="f">Ton</span>Neutre et factuel.</p><p class="pr-l"><span class="f">Interdits</span>Ne rapporte pas les tensions ni les propos vifs&nbsp;: un compte rendu de service consigne des décisions, pas des humeurs. N'ajoute aucune décision qui ne figure pas dans mes notes. <b>Si une décision est incomplète — sans responsable ou sans échéance — signale-le entre crochets plutôt que de la compléter.</b></p></div><div class="crit a-rise" style="--d:0.65s"><div class="crit-h">Deux exigences décident</div><p class="crit-p"><b>L'interdit sur les tensions</b>&nbsp;: c'est le seul exercice où l'on demande de ne pas restituer une partie du réel, et cela mérite discussion. <b>Le signalement des décisions incomplètes</b>&nbsp;: l'outil, laissé libre, inventera un responsable et une échéance, parce qu'un compte rendu bien formé en comporte. C'est l'exemple le plus net de la journée sur la production du plausible.</p></div>
+  </div>
+  <div class="pageno">39<b>/44</b></div>
+</section>
+
+<section class="slide" style="--e:1.4" data-label="Solution 5">
+  <div class="top">
+    <div class="ey a-fade" style="--d:0.05s">Solution · exercice 5</div>
+    <h2 class="a-rise" style="--d:0.12s">Comptabilité — le modèle de relance</h2>
+  </div>
+  <div class="body"><div class="pr a-rise" style="--d:0.45s"><p class="pr-l"><span class="f">Rôle</span>Tu es chargé du recouvrement amiable dans une PME.</p><p class="pr-l"><span class="f">Destinataire</span><span class="br">[FONCTION]</span> chez <span class="br">[CLIENT]</span>, relation commerciale <span class="br">[ANCIENNETÉ]</span>. Historique de paiement&nbsp;: <span class="br">[PONCTUEL / IRRÉGULIER]</span>.</p><p class="pr-l"><span class="f">Tâche</span>Rédige un courriel de relance, objet compris.</p><p class="pr-l"><span class="f">Contexte</span>Facture <span class="br">[NUMÉRO]</span>, montant <span class="br">[MONTANT]</span>, échue depuis <span class="br">[DURÉE]</span>. Rappel numéro <span class="br">[RANG]</span>. Relances précédentes&nbsp;: <span class="br">[OUI / NON, DATE]</span>.</p><p class="pr-l"><span class="f">Format</span>Huit lignes maximum. Le montant, le numéro de facture et la date d'échéance apparaissent dans les deux premières lignes.</p><p class="pr-l"><span class="f">Ton</span><b>Déterminé par le rang du rappel</b>&nbsp;: cordial au premier, ferme au deuxième, formel au troisième.</p><p class="pr-l"><span class="f">Interdits</span>Ne menace d'aucune procédure tant que <span class="br">[RANG]</span> est inférieur à 3. N'invente aucun montant ni aucune date.</p></div><div class="crit a-rise" style="--d:0.65s"><div class="crit-h">Ce qui fait un modèle, et non un prompt</div><p class="crit-p"><b>Le ton est paramétré, non fixé</b>&nbsp;: c'est ce qui permet à un seul modèle de couvrir les quatre situations. Et <b>la menace est interdite en deçà d'un certain rang</b> — une relance qui évoque le contentieux au premier rappel abîme la relation commerciale, et l'outil, laissé libre, le fera.</p></div>
+  </div>
+  <div class="pageno">40<b>/44</b></div>
+</section>
+
+<section class="slide" style="--e:1.25" data-label="Solution 6">
+  <div class="top">
+    <div class="ey a-fade" style="--d:0.05s">Solution · exercice 6</div>
+    <h2 class="a-rise" style="--d:0.12s">Direction — un message, trois destinataires</h2>
+  </div>
+  <div class="body"><div class="pr a-rise" style="--d:0.45s"><p class="pr-l"><span class="f">Rôle</span>Tu es responsable de la communication interne et externe d'une entreprise industrielle.</p><p class="pr-l"><span class="f">Tâche</span>Produis trois versions d'une même annonce, l'une après l'autre.</p><p class="pr-l"><span class="f">Contexte</span>Décision&nbsp;: déménagement du site de <span class="br">[A]</span> vers <span class="br">[B]</span>, effectif dans six mois. Motif&nbsp;: <span class="br">[MOTIF]</span>. Conséquences connues&nbsp;: <span class="br">[CONSÉQUENCES]</span>. Ce qui n'est pas encore arbitré&nbsp;: <span class="br">[POINTS OUVERTS]</span>.</p><p class="pr-l"><span class="f">Destinataires</span><b>(1) Comité de direction</b>&nbsp;: veut le calendrier et le coût, connaît le dossier. <b>(2) Équipes concernées</b>&nbsp;: veulent savoir ce qui change pour elles, et <b>craignent pour leurs trajets</b>. <b>(3) Clients</b>&nbsp;: veulent l'assurance que les livraisons ne seront pas affectées.</p><p class="pr-l"><span class="f">Format</span>Trois textes séparés et titrés. Comité&nbsp;: dix lignes. Équipes&nbsp;: quinze lignes. Clients&nbsp;: huit lignes.</p><p class="pr-l"><span class="f">Ton</span>Factuel pour le comité&nbsp;; attentif et concret pour les équipes&nbsp;; rassurant mais sans engagement chiffré pour les clients.</p><p class="pr-l"><span class="f">Interdits</span>Ne présente comme arbitré ce qui figure dans [POINTS OUVERTS]. Ne promets aucune compensation aux équipes. Ne donne aux clients aucune date de reprise que je n'ai pas fournie.</p></div><div class="crit a-rise" style="--d:0.65s"><div class="crit-h">L'exercice se réussit sur un point unique</div><p class="crit-p"><b>Avoir décrit ce que chaque public craint</b>, et non seulement ce qu'il doit savoir. C'est l'application directe du champ « destinataire ». Un prompt qui se contente de « adapte le message aux trois publics » produira trois variantes de longueur, non trois écrits différents.</p></div>
+  </div>
+  <div class="pageno">41<b>/44</b></div>
+</section>
+
+<section class="slide" style="--e:1.55" data-label="Solution 7">
+  <div class="top">
+    <div class="ey a-fade" style="--d:0.05s">Solution · exercice 7</div>
+    <h2 class="a-rise" style="--d:0.12s">Le courriel en autonomie — ce qu'on évalue</h2>
+    <p class="lede a-fade" style="--d:0.27s">Il n'y a pas ici de prompt modèle, puisque le cas est personnel.</p>
+  </div>
+  <div class="body">
+    <div class="g3">
+      <div class="mod a-rise" style="--d:0.45s"><div class="mod-h">La présence des six champs</div><p class="mod-p">Rôle, tâche, format, contexte, ton — et le destinataire, qui manque presque toujours au premier essai.</p></div>
+      <div class="mod a-rise" style="--d:0.55s"><div class="mod-h">Le destinataire caractérisé</div><p class="mod-p">Par ce qu'il <b>attend</b> et par ce qu'il <b>craint</b>, non par sa fonction seule.</p></div>
+      <div class="mod mod-ac a-rise" style="--d:0.65s"><div class="mod-h">Le relevé des corrections</div><p class="mod-p"><b>C'est le vrai livrable.</b> Il dit à chacun où son outil l'a trompé.</p></div>
+    </div>
+    <div class="mod a-rise" style="--d:0.8s"><div class="mod-h">Critère de réussite</div><p class="mod-p">Le participant peut nommer <b>au moins une chose</b> que l'outil a produite et qu'il a dû corriger.</p><p class="mod-p">S'il n'en trouve aucune, c'est presque toujours qu'il n'a pas vérifié — et c'est ce constat, plus que le texte produit, qui fait le prix de l'exercice.</p></div>
+  </div>
+  <div class="pageno">42<b>/44</b></div>
+</section>
+
+<section class="slide" style="--e:1.45" data-label="Solution 8">
+  <div class="top">
+    <div class="ey a-fade" style="--d:0.05s">Solution · exercice 8</div>
+    <h2 class="a-rise" style="--d:0.12s">La présentation à partir d'une note</h2>
+  </div>
+  <div class="body"><div class="pr a-rise" style="--d:0.45s"><p class="pr-l"><span class="f">Rôle</span>Tu es consultant en communication, spécialiste de la transformation d'un document écrit en présentation orale.</p><p class="pr-l"><span class="f">Destinataire</span>Des personnes qui <b>n'ont pas lu la note</b>, disposent de dix minutes, et devront en retenir trois idées.</p><p class="pr-l"><span class="f">Tâche</span>Produis la trame d'une présentation de huit diapositives à partir de la note ci-dessous.</p><p class="pr-l"><span class="f">Contexte</span><span class="br">[NOTE COLLÉE]</span>. L'idée que je veux qu'ils retiennent en priorité est&nbsp;: <span class="br">[IDÉE]</span>.</p><p class="pr-l"><span class="f">Format</span>Huit diapositives. Pour chacune&nbsp;: un titre, et une phrase énonçant son message unique. Aucun contenu rédigé.</p><p class="pr-l"><span class="f">Ton</span>Orienté compréhension, non exhaustivité.</p><p class="pr-l"><span class="f">Interdits</span><b>Ne reprends pas le plan de la note</b>&nbsp;: une note se lit, une présentation s'entend. N'ajoute aucune idée absente de la note.</p></div><div class="crit a-rise" style="--d:0.65s"><div class="crit-h">Un seul point décide, et il condense la journée</div><p class="crit-p"><b>L'interdit de reprendre le plan de la note.</b> C'est la consigne que l'outil ne devinera jamais, et c'est celle qui distingue une présentation d'un document projeté.</p></div>
+  </div>
+  <div class="pageno">43<b>/44</b></div>
+</section>
+
+<section class="slide" style="--e:1.15" data-label="Références">
+  <div class="top">
+    <div class="ey a-fade" style="--d:0.05s">Références</div>
+    <h2 class="a-rise" style="--d:0.12s">Ce qui fonde ce support</h2>
+    <p class="lede a-fade" style="--d:0.27s">Les sources primaires portent des données contestables&nbsp;; les repères de contexte situent sans mesurer.</p>
+  </div>
+  <div class="body">
+    <div class="refs">
+      <div class="panel a-rise" style="--d:.45s">
+        <div class="panel-h">Sources primaires</div>
+        <p class="ref"><b>Règlement (UE) 2024/1689</b> établissant des règles harmonisées concernant l'intelligence artificielle, 2024 — art. 4 (maîtrise de l'IA), art. 99 (sanctions), art. 113 (calendrier).</p>
+        <p class="ref"><b>Règlement (UE) 2026/1744</b>, omnibus numérique sur l'IA — publié au <i>JOUE</i> le 24 juillet 2026, en vigueur le 27 juillet 2026&nbsp;: réécriture de l'article 4.</p>
+        <p class="ref"><b>Commission européenne</b>, <i>AI Literacy — Questions &amp; Answers</i>, portail « Shaping Europe's digital future », consulté le 6 septembre 2026.</p>
+        <p class="ref"><b>Commission européenne</b>, <i>AI talent, skills and literacy</i> — répertoire vivant des pratiques de maîtrise de l'IA.</p>
+        <p class="ref"><b>GovTech Singapour</b>, Data Science &amp; AI Division, <i>Prompt Engineering Playbook</i>, août 2023 — cadre CO-STAR.</p>
+        <p class="ref"><b>Skill <i>prompt-master</i></b>, v. 1.8.0, licence MIT, 2026 — treize gabarits, trente-sept défauts répertoriés.</p>
+        <p class="ref"><b>Registre skills.sh</b>, page d'accueil et classement, consultés le 6 septembre 2026.</p>
+      </div>
+      <div class="panel a-rise" style="--d:.6s">
+        <div class="panel-h">Repères de contexte</div>
+        <p class="ref">Teo, Sheila, « How I Won Singapore's GPT-4 Prompt Engineering Competition », <i>Towards Data Science</i>, décembre 2023.</p>
+        <p class="ref">Comparatifs de cadres de prompting — RTF, RCTF, CRAFT, CO-STAR, RISEN, CRISPE —, presse spécialisée, 2026.</p>
+        <p class="ref">Littérature professionnelle sur le déplacement du <i>prompt engineering</i> vers l'ingénierie du contexte, 2026.</p>
+      </div>
+    </div>
+  </div>
+  <div class="pageno">44<b>/44</b></div>
+</section>
+
+    </div>
+
+    <div class="nav" id="nav">
+      <button id="prev" title="Précédent (←)">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+      </button>
+      <span class="count" id="count">1 / 44</span>
+      <button id="next" title="Suivant (→)">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+      </button>
+    </div>
+  </main>
+</div>
+
+<script>
+(function(){
+  const deck   = document.getElementById('deck');
+  const stage  = document.getElementById('stage');
+  const slides = Array.from(deck.querySelectorAll('.slide'));
+  const thumbs = document.getElementById('thumbs');
+  const count  = document.getElementById('count');
+  const N = slides.length;
+  let cur = 0;
+
+  /* ---------- Miniatures : véritables clones à l'échelle ---------- */
+  slides.forEach((s, i) => {
+    const wrap = document.createElement('div');
+    wrap.className = 'thumb';
+    const clone = s.cloneNode(true);
+    clone.classList.remove('active');
+    clone.classList.add('tvis');
+    // Les animations ne s'appliquent que sous « .slide.active » : le clone,
+    // jamais actif, affiche donc d'emblée l'état final. Rien à neutraliser.
+    wrap.innerHTML =
+      '<div class="thumb-no">' + (i+1) + '</div>' +
+      '<div class="thumb-box"><div class="thumb-scale"></div></div>' +
+      '<div class="thumb-label">' + (s.dataset.label || ('Carte ' + (i+1))) + '</div>';
+    wrap.querySelector('.thumb-scale').appendChild(clone);
+    wrap.addEventListener('click', () => go(i));
+    thumbs.appendChild(wrap);
+  });
+  const thumbEls = Array.from(thumbs.querySelectorAll('.thumb'));
+
+  /* ---------- Navigation + relance des animations ---------- */
+  function go(i){
+    if(i < 0 || i > N-1) return;
+    const s = slides[i];
+    slides.forEach(x => x.classList.remove('active'));
+    void s.offsetWidth;              // reflow : rejoue les animations en cascade
+    s.classList.add('active');
+    cur = i;
+    thumbEls.forEach((t,k) => t.classList.toggle('on', k === i));
+    count.textContent = (i+1) + ' / ' + N;
+    document.getElementById('prev').disabled = (i === 0);
+    document.getElementById('next').disabled = (i === N-1);
+    thumbEls[i].scrollIntoView({block:'nearest', behavior:'smooth'});
+  }
+  document.getElementById('prev').onclick = () => go(cur-1);
+  document.getElementById('next').onclick = () => go(cur+1);
+
+  /* ---------- Mise à l'échelle de la carte ---------- */
+  function fit(){
+    const pad = document.fullscreenElement ? 0 : 56;
+    const r = stage.getBoundingClientRect();
+    const s = Math.min((r.width - pad) / 1280, (r.height - pad) / 720);
+    deck.style.transform = 'scale(' + s + ')';
+  }
+  window.addEventListener('resize', fit);
+
+  /* ---------- Plein écran (Échap pour sortir) ---------- */
+  function toggleFs(){
+    if(document.fullscreenElement) document.exitFullscreen();
+    else stage.requestFullscreen && stage.requestFullscreen();
+  }
+  document.getElementById('btnFs').onclick = toggleFs;
+  document.addEventListener('fullscreenchange', () => {
+    fit(); setTimeout(fit, 130);          // la scène n'a pas fini de se redimensionner
+    go(cur); wake();
+  });
+
+  /* ---------- Masquage de l'interface au repos (plein écran) ---------- */
+  let idleT;
+  function wake(){
+    stage.classList.remove('idle');
+    clearTimeout(idleT);
+    if(document.fullscreenElement) idleT = setTimeout(() => stage.classList.add('idle'), 2600);
+  }
+  stage.addEventListener('mousemove', wake);
+
+  /* ---------- Export PDF ---------- */
+  function toPdf(){
+    const wasFs = !!document.fullscreenElement;
+    const finish = () => window.print();
+    if(wasFs) document.exitFullscreen().then(() => setTimeout(finish, 260));
+    else finish();
+  }
+  document.getElementById('btnPdf').onclick = toPdf;
+
+  /* ---------- Clavier ---------- */
+  document.addEventListener('keydown', e => {
+    if(e.metaKey || e.ctrlKey || e.altKey) return;   // laisse passer Cmd+P natif
+    if(e.key === 'ArrowRight' || e.key === 'PageDown' || e.key === ' '){ e.preventDefault(); go(cur+1); }
+    else if(e.key === 'ArrowLeft' || e.key === 'PageUp'){ e.preventDefault(); go(cur-1); }
+    else if(e.key === 'Home'){ go(0); }
+    else if(e.key === 'End'){ go(N-1); }
+    else if(e.key === 'f' || e.key === 'F'){ toggleFs(); }
+    else if(e.key === 'p' || e.key === 'P'){ e.preventDefault(); toPdf(); }
+  });
+
+  fit();
+  go(0);
+})();
+</script>
