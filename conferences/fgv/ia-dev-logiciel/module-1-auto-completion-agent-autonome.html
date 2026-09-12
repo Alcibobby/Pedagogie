@@ -420,6 +420,18 @@ h2{
 .stat .sd{font-size:11.8px; color:var(--ink-50); margin-top:6px; line-height:1.45; font-weight:300}
 
 /* — Jauge de perception — */
+.stats.three{grid-template-columns:1fr 1fr 1fr; gap:16px}
+.stats.three .stat{padding:16px 18px}
+.stats.three .sv{font-size:38px}
+.donut.past{background:conic-gradient(var(--blue-soft) 0 19.7%, rgba(11,37,69,.09) 19.7% 100%)}
+.donut.past span{color:var(--blue)}
+.donut.now{background:conic-gradient(var(--accent) 0 6.1%, rgba(11,37,69,.09) 6.1% 100%)}
+.donut.sm{width:96px; height:96px; flex:0 0 96px}
+.donut.sm::after{inset:11px}
+.donut.sm span{font-size:20px}
+.donut .dy{position:absolute; bottom:-17px; left:0; right:0; text-align:center;
+  font-size:10.5px; letter-spacing:.12em; color:var(--ink-50); font-weight:700; z-index:1}
+.dep.two{gap:26px; margin-top:20px; margin-bottom:8px}
 .gauge{margin-top:22px; display:grid; gap:9px}
 .grow{display:flex; align-items:center; gap:13px; font-size:12.2px}
 .grow .gl{width:150px; flex:0 0 150px; color:var(--ink-70); font-weight:500}
@@ -613,7 +625,7 @@ h2{
             <div class="gen a-rise" style="--d:.9s">
               <div class="gy">2024 — 2026</div>
               <div class="gn">Le mandataire</div>
-              <div class="gd">Devin, « premier ingénieur logiciel IA » (Cognition, mars 2024) ; Claude Code dans le terminal (Anthropic, février 2025). Recevoir un objectif et l'accomplir de bout en bout.</div>
+              <div class="gd">Devin, « premier ingénieur logiciel IA » (Cognition, mars 2024) : <b>13,9 %</b> des tickets SWE-bench résolus de bout en bout. Claude Code dans le terminal (février 2025). En septembre 2026, les meilleurs agents dépassent <b>95 %</b> sur SWE-bench Verified.</div>
               <div class="gv">Il agit</div>
             </div>
           </div>
@@ -684,19 +696,24 @@ h2{
 
       <!-- ========== 7 · LE GAIN MESURÉ / RESSENTI ========== -->
       <section class="slide" data-label="Le gain mesuré, le gain ressenti">
-        <div class="eyebrow a-fade" style="--d:.1s">Mesure · deux études, deux contextes</div>
+        <div class="eyebrow a-fade" style="--d:.1s">Mesure · trois études, trois contextes</div>
         <h2 class="a-rise" style="--d:.2s">Le gain mesuré, le gain ressenti</h2>
 
-        <div class="stats">
+        <div class="stats three">
           <div class="stat a-rise" style="--d:.38s">
             <div class="sv">− 55 %</div>
-            <div class="sl">de temps sur la tâche · GitHub, 2022</div>
-            <div class="sd">Étude contrôlée, ≈ 95 développeurs, tâche neuve et circonscrite. Conduite par le fournisseur de l'outil.</div>
+            <div class="sl">de temps · GitHub, 2022</div>
+            <div class="sd">≈ 95 développeurs, tâche neuve et circonscrite. Conduite par le fournisseur.</div>
           </div>
-          <div class="stat t a-rise" style="--d:.52s">
+          <div class="stat t a-rise" style="--d:.5s">
             <div class="sv">+ 19 %</div>
             <div class="sl">de temps en plus · METR, juillet 2025</div>
-            <div class="sd">Essai randomisé, 16 développeurs expérimentés, 246 tâches réelles sur leurs propres projets, matures et volumineux.</div>
+            <div class="sd">16 développeurs expérimentés, 246 tâches réelles sur leurs propres projets, matures et volumineux.</div>
+          </div>
+          <div class="stat a-rise" style="--d:.62s">
+            <div class="sv">− 4 %</div>
+            <div class="sl">de temps · METR, février 2026</div>
+            <div class="sd">57 développeurs, 143 dépôts, 800 tâches, outils de fin 2025. Intervalle − 15 % à + 9 % : l'effet n'est plus distinguable de zéro.</div>
           </div>
         </div>
 
@@ -718,7 +735,7 @@ h2{
           </div>
         </div>
 
-        <div class="foot-note a-fade" style="--d:1.1s">Ces études ne se contredisent pas : elles ne mesurent pas la même chose. Leçon commune — <em>le sentiment de vitesse n'est pas la vitesse.</em></div>
+        <div class="foot-note a-fade" style="--d:1.1s">En dix-huit mois, le ralentissement mesuré passe de 19 % à 4 %, et l'intervalle traverse désormais zéro : <b>l'écart se referme</b>. METR a toutefois suspendu ce protocole, jugeant ses biais de sélection trop lourds — les développeurs refusant de travailler sans IA ne se portent plus volontaires. Leçon qui, elle, tient toujours : <em>le sentiment de vitesse n'est pas la vitesse.</em></div>
         <div class="pageno">7<b>/11</b></div>
       </section>
 
@@ -726,34 +743,34 @@ h2{
       <section class="slide" data-label="Risque 1 · qualité du code">
         <div class="eyebrow a-fade" style="--d:.1s">Risque 1 · Qualité du code</div>
         <h2 class="a-rise" style="--d:.2s">Le copier-coller dépasse le réagencement</h2>
-        <p class="lede a-rise" style="--d:.36s">Il est plus rapide de faire regénérer un bloc voisin que de refactoriser proprement l'existant. On produit vite, mais on accumule de la redondance — c'est-à-dire de la <b>dette technique</b>, ce coût différé qu'une équipe paiera plus tard en maintenance.</p>
+        <p class="lede a-rise" style="--d:.36s">Deux mesures, faites sur les <i>commits</i> eux-mêmes. Le <b>copié-collé</b> : des lignes ajoutées identiques à des lignes existant déjà ailleurs dans le dépôt. Le <b>code déplacé</b> : des lignes qui changent d'endroit sans changer de contenu — la trace d'un travail de réorganisation. Demander une regénération coûte une phrase ; réorganiser l'existant coûte une heure. L'outil rend le premier geste presque gratuit, et ne change rien au coût du second.</p>
 
         <div class="brows">
           <div class="brow a-fade" style="--d:.5s">
-            <div class="bl">Part de code purement copié-collé <span>il progresse</span></div>
+            <div class="bl">Copié-collé — lignes ajoutées déjà présentes ailleurs <span>+ 67 % depuis 2022</span></div>
             <div class="byear">
-              <span class="yl">2021</span>
-              <div class="btrack"><div class="bseg a a-grow" style="--w:33.2%;--d:.6s">8,3 %</div></div>
+              <span class="yl">2022</span>
+              <div class="btrack"><div class="bseg a a-grow" style="--w:37.6%;--d:.6s">9,4 %</div></div>
             </div>
             <div class="byear">
-              <span class="yl">2024</span>
-              <div class="btrack"><div class="bseg b a-grow" style="--w:49.2%;--d:.72s">12,3 %</div></div>
+              <span class="yl">2026</span>
+              <div class="btrack"><div class="bseg b a-grow" style="--w:62.8%;--d:.72s">15,7 %</div></div>
             </div>
           </div>
           <div class="brow a-fade" style="--d:.84s">
-            <div class="bl">Part de code « déplacé », signe de réorganisation <span>il s'effondre</span></div>
+            <div class="bl">Code déplacé — trace d'une réorganisation <span>− 82 % depuis 2022</span></div>
             <div class="byear">
-              <span class="yl">2021</span>
-              <div class="btrack"><div class="bseg d a-grow" style="--w:100%;--d:.94s">25 %</div></div>
+              <span class="yl">2022</span>
+              <div class="btrack"><div class="bseg d a-grow" style="--w:100%;--d:.94s">21 %</div></div>
             </div>
             <div class="byear">
-              <span class="yl">2024</span>
-              <div class="btrack"><div class="bseg a a-grow" style="--w:40%;--d:1.06s">&lt; 10 %</div></div>
+              <span class="yl">2026</span>
+              <div class="btrack"><div class="bseg a a-grow" style="--w:18.1%;--d:1.06s">3,8 %</div></div>
             </div>
           </div>
         </div>
 
-        <div class="src a-fade" style="--d:1.15s">GitClear, 2025 — analyse de 211 millions de lignes de code modifiées entre 2020 et 2024. Pour la première fois, le copier-coller dépasse le réagencement.</div>
+        <div class="src a-fade" style="--d:1.15s">GitClear, « The Maintainability Gap », janvier 2026 — 623 millions de changements analysés, 2023-2026. Mesure agrégée sur des dépôts entiers, non sur une pratique individuelle : une équipe qui fait refactoriser son agent échappe à la tendance, elle ne la réfute pas.</div>
         <div class="pageno">8<b>/11</b></div>
       </section>
 
@@ -764,21 +781,22 @@ h2{
 
         <div class="duo">
           <div class="a-rise" style="--d:.42s">
-            <div class="dh">Sécurité · Stanford, 2023</div>
-            <div class="dp">Les participants disposant d'un assistant IA ont produit un code <b>significativement moins sûr</b> que ceux qui s'en passaient. Et ils étaient <b>davantage convaincus</b> d'avoir écrit un code sûr.</div>
-            <div class="dtag">Une vulnérabilité que l'on croit absente ne se cherche pas</div>
+            <div class="dh">Sécurité · Stanford 2023, confirmé en 2026</div>
+            <div class="dp">En 2023 déjà : code <b>significativement moins sûr</b>, et auteurs <b>davantage convaincus</b> de l'avoir écrit sûr. Trois ans plus tard, l'écart ne s'est pas refermé — il s'est creusé. Le <i>benchmark</i> OX 2026 relève des vulnérabilités critiques <b>multipliées par quatre en un an</b>, et la Cloud Security Alliance documente une <b>vague de CVE</b> imputable au code généré.</div>
+            <div class="dtag">C'est le seul indicateur qui ne s'est pas amélioré</div>
           </div>
           <div class="a-rise" style="--d:.58s">
-            <div class="dh t">Dépendances · Spracklen et al., 2024</div>
-            <div class="dep">
-              <div class="donut a-pop" style="--d:.72s"><span>19,7 %</span></div>
-              <div class="dl">des paquets suggérés par les modèles <b>n'existent pas</b> : le modèle en invente le nom.<br><br>≈ 5,2 % pour les modèles commerciaux, ≈ 21,7 % pour les modèles ouverts.</div>
+            <div class="dh t">Dépendances · 2024 → 2026</div>
+            <div class="dep two">
+              <div class="donut past sm a-pop" style="--d:.66s"><span>19,7 %</span><div class="dy">2024</div></div>
+              <div class="donut now sm a-pop" style="--d:.78s"><span>6,1 %</span><div class="dy">2026</div></div>
+              <div class="dl">Un modèle qui invente le <b>nom d'une bibliothèque</b> qui n'existe pas : vous l'installez, elle n'est pas là — ou pire, quelqu'un l'y a mise.<br><br>Le taux s'effondre : 19,7 % en 2024, <b>4,6 à 6,1 %</b> en 2026 sur les modèles frontière.</div>
             </div>
-            <div class="dtag t">Slopsquatting : publier du code malveillant sous un nom halluciné</div>
+            <div class="dtag t">Mais 53 noms hallucinés par les 5 modèles étaient encore libres à l'enregistrement en avril 2026</div>
           </div>
         </div>
 
-        <div class="foot-note a-fade" style="--d:.95s">La dépendance a un second sens, organisationnel : le remède crée son propre besoin. Ce qui nous augmente aujourd'hui peut nous diminuer demain, si nous cessons de comprendre ce que nous déléguons.</div>
+        <div class="foot-note a-fade" style="--d:.95s">Deux trajectoires opposées, et il faut les tenir ensemble : l'hallucination de paquets se résorbe, la sécurité du code se dégrade. Le progrès des modèles règle ce qui relève de leur connaissance, non ce qui relève de <b>notre</b> vigilance. Et la dépendance garde son second sens, organisationnel : le remède crée son propre besoin.</div>
         <div class="pageno">9<b>/11</b></div>
       </section>
 
@@ -799,11 +817,11 @@ h2{
           <div class="a-rise" style="--d:.36s">
             <div class="refh">Sources primaires — une donnée peut y être contestée</div>
             <div class="ref"><b>GitHub (Kalliamvakou et al.), 2022</b> — « Research: quantifying GitHub Copilot's impact on developer productivity and happiness ». Étude contrôlée, ≈ 95 développeurs ; tâche ~55 % plus rapide. Conduite par le fournisseur. arXiv 2302.06590.</div>
-            <div class="ref"><b>METR (Becker, Rush, Barnes, Rein), 10 juillet 2025</b> — « Measuring the Impact of Early-2025 AI on Experienced Open-Source Developer Productivity ». Essai randomisé, 16 développeurs, 246 tâches ; +19 % de temps. arXiv 2507.09089.</div>
-            <div class="ref"><b>GitClear, 2025</b> — « AI Copilot Code Quality » ; 211 M de lignes modifiées (2020–2024) ; copié-collé 8,3 % → 12,3 % ; code déplacé 25 % → &lt; 10 %.</div>
-            <div class="ref"><b>Perry, Srivastava, Kumar, Boneh (Stanford), 2023</b> — « Do Users Write More Insecure Code with AI Assistants? », ACM CCS 2023. arXiv 2211.03622.</div>
-            <div class="ref"><b>Spracklen et al., 2024</b> — « We Have a Package for You! » ; 19,7 % de paquets hallucinés, 16 modèles. arXiv 2406.10279, USENIX Security 2025.</div>
-            <div class="ref"><b>Cognition (Scott Wu), 12 mars 2024</b> — « Introducing Devin, the first AI software engineer » ; SWE-bench : 13,86 % contre 1,96 % pour l'état de l'art antérieur.</div>
+            <div class="ref"><b>METR, 10 juillet 2025</b> — « Measuring the Impact of Early-2025 AI… » ; essai randomisé, 16 développeurs, 246 tâches ; +19 % de temps. arXiv 2507.09089. — <b>et 24 février 2026</b>, « We are Changing our Developer Productivity Experiment Design » : 57 développeurs, 143 dépôts, 800+ tâches, outils de fin 2025 ; −4 % (IC −15 % / +9 %) pour les 47 nouveaux, −18 % (IC −38 % / +9 %) pour les 10 revenants ; protocole suspendu pour biais de sélection.</div>
+            <div class="ref"><b>GitClear, « The Maintainability Gap », janvier 2026</b> — 623 M de changements (2023-2026) ; code déplacé 21 % (2022) → 13 % (2023) → 3,8 % (2026) ; copié-collé 9,4 % (2022) → 15,7 % (S1 2026) ; duplication de blocs +81 % depuis 2023.</div>
+            <div class="ref"><b>Perry, Srivastava, Kumar, Boneh (Stanford), 2023</b> — « Do Users Write More Insecure Code with AI Assistants? », ACM CCS 2023. arXiv 2211.03622. — Confirmé en 2026 par le <b>OX Application Security Benchmark</b> (findings critiques ×4 en un an) et la <b>Cloud Security Alliance</b> (vague de CVE imputable au code généré).</div>
+            <div class="ref"><b>Spracklen et al., 2024</b> — « We Have a Package for You! » ; 19,7 % de paquets hallucinés. arXiv 2406.10279, USENIX Security 2025. — <b>Réévalué en 2026</b> : « The Range Shrinks, the Threat Remains », arXiv 2605.17062 ; 5 modèles frontière, 199 845 requêtes ; 4,62 % à 6,10 % ; 53 noms encore enregistrables en avril 2026.</div>
+            <div class="ref"><b>Cognition, 12 mars 2024</b> — Devin ; SWE-bench : 13,86 % contre 1,96 % pour l'état de l'art antérieur. — <b>Septembre 2026</b> : les premiers agents dépassent 95 % sur SWE-bench Verified, épreuve désormais proche de la saturation.</div>
           </div>
           <div class="b-col a-rise" style="--d:.52s">
             <div class="refh b">Repères de contexte — situent sans mesurer</div>
