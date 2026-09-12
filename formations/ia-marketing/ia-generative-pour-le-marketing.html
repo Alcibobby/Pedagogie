@@ -22,7 +22,7 @@
 <meta name="pedago:titre"   content="Utiliser l'IA générative pour le marketing">
 <meta name="pedago:rang"    content="1">
 <meta name="pedago:mode"    content="formation">
-<meta name="pedago:cartes"  content="60">
+<meta name="pedago:cartes"  content="61">
 <meta name="pedago:resume"  content="Choisir ses outils, produire, vérifier, industrialiser — et savoir ce qu'on a le droit de publier.">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -319,7 +319,7 @@ body{
 
 /* ---- tête de carte ---- */
 .ey{font-size:calc(10.5px * var(--e)); letter-spacing:.17em; text-transform:uppercase;
-    font-weight:700; color:var(--accent); margin-bottom:calc(9px * var(--e))}
+    font-weight:700; color:var(--accent); margin-bottom:0}
 h2{font-family:var(--serif); font-weight:400; line-height:1.1; margin:0;
    font-size:calc(38px * var(--ed)); color:var(--ink); letter-spacing:-.015em}
 h2 em{font-style:normal; color:var(--accent)}
@@ -327,13 +327,17 @@ h2 em{font-style:normal; color:var(--accent)}
       margin:calc(11px * var(--e)) 0 0; max-width:calc(880px * var(--e))}
 
 /* ---- pastille de régime ---- */
-.reg{position:absolute; top:calc(48px * var(--e)); right:calc(62px * var(--e));
+.hd{display:flex; align-items:center; justify-content:space-between;
+     gap:calc(18px * var(--e)); margin-bottom:calc(7px * var(--e))}
+.hd .ey{margin-bottom:0}
+.reg{flex:0 0 auto;
      display:inline-flex; align-items:center; gap:calc(6px * var(--e));
      font-size:calc(10px * var(--e)); font-weight:700; letter-spacing:.11em;
      text-transform:uppercase; padding:calc(6px * var(--e)) calc(12px * var(--e));
      border-radius:999px; white-space:nowrap}
 .reg i{width:calc(6px * var(--e)); height:calc(6px * var(--e)); border-radius:50%; background:currentColor}
-.reg.ap{background:rgba(29,78,137,.09); color:var(--blue)}
+.reg.ex{background:rgba(29,78,137,.09); color:var(--blue)}
+.reg.di{background:rgba(110,155,209,.18); color:var(--ink-2)}
 .reg.mp{background:var(--accent-wash); color:var(--accent)}
 .reg.dm{background:rgba(11,37,69,.07); color:var(--ink-70)}
 
@@ -455,7 +459,7 @@ h2 em{font-style:normal; color:var(--accent)}
       </a>
       <div class="rail-kicker">Formation · deux journées</div>
       <div class="rail-title">IA générative pour le marketing</div>
-      <div class="rail-meta">Marketing et communication · 60 cartes</div>
+      <div class="rail-meta">Marketing et communication · 61 cartes</div>
     </div>
     <div class="thumbs" id="thumbs"></div>
     <div class="rail-foot">
@@ -504,7 +508,9 @@ h2 em{font-style:normal; color:var(--accent)}
 <!-- 2 — OUVERTURE : acquis -->
 <section class="slide" data-label="Ce que vous saurez faire" style="--e:1.7">
   <div class="top">
-    <div class="ey a-fade" style="--d:.05s">Ouverture</div>
+    <div class="hd">
+      <div class="ey a-fade" style="--d:.05s">Ouverture</div>
+    </div>
     <h2 class="a-rise" style="--d:.12s">Ce que vous saurez faire <em>en repartant</em></h2>
   </div>
   <div class="body">
@@ -517,13 +523,15 @@ h2 em{font-style:normal; color:var(--accent)}
       <div class="mod a-rise" style="--d:.64s"><div class="mod-h"><span>06</span>Mesurer</div><p class="mod-p">Établir ce que tout cela vous apporte, avec des indicateurs que vous pourrez <b>défendre</b>.</p></div>
     </div>
   </div>
-  <div class="pageno">2<b>/60</b></div>
+  <div class="pageno">2<b>/61</b></div>
 </section>
 
 <!-- 3 — OUVERTURE : le fil -->
-<section class="slide" data-label="Le fil des deux journées" style="--e:1.65">
+<section class="slide" data-label="Le fil des deux journées" style="--e:1.6">
   <div class="top">
-    <div class="ey a-fade" style="--d:.05s">Ouverture</div>
+    <div class="hd">
+      <div class="ey a-fade" style="--d:.05s">Ouverture</div>
+    </div>
     <h2 class="a-rise" style="--d:.12s">Le fil des deux journées</h2>
     <p class="lede a-rise" style="--d:.22s">Nous ne suivrons pas l'ordre du catalogue, mais <b>la chaîne de production</b> telle qu'elle existe dans votre métier.</p>
   </div>
@@ -544,7 +552,27 @@ h2 em{font-style:normal; color:var(--accent)}
     </div>
     <div class="note a-fade" style="--d:.6s"><b>Une remarque de méthode.</b> Vous venez de deux mondes opposés — l'un tenu par une obligation de transparence, l'autre par une obligation de secret. Ces contraintes sont contraires et aboutissent pourtant à la même règle pratique. C'est la première leçon de ces deux jours : <b>les mêmes questions se posent partout, ce sont les réponses qui diffèrent.</b></div>
   </div>
-  <div class="pageno">3<b>/60</b></div>
+  <div class="pageno">3<b>/61</b></div>
+</section>
+
+<!-- LÉGENDE DES RÉGIMES -->
+<section class="slide" data-label="Les quatre régimes" style="--e:1.55">
+  <div class="top">
+    <div class="hd">
+      <div class="ey a-fade" style="--d:.05s">Ouverture · comment lire ce support</div>
+    </div>
+    <h2 class="a-rise" style="--d:.12s">Quatre régimes — <em>et vous saurez toujours qui tient le clavier</em></h2>
+  </div>
+  <div class="body">
+    <div class="g2">
+      <div class="mod a-rise" style="--d:.26s"><div class="mod-h"><span class="reg ex" style="position:static"><i></i>Exposé</span></div><p class="mod-p">Je parle, <b>personne n'a les mains sur un clavier</b>. La notion, la grille, le repère.</p></div>
+      <div class="mod a-rise" style="--d:.34s"><div class="mod-h"><span class="reg di" style="position:static"><i></i>Discussion</span></div><p class="mod-p"><b>Vous parlez, je cadre.</b> Trois moments où vous en savez plus que moi, et où votre métier doit s'exposer.</p></div>
+      <div class="mod a-rise" style="--d:.42s"><div class="mod-h"><span class="reg dm" style="position:static"><i></i>Démonstration</span></div><p class="mod-p">Je suis au clavier, vous regardez — et vous repartez avec <b>la recette écrite</b>. Ce sont les outils que vous n'avez pas installés.</p></div>
+      <div class="mod a-rise" style="--d:.5s"><div class="mod-h"><span class="reg mp" style="position:static"><i></i>Mise en pratique</span></div><p class="mod-p"><b>Vous êtes au clavier</b>, sur votre propre organisation. Ce que vous produisez vous sert dès lundi.</p></div>
+    </div>
+    <div class="note a-fade" style="--d:.62s">L'étiquette figure en haut à droite de chaque carte. Ce n'est pas un ornement : à distance, <b>l'ambiguïté sur qui tient le clavier est ce qui fait dérailler une séance</b>. Vous saurez toujours, et moi aussi.</div>
+  </div>
+  <div class="pageno">4<b>/61</b></div>
 </section>
 
 <!-- 4 — INTERTITRE JOUR 1 -->
@@ -555,10 +583,11 @@ h2 em{font-style:normal; color:var(--accent)}
 </section>
 
 <!-- 5 — M1 : les quatre morts -->
-<section class="slide" data-label="Quatre outils morts" style="--e:1.7">
-  <div class="reg ap a-fade" style="--d:.05s"><i></i>Apport</div>
-  <div class="top">
-    <div class="ey a-fade" style="--d:.05s">Module 1 · 9 h 00</div>
+<section class="slide" data-label="Quatre outils morts" style="--e:1.65">
+<div class="top">    <div class="hd">
+  <div class="ey a-fade" style="--d:.05s">Module 1 · 9 h 00</div>
+  <div class="reg ex a-fade" style="--d:.05s"><i></i>Exposé</div>
+    </div>
     <h2 class="a-rise" style="--d:.12s">Quatre outils morts dans la fiche <em>que vous avez achetée</em></h2>
   </div>
   <div class="body">
@@ -571,14 +600,15 @@ h2 em{font-style:normal; color:var(--accent)}
     </table>
     <div class="note a-fade" style="--d:.62s">Ce constat n'est pas une provocation : c'est un fait, et il commande tout le reste. <b>On n'apprend pas des marques, on apprend des catégories et des critères de choix.</b> Une liste d'outils périme en dix-huit mois ; une méthode de décision, non.</div>
   </div>
-  <div class="pageno">5<b>/60</b></div>
+  <div class="pageno">6<b>/61</b></div>
 </section>
 
 <!-- 6 — M1 : pourquoi ils sont morts -->
-<section class="slide" data-label="Pourquoi ils sont morts" style="--e:1.7">
-  <div class="reg ap a-fade" style="--d:.05s"><i></i>Apport</div>
-  <div class="top">
-    <div class="ey a-fade" style="--d:.05s">Module 1</div>
+<section class="slide" data-label="Pourquoi ils sont morts" style="--e:1.65">
+<div class="top">    <div class="hd">
+  <div class="ey a-fade" style="--d:.05s">Module 1</div>
+  <div class="reg ex a-fade" style="--d:.05s"><i></i>Exposé</div>
+    </div>
     <h2 class="a-rise" style="--d:.12s">Trois causes de mort, <em>et une seule cause de survie</em></h2>
   </div>
   <div class="body">
@@ -593,14 +623,15 @@ h2 em{font-style:normal; color:var(--accent)}
     </div>
     <div class="note a-fade" style="--d:.68s">D'où la question que nous poserons désormais devant tout outil : <b>qui paie pour ceci ?</b><br><span class="src">Chiffres Sora : rapports de presse spécialisée, 2026.</span></div>
   </div>
-  <div class="pageno">6<b>/60</b></div>
+  <div class="pageno">7<b>/61</b></div>
 </section>
 
 <!-- 7 — M1 : ce que calcule un modèle -->
 <section class="slide" data-label="Plausible, pas vrai" style="--e:1.7">
-  <div class="reg ap a-fade" style="--d:.05s"><i></i>Apport</div>
-  <div class="top">
-    <div class="ey a-fade" style="--d:.05s">Module 1</div>
+<div class="top">    <div class="hd">
+  <div class="ey a-fade" style="--d:.05s">Module 1</div>
+  <div class="reg ex a-fade" style="--d:.05s"><i></i>Exposé</div>
+    </div>
     <h2 class="a-rise" style="--d:.12s">Ce qu'une IA générative <em>calcule réellement</em></h2>
   </div>
   <div class="body">
@@ -613,14 +644,15 @@ h2 em{font-style:normal; color:var(--accent)}
     </div>
     <div class="note a-fade" style="--d:.62s">Retenons la formule — <b>l'outil produit du plausible, pas du vrai.</b> Tout ce que nous ferons pendant deux jours en découle.</div>
   </div>
-  <div class="pageno">7<b>/60</b></div>
+  <div class="pageno">8<b>/61</b></div>
 </section>
 
 <!-- 8 — M1 : la correction taxonomique -->
-<section class="slide" data-label="Discriminatif / génératif" style="--e:1.7">
-  <div class="reg ap a-fade" style="--d:.05s"><i></i>Apport</div>
-  <div class="top">
-    <div class="ey a-fade" style="--d:.05s">Module 1 · correction</div>
+<section class="slide" data-label="Discriminatif / génératif" style="--e:1.55">
+<div class="top">    <div class="hd">
+  <div class="ey a-fade" style="--d:.05s">Module 1 · correction</div>
+  <div class="reg ex a-fade" style="--d:.05s"><i></i>Exposé</div>
+    </div>
     <h2 class="a-rise" style="--d:.12s">« Prédictives, discriminantes, génératives » — <em>trois familles ?</em></h2>
     <p class="lede a-rise" style="--d:.2s">Votre fiche annonce cette tripartition. Elle n'est pas juste, et vous la rencontrerez ailleurs : autant la corriger.</p>
   </div>
@@ -635,14 +667,15 @@ h2 em{font-style:normal; color:var(--accent)}
     </div>
     <div class="note a-fade" style="--d:.66s">Nous ne mobiliserons pas davantage la taxonomie « IA faible, forte, générale », également présente dans votre fiche. Non qu'elle soit absurde : elle ne décide d'<b>aucun choix professionnel</b>. Or nous sommes ici pour décider.</div>
   </div>
-  <div class="pageno">8<b>/60</b></div>
+  <div class="pageno">9<b>/61</b></div>
 </section>
 
 <!-- 9 — M1 : où elle se loge -->
 <section class="slide" data-label="Où elle se loge" style="--e:1.7">
-  <div class="reg ap a-fade" style="--d:.05s"><i></i>Apport</div>
-  <div class="top">
-    <div class="ey a-fade" style="--d:.05s">Module 1</div>
+<div class="top">    <div class="hd">
+  <div class="ey a-fade" style="--d:.05s">Module 1</div>
+  <div class="reg ex a-fade" style="--d:.05s"><i></i>Exposé</div>
+    </div>
     <h2 class="a-rise" style="--d:.12s">Où l'IA générative se loge <em>dans vos métiers</em></h2>
   </div>
   <div class="body">
@@ -664,14 +697,15 @@ h2 em{font-style:normal; color:var(--accent)}
     </div>
     <div class="note a-fade" style="--d:.54s">Notons ce que ces deux listes ont en commun : <b>aucune ne dit « avoir des idées »</b>. L'outil accélère la fabrication, il ne remplace pas la conception.</div>
   </div>
-  <div class="pageno">9<b>/60</b></div>
+  <div class="pageno">10<b>/61</b></div>
 </section>
 
 <!-- 10 — M2 : trois notions -->
 <section class="slide" data-label="Trois notions" style="--e:1.7">
-  <div class="reg ap a-fade" style="--d:.05s"><i></i>Apport</div>
-  <div class="top">
-    <div class="ey a-fade" style="--d:.05s">Module 2 · 10 h 15</div>
+<div class="top">    <div class="hd">
+  <div class="ey a-fade" style="--d:.05s">Module 2 · 10 h 15</div>
+  <div class="reg ex a-fade" style="--d:.05s"><i></i>Exposé</div>
+    </div>
     <h2 class="a-rise" style="--d:.12s">Trois notions, <em>et pas une de plus</em></h2>
   </div>
   <div class="body">
@@ -682,14 +716,15 @@ h2 em{font-style:normal; color:var(--accent)}
     </div>
     <div class="note a-fade" style="--d:.56s">Ces trois notions suffisent pour travailler. Tout le reste — architecture, paramètres, familles de modèles — ne change rien à ce que vous ferez de vos journées.</div>
   </div>
-  <div class="pageno">10<b>/60</b></div>
+  <div class="pageno">11<b>/61</b></div>
 </section>
 
 <!-- 11 — M2 : ce qu'il fait bien -->
 <section class="slide" data-label="Ce qu'il fait bien" style="--e:1.7">
-  <div class="reg ap a-fade" style="--d:.05s"><i></i>Apport</div>
-  <div class="top">
-    <div class="ey a-fade" style="--d:.05s">Module 2</div>
+<div class="top">    <div class="hd">
+  <div class="ey a-fade" style="--d:.05s">Module 2</div>
+  <div class="reg ex a-fade" style="--d:.05s"><i></i>Exposé</div>
+    </div>
     <h2 class="a-rise" style="--d:.12s">Ce qu'il fait bien — <em>cinq verbes</em></h2>
     <p class="lede a-rise" style="--d:.2s">Le modèle excelle là où la forme est contrainte et le fond fourni.</p>
   </div>
@@ -703,14 +738,15 @@ h2 em{font-style:normal; color:var(--accent)}
       <div class="mod hi a-rise" style="--d:.6s"><div class="mod-h">Le point commun</div><p class="mod-p">Dans chacun de ces cinq verbes, <b>la matière vient de vous</b>. Le modèle transforme ; il n'apporte pas.</p></div>
     </div>
   </div>
-  <div class="pageno">11<b>/60</b></div>
+  <div class="pageno">12<b>/61</b></div>
 </section>
 
 <!-- 12 — M2 : ce qu'il fait mal -->
 <section class="slide" data-label="Ce qu'il fait mal" style="--e:1.65">
-  <div class="reg ap a-fade" style="--d:.05s"><i></i>Apport</div>
-  <div class="top">
-    <div class="ey a-fade" style="--d:.05s">Module 2</div>
+<div class="top">    <div class="hd">
+  <div class="ey a-fade" style="--d:.05s">Module 2</div>
+  <div class="reg ex a-fade" style="--d:.05s"><i></i>Exposé</div>
+    </div>
     <h2 class="a-rise" style="--d:.12s">Ce qu'il fait mal, <em>et ce qu'il ne fait pas du tout</em></h2>
   </div>
   <div class="body">
@@ -721,14 +757,15 @@ h2 em{font-style:normal; color:var(--accent)}
       <div class="mod a-rise" style="--d:.5s"><div class="mod-h"><span>04</span>Il uniformise</div><p class="mod-p">Sans contexte particulier, il produit <b>la moyenne de ce qui s'écrit sur internet</b>. D'où des textes corrects et sans aucune personnalité.</p></div>
     </div>
   </div>
-  <div class="pageno">12<b>/60</b></div>
+  <div class="pageno">13<b>/61</b></div>
 </section>
 
 <!-- 13 — M2 : le risque marketing -->
 <section class="slide" data-label="Allégation = exposition" style="--e:1.7">
-  <div class="reg ap a-fade" style="--d:.05s"><i></i>Apport</div>
-  <div class="top">
-    <div class="ey a-fade" style="--d:.05s">Module 2 · arrêt</div>
+<div class="top">    <div class="hd">
+  <div class="ey a-fade" style="--d:.05s">Module 2 · arrêt</div>
+  <div class="reg ex a-fade" style="--d:.05s"><i></i>Exposé</div>
+    </div>
     <h2 class="a-rise" style="--d:.12s">Dans une communication d'organisation, <em>une allégation inventée est une exposition</em></h2>
   </div>
   <div class="body">
@@ -739,14 +776,15 @@ h2 em{font-style:normal; color:var(--accent)}
     </div>
     <div class="note a-fade" style="--d:.6s">D'où la question que nous ne cesserons pas de poser : <b>qui, dans votre organisation, est capable de vérifier ceci ?</b> La réponse n'est presque jamais « le service communication ».</div>
   </div>
-  <div class="pageno">13<b>/60</b></div>
+  <div class="pageno">14<b>/61</b></div>
 </section>
 
 <!-- 14 — M2 : gain réel / illusoire -->
 <section class="slide" data-label="Gain réel, gain illusoire" style="--e:1.7">
-  <div class="reg ap a-fade" style="--d:.05s"><i></i>Apport</div>
-  <div class="top">
-    <div class="ey a-fade" style="--d:.05s">Module 2</div>
+<div class="top">    <div class="hd">
+  <div class="ey a-fade" style="--d:.05s">Module 2</div>
+  <div class="reg ex a-fade" style="--d:.05s"><i></i>Exposé</div>
+    </div>
     <h2 class="a-rise" style="--d:.12s">Où le gain de temps est réel, <em>où il est illusoire</em></h2>
   </div>
   <div class="body">
@@ -757,14 +795,15 @@ h2 em{font-style:normal; color:var(--accent)}
     </div>
     <div class="note a-fade" style="--d:.62s">Cette troisième colonne est l'objet du module 10, en fin de deuxième journée. Nous y reviendrons avec des indicateurs, et non avec des impressions.</div>
   </div>
-  <div class="pageno">14<b>/60</b></div>
+  <div class="pageno">15<b>/61</b></div>
 </section>
 
 <!-- 15 — M3 : le document déposé -->
 <section class="slide" data-label="Trois questions au fournisseur" style="--e:1.7">
-  <div class="reg ap a-fade" style="--d:.05s"><i></i>Apport</div>
-  <div class="top">
-    <div class="ey a-fade" style="--d:.05s">Module 3 · 11 h 30</div>
+<div class="top">    <div class="hd">
+  <div class="ey a-fade" style="--d:.05s">Module 3 · 11 h 30</div>
+  <div class="reg ex a-fade" style="--d:.05s"><i></i>Exposé</div>
+    </div>
     <h2 class="a-rise" style="--d:.12s">Ce que devient un document <em>déposé dans un outil grand public</em></h2>
     <p class="lede a-rise" style="--d:.2s">Sans dramatiser ni rassurer : il peut être conservé, examiné dans le cadre de contrôles, et selon les conditions du service, servir à l'amélioration du produit.</p>
   </div>
@@ -776,14 +815,15 @@ h2 em{font-style:normal; color:var(--accent)}
     </div>
     <div class="mod warn a-rise" style="--d:.58s"><div class="mod-h"><span>Rappel</span>La confidentialité ne se traite pas par un produit tiers</div><p class="mod-p">GPTGuard promettait exactement cela. Son abandon a laissé ses utilisateurs sans rien. Elle se traite par le <b>contrat</b> et par le <b>tri</b>.</p></div>
   </div>
-  <div class="pageno">15<b>/60</b></div>
+  <div class="pageno">16<b>/61</b></div>
 </section>
 
 <!-- 16 — M3 : le tri en quatre niveaux -->
-<section class="slide" data-label="Le tri en quatre niveaux" style="--e:1.7">
-  <div class="reg ap a-fade" style="--d:.05s"><i></i>Apport</div>
-  <div class="top">
-    <div class="ey a-fade" style="--d:.05s">Module 3 · l'outil de la matinée</div>
+<section class="slide" data-label="Le tri en quatre niveaux" style="--e:1.6">
+<div class="top">    <div class="hd">
+  <div class="ey a-fade" style="--d:.05s">Module 3 · l'outil de la matinée</div>
+  <div class="reg ex a-fade" style="--d:.05s"><i></i>Exposé</div>
+    </div>
     <h2 class="a-rise" style="--d:.12s">Le tri, <em>en quatre niveaux</em></h2>
   </div>
   <div class="body">
@@ -796,14 +836,15 @@ h2 em{font-style:normal; color:var(--accent)}
     </table>
     <div class="note a-fade" style="--d:.62s">Appliquons-le tout de suite. Une <b>offre d'emploi</b> est publique — nous y reviendrons demain, car c'est ce qui en fait le bon terrain pour commencer. Un <b>dossier de candidature</b> est une donnée personnelle. Une <b>spécification technique</b> est sensible. Un <b>plan de communication</b> non encore présenté est interne.</div>
   </div>
-  <div class="pageno">16<b>/60</b></div>
+  <div class="pageno">17<b>/61</b></div>
 </section>
 
 <!-- 17 — M3 : les deux régimes -->
 <section class="slide" data-label="Transparence / secret" style="--e:1.7">
-  <div class="reg dm a-fade" style="--d:.05s"><i></i>Échange</div>
-  <div class="top">
-    <div class="ey a-fade" style="--d:.05s">Module 3</div>
+<div class="top">    <div class="hd">
+  <div class="ey a-fade" style="--d:.05s">Module 3</div>
+  <div class="reg di a-fade" style="--d:.05s"><i></i>Discussion</div>
+    </div>
     <h2 class="a-rise" style="--d:.12s">Deux contraintes opposées, <em>une même règle</em></h2>
   </div>
   <div class="body">
@@ -823,14 +864,15 @@ h2 em{font-style:normal; color:var(--accent)}
     </svg></div>
     <div class="note a-fade" style="--d:1.9s">C'est ce que nous disions en ouverture : <b>les questions sont partout les mêmes, ce sont les réponses qui diffèrent.</b> Les deux régimes sont contraires et commandent le même geste.</div>
   </div>
-  <div class="pageno">17<b>/60</b></div>
+  <div class="pageno">18<b>/61</b></div>
 </section>
 
 <!-- 18 — M3 : la loi -->
-<section class="slide" data-label="Ce que la loi exige" style="--e:1.7">
-  <div class="reg ap a-fade" style="--d:.05s"><i></i>Apport</div>
-  <div class="top">
-    <div class="ey a-fade" style="--d:.05s">Module 3 · droit applicable</div>
+<section class="slide" data-label="Ce que la loi exige" style="--e:1.6">
+<div class="top">    <div class="hd">
+  <div class="ey a-fade" style="--d:.05s">Module 3 · droit applicable</div>
+  <div class="reg ex a-fade" style="--d:.05s"><i></i>Exposé</div>
+    </div>
     <h2 class="a-rise" style="--d:.12s">Depuis le <em>2 août 2026</em>, trois obligations de transparence</h2>
   </div>
   <div class="body">
@@ -842,14 +884,15 @@ h2 em{font-style:normal; color:var(--accent)}
     <div class="mod warn a-rise" style="--d:.56s"><div class="mod-h"><span>Ne vous trompez pas</span>Ce qui a été reporté, et ce qui ne l'a pas été</div><p class="mod-p">La révision du règlement adoptée en juillet 2026 a bien reporté certaines échéances — mais <b>celles des systèmes à haut risque</b>, non celles-ci. Ces trois obligations sont applicables aujourd'hui.</p></div>
     <div class="note a-fade" style="--d:.68s">Concrètement : un visuel généré publié sur vos réseaux entre dans le champ. Une voix de synthèse aussi. Un agent conversationnel sur votre site également.<br><span class="src">Règlement (UE) sur l'intelligence artificielle, article 50.</span></div>
   </div>
-  <div class="pageno">18<b>/60</b></div>
+  <div class="pageno">19<b>/61</b></div>
 </section>
 
 <!-- 19 — M3 : la responsabilité -->
-<section class="slide" data-label="Qui signe répond" style="--e:1.7">
-  <div class="reg ap a-fade" style="--d:.05s"><i></i>Apport</div>
-  <div class="top">
-    <div class="ey a-fade" style="--d:.05s">Module 3 · à emporter</div>
+<section class="slide" data-label="Qui signe répond" style="--e:1.65">
+<div class="top">    <div class="hd">
+  <div class="ey a-fade" style="--d:.05s">Module 3 · à emporter</div>
+  <div class="reg ex a-fade" style="--d:.05s"><i></i>Exposé</div>
+    </div>
     <h2 class="a-rise" style="--d:.12s">La responsabilité <em>ne se partage pas</em></h2>
   </div>
   <div class="body">
@@ -861,14 +904,15 @@ h2 em{font-style:normal; color:var(--accent)}
     </div>
     <div class="mod hi a-rise" style="--d:.6s"><p class="mod-p" style="font-size:calc(15px * var(--e)); color:var(--ink)"><b>Vous ne déléguez jamais la responsabilité. Vous ne déléguez que la fabrication.</b></p></div>
   </div>
-  <div class="pageno">19<b>/60</b></div>
+  <div class="pageno">20<b>/61</b></div>
 </section>
 
 <!-- 20 — M4 : la grille -->
-<section class="slide" data-label="La grille en cinq critères" style="--e:1.5">
-  <div class="reg ap a-fade" style="--d:.05s"><i></i>Apport</div>
-  <div class="top">
-    <div class="ey a-fade" style="--d:.05s">Module 4 · 14 h 00</div>
+<section class="slide" data-label="La grille en cinq critères" style="--e:1.45">
+<div class="top">    <div class="hd">
+  <div class="ey a-fade" style="--d:.05s">Module 4 · 14 h 00</div>
+  <div class="reg ex a-fade" style="--d:.05s"><i></i>Exposé</div>
+    </div>
     <h2 class="a-rise" style="--d:.12s">La grille — <em>cinq critères, dont trois qu'on n'enseigne pas</em></h2>
   </div>
   <div class="body">
@@ -882,14 +926,15 @@ h2 em{font-style:normal; color:var(--accent)}
     </table>
     <div class="note a-fade" style="--d:.6s">Les deux premiers critères sont ceux que tout le monde applique. Les trois suivants sont ceux que le marché récent a rendus décisifs — et le module 1 vient d'en donner quatre démonstrations.</div>
   </div>
-  <div class="pageno">20<b>/60</b></div>
+  <div class="pageno">21<b>/61</b></div>
 </section>
 
 <!-- 21 — M4 : qui paie -->
 <section class="slide" data-label="Qui paie pour cet outil ?" style="--e:1.7">
-  <div class="reg ap a-fade" style="--d:.05s"><i></i>Apport</div>
-  <div class="top">
-    <div class="ey a-fade" style="--d:.05s">Module 4 · critère 3</div>
+<div class="top">    <div class="hd">
+  <div class="ey a-fade" style="--d:.05s">Module 4 · critère 3</div>
+  <div class="reg ex a-fade" style="--d:.05s"><i></i>Exposé</div>
+    </div>
     <h2 class="a-rise" style="--d:.12s">« Regardez qui paie. <em>Si ce n'est pas vous ni un client comme vous…</em> »</h2>
   </div>
   <div class="body">
@@ -909,14 +954,15 @@ h2 em{font-style:normal; color:var(--accent)}
     </div>
     <div class="note a-fade" style="--d:.58s"><b>Et le corollaire, critère 4 :</b> quelle est ma porte de sortie ? Les utilisateurs de Tome qui n'avaient pas exporté ont perdu leurs présentations. La question ne se pose pas le jour de la fermeture — elle se pose <b>le jour du choix</b>.</div>
   </div>
-  <div class="pageno">21<b>/60</b></div>
+  <div class="pageno">22<b>/61</b></div>
 </section>
 
 <!-- 22 — M4 : le sixième critère -->
 <section class="slide" data-label="Le sixième critère" style="--e:1.7">
-  <div class="reg dm a-fade" style="--d:.05s"><i></i>Échange</div>
-  <div class="top">
-    <div class="ey a-fade" style="--d:.05s">Module 4 · critère 6</div>
+<div class="top">    <div class="hd">
+  <div class="ey a-fade" style="--d:.05s">Module 4 · critère 6</div>
+  <div class="reg di a-fade" style="--d:.05s"><i></i>Discussion</div>
+    </div>
     <h2 class="a-rise" style="--d:.12s">La commande publique — <em>un critère qui ne concerne qu'une partie de cette salle</em></h2>
     <p class="lede a-rise" style="--d:.2s">Une collectivité n'achète pas un outil parce qu'il est bon : au-delà de certains seuils, l'achat suppose une procédure.</p>
   </div>
@@ -928,14 +974,15 @@ h2 em{font-style:normal; color:var(--accent)}
     </div>
     <div class="note a-fade" style="--d:.6s">Ce critère sera exposé par la personne concernée plutôt que par le formateur : elle le fera mieux — et l'autre y découvrira une contrainte qu'elle n'imagine pas.</div>
   </div>
-  <div class="pageno">22<b>/60</b></div>
+  <div class="pageno">23<b>/61</b></div>
 </section>
 
 <!-- 23 — M4 : ce que ça coûte -->
-<section class="slide" data-label="Ce que ça coûte vraiment" style="--e:1.6">
-  <div class="reg ap a-fade" style="--d:.05s"><i></i>Apport</div>
-  <div class="top">
-    <div class="ey a-fade" style="--d:.05s">Module 4 · relevé de septembre 2026</div>
+<section class="slide" data-label="Ce que ça coûte vraiment" style="--e:1.5">
+<div class="top">    <div class="hd">
+  <div class="ey a-fade" style="--d:.05s">Module 4 · relevé de septembre 2026</div>
+  <div class="reg ex a-fade" style="--d:.05s"><i></i>Exposé</div>
+    </div>
     <h2 class="a-rise" style="--d:.12s">Ce que ça coûte vraiment</h2>
     <p class="lede a-rise" style="--d:.2s">L'information que personne ne vous donne, et celle que votre direction vous demandera.</p>
   </div>
@@ -949,14 +996,15 @@ h2 em{font-style:normal; color:var(--accent)}
     </table>
     <div class="mod hi a-rise" style="--d:.62s"><div class="mod-h"><span>Le calcul à faire devant votre direction</span>Une équipe de six personnes</div><p class="mod-p">Un assistant professionnel chacun, un outil de création partagé : <b>quelques centaines d'euros par mois</b>. Pas quelques milliers. C'est un ordre de grandeur qui rassure, et il vaut d'être posé.</p></div>
   </div>
-  <div class="pageno">23<b>/60</b></div>
+  <div class="pageno">24<b>/61</b></div>
 </section>
 
 <!-- 24 — M4 : exemple travaillé + atelier -->
-<section class="slide" data-label="Exemple travaillé + atelier" style="--e:1.3">
+<section class="slide" data-label="Exemple travaillé + atelier" style="--e:1.15">
+<div class="top">    <div class="hd">
+  <div class="ey a-fade" style="--d:.05s">Module 4 · atelier · 30 min</div>
   <div class="reg mp a-fade" style="--d:.05s"><i></i>Mise en pratique</div>
-  <div class="top">
-    <div class="ey a-fade" style="--d:.05s">Module 4 · atelier · 30 min</div>
+    </div>
     <h2 class="a-rise" style="--d:.12s">Un exemple travaillé — <em>180 offres d'emploi, deux personnes, un an</em></h2>
   </div>
   <div class="body">
@@ -971,14 +1019,15 @@ h2 em{font-style:normal; color:var(--accent)}
     <div class="mod hi a-rise" style="--d:.6s"><div class="mod-h"><span>Le conseil à emporter</span>Commencez par ce qui est public</div><p class="mod-p">Le critère « données » est ici le plus permissif de tous. C'est précisément pourquoi le <b>recrutement est le bon endroit où commencer</b> quand on travaille sous contrainte : on apprend l'outil sans risque, et l'on aborde ensuite les sujets sensibles avec de l'expérience plutôt qu'avec de l'enthousiasme.</p></div>
     <div class="note a-fade" style="--d:.72s"><b>À vous.</b> Prenez un besoin réel de votre poste. Passez-le dans la grille, critère par critère. Écrivez la conclusion en trois lignes — comme si vous la présentiez à votre direction. Et répondez à : <i>et si l'outil ferme dans un an ?</i></div>
   </div>
-  <div class="pageno">24<b>/60</b></div>
+  <div class="pageno">25<b>/61</b></div>
 </section>
 
 <!-- 25 — M5 : les notions transposées -->
-<section class="slide" data-label="Les notions transposées" style="--e:1.5">
-  <div class="reg ap a-fade" style="--d:.05s"><i></i>Apport</div>
-  <div class="top">
-    <div class="ey a-fade" style="--d:.05s">Module 5 · 15 h 45</div>
+<section class="slide" data-label="Les notions transposées" style="--e:1.45">
+<div class="top">    <div class="hd">
+  <div class="ey a-fade" style="--d:.05s">Module 5 · 15 h 45</div>
+  <div class="reg ex a-fade" style="--d:.05s"><i></i>Exposé</div>
+    </div>
     <h2 class="a-rise" style="--d:.12s">Les notions du métier — <em>et leur transposition hors du commerce</em></h2>
   </div>
   <div class="body">
@@ -991,14 +1040,15 @@ h2 em{font-style:normal; color:var(--accent)}
     </table>
     <div class="note a-fade" style="--d:.62s">Pourquoi ces notions comptent ici : <b>un modèle les réclame explicitement, faute de les deviner.</b> Ce sont exactement les informations qu'il n'a pas.</div>
   </div>
-  <div class="pageno">25<b>/60</b></div>
+  <div class="pageno">26<b>/61</b></div>
 </section>
 
 <!-- 26 — M5 : les six champs -->
-<section class="slide" data-label="Commander un texte" style="--e:1.7">
-  <div class="reg ap a-fade" style="--d:.05s"><i></i>Apport</div>
-  <div class="top">
-    <div class="ey a-fade" style="--d:.05s">Module 5</div>
+<section class="slide" data-label="Commander un texte" style="--e:1.25">
+<div class="top">    <div class="hd">
+  <div class="ey a-fade" style="--d:.05s">Module 5</div>
+  <div class="reg ex a-fade" style="--d:.05s"><i></i>Exposé</div>
+    </div>
     <h2 class="a-rise" style="--d:.12s">Commander un texte — <em>six champs</em></h2>
     <p class="lede a-rise" style="--d:.2s">Ni méthode magique ni acronyme à retenir : une liste de vérification, pour ne rien oublier.</p>
   </div>
@@ -1011,16 +1061,18 @@ h2 em{font-style:normal; color:var(--accent)}
       <div class="mod a-rise" style="--d:.54s"><div class="mod-h"><span>05</span>Ton</div><p class="mod-p">Le registre.</p></div>
       <div class="mod a-rise" style="--d:.6s"><div class="mod-h"><span>06</span>Contrainte</div><p class="mod-p">Ce qui est interdit — <b>et sous quelle forme</b>.</p></div>
     </div>
-    <div class="note a-fade" style="--d:.72s">Sur les modèles récents, le gain ne vient plus de la formule mais du <b>contexte fourni</b> : vos documents, vos productions passées, votre charte. <i>Une demande médiocre accompagnée du bon document bat une demande brillante sans document.</i></div>
+    <div class="mod a-rise" style="--d:.7s"><div class="mod-h"><span>Les six champs remplis</span>Un exemple, plutôt qu'une liste</div><p class="mod-p"><b>Rôle</b> — chargé de communication dans une collectivité. <b>Tâche</b> — réécrire ce texte en langage clair. <b>Destinataire</b> — un habitant qui ne connaît ni le vocabulaire administratif ni le découpage en secteurs ; certains lisent mal le français. <b>Format</b> — 150 mots, des intertitres, une idée par phrase, le lecteur appelé « vous ». <b>Ton</b> — direct, sans langue de bois ; la décision est impopulaire sur un point, ne pas le dissimuler. <b>Contrainte</b> — si une donnée manque, écrire [à compléter].</p></div>
+    <div class="note a-fade" style="--d:.8s">Sur les modèles récents, le gain ne vient plus de la formule mais du <b>contexte fourni</b> : vos documents, vos productions passées, votre charte. <i>Une demande médiocre accompagnée du bon document bat une demande brillante sans document.</i></div>
   </div>
-  <div class="pageno">26<b>/60</b></div>
+  <div class="pageno">27<b>/61</b></div>
 </section>
 
 <!-- 27 — M5 : le destinataire -->
 <section class="slide" data-label="Le champ qui décide" style="--e:1.7">
-  <div class="reg ap a-fade" style="--d:.05s"><i></i>Apport</div>
-  <div class="top">
-    <div class="ey a-fade" style="--d:.05s">Module 5 · champ 3</div>
+<div class="top">    <div class="hd">
+  <div class="ey a-fade" style="--d:.05s">Module 5 · champ 3</div>
+  <div class="reg ex a-fade" style="--d:.05s"><i></i>Exposé</div>
+    </div>
     <h2 class="a-rise" style="--d:.12s">Décrivez votre destinataire. <em>Ne le nommez pas.</em></h2>
   </div>
   <div class="body">
@@ -1031,14 +1083,15 @@ h2 em{font-style:normal; color:var(--accent)}
     <div class="mod a-rise" style="--d:.52s"><p class="mod-p" style="font-size:calc(14px * var(--e))">Écrire pour un habitant qui a <b>déjà entendu parler</b> du changement n'est pas écrire pour celui qui le découvre. Écrire pour un candidat qui <b>connaît le métier</b> n'est pas écrire pour celui qui l'ignore.</p></div>
     <div class="note a-fade" style="--d:.64s">Les méthodes de rédaction que vous trouverez en ligne insistent sur le rôle et le format. Elles négligent le destinataire — <b>or c'est lui qui commande tout</b>.</div>
   </div>
-  <div class="pageno">27<b>/60</b></div>
+  <div class="pageno">28<b>/61</b></div>
 </section>
 
 <!-- 28 — M5 : interdire ou commander -->
-<section class="slide" data-label="Interdire ou commander ?" style="--e:1.65">
-  <div class="reg ap a-fade" style="--d:.05s"><i></i>Apport</div>
-  <div class="top">
-    <div class="ey a-fade" style="--d:.05s">Module 5 · champ 6</div>
+<section class="slide" data-label="Interdire ou commander ?" style="--e:1.3">
+<div class="top">    <div class="hd">
+  <div class="ey a-fade" style="--d:.05s">Module 5 · champ 6</div>
+  <div class="reg ex a-fade" style="--d:.05s"><i></i>Exposé</div>
+    </div>
     <h2 class="a-rise" style="--d:.12s">Formulez vos interdictions <em>en actions</em></h2>
   </div>
   <div class="body">
@@ -1051,16 +1104,17 @@ h2 em{font-style:normal; color:var(--accent)}
       <div class="mod a-rise" style="--d:.62s"><div class="mod-h"><span>Bénéfice</span>Le trou devient visible</div><p class="mod-p">La mention <b>[à compléter]</b> se cherche au correcteur automatique. L'information manquante cesse d'être un oubli silencieux : elle devient une <b>tâche</b>.</p></div>
     </div>
     <div class="mod a-rise" style="--d:.72s"><p class="mod-p">Démonstration expérimentale demain : un modèle chargé de rédiger des offres d'emploi a respecté scrupuleusement cette consigne, et les textes produits portent bien la mention aux endroits attendus.</p></div>
-    <div class="note a-fade" style="--d:.82s">Mais nous en verrons aussi <b>la limite</b>, et elle est sévère. Rendez-vous au module 9, demain après-midi.</div>
+    <div class="mod warn a-rise" style="--d:.8s"><div class="mod-h"><span>Et la limite</span>Elle est sévère, et nous la verrons demain</div><p class="mod-p">Cette règle protège les champs que <b>vous avez pensé à nommer</b>. Elle ne protège pas les autres — et les autres sont innombrables.</p><p class="mod-p">Rendez-vous au module 9, demain après-midi. D'ici là, tenez la règle : elle est bonne, elle n'est simplement pas suffisante.</p></div>
   </div>
-  <div class="pageno">28<b>/60</b></div>
+  <div class="pageno">29<b>/61</b></div>
 </section>
 
 <!-- 29 — M5 : atelier langage clair -->
-<section class="slide" data-label="Atelier — langage clair" style="--e:1.6">
+<section class="slide" data-label="Atelier — langage clair" style="--e:1.5">
+<div class="top">    <div class="hd">
+  <div class="ey a-fade" style="--d:.05s">Module 5 · atelier · 35 min</div>
   <div class="reg mp a-fade" style="--d:.05s"><i></i>Mise en pratique</div>
-  <div class="top">
-    <div class="ey a-fade" style="--d:.05s">Module 5 · atelier · 35 min</div>
+    </div>
     <h2 class="a-rise" style="--d:.12s">Réécrire en langage clair — <em>le geste le plus rentable</em></h2>
   </div>
   <div class="body">
@@ -1071,7 +1125,7 @@ h2 em{font-style:normal; color:var(--accent)}
     <div class="mod hi a-rise" style="--d:.54s"><div class="mod-h"><span>À vous</span>Sur votre propre organisation</div><p class="mod-p">Un texte d'information destiné à vos publics · un message pour le réseau professionnel · un courriel. Rédigez le prompt <b>à la main</b>, les six champs sur le papier, avant de générer.</p></div>
     <div class="note a-fade" style="--d:.66s">Ce que l'outil ne peut pas apporter : la connaissance de ce que votre destinataire a déjà entendu, de ce qu'il redoute, de ce qui s'est dit la semaine dernière. <b>Cette connaissance est votre valeur ajoutée, et elle n'est pas menacée.</b></div>
   </div>
-  <div class="pageno">29<b>/60</b></div>
+  <div class="pageno">30<b>/61</b></div>
 </section>
 
 <!-- 30 — INTERTITRE JOUR 2 -->
@@ -1082,10 +1136,11 @@ h2 em{font-style:normal; color:var(--accent)}
 </section>
 
 <!-- 31 — M6 : le marché -->
-<section class="slide" data-label="Le marché de l'image" style="--e:1.65">
-  <div class="reg ap a-fade" style="--d:.05s"><i></i>Apport</div>
-  <div class="top">
-    <div class="ey a-fade" style="--d:.05s">Module 6 · 9 h 00</div>
+<section class="slide" data-label="Le marché de l'image" style="--e:1.5">
+<div class="top">    <div class="hd">
+  <div class="ey a-fade" style="--d:.05s">Module 6 · 9 h 00</div>
+  <div class="reg ex a-fade" style="--d:.05s"><i></i>Exposé</div>
+    </div>
     <h2 class="a-rise" style="--d:.12s">Où en est le marché de l'image <em>et de la vidéo</em></h2>
   </div>
   <div class="body">
@@ -1097,14 +1152,15 @@ h2 em{font-style:normal; color:var(--accent)}
     <div class="mod hi a-rise" style="--d:.56s"><div class="mod-h"><span>Conséquence</span>Ce que nous ferons, et ce que nous ne ferons pas</div><p class="mod-p">Cette dernière information n'est pas anecdotique : <b>elle décide de l'atelier de ce matin</b>. Nous ne pratiquerons pas sur un outil que vous ne pourriez pas rouvrir demain.</p><p class="mod-p">Nous travaillerons donc sur la <b>génération intégrée à l'outil de création graphique</b> : accessible, gratuite dans certaines limites, et déjà dans votre environnement. C'est moins spectaculaire, et c'est reproductible.</p></div>
     <div class="note a-fade" style="--d:.68s">Notez la règle générale, qui vaut au-delà de ce matin : <b>on n'enseigne pas un outil dont l'accès n'est pas garanti à celui qui apprend.</b></div>
   </div>
-  <div class="pageno">31<b>/60</b></div>
+  <div class="pageno">32<b>/61</b></div>
 </section>
 
 <!-- 32 — M6 : anatomie d'une demande d'image -->
-<section class="slide" data-label="Anatomie d'une demande d'image" style="--e:1.65">
-  <div class="reg ap a-fade" style="--d:.05s"><i></i>Apport</div>
-  <div class="top">
-    <div class="ey a-fade" style="--d:.05s">Module 6</div>
+<section class="slide" data-label="Anatomie d'une demande d'image" style="--e:1.5">
+<div class="top">    <div class="hd">
+  <div class="ey a-fade" style="--d:.05s">Module 6</div>
+  <div class="reg ex a-fade" style="--d:.05s"><i></i>Exposé</div>
+    </div>
     <h2 class="a-rise" style="--d:.12s">Anatomie d'une demande d'image — <em>six champs</em></h2>
   </div>
   <div class="body">
@@ -1119,14 +1175,15 @@ h2 em{font-style:normal; color:var(--accent)}
     </table>
     <div class="mod warn a-rise" style="--d:.6s"><div class="mod-h"><span>À annoncer d'emblée</span>Ce qui se contrôle mal</div><p class="mod-p">Le texte incrusté. Le nombre exact d'objets. Les mains. Et <b>tout ce qui suppose une connaissance du réel</b> — un lieu, une personne, un produit existants.</p></div>
   </div>
-  <div class="pageno">32<b>/60</b></div>
+  <div class="pageno">33<b>/61</b></div>
 </section>
 
 <!-- 33 — M6 : le lieu qui n'existe pas -->
-<section class="slide" data-label="Le lieu qui n'existe pas" style="--e:1.7">
+<section class="slide" data-label="Le lieu qui n'existe pas" style="--e:1.45">
+<div class="top">    <div class="hd">
+  <div class="ey a-fade" style="--d:.05s">Module 6 · piège 1</div>
   <div class="reg dm a-fade" style="--d:.05s"><i></i>Démonstration</div>
-  <div class="top">
-    <div class="ey a-fade" style="--d:.05s">Module 6 · piège 1</div>
+    </div>
     <h2 class="a-rise" style="--d:.12s">« On la publie ? » — <em>quatre défauts</em></h2>
     <p class="lede a-rise" style="--d:.2s">Un visuel produit à partir d'une demande parfaitement ordinaire. La réponse spontanée est oui.</p>
   </div>
@@ -1139,14 +1196,15 @@ h2 em{font-style:normal; color:var(--accent)}
     </div>
     <div class="note a-fade" style="--d:.66s"><b>La règle à emporter :</b> jamais de lieu réel, de bâtiment réel, de personne réelle dans une image générée. Pour représenter votre territoire ou votre site, <b>on photographie</b>. C'est plus lent, et c'est la seule option défendable.</div>
   </div>
-  <div class="pageno">33<b>/60</b></div>
+  <div class="pageno">34<b>/61</b></div>
 </section>
 
 <!-- 34 — M6 : le défaut qu'on ne voit pas -->
-<section class="slide" data-label="Le défaut qu'on ne voit pas" style="--e:1.7">
+<section class="slide" data-label="Le défaut qu'on ne voit pas" style="--e:1.55">
+<div class="top">    <div class="hd">
+  <div class="ey a-fade" style="--d:.05s">Module 6 · piège 2</div>
   <div class="reg dm a-fade" style="--d:.05s"><i></i>Démonstration</div>
-  <div class="top">
-    <div class="ey a-fade" style="--d:.05s">Module 6 · piège 2</div>
+    </div>
     <h2 class="a-rise" style="--d:.12s">Cette fois l'image est bonne. <em>Et c'est le problème.</em></h2>
   </div>
   <div class="body">
@@ -1157,14 +1215,15 @@ h2 em{font-style:normal; color:var(--accent)}
     </div>
     <div class="mod hi a-rise" style="--d:.6s"><div class="mod-h"><span>La procédure</span>Cinq minutes, une personne</div><p class="mod-p">Tout visuel montrant un geste professionnel passe par une <b>relecture métier</b> avant publication. Le contrôle le moins cher de toute la chaîne.</p></div>
   </div>
-  <div class="pageno">34<b>/60</b></div>
+  <div class="pageno">35<b>/61</b></div>
 </section>
 
 <!-- 35 — M6 : la cohérence + atelier -->
-<section class="slide" data-label="La cohérence + atelier" style="--e:1.7">
+<section class="slide" data-label="La cohérence + atelier" style="--e:1.45">
+<div class="top">    <div class="hd">
+  <div class="ey a-fade" style="--d:.05s">Module 6 · atelier · 30 min</div>
   <div class="reg mp a-fade" style="--d:.05s"><i></i>Mise en pratique</div>
-  <div class="top">
-    <div class="ey a-fade" style="--d:.05s">Module 6 · atelier · 30 min</div>
+    </div>
     <h2 class="a-rise" style="--d:.12s">Le vrai problème du quotidien : <em>la cohérence</em></h2>
     <p class="lede a-rise" style="--d:.2s">Deux visuels d'une même campagne ne se ressemblent pas. Le modèle repart de zéro à chaque demande — il n'a aucune mémoire de ce qu'il vient de produire.</p>
   </div>
@@ -1177,14 +1236,15 @@ h2 em{font-style:normal; color:var(--accent)}
     <div class="mod a-rise" style="--d:.58s"><div class="mod-h"><span>À vous</span>Un visuel pour votre organisation</div><p class="mod-p">Écrivez d'abord les <b>six champs sur le papier</b>. Générez. Puis appliquez la grille de vérification avant de me le montrer : aucun lieu réel · texte relu mot à mot, à voix haute · aucun texte parasite · scène crédible pour un homme du métier · charte respectée · <b>texte alternatif rédigé</b>.</p></div>
     <div class="note a-fade" style="--d:.7s">Deux à trois générations chacun, pas davantage : l'allocation gratuite est de vingt utilisations par mois, et un cycle complet en consomme deux.</div>
   </div>
-  <div class="pageno">35<b>/60</b></div>
+  <div class="pageno">36<b>/61</b></div>
 </section>
 
 <!-- 36 — Séquence : le signalement -->
-<section class="slide" data-label="Le signalement" style="--e:1.7">
-  <div class="reg ap a-fade" style="--d:.05s"><i></i>Apport</div>
-  <div class="top">
-    <div class="ey a-fade" style="--d:.05s">Séquence · 10 h 45</div>
+<section class="slide" data-label="Le signalement" style="--e:1.6">
+<div class="top">    <div class="hd">
+  <div class="ey a-fade" style="--d:.05s">Séquence · 10 h 45</div>
+  <div class="reg ex a-fade" style="--d:.05s"><i></i>Exposé</div>
+    </div>
     <h2 class="a-rise" style="--d:.12s">Ce qu'on a le droit de publier — <em>le signalement</em></h2>
     <p class="lede a-rise" style="--d:.2s">Le module 3 disait ce qu'on peut confier à un outil. Reprenons par l'autre bout, maintenant que vous avez produit.</p>
   </div>
@@ -1199,14 +1259,15 @@ h2 em{font-style:normal; color:var(--accent)}
       <div class="mod a-rise" style="--d:.64s"><div class="mod-h"><span>Ce qui n'entre pas dans le champ</span>Pour lever un doute fréquent</div><p class="mod-p">Un texte que vous avez <b>réécrit et validé</b> n'est pas un contenu de synthèse au sens du règlement : vous en êtes l'auteur. La transparence porte sur ce qui est <b>diffusé tel que produit</b>, non sur l'aide reçue en chemin.</p></div>
     </div>
   </div>
-  <div class="pageno">36<b>/60</b></div>
+  <div class="pageno">37<b>/61</b></div>
 </section>
 
 <!-- 37 — Séquence : les trois expositions -->
 <section class="slide" data-label="Trois expositions" style="--e:1.7">
-  <div class="reg ap a-fade" style="--d:.05s"><i></i>Apport</div>
-  <div class="top">
-    <div class="ey a-fade" style="--d:.05s">Séquence</div>
+<div class="top">    <div class="hd">
+  <div class="ey a-fade" style="--d:.05s">Séquence</div>
+  <div class="reg ex a-fade" style="--d:.05s"><i></i>Exposé</div>
+    </div>
     <h2 class="a-rise" style="--d:.12s">Trois expositions ordinaires, <em>et une obligation</em></h2>
   </div>
   <div class="body">
@@ -1217,14 +1278,15 @@ h2 em{font-style:normal; color:var(--accent)}
     </div>
     <div class="mod hi a-rise" style="--d:.56s"><div class="mod-h"><span>Et l'accessibilité</span>Une obligation, pas une option</div><p class="mod-p">Pour une organisation publique, un visuel publié sans texte alternatif est un <b>manquement</b>, non un oubli. Une vidéo sans sous-titres également.</p><p class="mod-p">L'ironie utile : rédiger des textes alternatifs est une tâche répétitive et longue, que l'outil fait très bien. <b>Ici, l'IA est du côté de la solution.</b></p></div>
   </div>
-  <div class="pageno">37<b>/60</b></div>
+  <div class="pageno">38<b>/61</b></div>
 </section>
 
 <!-- 38 — Séquence : la question ouverte -->
-<section class="slide" data-label="La question ouverte" style="--e:1.6">
-  <div class="reg dm a-fade" style="--d:.05s"><i></i>Échange</div>
-  <div class="top">
-    <div class="ey a-fade" style="--d:.05s">Séquence · question ouverte</div>
+<section class="slide" data-label="La question ouverte" style="--e:1.2">
+<div class="top">    <div class="hd">
+  <div class="ey a-fade" style="--d:.05s">Séquence · question ouverte</div>
+  <div class="reg di a-fade" style="--d:.05s"><i></i>Discussion</div>
+    </div>
     <h2 class="a-rise" style="--d:.12s">Une question que <em>je ne trancherai pas</em></h2>
   </div>
   <div class="body">
@@ -1233,17 +1295,19 @@ h2 em{font-style:normal; color:var(--accent)}
       <div class="mod a-rise" style="--d:.42s"><div class="mod-h">Dans quels contextes l'effacement est-il <b>légitime</b> ?</div><p class="mod-p">Un texte relu, corrigé et assumé par son signataire. Une traduction. Une mise en forme. Dans ces cas, la trace de l'outil n'apprend rien d'utile au lecteur — <b>elle informe sur la fabrication, pas sur le contenu</b>.</p></div>
       <div class="mod a-rise" style="--d:.5s"><div class="mod-h">Et dans lesquels le public est-il <b>en droit de savoir</b> ?</div><p class="mod-p">Quand la trace change ce que vaut le message : un témoignage, un avis, une expertise, une image qui prétend documenter le réel. Là, effacer la trace, <b>c'est effacer une information</b>.</p></div>
     </div>
-    <div class="mod warn a-rise" style="--d:.58s"><div class="mod-h"><span>Le critère que je vous propose</span>Sans prétendre qu'il tranche tout</div><p class="mod-p">Demandez-vous si le lecteur, apprenant la manière dont le contenu a été produit, <b>changerait son jugement sur le contenu lui-même</b>. Si oui, il faut le dire. Sinon, c'est une information de procédé, et il n'y a pas de dette.</p></div>
+    <div class="mod warn a-rise" style="--d:.58s"><div class="mod-h"><span>Le critère que je vous propose</span>Sans prétendre qu'il tranche tout</div><p class="mod-p">Demandez-vous si le lecteur, apprenant la manière dont le contenu a été produit, <b>changerait son jugement sur le contenu lui-même</b>. Si oui, il faut le dire. Sinon, c'est une information de procédé, et il n'y a pas de dette.</p><p class="mod-p">Ce critère a un mérite et une faiblesse. Son mérite : il ne dépend d'aucune réglementation, il tiendra donc quand celles-ci auront changé. Sa faiblesse : <b>c'est vous qui estimez ce que le lecteur penserait</b> — et l'on est mauvais juge de ce qui nous arrange.</p></div>
+    <div class="note a-fade" style="--d:.7s">Notez enfin que l'obligation légale et la question morale ne se recouvrent pas. Le règlement dit ce qu'il faut signaler ; il ne dit pas <b>ce qu'il serait honnête de signaler</b>. Vous serez souvent au-delà de ce qu'il exige — et c'est là que se joue la confiance.</div>
     <div class="note a-fade" style="--d:.62s">Notons seulement que la question ne se pose pas de la même façon pour une organisation publique, qui <b>doit des comptes</b>, et pour une entreprise, qui <b>doit une image</b>.</div>
   </div>
-  <div class="pageno">38<b>/60</b></div>
+  <div class="pageno">39<b>/61</b></div>
 </section>
 
 <!-- 39 — M7 : l'ordre -->
 <section class="slide" data-label="D'abord à la main" style="--e:1.7">
+<div class="top">    <div class="hd">
+  <div class="ey a-fade" style="--d:.05s">Module 7 · atelier · 40 min</div>
   <div class="reg mp a-fade" style="--d:.05s"><i></i>Mise en pratique</div>
-  <div class="top">
-    <div class="ey a-fade" style="--d:.05s">Module 7 · atelier · 40 min</div>
+    </div>
     <h2 class="a-rise" style="--d:.12s">D'abord à la main. <em>L'ordre n'est pas négociable.</em></h2>
     <p class="lede a-rise" style="--d:.2s">On ne mesure ce qu'une automatisation fait gagner qu'en ayant fait le travail soi-même.</p>
   </div>
@@ -1256,14 +1320,15 @@ h2 em{font-style:normal; color:var(--accent)}
     </div>
     <div class="note a-fade" style="--d:.72s">Ces trois relevés sont le matériau de la démonstration qui suit. <b>Sans eux, le pilotage paraît un gadget de technicien.</b></div>
   </div>
-  <div class="pageno">39<b>/60</b></div>
+  <div class="pageno">40<b>/61</b></div>
 </section>
 
 <!-- 40 — M7 : les trois gains -->
-<section class="slide" data-label="Les trois gains" style="--e:1.7">
+<section class="slide" data-label="Les trois gains" style="--e:1.65">
+<div class="top">    <div class="hd">
+  <div class="ey a-fade" style="--d:.05s">Module 7</div>
   <div class="reg dm a-fade" style="--d:.05s"><i></i>Démonstration</div>
-  <div class="top">
-    <div class="ey a-fade" style="--d:.05s">Module 7</div>
+    </div>
     <h2 class="a-rise" style="--d:.12s">Trois gains — <em>et aucun n'est la qualité du modèle</em></h2>
     <p class="lede a-rise" style="--d:.2s">L'argument qu'on entend partout est celui de la qualité. Il est vrai et il est faible : personne ne change ses habitudes pour un gain marginal.</p>
   </div>
@@ -1275,14 +1340,15 @@ h2 em{font-style:normal; color:var(--accent)}
     </div>
     <div class="note a-fade" style="--d:.62s">Reprenez vos trois relevés, un par un. Combien de copier-coller ? <b>Zéro.</b> Combien de redites de la charte ? <b>Zéro.</b> Que refaire pour la suivante ? <b>Un mot.</b></div>
   </div>
-  <div class="pageno">40<b>/60</b></div>
+  <div class="pageno">41<b>/61</b></div>
 </section>
 
 <!-- 41 — M7 : les limites -->
 <section class="slide" data-label="Les quatre limites" style="--e:1.7">
+<div class="top">    <div class="hd">
+  <div class="ey a-fade" style="--d:.05s">Module 7 · sans qu'on me les demande</div>
   <div class="reg dm a-fade" style="--d:.05s"><i></i>Démonstration</div>
-  <div class="top">
-    <div class="ey a-fade" style="--d:.05s">Module 7 · sans qu'on me les demande</div>
+    </div>
     <h2 class="a-rise" style="--d:.12s">Quatre limites — <em>c'est ici que je me sépare d'un démonstrateur commercial</em></h2>
   </div>
   <div class="body">
@@ -1293,14 +1359,15 @@ h2 em{font-style:normal; color:var(--accent)}
       <div class="mod warn a-rise" style="--d:.52s"><div class="mod-h"><span>04</span>Il faut payer</div><p class="mod-p">Des comptes payants sur la plupart des outils pilotés.</p></div>
     </div>
   </div>
-  <div class="pageno">41<b>/60</b></div>
+  <div class="pageno">42<b>/61</b></div>
 </section>
 
 <!-- 42 — M7 : le contre-argument -->
-<section class="slide" data-label="Le contre-argument" style="--e:1.7">
-  <div class="reg ap a-fade" style="--d:.05s"><i></i>Apport</div>
-  <div class="top">
-    <div class="ey a-fade" style="--d:.05s">Module 7 · le contre-argument</div>
+<section class="slide" data-label="Le contre-argument" style="--e:1.6">
+<div class="top">    <div class="hd">
+  <div class="ey a-fade" style="--d:.05s">Module 7 · le contre-argument</div>
+  <div class="reg ex a-fade" style="--d:.05s"><i></i>Exposé</div>
+    </div>
     <h2 class="a-rise" style="--d:.12s">« Pour un seul support, <em>ouvrir l'outil est plus rapide.</em> »</h2>
   </div>
   <div class="body">
@@ -1312,14 +1379,15 @@ h2 em{font-style:normal; color:var(--accent)}
       <div class="mod a-rise" style="--d:.72s"><div class="mod-h"><span>Hésitez</span>Le cas limite</div><p class="mod-p">Entre les deux, posez-vous une seule question : <b>le ferai-je encore dans six mois ?</b> Si la réponse est non, ouvrez l'outil.</p></div>
     </div>
   </div>
-  <div class="pageno">42<b>/60</b></div>
+  <div class="pageno">43<b>/61</b></div>
 </section>
 
 <!-- 43 — M7 : vérifier -->
-<section class="slide" data-label="Ce que la chaîne a ajouté" style="--e:1.7">
+<section class="slide" data-label="Ce que la chaîne a ajouté" style="--e:1.55">
+<div class="top">    <div class="hd">
+  <div class="ey a-fade" style="--d:.05s">Module 7 · vérification</div>
   <div class="reg dm a-fade" style="--d:.05s"><i></i>Démonstration</div>
-  <div class="top">
-    <div class="ey a-fade" style="--d:.05s">Module 7 · vérification</div>
+    </div>
     <h2 class="a-rise" style="--d:.12s">Tous les faits ont survécu. <em>Deux détails ont été inventés.</em></h2>
   </div>
   <div class="body">
@@ -1331,14 +1399,15 @@ h2 em{font-style:normal; color:var(--accent)}
     </table>
     <div class="note a-fade" style="--d:.6s">Le premier est plausible. Le second est <b>faux</b> — et annoncer à des élus que le magazine public est sur abonnement est une erreur qu'on ne rattrape pas en réunion.<br><br><b>Plus la chaîne est automatisée, plus le résultat a l'air fini — et moins on a envie de le relire.</b> C'est exactement l'inverse qu'il faut faire.</div>
   </div>
-  <div class="pageno">43<b>/60</b></div>
+  <div class="pageno">44<b>/61</b></div>
 </section>
 
 <!-- 44 — Séquence corpus : le principe -->
 <section class="slide" data-label="La marque comme corpus" style="--e:1.7">
-  <div class="reg ap a-fade" style="--d:.05s"><i></i>Apport</div>
-  <div class="top">
-    <div class="ey a-fade" style="--d:.05s">Séquence · 12 h 45</div>
+<div class="top">    <div class="hd">
+  <div class="ey a-fade" style="--d:.05s">Séquence · 12 h 45</div>
+  <div class="reg ex a-fade" style="--d:.05s"><i></i>Exposé</div>
+    </div>
     <h2 class="a-rise" style="--d:.12s">La marque comme corpus — <em>le principe en deux temps</em></h2>
     <p class="lede a-rise" style="--d:.2s">Le modèle ne connaît pas votre organisation. Jusqu'ici, notre parade a été de fournir le contexte à chaque demande — et cela ne passe pas à l'échelle.</p>
   </div>
@@ -1366,14 +1435,15 @@ h2 em{font-style:normal; color:var(--accent)}
     </svg></div>
     <div class="note a-fade" style="--d:2.3s">Le modèle ne « connaît » toujours rien. Mais <b>il a désormais sous les yeux ce qu'il faut</b>.</div>
   </div>
-  <div class="pageno">44<b>/60</b></div>
+  <div class="pageno">45<b>/61</b></div>
 </section>
 
 <!-- 45 — Séquence corpus : ce que ça change -->
-<section class="slide" data-label="Ce que le corpus change" style="--e:1.7">
-  <div class="reg ap a-fade" style="--d:.05s"><i></i>Apport</div>
-  <div class="top">
-    <div class="ey a-fade" style="--d:.05s">Séquence</div>
+<section class="slide" data-label="Ce que le corpus change" style="--e:1.5">
+<div class="top">    <div class="hd">
+  <div class="ey a-fade" style="--d:.05s">Séquence</div>
+  <div class="reg ex a-fade" style="--d:.05s"><i></i>Exposé</div>
+    </div>
     <h2 class="a-rise" style="--d:.12s">Pourquoi cela vous concerne <em>doublement</em></h2>
   </div>
   <div class="body">
@@ -1384,14 +1454,15 @@ h2 em{font-style:normal; color:var(--accent)}
     <div class="mod a-rise" style="--d:.5s"><div class="mod-h"><span>Ce qu'il faut y mettre</span>Et ce qu'il ne faut pas y mettre</div><p class="mod-p">Y mettre ce qui fait autorité et ce qui se répète : charte éditoriale, éléments de langage validés, fiches produit, réponses types, délibérations publiées, historique des campagnes.</p><p class="mod-p"><b>Ne pas y mettre</b> ce qui relève des niveaux « personnelle » et « sensible » du module 3 : la question du tri ne disparaît pas parce que le dispositif est interne — elle se déplace vers <b>qui a le droit d'interroger le fonds</b>.</p></div>
     <div class="note a-fade" style="--d:.62s">Je ne vous promets <b>ni coût ni délai</b> : cela dépend entièrement de votre environnement informatique. Je vous signale l'existence du chemin, non sa facilité.</div>
   </div>
-  <div class="pageno">45<b>/60</b></div>
+  <div class="pageno">46<b>/61</b></div>
 </section>
 
 <!-- 46 — M8 : ce qui a changé -->
 <section class="slide" data-label="Ce qui a changé" style="--e:1.7">
-  <div class="reg ap a-fade" style="--d:.05s"><i></i>Apport</div>
-  <div class="top">
-    <div class="ey a-fade" style="--d:.05s">Module 8 · 14 h 00</div>
+<div class="top">    <div class="hd">
+  <div class="ey a-fade" style="--d:.05s">Module 8 · 14 h 00</div>
+  <div class="reg ex a-fade" style="--d:.05s"><i></i>Exposé</div>
+    </div>
     <h2 class="a-rise" style="--d:.12s">On ne se bat plus pour un rang, <em>mais pour une citation</em></h2>
     <p class="lede a-rise" style="--d:.2s">Le référencement classique visait une place parmi dix liens. Un assistant retient deux à sept sources et rédige une réponse. <b>L'usager ne clique plus : il lit.</b></p>
   </div>
@@ -1403,14 +1474,15 @@ h2 em{font-style:normal; color:var(--accent)}
     </div>
     <div class="note a-fade" style="--d:.6s">Le vocabulaire, pour le reconnaître ailleurs : on parle d'<b>optimisation pour les moteurs génératifs</b>. Ce n'est pas une rupture — les signaux de crédibilité restent les mêmes — mais la cible a changé.</div>
   </div>
-  <div class="pageno">46<b>/60</b></div>
+  <div class="pageno">47<b>/61</b></div>
 </section>
 
 <!-- 47 — M8 : loi 1 -->
 <section class="slide" data-label="Loi 1 — lisible en texte" style="--e:1.7">
-  <div class="reg ap a-fade" style="--d:.05s"><i></i>Apport</div>
-  <div class="top">
-    <div class="ey a-fade" style="--d:.05s">Module 8 · première loi</div>
+<div class="top">    <div class="hd">
+  <div class="ey a-fade" style="--d:.05s">Module 8 · première loi</div>
+  <div class="reg ex a-fade" style="--d:.05s"><i></i>Exposé</div>
+    </div>
     <h2 class="a-rise" style="--d:.12s">Un assistant ne cite que <em>ce qui est lisible en texte</em></h2>
   </div>
   <div class="body">
@@ -1421,14 +1493,15 @@ h2 em{font-style:normal; color:var(--accent)}
     </div>
     <div class="note a-fade" style="--d:.6s">En revanche, une consigne publiée en texte simple — <i>« sortir les bacs la veille après 19 h »</i> — remonte parfaitement. <b>Elle, elle est citée.</b></div>
   </div>
-  <div class="pageno">47<b>/60</b></div>
+  <div class="pageno">48<b>/61</b></div>
 </section>
 
 <!-- 48 — M8 : lois 2 et 3 -->
 <section class="slide" data-label="Lois 2 et 3" style="--e:1.7">
-  <div class="reg ap a-fade" style="--d:.05s"><i></i>Apport</div>
-  <div class="top">
-    <div class="ey a-fade" style="--d:.05s">Module 8 · deuxième et troisième lois</div>
+<div class="top">    <div class="hd">
+  <div class="ey a-fade" style="--d:.05s">Module 8 · deuxième et troisième lois</div>
+  <div class="reg ex a-fade" style="--d:.05s"><i></i>Exposé</div>
+    </div>
     <h2 class="a-rise" style="--d:.12s">À défaut de vous, <em>il cite un tiers</em></h2>
   </div>
   <div class="body">
@@ -1438,14 +1511,15 @@ h2 em{font-style:normal; color:var(--accent)}
     </div>
     <div class="mod hi a-rise" style="--d:.54s"><p class="mod-p" style="font-size:calc(14px * var(--e)); color:var(--ink)">Votre page « carrières » ne concourt pas contre celle d'un concurrent. <b>Elle concourt contre des plateformes dont c'est le métier à plein temps.</b></p></div>
   </div>
-  <div class="pageno">48<b>/60</b></div>
+  <div class="pageno">49<b>/61</b></div>
 </section>
 
 <!-- 49 — M8 : six actions -->
 <section class="slide" data-label="Six actions dès lundi" style="--e:1.45">
-  <div class="reg ap a-fade" style="--d:.05s"><i></i>Apport</div>
-  <div class="top">
-    <div class="ey a-fade" style="--d:.05s">Module 8 · le livrable</div>
+<div class="top">    <div class="hd">
+  <div class="ey a-fade" style="--d:.05s">Module 8 · le livrable</div>
+  <div class="reg ex a-fade" style="--d:.05s"><i></i>Exposé</div>
+    </div>
     <h2 class="a-rise" style="--d:.12s">Six actions, <em>par coût croissant</em></h2>
   </div>
   <div class="body">
@@ -1459,14 +1533,15 @@ h2 em{font-style:normal; color:var(--accent)}
     </div>
     <div class="note a-fade" style="--d:.78s">La formule à emporter : <b>écrivez pour être cité, pas pour être visité.</b></div>
   </div>
-  <div class="pageno">49<b>/60</b></div>
+  <div class="pageno">50<b>/61</b></div>
 </section>
 
 <!-- 50 — M8 : le diagnostic -->
 <section class="slide" data-label="Atelier — le diagnostic" style="--e:1.7">
+<div class="top">    <div class="hd">
+  <div class="ey a-fade" style="--d:.05s">Module 8 · atelier · 25 min</div>
   <div class="reg mp a-fade" style="--d:.05s"><i></i>Mise en pratique</div>
-  <div class="top">
-    <div class="ey a-fade" style="--d:.05s">Module 8 · atelier · 25 min</div>
+    </div>
     <h2 class="a-rise" style="--d:.12s">Le diagnostic — <em>sur votre propre organisation</em></h2>
     <p class="lede a-rise" style="--d:.2s">Deux assistants ouverts. Cinq questions que vos publics posent vraiment. Pour chacune : la réponse est-elle juste ? qui est cité ?</p>
   </div>
@@ -1480,14 +1555,15 @@ h2 em{font-style:normal; color:var(--accent)}
       <div class="mod a-rise" style="--d:.6s"><div class="mod-h"><span>Relevé</span>Trois colonnes</div><p class="mod-p">Réponse juste ? · Qui est cité ? · <b>Est-ce nous ?</b></p></div>
     </div>
   </div>
-  <div class="pageno">50<b>/60</b></div>
+  <div class="pageno">51<b>/61</b></div>
 </section>
 
 <!-- 51 — M9 : ce qui est répétitif -->
-<section class="slide" data-label="Ce qui est répétitif" style="--e:1.6">
-  <div class="reg ap a-fade" style="--d:.05s"><i></i>Apport</div>
-  <div class="top">
-    <div class="ey a-fade" style="--d:.05s">Module 9 · 15 h 00</div>
+<section class="slide" data-label="Ce qui est répétitif" style="--e:1.2">
+<div class="top">    <div class="hd">
+  <div class="ey a-fade" style="--d:.05s">Module 9 · 15 h 00</div>
+  <div class="reg ex a-fade" style="--d:.05s"><i></i>Exposé</div>
+    </div>
     <h2 class="a-rise" style="--d:.12s">Ce qui s'automatise n'est pas la pensée, <em>c'est la fabrication</em></h2>
   </div>
   <div class="body">
@@ -1500,15 +1576,21 @@ h2 em{font-style:normal; color:var(--accent)}
       <div class="mod a-rise" style="--d:.58s"><div class="mod-h"><span>Industrie</span>Ce qui se rejoue</div><p class="mod-p">Une offre d'emploi déclinée en annonce, message réseau, fiche métier et relance. Cent quatre-vingts fois. Puis traduite.</p></div>
     </div>
     <div class="mod hi a-rise" style="--d:.66s"><p class="mod-p" style="font-size:calc(14.5px * var(--e))">Le critère de décision reste celui du module 7 : <b>le volume et la récurrence</b>. Une annonce, on l'écrit. Cent quatre-vingts, on les industrialise.</p></div>
+    <div class="g3">
+      <div class="mod a-rise" style="--d:.74s"><div class="mod-h"><span>01</span>Ce qui se prête</div><p class="mod-p">Une tâche <b>décrite</b> — si vous savez l'expliquer à un stagiaire en trois phrases, elle s'automatise.</p></div>
+      <div class="mod a-rise" style="--d:.8s"><div class="mod-h"><span>02</span>Ce qui résiste</div><p class="mod-p">Une tâche qui demande de <b>juger</b> : arbitrer un désaccord, choisir ce qu'on tait, décider du moment.</p></div>
+      <div class="mod warn a-rise" style="--d:.86s"><div class="mod-h"><span>03</span>Le piège</div><p class="mod-p">Automatiser une tâche <b>mal faite</b> ne la corrige pas : elle se reproduit plus vite et plus loin.</p></div>
+    </div>
   </div>
-  <div class="pageno">51<b>/60</b></div>
+  <div class="pageno">52<b>/61</b></div>
 </section>
 
 <!-- 52 — M9 : la démonstration -->
-<section class="slide" data-label="La chaîne, en direct" style="--e:1.45">
+<section class="slide" data-label="La chaîne, en direct" style="--e:1.3">
+<div class="top">    <div class="hd">
+  <div class="ey a-fade" style="--d:.05s">Module 9</div>
   <div class="reg dm a-fade" style="--d:.05s"><i></i>Démonstration</div>
-  <div class="top">
-    <div class="ey a-fade" style="--d:.05s">Module 9</div>
+    </div>
     <h2 class="a-rise" style="--d:.12s">Quatre annonces <em>en quinze secondes</em></h2>
   </div>
   <div class="body">
@@ -1556,14 +1638,15 @@ h2 em{font-style:normal; color:var(--accent)}
       <div class="mod warn a-rise" style="--d:2.5s"><div class="mod-h"><span>Aucun effet extérieur</span>Par conception</div><p class="mod-p">Rien n'est envoyé, rien n'est publié, aucun compte externe n'est touché. Tout atterrit dans une table, au statut <b>« à valider »</b>.</p><p class="mod-p">Une démonstration de formation <b>ne doit pas pouvoir agir sur le monde</b> — c'est la même règle que le bouton de publication publicitaire.</p></div>
     </div>
   </div>
-  <div class="pageno">52<b>/60</b></div>
+  <div class="pageno">53<b>/61</b></div>
 </section>
 
 <!-- 53 — M9 : ce que la contrainte a protégé -->
-<section class="slide" data-label="La contrainte respectée" style="--e:1.65">
+<section class="slide" data-label="La contrainte respectée" style="--e:1.2">
+<div class="top">    <div class="hd">
+  <div class="ey a-fade" style="--d:.05s">Module 9 · le résultat</div>
   <div class="reg dm a-fade" style="--d:.05s"><i></i>Démonstration</div>
-  <div class="top">
-    <div class="ey a-fade" style="--d:.05s">Module 9 · le résultat</div>
+    </div>
     <h2 class="a-rise" style="--d:.12s">La contrainte d'hier <em>a été scrupuleusement respectée</em></h2>
   </div>
   <div class="body">
@@ -1573,16 +1656,18 @@ h2 em{font-style:normal; color:var(--accent)}
       <div class="mod a-rise" style="--d:.56s"><div class="mod-h"><span>Pourquoi</span>Le modèle produit, il ne s'abstient pas</div><p class="mod-p">Une interdiction lui demande de <b>ne rien faire</b> à un endroit précis. Une consigne d'action lui donne <b>quelque chose à écrire</b> — ce qu'il sait faire.</p></div>
       <div class="mod hi a-rise" style="--d:.64s"><div class="mod-h"><span>Bénéfice</span>Le trou devient une tâche</div><p class="mod-p">La mention se cherche au correcteur automatique. L'information manquante cesse d'être un <b>oubli silencieux</b>.</p></div>
     </div>
-    <div class="note a-fade" style="--d:.74s">Démonstration faite : une consigne d'<b>action</b> est mieux suivie qu'une <b>interdiction</b>. Retenez-le — et gardez votre satisfaction deux minutes.</div>
+    <div class="mod a-rise" style="--d:.72s"><div class="mod-h"><span>Ce que cela prouve, exactement</span>Et ce que cela ne prouve pas</div><p class="mod-p"><b>Cela prouve</b> que la formulation apprise hier fonctionne sur une consigne précise et énumérable : salaire, avantage, date, chiffre.</p><p class="mod-p"><b>Cela ne prouve pas</b> que le texte est fiable. Quatre catégories ont été protégées — nous n'avons encore rien dit des autres.</p></div>
+    <div class="note a-fade" style="--d:.82s">Démonstration faite : une consigne d'<b>action</b> est mieux suivie qu'une <b>interdiction</b>. Retenez-le — et gardez votre satisfaction deux minutes.</div>
   </div>
-  <div class="pageno">53<b>/60</b></div>
+  <div class="pageno">54<b>/61</b></div>
 </section>
 
 <!-- 54 — M9 : ce qu'elle n'a pas protégé -->
-<section class="slide" data-label="Ce qui a été inventé" style="--e:1.6">
+<section class="slide" data-label="Ce qui a été inventé" style="--e:1.5">
+<div class="top">    <div class="hd">
+  <div class="ey a-fade" style="--d:.05s">Module 9 · et pourtant</div>
   <div class="reg dm a-fade" style="--d:.05s"><i></i>Démonstration</div>
-  <div class="top">
-    <div class="ey a-fade" style="--d:.05s">Module 9 · et pourtant</div>
+    </div>
     <h2 class="a-rise" style="--d:.12s">Tout ce que j'avais donné sur ce poste : <em>une ligne</em></h2>
     <p class="lede a-rise" style="--d:.2s">« assemble par soudure les viroles et les carters de grandes turbines industrielles »</p>
   </div>
@@ -1598,14 +1683,15 @@ h2 em{font-style:normal; color:var(--accent)}
     </table>
     <div class="note a-fade" style="--d:.66s">Nuances d'acier, méthodes de contrôle, référentiels de qualification, diplôme attendu, existence d'un atelier, raison d'être du poste — <b>tout inventé, tout plausible, tout techniquement cohérent.</b> Donc tout indétectable pour vous, pour moi, et pour un service communication.</div>
   </div>
-  <div class="pageno">54<b>/60</b></div>
+  <div class="pageno">55<b>/61</b></div>
 </section>
 
 <!-- 55 — M9 : la leçon -->
-<section class="slide" data-label="On ne peut interdire que…" style="--e:1.7">
-  <div class="reg ap a-fade" style="--d:.05s"><i></i>Apport</div>
-  <div class="top">
-    <div class="ey a-fade" style="--d:.05s">Module 9 · la conclusion des deux jours</div>
+<section class="slide" data-label="On ne peut interdire que…" style="--e:1.55">
+<div class="top">    <div class="hd">
+  <div class="ey a-fade" style="--d:.05s">Module 9 · la conclusion des deux jours</div>
+  <div class="reg ex a-fade" style="--d:.05s"><i></i>Exposé</div>
+    </div>
     <h2 class="a-rise" style="--d:.12s">On ne peut interdire <em>que ce à quoi on a pensé</em></h2>
   </div>
   <div class="body">
@@ -1616,14 +1702,15 @@ h2 em{font-style:normal; color:var(--accent)}
       <div class="mod warn a-rise" style="--d:.64s"><div class="mod-h"><span>Supervision</span>Qu'est-ce qui peut partir sans relecture ?</div><p class="mod-p"><b>Rien de ce qui engage l'organisation.</b> Onze minutes pour produire — mais quelqu'un devra lire les cent quatre-vingts. Le travail a été déplacé, non supprimé.</p></div>
     </div>
   </div>
-  <div class="pageno">55<b>/60</b></div>
+  <div class="pageno">56<b>/61</b></div>
 </section>
 
 <!-- 56 — M10 : les indicateurs du commerce -->
-<section class="slide" data-label="Indicateurs du commerce" style="--e:1.7">
-  <div class="reg ap a-fade" style="--d:.05s"><i></i>Apport</div>
-  <div class="top">
-    <div class="ey a-fade" style="--d:.05s">Module 10 · 16 h 00</div>
+<section class="slide" data-label="Indicateurs du commerce" style="--e:1.6">
+<div class="top">    <div class="hd">
+  <div class="ey a-fade" style="--d:.05s">Module 10 · 16 h 00</div>
+  <div class="reg ex a-fade" style="--d:.05s"><i></i>Exposé</div>
+    </div>
     <h2 class="a-rise" style="--d:.12s">Pourquoi les indicateurs du commerce <em>ne vous serviront pas</em></h2>
     <p class="lede a-rise" style="--d:.2s">Vous les rencontrerez partout. Sachez pourquoi ils ne s'appliquent pas ici — c'est déjà un acquis.</p>
   </div>
@@ -1636,14 +1723,15 @@ h2 em{font-style:normal; color:var(--accent)}
     </div>
     <div class="mod warn a-rise" style="--d:.6s"><div class="mod-h"><span>Le point commun</span>Tous supposent une transaction</div><p class="mod-p">Ils mesurent le chemin qui mène à un achat. Or une métropole <b>ne vend rien à ses habitants</b>, et un équipementier dont les clients se comptent sur les doigts d'une main <b>ne pilote pas sa prospection au taux de clic</b>.</p></div>
   </div>
-  <div class="pageno">56<b>/60</b></div>
+  <div class="pageno">57<b>/61</b></div>
 </section>
 
 <!-- 57 — M10 : ce qu'on mesure à la place -->
 <section class="slide" data-label="Ce qu'on mesure à la place" style="--e:1.7">
-  <div class="reg ap a-fade" style="--d:.05s"><i></i>Apport</div>
-  <div class="top">
-    <div class="ey a-fade" style="--d:.05s">Module 10 · la substitution</div>
+<div class="top">    <div class="hd">
+  <div class="ey a-fade" style="--d:.05s">Module 10 · la substitution</div>
+  <div class="reg ex a-fade" style="--d:.05s"><i></i>Exposé</div>
+    </div>
     <h2 class="a-rise" style="--d:.12s">Ce que vous mesurez <em>à la place</em></h2>
   </div>
   <div class="body">
@@ -1665,14 +1753,15 @@ h2 em{font-style:normal; color:var(--accent)}
     </div>
     <div class="note a-fade" style="--d:.54s">Ce que ces huit indicateurs ont en commun : <b>aucun ne se mesure le lendemain.</b> Ils demandent une mesure <i>avant</i> — et c'est précisément pourquoi personne ne les mesure.</div>
   </div>
-  <div class="pageno">57<b>/60</b></div>
+  <div class="pageno">58<b>/61</b></div>
 </section>
 
 <!-- 58 — M10 : test comparatif et temps gagné -->
-<section class="slide" data-label="Test comparatif · temps gagné" style="--e:1.55">
-  <div class="reg ap a-fade" style="--d:.05s"><i></i>Apport</div>
-  <div class="top">
-    <div class="ey a-fade" style="--d:.05s">Module 10</div>
+<section class="slide" data-label="Test comparatif · temps gagné" style="--e:1.4">
+<div class="top">    <div class="hd">
+  <div class="ey a-fade" style="--d:.05s">Module 10</div>
+  <div class="reg ex a-fade" style="--d:.05s"><i></i>Exposé</div>
+    </div>
     <h2 class="a-rise" style="--d:.12s">Ce qui donne un sens <em>à vingt variantes</em></h2>
   </div>
   <div class="body">
@@ -1680,14 +1769,15 @@ h2 em{font-style:normal; color:var(--accent)}
     <div class="mod warn a-rise" style="--d:.44s"><div class="mod-h"><span>Le piège</span>« On gagne du temps » n'est pas une mesure</div><p class="mod-p">Pour en faire une, trois choses : avoir chronométré une production <b>avant</b> · chronométrer la même <b>après</b> · et — le point oublié — <b>inclure la vérification dans le après</b>.</p></div>
     <div class="mod a-rise" style="--d:.56s"><div class="mod-h"><span>Le calcul honnête</span>Et pourquoi il vous sert</div><p class="mod-p">La chaîne déplace le travail vers la relecture. Un gain de fabrication de quatre-vingt-dix pour cent, absorbé à moitié par la vérification, <b>reste un gain considérable</b> — mais ce n'est pas le même chiffre.</p><p class="mod-p">Annoncez le chiffre honnête plutôt que le chiffre flatteur : <b>c'est celui qui résistera à la question suivante</b>, et votre direction verra la différence.</p></div>
   </div>
-  <div class="pageno">58<b>/60</b></div>
+  <div class="pageno">59<b>/61</b></div>
 </section>
 
 <!-- 59 — M10 : le plan d'action -->
-<section class="slide" data-label="Votre plan d'action" style="--e:1.7">
+<section class="slide" data-label="Votre plan d'action" style="--e:1.55">
+<div class="top">    <div class="hd">
+  <div class="ey a-fade" style="--d:.05s">Module 10 · ce que vous emportez</div>
   <div class="reg mp a-fade" style="--d:.05s"><i></i>Mise en pratique</div>
-  <div class="top">
-    <div class="ey a-fade" style="--d:.05s">Module 10 · ce que vous emportez</div>
+    </div>
     <h2 class="a-rise" style="--d:.12s">Trois décisions écrites — <em>non une liste d'intentions</em></h2>
   </div>
   <div class="body">
@@ -1698,13 +1788,15 @@ h2 em{font-style:normal; color:var(--accent)}
     </div>
     <div class="mod a-rise" style="--d:.58s"><div class="mod-h"><span>Et pour finir</span>Ce qui ne s'automatise pas</div><p class="mod-p">Nous avons passé deux jours à apprendre à produire vite. <b>La vitesse de production n'est plus le problème : elle est résolue.</b></p><p class="mod-p">Ce qui reste, et qu'aucun outil ne résoudra, c'est de <b>savoir ce qu'on peut affirmer</b>. Cette compétence suppose de connaître son dossier, son destinataire et son organisation. Elle était votre métier avant ces deux jours — <b>elle l'est davantage après</b>.</p></div>
   </div>
-  <div class="pageno">59<b>/60</b></div>
+  <div class="pageno">60<b>/61</b></div>
 </section>
 
 <!-- 60 — RÉFÉRENCES -->
 <section class="slide" data-label="Références" style="--e:1.45">
   <div class="top">
-    <div class="ey a-fade" style="--d:.05s">Pour aller vérifier</div>
+    <div class="hd">
+      <div class="ey a-fade" style="--d:.05s">Pour aller vérifier</div>
+    </div>
     <h2 class="a-rise" style="--d:.12s">Références</h2>
   </div>
   <div class="body">
@@ -1724,7 +1816,7 @@ h2 em{font-style:normal; color:var(--accent)}
       </div>
     </div>
   </div>
-  <div class="pageno">60<b>/60</b></div>
+  <div class="pageno">61<b>/61</b></div>
 </section>
 
 
@@ -1734,7 +1826,7 @@ h2 em{font-style:normal; color:var(--accent)}
       <button id="prev" title="Précédent (←)">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
       </button>
-      <span class="count" id="count">1 / 60</span>
+      <span class="count" id="count">1 / 61</span>
       <button id="next" title="Suivant (→)">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
       </button>
