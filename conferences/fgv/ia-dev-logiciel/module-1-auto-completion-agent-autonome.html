@@ -191,6 +191,10 @@ body{
   transition:opacity .5s ease;
   display:flex; flex-direction:column;
 }
+/* Les blocs occupent la hauteur disponible — sans quoi une note de bas de
+   carte se décollerait de son bloc. C'est à l'intérieur du bloc que le résidu
+   se partage : la rangée se CENTRE, et les boîtes gardent la hauteur de leur
+   matière (voir la règle des boîtes ci-dessous). */
 .slide > .qrow,
 .slide > .frise,
 .slide > .duo,
@@ -198,15 +202,20 @@ body{
 .slide > .stats,
 .slide > .gauge,
 .slide > .brows{flex:1 1 auto}
+.stats, .duo, .refgrid{align-content:center}
 /* la grille de références garde sa hauteur naturelle et se centre : avec peu
    d'entrées, un bloc dense et centré vaut mieux qu'une grille distendue */
 /* une citation ne s'étire pas : elle se centre dans l'espace disponible */
 .slide > .quote{flex:1 1 auto; display:flex; flex-direction:column; justify-content:center}
-/* Les boîtes étirées répartissent l'espace entre tous leurs éléments plutôt
-   que de le concentrer avant leur dernière ligne. Réservé aux boîtes d'au
-   moins trois éléments : à deux, la répartition écarte le titre du corps au
-   lieu d'aérer. */
-.stat, .fbox, .gen, .duo > div{display:flex; flex-direction:column; justify-content:space-between}
+/* Une boîte de TEXTE garde la hauteur de sa matière : on ne l'étire jamais.
+   Répartir l'espace entre ses éléments creuserait un vide entre l'énoncé et
+   son explication — exactement là où le lien de lecture doit tenir. Le résidu
+   se partage au niveau du BLOC, qui se centre (voir ci-dessous). */
+.stat, .fbox, .duo > div{display:flex; flex-direction:column; justify-content:flex-start}
+/* Exception assumée : la frise est une figure, non une boîte de texte. Ses
+   trois colonnes répartissent leur rythme et sont de longueur égalisée, ce
+   qui fait lire l'écart comme une cadence et non comme un trou. */
+.gen{display:flex; flex-direction:column; justify-content:space-between}
 /* Les boîtes pauvres en éléments se centrent dans la hauteur au lieu de
    s'étirer : le vide se partage alors au-dessus et au-dessous. */
 .slide > .qrow{align-items:center}
@@ -381,7 +390,7 @@ h2{
 .quote .qs{margin-top:13px; font-size:13.5px; color:var(--ink-70); font-weight:300; font-family:var(--sans)}
 
 /* — Flux : produire → spécifier / vérifier — */
-.flow{display:flex; align-items:stretch; gap:22px; margin-top:28px}
+.flow{display:flex; align-items:center; gap:22px; margin-top:28px}
 .fbox{
   flex:1; border:1px solid var(--line); border-radius:12px; padding:20px 24px;
   background:var(--paper);
@@ -495,6 +504,10 @@ h2{
   padding:17px 21px 18px;
   display:flex; flex-direction:column; justify-content:space-between;
 }
+/* Seule exception au flex-start, et elle est documentée : sur la planche de
+   références, la colonne courte répartit son surplus entre ses entrées. Vingt
+   pixels entre deux références passent pour un choix ; cent cinquante font un
+   trou. */
 .ref:last-child{margin-bottom:0}
 .refh{
   font-size:10.6px; font-weight:700; letter-spacing:.17em; text-transform:uppercase;
