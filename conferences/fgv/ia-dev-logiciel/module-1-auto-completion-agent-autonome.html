@@ -185,6 +185,12 @@ body{
    absorbe la hauteur restante. Sans cela le contenu s'arrête où il s'arrête
    et laisse une bande morte en bas, qui déséquilibre la vue. */
 .slide{
+  /* Échelle de la carte : toutes les tailles de la maquette s'y raccordent.
+     --ed est l'échelle amortie des grandes tailles : sans elle, à --e:1.6 un
+     titre de carte rejoindrait le titre de couverture et la hiérarchie
+     s'effondrerait. Se pose carte par carte, à la mesure : style="--e:1.4". */
+  --e:1;
+  --ed:calc(1 + (var(--e) - 1) * .45);
   position:absolute; inset:0; width:var(--W); height:var(--H);
   padding:58px 74px 50px; background:var(--card);
   opacity:0; visibility:hidden; z-index:1;
@@ -212,10 +218,12 @@ body{
    son explication — exactement là où le lien de lecture doit tenir. Le résidu
    se partage au niveau du BLOC, qui se centre (voir ci-dessous). */
 .stat, .fbox, .duo > div{display:flex; flex-direction:column; justify-content:flex-start}
-/* Exception assumée : la frise est une figure, non une boîte de texte. Ses
-   trois colonnes répartissent leur rythme et sont de longueur égalisée, ce
-   qui fait lire l'écart comme une cadence et non comme un trou. */
-.gen{display:flex; flex-direction:column; justify-content:space-between}
+/* La frise est une figure : ses trois colonnes doivent s'aligner quoi qu'il
+   arrive. Année, titre et texte sont donc ancrés en haut — sans quoi une
+   colonne qui se replie sur une ligne de plus décale son titre, et les trois
+   générations cessent d'être lues en parallèle. La pastille, elle, est
+   poussée en bas par une marge automatique : les trois s'alignent aussi. */
+.gen{display:flex; flex-direction:column; justify-content:flex-start}
 /* Les boîtes pauvres en éléments se centrent dans la hauteur au lieu de
    s'étirer : le vide se partage alors au-dessus et au-dessous. */
 .slide > .qrow{align-items:center}
@@ -267,204 +275,205 @@ body{
 
 /* — Surtitre à filet — */
 .eyebrow{
-  font-size:10.5px; font-weight:700; letter-spacing:.24em; text-transform:uppercase;
-  color:var(--accent); display:flex; align-items:center; gap:12px;
+  font-size:calc(10.5px * var(--e)); font-weight:700; letter-spacing:.24em; text-transform:uppercase;
+  color:var(--accent); display:flex; align-items:center; gap:calc(12px * var(--e));
 }
-.eyebrow::after{content:''; flex:1; height:1px; background:linear-gradient(90deg,var(--accent),rgba(14,149,148,0))}
+.eyebrow::after{content:''; flex:1; height:calc(1px * var(--e)); background:linear-gradient(90deg,var(--accent),rgba(14,149,148,0))}
 .dark .eyebrow{color:var(--accent-2); justify-content:center}
-.dark .eyebrow::after{flex:0 0 56px}
-.dark .eyebrow::before{content:''; flex:0 0 56px; height:1px; background:linear-gradient(270deg,var(--accent-2),rgba(23,179,163,0))}
+.dark .eyebrow::after{flex:0 0 calc(56px * var(--e))}
+.dark .eyebrow::before{content:''; flex:0 0 calc(56px * var(--e)); height:calc(1px * var(--e)); background:linear-gradient(270deg,var(--accent-2),rgba(23,179,163,0))}
 
 /* — Titres — */
 h1{
-  font-family:var(--serif); font-weight:400; font-size:66px; line-height:1.05;
-  letter-spacing:-.022em; margin:28px 0 0; max-width:980px
+  font-family:var(--serif); font-weight:400; font-size:calc(66px * var(--ed)); line-height:1.05;
+  letter-spacing:-.022em; margin:calc(28px * var(--e)) 0 0; max-width:980px
 }
 h2{
-  font-family:var(--serif); font-weight:400; font-size:40px; line-height:1.12;
-  letter-spacing:-.018em; margin:16px 0 0; color:var(--ink); max-width:1060px
+  font-family:var(--serif); font-weight:400; font-size:calc(40px * var(--ed)); line-height:1.12;
+  letter-spacing:-.018em; margin:calc(16px * var(--e)) 0 0; color:var(--ink); max-width:1060px
 }
 .lede{
-  font-size:16.5px; line-height:1.62; font-weight:300; color:var(--ink-70);
-  margin:16px 0 0; max-width:990px
+  font-size:calc(16.5px * var(--e)); line-height:1.62; font-weight:300; color:var(--ink-70);
+  margin:calc(16px * var(--e)) 0 0; max-width:990px
 }
 .lede b{font-weight:600; color:var(--ink)}
 .lede em{font-style:italic; color:var(--ink)}
 
 /* — Couverture / clôture — */
-.dark h1{font-size:70px; max-width:1010px}
+.dark h1{font-size:calc(70px * var(--ed)); max-width:1010px}
 .dark .sub{
-  font-size:18.5px; color:rgba(255,255,255,.74); margin-top:24px;
+  font-size:calc(18.5px * var(--ed)); color:rgba(255,255,255,.74); margin-top:calc(24px * var(--e));
   font-weight:300; letter-spacing:.01em; max-width:830px; line-height:1.55
 }
 .dark .who{
-  margin-top:42px; padding-top:22px; border-top:1px solid rgba(255,255,255,.16);
-  font-size:13.4px; color:rgba(255,255,255,.62); letter-spacing:.04em
+  margin-top:calc(42px * var(--e)); padding-top:calc(22px * var(--e)); border-top:1px solid rgba(255,255,255,.16);
+  font-size:calc(13.4px * var(--e)); color:rgba(255,255,255,.62); letter-spacing:.04em
 }
 .dark .who b{color:#fff; font-weight:600}
 .dark .closer{
-  margin-top:34px; font-family:var(--serif); font-size:23px; font-weight:300;
+  margin-top:calc(34px * var(--e)); font-family:var(--serif); font-size:calc(23px * var(--ed)); font-weight:300;
   font-style:italic; color:var(--accent-2); max-width:800px; line-height:1.4
 }
 
 /* — Trois questions — */
-.qrow{display:grid; grid-template-columns:repeat(3,1fr); gap:20px; margin-top:26px}
+.qrow{display:grid; grid-template-columns:repeat(3,1fr); gap:calc(20px * var(--e)); margin-top:calc(26px * var(--e))}
 .q{
-  border-top:2px solid var(--accent); padding-top:14px;
+  border-top:2px solid var(--accent); padding-top:calc(14px * var(--e));
 }
 .q .qn{
-  font-size:10.5px; font-weight:700; letter-spacing:.16em; color:var(--accent);
+  font-size:calc(10.5px * var(--e)); font-weight:700; letter-spacing:.16em; color:var(--accent);
   font-variant-numeric:tabular-nums
 }
-.q .qt{font-size:14.5px; line-height:1.45; color:var(--ink-2); margin-top:7px; font-weight:500}
+.q .qt{font-size:calc(14.5px * var(--e)); line-height:1.45; color:var(--ink-2); margin-top:calc(7px * var(--e)); font-weight:500}
 
 .foot-note{
-  margin-top:18px;
-  font-size:12.5px; color:var(--ink-50); font-weight:300; font-style:italic;
-  border-left:2px solid var(--accent-wash); padding-left:14px;
+  margin-top:calc(18px * var(--e));
+  font-size:calc(12.5px * var(--e)); color:var(--ink-50); font-weight:300; font-style:italic;
+  border-left:2px solid var(--accent-wash); padding-left:calc(14px * var(--e));
 }
 
 /* — Frise des trois générations — */
-.frise{position:relative; margin-top:30px; padding-top:34px; display:flex; flex-direction:column}
+.frise{position:relative; margin-top:calc(30px * var(--e)); padding-top:calc(34px * var(--e)); display:flex; flex-direction:column}
 .frise .gens{flex:1 1 auto}
 .frise-rail{
-  position:absolute; top:9px; left:0; right:0; height:2px;
+  position:absolute; top:calc(9px * var(--e)); left:0; right:0; height:calc(2px * var(--e));
   background:linear-gradient(90deg,var(--blue-soft),var(--accent));
-  border-radius:2px;
+  border-radius:calc(2px * var(--e));
 }
-.gens{display:grid; grid-template-columns:repeat(3,1fr); gap:24px}
+.gens{display:grid; grid-template-columns:repeat(3,1fr); gap:calc(24px * var(--e))}
 .gen{position:relative}
 .gen::before{
-  content:''; position:absolute; top:-33px; left:0;
-  width:13px; height:13px; border-radius:50%;
+  content:''; position:absolute; top:calc(-33px * var(--e)); left:0;
+  width:calc(13px * var(--e)); height:calc(13px * var(--e)); border-radius:50%;
   background:#fff; border:3px solid var(--accent);
   box-shadow:0 0 0 4px rgba(14,149,148,.12);
 }
 .gen .gy{
-  font-size:11px; font-weight:700; letter-spacing:.13em; color:var(--accent);
+  font-size:calc(11px * var(--e)); font-weight:700; letter-spacing:.13em; color:var(--accent);
   font-variant-numeric:tabular-nums
 }
 .gen .gn{
-  font-family:var(--serif); font-size:25px; font-weight:500; color:var(--ink);
-  margin-top:5px; line-height:1.15
+  font-family:var(--serif); font-size:calc(25px * var(--ed)); font-weight:500; color:var(--ink);
+  margin-top:calc(5px * var(--e)); line-height:1.15
 }
-.gen .gd{font-size:12.8px; line-height:1.5; color:var(--ink-70); margin-top:9px; font-weight:300}
+.gen .gd{font-size:calc(12.8px * var(--e)); line-height:1.5; color:var(--ink-70); margin-top:calc(9px * var(--e)); margin-bottom:calc(11px * var(--e)); font-weight:300}
 .gen .gv{
-  display:inline-block; margin-top:11px; padding:4px 11px; border-radius:999px;
+  display:inline-block; margin-top:auto; align-self:flex-start;
+  padding:calc(4px * var(--e)) calc(11px * var(--e)); border-radius:calc(999px * var(--e));
   background:var(--accent-wash); color:var(--accent);
-  font-size:11px; font-weight:600; letter-spacing:.05em
+  font-size:calc(11px * var(--e)); font-weight:600; letter-spacing:.05em
 }
 
 /* — Duo comparatif — */
-.duo{display:grid; grid-template-columns:1fr 1fr; gap:0; margin-top:26px}
-.duo > div{padding:22px 30px}
+.duo{display:grid; grid-template-columns:1fr 1fr; gap:0; margin-top:calc(26px * var(--e))}
+.duo > div{padding:calc(22px * var(--e)) calc(30px * var(--e))}
 .duo > div:first-child{border-right:1px solid var(--line); padding-left:0}
 .duo .dh{
-  font-size:11px; font-weight:700; letter-spacing:.17em; text-transform:uppercase;
+  font-size:calc(11px * var(--e)); font-weight:700; letter-spacing:.17em; text-transform:uppercase;
   color:var(--blue)
 }
 .duo .dh.t{color:var(--accent)}
 .duo .dt{
-  font-family:var(--serif); font-size:22px; font-weight:500; margin-top:9px;
+  font-family:var(--serif); font-size:calc(22px * var(--ed)); font-weight:500; margin-top:calc(9px * var(--e));
   color:var(--ink); line-height:1.2
 }
-.duo .dp{font-size:13.6px; line-height:1.58; color:var(--ink-70); margin-top:11px; font-weight:300}
+.duo .dp{font-size:calc(13.6px * var(--e)); line-height:1.58; color:var(--ink-70); margin-top:calc(11px * var(--e)); font-weight:300}
 .duo .dp b{color:var(--ink); font-weight:600}
 .duo .dtag{
-  display:inline-block; margin-top:14px; font-size:11.5px; font-weight:600;
-  letter-spacing:.06em; padding:5px 12px; border-radius:6px;
+  display:inline-block; margin-top:calc(14px * var(--e)); font-size:calc(11.5px * var(--e)); font-weight:600;
+  letter-spacing:.06em; padding:calc(5px * var(--e)) calc(12px * var(--e)); border-radius:calc(6px * var(--e));
   background:rgba(29,78,137,.08); color:var(--blue)
 }
 .duo .dtag.t{background:var(--accent-wash); color:var(--accent)}
 
 /* — Citation détachée — */
 .quote{
-  margin-top:30px; padding:26px 34px; border-radius:13px;
+  margin-top:calc(30px * var(--e)); padding:calc(26px * var(--e)) calc(34px * var(--e)); border-radius:calc(13px * var(--e));
   background:linear-gradient(120deg,rgba(14,149,148,.09),rgba(29,78,137,.05));
   border-left:3px solid var(--accent);
 }
 .quote p{
-  margin:0; font-family:var(--serif); font-size:29px; font-weight:400;
+  margin:0; font-family:var(--serif); font-size:calc(29px * var(--ed)); font-weight:400;
   line-height:1.3; color:var(--ink); letter-spacing:-.01em
 }
-.quote .qs{margin-top:13px; font-size:13.5px; color:var(--ink-70); font-weight:300; font-family:var(--sans)}
+.quote .qs{margin-top:calc(13px * var(--e)); font-size:calc(13.5px * var(--e)); color:var(--ink-70); font-weight:300; font-family:var(--sans)}
 
 /* — Flux : produire → spécifier / vérifier — */
-.flow{display:flex; align-items:center; gap:22px; margin-top:28px}
+.flow{display:flex; align-items:center; gap:calc(22px * var(--e)); margin-top:calc(28px * var(--e))}
 .fbox{
-  flex:1; border:1px solid var(--line); border-radius:12px; padding:20px 24px;
+  flex:1; border:1px solid var(--line); border-radius:calc(12px * var(--e)); padding:calc(20px * var(--e)) calc(24px * var(--e));
   background:var(--paper);
 }
 .fbox.was{opacity:.62}
 .fbox .fk{
-  font-size:10.5px; font-weight:700; letter-spacing:.15em; text-transform:uppercase;
+  font-size:calc(10.5px * var(--e)); font-weight:700; letter-spacing:.15em; text-transform:uppercase;
   color:var(--ink-50)
 }
 .fbox.now .fk{color:var(--accent)}
 .fbox .fw{
-  font-family:var(--serif); font-size:27px; font-weight:500; color:var(--ink); margin-top:8px
+  font-family:var(--serif); font-size:calc(27px * var(--ed)); font-weight:500; color:var(--ink); margin-top:calc(8px * var(--e))
 }
-.fbox .fs{font-size:12.6px; color:var(--ink-70); margin-top:8px; font-weight:300; line-height:1.5}
+.fbox .fs{font-size:calc(12.6px * var(--e)); color:var(--ink-70); margin-top:calc(8px * var(--e)); font-weight:300; line-height:1.5}
 .farrow{
-  display:grid; place-items:center; color:var(--accent); flex:0 0 40px
+  display:grid; place-items:center; color:var(--accent); flex:0 0 calc(40px * var(--e))
 }
-.farrow svg{width:34px; height:34px}
+.farrow svg{width:calc(34px * var(--e)); height:calc(34px * var(--e))}
 
 /* — Figures chiffrées — */
-.stats{display:grid; grid-template-columns:1fr 1fr; gap:22px; margin-top:24px}
+.stats{display:grid; grid-template-columns:1fr 1fr; gap:calc(22px * var(--e)); margin-top:calc(24px * var(--e))}
 .stat{
-  border:1px solid var(--line); border-radius:12px; padding:19px 22px; background:var(--paper);
+  border:1px solid var(--line); border-radius:calc(12px * var(--e)); padding:calc(19px * var(--e)) calc(22px * var(--e)); background:var(--paper);
   position:relative; overflow:hidden
 }
 .stat::before{
-  content:''; position:absolute; left:0; top:0; bottom:0; width:3px; background:var(--blue)
+  content:''; position:absolute; left:0; top:0; bottom:0; width:calc(3px * var(--e)); background:var(--blue)
 }
 .stat.t::before{background:var(--accent)}
 .stat .sv{
-  font-family:var(--serif); font-size:44px; line-height:1; color:var(--blue);
+  font-family:var(--serif); font-size:calc(44px * var(--ed)); line-height:1; color:var(--blue);
   font-variant-numeric:tabular-nums
 }
 .stat.t .sv{color:var(--accent)}
-.stat .sl{font-size:13.2px; font-weight:600; color:var(--ink); margin-top:9px}
-.stat .sd{font-size:11.8px; color:var(--ink-50); margin-top:6px; line-height:1.45; font-weight:300}
+.stat .sl{font-size:calc(13.2px * var(--e)); font-weight:600; color:var(--ink); margin-top:calc(9px * var(--e))}
+.stat .sd{font-size:calc(11.8px * var(--e)); color:var(--ink-50); margin-top:calc(6px * var(--e)); line-height:1.45; font-weight:300}
 
 /* — Jauge de perception — */
-.stats.three{grid-template-columns:1fr 1fr 1fr; gap:16px}
-.stats.three .stat{padding:16px 18px}
-.stats.three .sv{font-size:38px}
+.stats.three{grid-template-columns:1fr 1fr 1fr; gap:calc(16px * var(--e))}
+.stats.three .stat{padding:calc(16px * var(--e)) calc(18px * var(--e))}
+.stats.three .sv{font-size:calc(38px * var(--ed))}
 .donut.past{background:conic-gradient(var(--blue-soft) 0 19.7%, rgba(11,37,69,.09) 19.7% 100%)}
 .donut.past span{color:var(--blue)}
 .donut.now{background:conic-gradient(var(--accent) 0 6.1%, rgba(11,37,69,.09) 6.1% 100%)}
-.donut.sm{width:96px; height:96px; flex:0 0 96px}
-.donut.sm::after{inset:11px}
-.donut.sm span{font-size:20px}
-.donut .dy{position:absolute; bottom:-17px; left:0; right:0; text-align:center;
-  font-size:10.5px; letter-spacing:.12em; color:var(--ink-50); font-weight:700; z-index:1}
-.dep.two{gap:26px; margin-top:20px; margin-bottom:8px}
-.gauge{margin-top:22px; display:grid; gap:9px}
-.grow{display:flex; align-items:center; gap:13px; font-size:12.2px}
-.grow .gl{width:150px; flex:0 0 150px; color:var(--ink-70); font-weight:500}
-.grow .gt{flex:1; height:10px; border-radius:5px; background:rgba(11,37,69,.07); overflow:hidden}
-.grow .gf{height:100%; border-radius:5px; width:var(--w); background:linear-gradient(90deg,var(--blue-soft),var(--blue))}
+.donut.sm{width:calc(96px * var(--e)); height:calc(96px * var(--e)); flex:0 0 calc(96px * var(--e))}
+.donut.sm::after{inset:calc(11px * var(--e))}
+.donut.sm span{font-size:calc(20px * var(--ed))}
+.donut .dy{position:absolute; bottom:calc(-17px * var(--e)); left:0; right:0; text-align:center;
+  font-size:calc(10.5px * var(--e)); letter-spacing:.12em; color:var(--ink-50); font-weight:700; z-index:1}
+.dep.two{gap:calc(26px * var(--e)); margin-top:calc(20px * var(--e)); margin-bottom:calc(8px * var(--e))}
+.gauge{margin-top:calc(22px * var(--e)); display:grid; gap:calc(9px * var(--e))}
+.grow{display:flex; align-items:center; gap:calc(13px * var(--e)); font-size:calc(12.2px * var(--e))}
+.grow .gl{width:calc(150px * var(--e)); flex:0 0 calc(150px * var(--e)); color:var(--ink-70); font-weight:500}
+.grow .gt{flex:1; height:calc(10px * var(--e)); border-radius:calc(5px * var(--e)); background:rgba(11,37,69,.07); overflow:hidden}
+.grow .gf{height:100%; border-radius:calc(5px * var(--e)); width:var(--w); background:linear-gradient(90deg,var(--blue-soft),var(--blue))}
 .grow .gf.neg{background:linear-gradient(90deg,var(--accent),var(--accent-2))}
-.grow .gv{width:62px; text-align:right; font-weight:700; color:var(--ink-2); font-variant-numeric:tabular-nums}
+.grow .gv{width:calc(62px * var(--e)); text-align:right; font-weight:700; color:var(--ink-2); font-variant-numeric:tabular-nums}
 
 /* — Barres d'évolution — */
-.brows{margin-top:22px; display:grid; gap:18px}
-.brow .bl{font-size:13px; font-weight:600; color:var(--ink); margin-bottom:9px; display:flex; justify-content:space-between}
-.brow .bl span{font-weight:300; color:var(--ink-50); font-size:12px}
+.brows{margin-top:calc(22px * var(--e)); display:grid; gap:calc(18px * var(--e))}
+.brow .bl{font-size:calc(13px * var(--e)); font-weight:600; color:var(--ink); margin-bottom:calc(9px * var(--e)); display:flex; justify-content:space-between}
+.brow .bl span{font-weight:300; color:var(--ink-50); font-size:calc(12px * var(--e))}
 /* Deux barres distinctes par indicateur, à échelle commune (100 % = 25 points) :
    les superposer au même point de départ ferait mentir la comparaison. */
-.byear{display:flex; align-items:center; gap:13px; margin-bottom:7px}
+.byear{display:flex; align-items:center; gap:calc(13px * var(--e)); margin-bottom:calc(7px * var(--e))}
 .byear .yl{
-  width:36px; flex:0 0 36px; font-size:11.5px; font-weight:600; color:var(--ink-50);
+  width:calc(36px * var(--e)); flex:0 0 calc(36px * var(--e)); font-size:calc(11.5px * var(--e)); font-weight:600; color:var(--ink-50);
   font-variant-numeric:tabular-nums
 }
-.btrack{position:relative; flex:1; height:26px; border-radius:6px; background:rgba(11,37,69,.055); overflow:hidden}
+.btrack{position:relative; flex:1; height:calc(26px * var(--e)); border-radius:calc(6px * var(--e)); background:rgba(11,37,69,.055); overflow:hidden}
 .bseg{
-  position:absolute; top:0; bottom:0; left:0; border-radius:6px; width:var(--w);
-  display:flex; align-items:center; padding-left:12px;
-  font-size:11.8px; font-weight:700; color:#fff; letter-spacing:.03em
+  position:absolute; top:0; bottom:0; left:0; border-radius:calc(6px * var(--e)); width:var(--w);
+  display:flex; align-items:center; padding-left:calc(12px * var(--e));
+  font-size:calc(11.8px * var(--e)); font-weight:700; color:#fff; letter-spacing:.03em
 }
 .bseg.a{background:linear-gradient(90deg,rgba(29,78,137,.34),rgba(110,155,209,.34)); color:var(--ink-2)}
 .bseg.b{background:linear-gradient(90deg,var(--accent),var(--accent-2))}
@@ -472,22 +481,22 @@ h2{
 
 /* — Anneau de proportion — */
 .donut{
-  width:118px; height:118px; border-radius:50%; flex:0 0 118px;
+  width:calc(118px * var(--e)); height:calc(118px * var(--e)); border-radius:50%; flex:0 0 calc(118px * var(--e));
   background:conic-gradient(var(--accent) 0 19.7%, rgba(11,37,69,.09) 19.7% 100%);
   display:grid; place-items:center; position:relative;
 }
-.donut::after{content:''; position:absolute; inset:13px; border-radius:50%; background:var(--paper)}
+.donut::after{content:''; position:absolute; inset:calc(13px * var(--e)); border-radius:50%; background:var(--paper)}
 .donut span{
-  position:relative; z-index:1; font-family:var(--serif); font-size:25px;
+  position:relative; z-index:1; font-family:var(--serif); font-size:calc(25px * var(--ed));
   color:var(--accent); font-variant-numeric:tabular-nums
 }
-.dep{display:flex; align-items:center; gap:20px; margin-top:14px}
-.dep .dl{font-size:12.4px; line-height:1.5; color:var(--ink-70); font-weight:300}
+.dep{display:flex; align-items:center; gap:calc(20px * var(--e)); margin-top:calc(14px * var(--e))}
+.dep .dl{font-size:calc(12.4px * var(--e)); line-height:1.5; color:var(--ink-70); font-weight:300}
 .dep .dl b{color:var(--ink); font-weight:600}
 
 .src{
-  font-size:11.4px; color:var(--ink-50); margin-top:14px; font-weight:300;
-  padding-left:12px; border-left:2px solid var(--line)
+  font-size:calc(11.4px * var(--e)); color:var(--ink-50); margin-top:calc(14px * var(--e)); font-weight:300;
+  padding-left:calc(12px * var(--e)); border-left:2px solid var(--line)
 }
 
 /* — Références — */
@@ -496,12 +505,12 @@ h2{
    d'entrées se lit comme de la respiration, non comme une colonne tronquée.
    La grille garde sa hauteur naturelle et se centre. */
 .refgrid{
-  display:grid; grid-template-columns:1.7fr 1fr; gap:16px;
+  display:grid; grid-template-columns:1.7fr 1fr; gap:calc(16px * var(--e));
   align-items:stretch; margin:auto 0;
 }
 .refgrid > div{
-  background:var(--paper); border:1px solid var(--line); border-radius:11px;
-  padding:17px 21px 18px;
+  background:var(--paper); border:1px solid var(--line); border-radius:calc(11px * var(--e));
+  padding:calc(17px * var(--e)) calc(21px * var(--e)) calc(18px * var(--e));
   display:flex; flex-direction:column; justify-content:space-between;
 }
 /* Seule exception au flex-start, et elle est documentée : sur la planche de
@@ -510,16 +519,16 @@ h2{
    trou. */
 .ref:last-child{margin-bottom:0}
 .refh{
-  font-size:10.6px; font-weight:700; letter-spacing:.17em; text-transform:uppercase;
-  color:var(--accent); padding-bottom:8px; border-bottom:1px solid var(--line); margin-bottom:13px
+  font-size:calc(10.6px * var(--e)); font-weight:700; letter-spacing:.17em; text-transform:uppercase;
+  color:var(--accent); padding-bottom:calc(8px * var(--e)); border-bottom:1px solid var(--line); margin-bottom:calc(13px * var(--e))
 }
 .refh.b{color:var(--blue)}
 .ref{
-  font-size:11.6px; line-height:1.48; color:var(--ink-70); margin-bottom:9px;
-  padding-left:13px; position:relative; font-weight:300
+  font-size:calc(11.6px * var(--e)); line-height:1.48; color:var(--ink-70); margin-bottom:calc(9px * var(--e));
+  padding-left:calc(13px * var(--e)); position:relative; font-weight:300
 }
 .ref::before{
-  content:''; position:absolute; left:0; top:6px; width:5px; height:5px;
+  content:''; position:absolute; left:0; top:calc(6px * var(--e)); width:calc(5px * var(--e)); height:calc(5px * var(--e));
   border-radius:50%; background:var(--accent)
 }
 .b-col .ref::before{background:rgba(11,37,69,.24)}
@@ -590,7 +599,7 @@ h2{
       </section>
 
       <!-- ========== 2 · OUVERTURE — PROGRAMME ========== -->
-      <section class="slide" data-label="Ouverture — Programme">
+      <section class="slide" data-label="Ouverture — Programme" style="--e:1.45">
         <div class="eyebrow a-fade" style="--d:.1s">Ouverture · Programme</div>
         <h2 class="a-rise" style="--d:.2s">Une question de vocabulaire — et le vocabulaire,<br>ici, n'est pas anodin</h2>
         <p class="lede a-rise" style="--d:.36s">En quatre ans, l'outil qui vous « aide à coder » a changé de nature trois fois. Il fut d'abord un <b>souffleur</b>, qui terminait vos phrases. Il est devenu un <b>interlocuteur</b>, à qui l'on demande. Il se présente aujourd'hui comme un <b>mandataire</b>, à qui l'on délègue. Trois mots, trois régimes de collaboration — et c'est le passage du deuxième au troisième qui fait rupture.</p>
@@ -615,7 +624,7 @@ h2{
       </section>
 
       <!-- ========== 3 · TROIS GÉNÉRATIONS ========== -->
-      <section class="slide" data-label="Trois générations · 2021→2026">
+      <section class="slide" data-label="Trois générations · 2021→2026" style="--e:1.5">
         <div class="eyebrow a-fade" style="--d:.1s">Bref historique · 2021 → 2026</div>
         <h2 class="a-rise" style="--d:.2s">Trois générations, une seule ligne de crête</h2>
         <p class="lede a-rise" style="--d:.36s">L'outillage d'IA pour le développement n'a pas quatre décennies : il a quatre ans. Non pas trois versions d'un même produit, mais trois manières différentes de tenir la main du développeur.</p>
@@ -647,7 +656,7 @@ h2{
       </section>
 
       <!-- ========== 4 · RUPTURE ========== -->
-      <section class="slide" data-label="Rupture · complétion / délégation">
+      <section class="slide" data-label="Rupture · complétion / délégation" style="--e:1.3">
         <div class="eyebrow a-fade" style="--d:.1s">Rupture paradigmatique</div>
         <h2 class="a-rise" style="--d:.2s">Complétion, délégation :<br>une différence de nature, non de degré</h2>
         <p class="lede a-rise" style="--d:.36s">Passer de Copilot 2022 à un agent 2025, est-ce seulement disposer d'un assistant « plus puissant » ? Notre position est que non : on confond souvent une différence de degré avec un changement de paradigme.</p>
@@ -670,7 +679,7 @@ h2{
       </section>
 
       <!-- ========== 5 · TRANSFERT D'INITIATIVE ========== -->
-      <section class="slide" data-label="Le transfert d'initiative">
+      <section class="slide" data-label="Le transfert d'initiative" style="--e:1.75">
         <div class="eyebrow a-fade" style="--d:.1s">Le cœur du module</div>
         <h2 class="a-rise" style="--d:.2s">Un transfert d'initiative</h2>
         <p class="lede a-rise" style="--d:.36s">La rupture tient en un mot. Non pas « la machine écrit plus de code », mais <b>« la machine décide d'une part du chemin »</b>. Entre votre intention et le résultat s'intercale désormais une chaîne de décisions que vous n'avez pas prises.</p>
@@ -683,7 +692,7 @@ h2{
       </section>
 
       <!-- ========== 6 · LE MÉTIER ========== -->
-      <section class="slide" data-label="Le métier se retourne">
+      <section class="slide" data-label="Le métier se retourne" style="--e:1.55">
         <div class="eyebrow a-fade" style="--d:.1s">Transformation du métier</div>
         <h2 class="a-rise" style="--d:.2s">Le geste central se retourne</h2>
 
@@ -708,7 +717,7 @@ h2{
       </section>
 
       <!-- ========== 7 · LE GAIN MESURÉ / RESSENTI ========== -->
-      <section class="slide" data-label="Le gain mesuré, le gain ressenti">
+      <section class="slide" data-label="Le gain mesuré, le gain ressenti" style="--e:1.55">
         <div class="eyebrow a-fade" style="--d:.1s">Mesure · trois études, trois contextes</div>
         <h2 class="a-rise" style="--d:.2s">Le gain mesuré, le gain ressenti</h2>
 
@@ -753,7 +762,7 @@ h2{
       </section>
 
       <!-- ========== 8 · RISQUE QUALITÉ ========== -->
-      <section class="slide" data-label="Risque 1 · qualité du code">
+      <section class="slide" data-label="Risque 1 · qualité du code" style="--e:1.2">
         <div class="eyebrow a-fade" style="--d:.1s">Risque 1 · Qualité du code</div>
         <h2 class="a-rise" style="--d:.2s">Le copier-coller dépasse le réagencement</h2>
         <p class="lede a-rise" style="--d:.36s">Deux mesures, faites sur les <i>commits</i> eux-mêmes. Le <b>copié-collé</b> : des lignes ajoutées identiques à des lignes existant déjà ailleurs dans le dépôt. Le <b>code déplacé</b> : des lignes qui changent d'endroit sans changer de contenu — la trace d'un travail de réorganisation. Demander une regénération coûte une phrase ; réorganiser l'existant coûte une heure. L'outil rend le premier geste presque gratuit, et ne change rien au coût du second.</p>
@@ -788,7 +797,7 @@ h2{
       </section>
 
       <!-- ========== 9 · SÉCURITÉ & DÉPENDANCES ========== -->
-      <section class="slide" data-label="Risques 2 & 3 · sécurité, dépendances">
+      <section class="slide" data-label="Risques 2 & 3 · sécurité, dépendances" style="--e:1.05">
         <div class="eyebrow a-fade" style="--d:.1s">Risques 2 &amp; 3 · Sécurité, dépendances</div>
         <h2 class="a-rise" style="--d:.2s">Moins sûr — et plus confiant</h2>
 
