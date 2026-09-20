@@ -3,13 +3,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 <!-- Métadonnées de publication — lues par l'étape de mise en ligne -->
-<meta name="pedago:chemin"  content="reflexions/ia-et-strategie">
+<meta name="pedago:chemin"  content="reflexions-critiques/ia-et-strategie">
 <meta name="pedago:famille" content="reflexion">
 <meta name="pedago:titre"   content="La vraie raison pour laquelle Anthropic vous parle de chômage">
 <meta name="pedago:rang"    content="1">
 <meta name="pedago:mode"    content="conference">
-<meta name="pedago:cartes"  content="32">
-<meta name="pedago:resume"  content="Les trois scénarios d'Anthropic pour 2030, vérifiés aux sources : une richesse qui passe au capital, une paie du savoir qui recule, et la question de l'origine de nos revenus.">
+<meta name="pedago:cartes"  content="36">
+<meta name="pedago:resume"  content="Les trois scénarios d'Anthropic pour 2030, vérifiés aux sources : une richesse qui passe au capital, une paie du savoir qui recule, et la question de l'origine de nos revenus. Analyse critique : le statut des chiffres, et la leçon stratégique qu'en tire l'auteur.">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -316,11 +316,17 @@ h2{text-wrap:balance; margin:calc(9px * var(--e)) 0 0; max-width:calc(1080px * v
 .tag::before{content:''; width:calc(6px * var(--e)); height:calc(6px * var(--e)); border-radius:50%; background:currentColor}
 .tag.rap{color:var(--accent); background:var(--accent-wash)}
 .tag.aut{color:var(--blue); background:rgba(29,78,137,.09)}
+.tag.cri{color:#fff; background:var(--ink)}
+
+/* ---------- L'affirmation visée par la critique ---------- */
+.dit{display:flex; align-items:baseline; gap:calc(14px * var(--e)); padding:calc(12px * var(--e)) calc(18px * var(--e)); border-left:calc(3px * var(--e)) solid var(--blue-soft); border-radius:0 calc(10px * var(--e)) calc(10px * var(--e)) 0; background:var(--paper); font-family:var(--serif); font-size:calc(17px * var(--e)); font-style:italic; line-height:1.35; color:var(--ink)}
+.dit b{flex:0 0 auto; font-family:var(--sans); font-style:normal; font-size:calc(11px * var(--e)); font-weight:700; letter-spacing:.1em; color:var(--ink-50)}
 
 /* ---------- Boîtes de texte : hauteur de leur matière, jamais étirées ---------- */
 .mod{display:flex; flex-direction:column; justify-content:flex-start; gap:calc(7px * var(--e)); padding:calc(16px * var(--e)) calc(18px * var(--e)); background:var(--paper); border:1px solid var(--line); border-radius:calc(12px * var(--e))}
 .mod.rap{border-left:calc(4px * var(--e)) solid var(--accent)}
 .mod.aut{border-left:calc(4px * var(--e)) solid var(--blue)}
+.mod.cri{border-left:calc(4px * var(--e)) solid var(--ink)}
 .mod-k{font-size:calc(10.5px * var(--e)); font-weight:700; letter-spacing:.16em; text-transform:uppercase; color:var(--ink-50)}
 .mod-h{font-family:var(--serif); font-size:calc(20px * var(--e)); font-weight:500; line-height:1.22; color:var(--ink)}
 .mod-p{text-wrap:pretty; font-size:calc(14px * var(--e)); line-height:1.5; color:var(--ink-70)}
@@ -367,6 +373,8 @@ h2{text-wrap:balance; margin:calc(9px * var(--e)) 0 0; max-width:calc(1080px * v
 .obj-p{font-size:calc(13.5px * var(--e)); line-height:1.45; color:var(--ink-70)}
 .steps{display:grid; gap:calc(8px * var(--e))}
 .step{display:grid; grid-template-columns:calc(44px * var(--e)) 1fr; gap:calc(14px * var(--e)); align-items:center; padding:calc(7px * var(--e)) calc(16px * var(--e)); border-radius:calc(12px * var(--e)); background:var(--paper); border:1px solid var(--line)}
+.step.cri{border-color:var(--ink)}
+.step.cri .step-n{background:var(--ink); color:#fff}
 .step-n{display:grid; place-items:center; width:calc(36px * var(--e)); height:calc(36px * var(--e)); border-radius:50%; background:var(--accent-wash); color:var(--accent); font-family:var(--serif); font-size:calc(19px * var(--e))}
 .step-q{font-family:var(--serif); font-size:calc(19px * var(--e)); line-height:1.25; color:var(--ink)}
 .step-s{margin-top:calc(2px * var(--e)); font-size:calc(12.5px * var(--e)); color:var(--ink-50)}
@@ -612,9 +620,9 @@ h2{text-wrap:balance; margin:calc(9px * var(--e)) 0 0; max-width:calc(1080px * v
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18 9 12l6-6"/></svg>
         Retour au thème
       </a>
-      <div class="rail-kicker">Réflexion · IA et Stratégie</div>
+      <div class="rail-kicker">Réflexion critique · IA et Stratégie</div>
       <div class="rail-title">La vraie raison pour laquelle Anthropic vous parle de chômage</div>
-      <div class="rail-meta">32 cartes · mode conférence</div>
+      <div class="rail-meta">36 cartes · mode conférence</div>
     </div>
     <div class="thumbs" id="thumbs"></div>
     <div class="rail-foot">
@@ -645,7 +653,7 @@ h2{text-wrap:balance; margin:calc(9px * var(--e)) 0 0; max-width:calc(1080px * v
       </section>
 
       <!-- ========== 2 · OUVERTURE ========== -->
-      <section class="slide" data-label="Ouverture" style="--e:1.35">
+      <section class="slide" data-label="Ouverture" style="--e:1.3">
         <div class="top">
           <div class="ey a-fade">Ouverture</div>
           <h2 class="a-rise" style="--d:.1s">Une vidéo pour colonne vertébrale, des sources pour la vérifier</h2>
@@ -653,8 +661,8 @@ h2{text-wrap:balance; margin:calc(9px * var(--e)) 0 0; max-width:calc(1080px * v
         </div>
         <div class="body">
           <div class="col a-rise" style="--d:.6s">
-            <div class="tags"><span class="tag rap">Ce qu'établissent les sources</span><span class="tag aut">Thèse de l'auteur de la vidéo</span></div>
-            <p class="t">Deux couleurs distinguent, sur chaque carte, ce que les sources établissent de ce que l'auteur en conclut.</p>
+            <div class="tags"><span class="tag rap">Ce qu'établissent les sources</span><span class="tag aut">Thèse de l'auteur de la vidéo</span><span class="tag cri">Regard critique</span></div>
+            <p class="t">Trois couleurs distinguent, sur chaque carte, ce que les sources établissent, ce que l'auteur en conclut, et ce que nous en disons pour finir.</p>
           </div>
           <div class="g4">
             <div class="obj a-rise" style="--d:.9s"><div class="obj-h">Lire</div><p class="obj-p">les trois scénarios d'Anthropic, et ce qu'ils ne prétendent pas être.</p></div>
@@ -663,11 +671,11 @@ h2{text-wrap:balance; margin:calc(9px * var(--e)) 0 0; max-width:calc(1080px * v
             <div class="obj a-rise" style="--d:1.35s"><div class="obj-h">Situer</div><p class="obj-p">votre propre revenu parmi trois origines possibles.</p></div>
           </div>
         </div>
-        <div class="pageno">2<b>/32</b></div>
+        <div class="pageno">2<b>/36</b></div>
       </section>
 
       <!-- ========== 3 · PARCOURS ========== -->
-      <section class="slide" data-label="Cinq questions" style="--e:1.6">
+      <section class="slide" data-label="Cinq questions" style="--e:1.35">
         <div class="top">
           <div class="ey a-fade">Ouverture · le parcours</div>
           <h2 class="a-rise" style="--d:.1s">Cinq questions, dans l'ordre de la vidéo</h2>
@@ -679,9 +687,10 @@ h2{text-wrap:balance; margin:calc(9px * var(--e)) 0 0; max-width:calc(1080px * v
             <div class="step a-slide" style="--d:.8s"><div class="step-n">3</div><div><div class="step-q">Qui paie l'addition, et sous quelle forme ?</div><div class="step-s">Salaires ou emplois, la reconversion, les tâches nouvelles</div></div></div>
             <div class="step a-slide" style="--d:1s"><div class="step-n">4</div><div><div class="step-q">Que ne voit pas le modèle, et pourquoi paraît-il maintenant ?</div><div class="step-s">Ses angles morts, son calendrier</div></div></div>
             <div class="step a-slide" style="--d:1.2s"><div class="step-n">5</div><div><div class="step-q">D'où viendra votre revenu ?</div><div class="step-s">Trois colonnes, un pari daté, quatre questions</div></div></div>
+            <div class="step cri a-slide" style="--d:1.4s"><div class="step-n">✦</div><div><div class="step-q">Et pour finir : que vaut cette démonstration ?</div><div class="step-s">Notre analyse critique — le statut des chiffres, la leçon stratégique</div></div></div>
           </div>
         </div>
-        <div class="pageno">3<b>/32</b></div>
+        <div class="pageno">3<b>/36</b></div>
       </section>
 
       <!-- ========== 4 · PARTIE I ========== -->
@@ -712,7 +721,7 @@ h2{text-wrap:balance; margin:calc(9px * var(--e)) 0 0; max-width:calc(1080px * v
           </div>
           <div class="src a-fade" style="--d:2s">Source : J. M. Keynes, « Economic Possibilities for our Grandchildren », 1930.</div>
         </div>
-        <div class="pageno">5<b>/32</b></div>
+        <div class="pageno">5<b>/36</b></div>
       </section>
 
       <!-- ========== 6 · LE RAPPORT ========== -->
@@ -736,11 +745,11 @@ h2{text-wrap:balance; margin:calc(9px * var(--e)) 0 0; max-width:calc(1080px * v
           </div>
           <div class="src a-fade" style="--d:2.2s">Source : Korinek et al., <i>Economic Scenarios for Transformative AI</i>, Anthropic Institute, 2026.</div>
         </div>
-        <div class="pageno">6<b>/32</b></div>
+        <div class="pageno">6<b>/36</b></div>
       </section>
 
       <!-- ========== 7 · F1 TROIS SCÉNARIOS ========== -->
-      <section class="slide" data-label="Trois scénarios" style="--e:1.5">
+      <section class="slide" data-label="Trois scénarios" style="--e:1.4">
         <div class="top">
           <div class="ey a-fade">I · Les trois scénarios</div>
           <h2 class="a-rise" style="--d:.1s">Plus l'IA réussit, plus la richesse monte, et plus la paie du savoir baisse</h2>
@@ -766,7 +775,7 @@ h2{text-wrap:balance; margin:calc(9px * var(--e)) 0 0; max-width:calc(1080px * v
           <p class="t a-fade" style="--d:2.8s">Dans le scénario extrême, le PIB gagne près d'un tiers quand la paie du savoir perd plus d'un dixième : <b>richesse et salaire se séparent</b>.</p>
           <div class="src a-fade" style="--d:3s">Source : Korinek et al., 2026, table 3.</div>
         </div>
-        <div class="pageno">7<b>/32</b></div>
+        <div class="pageno">7<b>/36</b></div>
       </section>
 
       <!-- ========== 8 · DES HYPOTHÈSES ========== -->
@@ -784,7 +793,7 @@ h2{text-wrap:balance; margin:calc(9px * var(--e)) 0 0; max-width:calc(1080px * v
           <div class="mod aut a-rise" style="--d:1.4s"><p class="mod-p">Notre intuition ne sait pas lire les croissances exponentielles, prévient l'auteur de la vidéo ; or c'est le rythme même de cette industrie.</p></div>
           <div class="src a-fade" style="--d:1.8s">Sources : Korinek et al., 2026, p. 3, 32 et 34 ; page de présentation de l'Anthropic Institute, 2026.</div>
         </div>
-        <div class="pageno">8<b>/32</b></div>
+        <div class="pageno">8<b>/36</b></div>
       </section>
 
       <!-- ========== 9 · MULTIPLICATEUR ========== -->
@@ -808,7 +817,7 @@ h2{text-wrap:balance; margin:calc(9px * var(--e)) 0 0; max-width:calc(1080px * v
           </div>
           <div class="src a-fade" style="--d:2.2s">Exemple et thèse de l'auteur, tirés de sa pratique du conseil en stratégie.</div>
         </div>
-        <div class="pageno">9<b>/32</b></div>
+        <div class="pageno">9<b>/36</b></div>
       </section>
 
       <!-- ========== 10 · PARTIE II ========== -->
@@ -820,7 +829,7 @@ h2{text-wrap:balance; margin:calc(9px * var(--e)) 0 0; max-width:calc(1080px * v
       </section>
 
       <!-- ========== 11 · F2 LE CALCUL ========== -->
-      <section class="slide" data-label="Le calcul" style="--e:1.65">
+      <section class="slide" data-label="Le calcul" style="--e:1.6">
         <div class="top">
           <div class="ey a-fade">II · La part du travail</div>
           <h2 class="a-rise" style="--d:.1s">La part rétrécit, le gâteau grossit : la paie ne bouge pas</h2>
@@ -854,7 +863,7 @@ h2{text-wrap:balance; margin:calc(9px * var(--e)) 0 0; max-width:calc(1080px * v
           </div>
           <div class="src a-fade" style="--d:3.6s">Source : Korinek et al., 2026, table 3 et p. 35.</div>
         </div>
-        <div class="pageno">11<b>/32</b></div>
+        <div class="pageno">11<b>/36</b></div>
       </section>
 
       <!-- ========== 12 · CHÔMAGE ========== -->
@@ -873,7 +882,7 @@ h2{text-wrap:balance; margin:calc(9px * var(--e)) 0 0; max-width:calc(1080px * v
           <p class="t a-fade" style="--d:2.5s">L'emploi du savoir recule de <b>21,5 %</b> depuis la mi-2026 : aucun taux de l'après-guerre n'a approché ce niveau.</p>
           <div class="src a-fade" style="--d:2.7s">Source : Korinek et al., 2026, p. 35.</div>
         </div>
-        <div class="pageno">12<b>/32</b></div>
+        <div class="pageno">12<b>/36</b></div>
       </section>
 
       <!-- ========== 13 · 9 % DU PIB ========== -->
@@ -896,7 +905,7 @@ h2{text-wrap:balance; margin:calc(9px * var(--e)) 0 0; max-width:calc(1080px * v
           </div>
           <div class="src a-fade" style="--d:2.1s">Source : Korinek et al., 2026, p. 35 — citation traduite.</div>
         </div>
-        <div class="pageno">13<b>/32</b></div>
+        <div class="pageno">13<b>/36</b></div>
       </section>
 
       <!-- ========== 14 · EUROPE ========== -->
@@ -913,7 +922,7 @@ h2{text-wrap:balance; margin:calc(9px * var(--e)) 0 0; max-width:calc(1080px * v
           <p class="t em a-fade" style="--d:1.5s">En Europe, qui détiendra le capital qui travaille ?</p>
           <div class="src a-fade" style="--d:1.8s">Thèse de l'auteur de la vidéo. Le transfert de 9 % du PIB : Korinek et al., 2026, p. 35.</div>
         </div>
-        <div class="pageno">14<b>/32</b></div>
+        <div class="pageno">14<b>/36</b></div>
       </section>
 
       <!-- ========== 15 · SONDAGE ========== -->
@@ -937,7 +946,7 @@ h2{text-wrap:balance; margin:calc(9px * var(--e)) 0 0; max-width:calc(1080px * v
           </div>
           <div class="src a-fade" style="--d:2.1s">Sondage Morning Consult, août 2026. Sources : Korinek et al., 2026, p. 29-30 ; page de présentation de l'Anthropic Institute, 2026.</div>
         </div>
-        <div class="pageno">15<b>/32</b></div>
+        <div class="pageno">15<b>/36</b></div>
       </section>
 
       <!-- ========== 16 · F3 TROIS POCHES ========== -->
@@ -971,7 +980,7 @@ h2{text-wrap:balance; margin:calc(9px * var(--e)) 0 0; max-width:calc(1080px * v
           </div>
           <div class="src a-fade" style="--d:3.1s">Scénario extrême, 2030, écart à la trajectoire sans IA. Source : Korinek et al., 2026, table 3 et p. 35.</div>
         </div>
-        <div class="pageno">16<b>/32</b></div>
+        <div class="pageno">16<b>/36</b></div>
       </section>
 
       <!-- ========== 17 · DEUX FICHES DE PAIE ========== -->
@@ -998,7 +1007,7 @@ h2{text-wrap:balance; margin:calc(9px * var(--e)) 0 0; max-width:calc(1080px * v
           </div>
           <div class="src a-fade" style="--d:2.4s">Scénario extrême, écart à la trajectoire sans IA. Source : Korinek et al., 2026, table 3.</div>
         </div>
-        <div class="pageno">17<b>/32</b></div>
+        <div class="pageno">17<b>/36</b></div>
       </section>
 
       <!-- ========== 18 · PARTIE III ========== -->
@@ -1010,7 +1019,7 @@ h2{text-wrap:balance; margin:calc(9px * var(--e)) 0 0; max-width:calc(1080px * v
       </section>
 
       <!-- ========== 19 · F4 LE CURSEUR ========== -->
-      <section class="slide" data-label="Salaire ou emploi" style="--e:1.5">
+      <section class="slide" data-label="Salaire ou emploi" style="--e:1.45">
         <div class="top">
           <div class="ey a-fade">III · La facture</div>
           <h2 class="a-rise" style="--d:.1s">Payer en salaire, ou payer en emplois</h2>
@@ -1040,7 +1049,7 @@ h2{text-wrap:balance; margin:calc(9px * var(--e)) 0 0; max-width:calc(1080px * v
           <p class="t a-fade" style="--d:3.1s">Le cas de base partage le coût : baisse de salaire et chômage sont <b>les deux faces d'une même facture</b>.</p>
           <div class="src a-fade" style="--d:3.3s">Source : Korinek et al., 2026, p. 37 et table 6.</div>
         </div>
-        <div class="pageno">19<b>/32</b></div>
+        <div class="pageno">19<b>/36</b></div>
       </section>
 
       <!-- ========== 20 · F5 LA PORTE DE SORTIE ========== -->
@@ -1067,7 +1076,7 @@ h2{text-wrap:balance; margin:calc(9px * var(--e)) 0 0; max-width:calc(1080px * v
           <div class="mod rap a-rise" style="--d:2.6s"><p class="mod-p">Ceux qui passent la porte perdent <b>10 à 20 %</b> de leur revenu, surtout s'ils changent de métier. Un ingénieur logiciel aura du mal à devenir électricien.</p></div>
           <div class="src a-fade" style="--d:2.9s">Source : Korinek et al., 2026, p. 3 et 28.</div>
         </div>
-        <div class="pageno">20<b>/32</b></div>
+        <div class="pageno">20<b>/36</b></div>
       </section>
 
       <!-- ========== 21 · F6 TÂCHES NOUVELLES ========== -->
@@ -1091,7 +1100,7 @@ h2{text-wrap:balance; margin:calc(9px * var(--e)) 0 0; max-width:calc(1080px * v
           </div>
           <div class="src a-fade" style="--d:3s">Sources : Acemoglu et Restrepo, 2019 ; Korinek et al., 2026, p. 32 ; page de présentation de l'Anthropic Institute, 2026.</div>
         </div>
-        <div class="pageno">21<b>/32</b></div>
+        <div class="pageno">21<b>/36</b></div>
       </section>
 
       <!-- ========== 22 · L'HISTOIRE ET LE DÉLAI ========== -->
@@ -1114,7 +1123,7 @@ h2{text-wrap:balance; margin:calc(9px * var(--e)) 0 0; max-width:calc(1080px * v
           </div>
           <div class="src a-fade" style="--d:1.6s">Sources : Autor et al., 2024 ; page de présentation de l'Anthropic Institute, 2026 ; Korinek et al., 2026, p. 30.</div>
         </div>
-        <div class="pageno">22<b>/32</b></div>
+        <div class="pageno">22<b>/36</b></div>
       </section>
 
       <!-- ========== 23 · PARTIE IV ========== -->
@@ -1140,7 +1149,7 @@ h2{text-wrap:balance; margin:calc(9px * var(--e)) 0 0; max-width:calc(1080px * v
           <div class="mod aut a-rise" style="--d:1.7s"><p class="mod-p">L'auteur y voit une simulation sous cloche. Les capitaux affluent vers l'IA, jusqu'à ses applications physiques : le sursis de Karim pourrait être court.</p></div>
           <div class="src a-fade" style="--d:2.1s">Sources : Korinek et al., 2026, p. 4, 5 et 39 ; NVIDIA, 3 septembre 2026.</div>
         </div>
-        <div class="pageno">24<b>/32</b></div>
+        <div class="pageno">24<b>/36</b></div>
       </section>
 
       <!-- ========== 25 · CHRONOLOGIE ========== -->
@@ -1161,7 +1170,7 @@ h2{text-wrap:balance; margin:calc(9px * var(--e)) 0 0; max-width:calc(1080px * v
           </div>
           <div class="src a-fade" style="--d:2.7s">Sources : Axios, 2025 ; Anthropic, 2026 ; Bloomberg, 2026.</div>
         </div>
-        <div class="pageno">25<b>/32</b></div>
+        <div class="pageno">25<b>/36</b></div>
       </section>
 
       <!-- ========== 26 · TROIS PALIERS, DEUX LECTURES ========== -->
@@ -1182,7 +1191,7 @@ h2{text-wrap:balance; margin:calc(9px * var(--e)) 0 0; max-width:calc(1080px * v
           </div>
           <div class="src a-fade" style="--d:2.5s">Sources : Anthropic, cadre de politique publique, juin 2026 ; Korinek et al., 2026.</div>
         </div>
-        <div class="pageno">26<b>/32</b></div>
+        <div class="pageno">26<b>/36</b></div>
       </section>
 
       <!-- ========== 27 · PARTIE V ========== -->
@@ -1208,7 +1217,7 @@ h2{text-wrap:balance; margin:calc(9px * var(--e)) 0 0; max-width:calc(1080px * v
           </div>
           <div class="src a-fade" style="--d:2.7s">Scénario extrême, 2030 : paie du savoir, salaire des autres métiers, revenu du capital. Source : Korinek et al., 2026, table 3 et p. 35.</div>
         </div>
-        <div class="pageno">28<b>/32</b></div>
+        <div class="pageno">28<b>/36</b></div>
       </section>
 
       <!-- ========== 29 · LA FIRME MINIMALE ========== -->
@@ -1236,7 +1245,7 @@ h2{text-wrap:balance; margin:calc(9px * var(--e)) 0 0; max-width:calc(1080px * v
           </div>
           <div class="src a-fade" style="--d:2.7s">Sources : U.S. Census Bureau, <i>Business Formation Statistics</i>, août 2026 ; Insee, Informations rapides n° 222, septembre 2026.</div>
         </div>
-        <div class="pageno">29<b>/32</b></div>
+        <div class="pageno">29<b>/36</b></div>
       </section>
 
       <!-- ========== 30 · UN PARI DATÉ ========== -->
@@ -1260,7 +1269,7 @@ h2{text-wrap:balance; margin:calc(9px * var(--e)) 0 0; max-width:calc(1080px * v
           </div>
           <div class="src a-fade" style="--d:2s">Pari et lecture de l'auteur de la vidéo ; part du travail : Korinek et al., 2026, p. 35 ; Keynes, 1930.</div>
         </div>
-        <div class="pageno">30<b>/32</b></div>
+        <div class="pageno">30<b>/36</b></div>
       </section>
 
       <!-- ========== 31 · QUATRE QUESTIONS ========== -->
@@ -1276,8 +1285,92 @@ h2{text-wrap:balance; margin:calc(9px * var(--e)) 0 0; max-width:calc(1080px * v
         <p class="dk-p a-fade" style="--d:2s">Pour l'auteur, le capital et la responsabilité se bâtissent d'avance ; ils ne s'improvisent pas.</p>
       </section>
 
-      <!-- ========== 32 · RÉFÉRENCES ========== -->
-      <section class="slide" data-label="Références" style="--e:1.25">
+      <!-- ========== 32 · ANALYSE CRITIQUE ========== -->
+      <section class="slide dark" data-label="Analyse critique" style="--e:1.4">
+        <div class="dk-n a-fade">Analyse critique</div>
+        <h2 class="dk-h a-rise" style="--d:.2s">Que vaut cette démonstration ?</h2>
+        <div class="dk-rule a-grow" style="--d:.6s"></div>
+        <p class="dk-p a-fade" style="--d:.8s">Deux points où, sources en main, nous ne suivons pas l'auteur</p>
+      </section>
+
+      <!-- ========== 33 · D.1 LE STATUT DES CHIFFRES ========== -->
+      <section class="slide" data-label="Le statut des chiffres" style="--e:1.1">
+        <div class="top">
+          <div class="ey a-fade">Analyse critique · 1</div>
+          <h2 class="a-rise" style="--d:.1s">Un chiffre précis n'est pas pour autant une mesure</h2>
+          <span class="tag cri a-fade" style="--d:.3s">Regard critique</span>
+        </div>
+        <div class="body">
+          <div class="dit a-rise" style="--d:.45s">« La paie du savoir chute de 11,5 %, le chômage de ces métiers atteint 17,9 %, le revenu du capital bondit de 81,4 % »<b>7:40 · 12:25 · 23:48</b></div>
+          <div class="split">
+            <div class="col">
+              <p class="t a-fade" style="--d:.8s">Ces trois nombres viennent du seul scénario extrême. Ce n'est pas une prévision haute : c'est le déroulé d'une hypothèse posée à la main — l'IA prend la moitié des tâches cognitives et <b>ne crée aucune tâche nouvelle</b>.</p>
+              <p class="t a-fade" style="--d:1.1s">Le rapport n'attache <b>aucune probabilité</b> à ses scénarios, et son propre sondage situe le répondant médian dans le scénario substantiel — un sondé sur dix seulement partage les vues de l'extrême.</p>
+            </div>
+            <div class="viz">
+              <div class="cur-cols" style="grid-template-columns:1fr 1fr">
+                <div class="cur-col a-rise" style="--d:1.3s">
+                  <div class="cur-h">Le scénario mis en scène</div><div class="cur-s">extrême — celui que déroule la vidéo</div>
+                  <div class="gv">PIB<b>+32,4 %</b><div class="track"><div class="fill a-grow" style="--w:100%; --d:1.5s"></div></div></div>
+                  <div class="gv">Paie du savoir<b>−11,5 %</b><div class="track"><div class="fill n a-grow" style="--w:35.5%; --d:1.7s"></div></div></div>
+                </div>
+                <div class="cur-col base a-rise" style="--d:1.9s">
+                  <div class="cur-h">Celui du répondant médian</div><div class="cur-s">substantiel — sondage du rapport</div>
+                  <div class="gv">PIB<b>+8,3 %</b><div class="track"><div class="fill a-grow" style="--w:25.6%; --d:2.1s"></div></div></div>
+                  <div class="gv">Paie du savoir<b>−0,3 %</b><div class="track"><div class="fill n a-grow" style="--w:0.9%; --d:2.3s"></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <p class="t em a-fade" style="--d:2.5s">Avant de lire un chiffre, lire son statut.</p>
+          <div class="src a-fade" style="--d:2.7s">Sources : Korinek et al., 2026, p. 3, 29 et 32, table 3 ; page de présentation de l'Anthropic Institute, 2026.</div>
+        </div>
+        <div class="pageno">33<b>/36</b></div>
+      </section>
+
+      <!-- ========== 34 · D.2 LE MULTIPLICATEUR ========== -->
+      <section class="slide" data-label="Le multiplicateur" style="--e:1.2">
+        <div class="top">
+          <div class="ey a-fade">Analyse critique · 2</div>
+          <h2 class="a-rise" style="--d:.1s">« L'IA multiplie les écarts » : la mesure dit l'inverse</h2>
+          <span class="tag cri a-fade" style="--d:.3s">Regard critique</span>
+        </div>
+        <div class="body">
+          <div class="dit a-rise" style="--d:.45s">« L'IA n'est pas une baguette magique, c'est un multiplicateur ; un multiplicateur appliqué à zéro donne zéro »<b>4:27</b></div>
+          <div class="viz">
+            <div class="hb a-fade" style="--d:.7s"><div class="hb-l">Débutants et moins qualifiés<small>productivité, agents de support client</small></div><div class="track"><div class="fill a-grow" style="--w:100%; --d:.9s"></div></div><div class="hb-v">+34 %</div></div>
+            <div class="hb a-fade" style="--d:1.2s"><div class="hb-l">Ensemble des agents<small>moyenne de l'expérience</small></div><div class="track"><div class="fill b a-grow" style="--w:41%; --d:1.4s"></div></div><div class="hb-v">+14 %</div></div>
+            <div class="hb a-fade" style="--d:1.7s"><div class="hb-l">Les plus expérimentés<small>les mieux dotés au départ</small></div><div class="track"><div class="fill g a-grow" style="--w:4%; --d:1.9s"></div></div><div class="hb-v">minime</div></div>
+          </div>
+          <div class="g2">
+            <div class="mod cri a-rise" style="--d:2.2s"><div class="mod-h">Deux niveaux confondus</div><p class="mod-p">Le multiplicateur joue <b>entre le capital et le travail</b> — les +81,4 % du rapport — et non <b>entre les travailleurs</b>, où l'outil relève d'abord les moins qualifiés. Le conseil « cultivez votre expertise » décourage ceux qu'il aide le plus.</p></div>
+            <div class="mod rap a-rise" style="--d:2.5s"><div class="mod-h">La réserve qui s'impose</div><p class="mod-p">Ces expériences portent sur les outils d'aujourd'hui et sur des tâches qui existent encore. Elles ne disent rien du cas où la tâche disparaît tout entière — celui, justement, du scénario extrême.</p></div>
+          </div>
+          <div class="src a-fade" style="--d:2.8s">Sources : Brynjolfsson, Li et Raymond, NBER 31161, 2023, sur 5 179 agents ; Noy et Zhang, <i>Science</i>, 2023, sur 444 professionnels : « la distribution des performances se comprime ».</div>
+        </div>
+        <div class="pageno">34<b>/36</b></div>
+      </section>
+
+      <!-- ========== 35 · BILAN DE LA CRITIQUE ========== -->
+      <section class="slide" data-label="Ce que nous en retenons" style="--e:1.35">
+        <div class="top">
+          <div class="ey a-fade">Analyse critique · bilan</div>
+          <h2 class="a-rise" style="--d:.1s">Ce que nous en retenons</h2>
+          <span class="tag cri a-fade" style="--d:.3s">Regard critique</span>
+        </div>
+        <div class="body">
+          <div class="g3">
+            <div class="mod rap a-rise" style="--d:.5s"><div class="mod-h">Ce qui tient</div><p class="mod-p">Le mécanisme central : la richesse peut croître d'un tiers sans que la masse salariale bouge, dès lors que la part du travail se contracte. Et la facture se paie en salaires ou en emplois, selon la vitesse d'ajustement.</p></div>
+            <div class="mod cri a-rise" style="--d:.9s"><div class="mod-h">Ce qui ne tient pas</div><p class="mod-p">La promotion silencieuse d'un scénario-limite au rang de scénario central ; et le transfert, au niveau des personnes, d'un résultat qui concerne le capital.</p></div>
+            <div class="mod aut a-rise" style="--d:1.3s"><div class="mod-h">Le geste que nous saluons</div><p class="mod-p">L'auteur date son pari : septembre 2028, la part du travail autour de 60 % et le chômage des cols blancs contenu. Une thèse qui accepte d'être réfutée à date fixe vaut mieux que dix qui ne le prévoient pas.</p></div>
+          </div>
+          <p class="t em a-fade" style="--d:1.7s">Regarder la vidéo reste utile : c'est la lire comme un scénario, et non comme un bulletin météo, qui l'est davantage.</p>
+        </div>
+        <div class="pageno">35<b>/36</b></div>
+      </section>
+
+      <!-- ========== 36 · RÉFÉRENCES ========== -->
+      <section class="slide" data-label="Références" style="--e:1.15">
         <div class="top">
           <div class="ey a-fade">Références</div>
           <h2 class="a-rise" style="--d:.1s">Sources</h2>
@@ -1299,10 +1392,17 @@ h2{text-wrap:balance; margin:calc(9px * var(--e)) 0 0; max-width:calc(1080px * v
                 <p class="ref"><b>Keynes</b>, « Economic Possibilities for our Grandchildren », 1930.</p>
               </div>
             </div>
-            <div class="panel ctx a-fade" style="--d:.9s"><span class="ref-h">Repère de contexte</span><p class="ref"><b>Anthropic Institute</b>, « Scenarios for our Economic Future », page de présentation et explorateur de scénarios, septembre 2026.</p></div>
+            <div class="panel a-fade" style="--d:.85s">
+              <div class="ref-h">Sources de l'analyse critique</div>
+              <div class="cols2">
+                <p class="ref"><b>Brynjolfsson, Li, Raymond</b>, « Generative AI at Work », NBER Working Paper 31161, 2023 ; <i>Quarterly Journal of Economics</i>.</p>
+                <p class="ref"><b>Noy, Zhang</b>, « Experimental Evidence on the Productivity Effects of Generative Artificial Intelligence », MIT, 2023 ; <i>Science</i>, 381.</p>
+              </div>
+            </div>
+            <div class="panel ctx a-fade" style="--d:.95s"><span class="ref-h">Repère de contexte</span><p class="ref"><b>Anthropic Institute</b>, « Scenarios for our Economic Future », page de présentation et explorateur de scénarios, septembre 2026.</p></div>
           </div>
         </div>
-        <div class="pageno">32<b>/32</b></div>
+        <div class="pageno">36<b>/36</b></div>
       </section>
 
     </div>
@@ -1311,7 +1411,7 @@ h2{text-wrap:balance; margin:calc(9px * var(--e)) 0 0; max-width:calc(1080px * v
       <button id="prev" title="Précédent (←)">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
       </button>
-      <span class="count" id="count">1 / 32</span>
+      <span class="count" id="count">1 / 36</span>
       <button id="next" title="Suivant (→)">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
       </button>

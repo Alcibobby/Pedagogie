@@ -1,0 +1,15 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "redirects": [
+    {
+      "source": "/reflexions",
+      "destination": "/reflexions-critiques",
+      "permanent": true
+    },
+    {
+      "source": "/reflexions/:chemin*",
+      "destination": "/reflexions-critiques/:chemin*",
+      "permanent": true
+    }
+  ]
+}
