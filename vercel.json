@@ -12,6 +12,11 @@
       "permanent": true
     },
     {
+      "source": "/reflexions/:chemin+/",
+      "destination": "/reflexions-critiques/:chemin+/",
+      "permanent": true
+    },
+    {
       "source": "/reflexions/:chemin*",
       "destination": "/reflexions-critiques/:chemin*",
       "permanent": true
