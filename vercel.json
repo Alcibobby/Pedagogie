@@ -7,6 +7,11 @@
       "permanent": true
     },
     {
+      "source": "/reflexions/",
+      "destination": "/reflexions-critiques/",
+      "permanent": true
+    },
+    {
       "source": "/reflexions/:chemin*",
       "destination": "/reflexions-critiques/:chemin*",
       "permanent": true
