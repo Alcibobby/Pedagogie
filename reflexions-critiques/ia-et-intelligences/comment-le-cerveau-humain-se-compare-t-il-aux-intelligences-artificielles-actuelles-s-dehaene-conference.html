@@ -1,0 +1,1364 @@
+<meta charset="utf-8">
+<title>Comment le cerveau humain se compare-t-il aux intelligences artificielles actuelles ? - S. Dehaene</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<!-- Métadonnées de publication — lues par l'étape de mise en ligne -->
+<meta name="pedago:chemin"  content="reflexions-critiques/ia-et-intelligences">
+<meta name="pedago:famille" content="reflexion">
+<meta name="pedago:titre"   content="Comment le cerveau humain se compare-t-il aux intelligences artificielles actuelles ? - S. Dehaene">
+<meta name="pedago:rang"    content="2">
+<meta name="pedago:mode"    content="conference">
+<meta name="pedago:cartes"  content="32">
+<meta name="pedago:resume"  content="Ce que les réseaux de neurones doivent au cerveau, et les trois terrains où il garde l'avantage : apprendre de peu, représenter symboliquement, ne pas voir d'illusion là où il n'y en a pas. Analyse critique : ce que onze mois de publications ont changé.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+/* ============================================================
+   CHARTE — variables de couleur et de fonte
+   ============================================================ */
+:root{
+  --ink:#0B2545;          /* marine profond — texte principal */
+  --ink-2:#13315C;
+  --blue:#1D4E89;
+  --blue-soft:#6E9BD1;
+  --accent:#0E9594;       /* vert-sarcelle */
+  --accent-2:#17B3A3;
+  --accent-wash:rgba(14,149,148,.10);
+  --accent-glow:rgba(14,149,148,.22);
+  --bg:#EEF3F8;
+  --card:#FFFFFF;
+  --paper:#F7FAFC;
+  --line:rgba(11,37,69,.11);
+  --ink-70:rgba(11,37,69,.72);
+  --ink-50:rgba(11,37,69,.52);
+  --stage-bg:radial-gradient(1100px 620px at 50% 8%, #fff 0%, rgba(255,255,255,0) 62%), #EEF3F8;
+  --dark-bg:radial-gradient(900px 560px at 22% 12%, #1B4A7E 0%, rgba(27,74,126,0) 60%),
+            radial-gradient(700px 500px at 88% 92%, rgba(14,149,148,.34) 0%, rgba(14,149,148,0) 62%),
+            linear-gradient(150deg,#0B2545 0%,#0A1E3A 100%);
+  --serif:'Fraunces','Iowan Old Style',Georgia,'Times New Roman',serif;
+  --sans:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;
+  --W:1280px; --H:720px;
+}
+
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0; background:var(--bg); color:var(--ink);
+  font-family:var(--sans); -webkit-font-smoothing:antialiased;
+  overflow:hidden;
+}
+
+/* ============================================================
+   COQUE — colonne de miniatures + scène
+   ============================================================ */
+.app{display:flex; height:100vh; width:100vw}
+
+/* Largeur du rail = 16 (marge) + 22 (colonne du numéro) + 212 (vignette)
+   + 16 (marge) + 6 (barre de défilement) = 272. Toute autre valeur fait
+   déborder la vignette et sortir une barre de défilement horizontale. */
+.rail{
+  width:272px; flex:0 0 272px; height:100vh;
+  background:#fff; border-right:1px solid var(--line);
+  display:flex; flex-direction:column;
+  box-shadow:0 0 40px rgba(0,0,0,.06); z-index:5;
+}
+.rail-head{padding:20px 18px 14px; border-bottom:1px solid var(--line)}
+
+/* Lien de retour vers l'index du cours / de la formation / de la conférence,
+   ou du thème pour une réflexion.
+   Il vit dans le rail, jamais dans la scène : le rail est masqué en plein
+   écran et à l'impression, le lien n'apparaît donc pas en projection. */
+.rail-back{
+  display:inline-flex; align-items:center; gap:6px;
+  margin-bottom:12px;
+  font-size:10.5px; font-weight:500; letter-spacing:.02em;
+  color:var(--ink-50); text-decoration:none;
+  transition:color .18s;
+}
+.rail-back:hover{color:var(--accent)}
+.rail-back:focus-visible{outline:2px solid var(--accent); outline-offset:3px; border-radius:3px}
+.rail-back svg{width:11px; height:11px; flex:0 0 11px}
+
+.rail-kicker{
+  font-size:9.5px; letter-spacing:.18em; text-transform:uppercase;
+  color:var(--accent); font-weight:700
+}
+.rail-title{
+  font-family:var(--serif); font-size:17px; line-height:1.25;
+  font-weight:500; margin-top:7px; color:var(--ink)
+}
+.rail-meta{font-size:11px; color:var(--ink-50); margin-top:6px}
+
+.thumbs{flex:1; overflow-y:auto; overflow-x:hidden; padding:14px 16px 18px; scrollbar-width:thin}
+.thumbs::-webkit-scrollbar{width:6px}
+.thumbs::-webkit-scrollbar-thumb{background:rgba(0,0,0,.16); border-radius:3px}
+
+.thumb{
+  position:relative; margin-bottom:13px; cursor:pointer;
+  border-radius:8px; padding-left:22px;
+  transition:transform .22s cubic-bezier(.2,.7,.3,1);
+}
+.thumb:hover{transform:translateX(2px)}
+.thumb-no{
+  position:absolute; left:0; top:50%; transform:translateY(-50%);
+  font-size:10.5px; font-weight:600; color:var(--ink-50);
+  font-variant-numeric:tabular-nums; transition:color .2s
+}
+.thumb-box{
+  position:relative; width:212px; height:119.25px; overflow:hidden;
+  border-radius:7px; background:#fff;
+  border:1px solid var(--line);
+  box-shadow:0 2px 8px rgba(0,0,0,.07);
+  transition:box-shadow .25s, border-color .25s;
+}
+.thumb-box::after{
+  content:''; position:absolute; inset:0; border-radius:7px;
+  box-shadow:inset 0 0 0 2px transparent; transition:box-shadow .25s
+}
+.thumb.on .thumb-box::after{box-shadow:inset 0 0 0 2px var(--accent)}
+.thumb.on .thumb-box{box-shadow:0 6px 20px var(--accent-glow)}
+.thumb.on .thumb-no{color:var(--accent); font-weight:700}
+/* La miniature est un clone de la carte à l'échelle : le facteur vaut la
+   largeur de la vignette divisée par celle de la toile (212 / 1280). */
+.thumb-scale{
+  position:absolute; top:0; left:0; width:var(--W); height:var(--H);
+  transform:scale(.16563); transform-origin:0 0; pointer-events:none;
+}
+.thumb-label{
+  font-size:10.5px; color:var(--ink-50); margin-top:5px;
+  letter-spacing:.01em; white-space:nowrap; overflow:hidden; text-overflow:ellipsis
+}
+.thumb.on .thumb-label{color:var(--ink-70); font-weight:500}
+
+.rail-foot{padding:13px 16px 16px; border-top:1px solid var(--line); display:grid; gap:8px}
+.btn{
+  display:flex; align-items:center; gap:9px; width:100%;
+  padding:9px 12px; border-radius:8px; border:1px solid var(--line);
+  background:var(--paper); color:var(--ink-70);
+  font-family:var(--sans); font-size:12px; font-weight:500;
+  cursor:pointer; transition:all .18s;
+}
+.btn:hover{background:var(--ink); color:#fff; border-color:var(--ink)}
+.btn svg{width:14px; height:14px; flex:0 0 14px}
+.btn .k{margin-left:auto; font-size:9.5px; opacity:.5; letter-spacing:.06em}
+
+/* ---- Scène ---- */
+.stage{
+  flex:1; position:relative; display:flex; align-items:center; justify-content:center;
+  background:var(--stage-bg);
+  overflow:hidden;
+}
+/* « flex:0 0 auto » n'est pas décoratif : .deck est un élément flex de la
+   scène. Sans lui, dès que la fenêtre est plus étroite que la toile, la scène
+   le rétrécit et son overflow:hidden rogne la carte — d'autant plus que la
+   toile est large. */
+.deck{
+  position:relative; flex:0 0 auto; width:var(--W); height:var(--H);
+  transform-origin:center center;
+  border-radius:14px; overflow:hidden;
+  box-shadow:0 26px 70px rgba(0,0,0,.20), 0 2px 6px rgba(0,0,0,.08);
+}
+.stage:fullscreen{background:var(--ink)}
+.stage:fullscreen .deck{border-radius:0; box-shadow:none}
+
+.nav{
+  position:absolute; bottom:22px; left:50%; transform:translateX(-50%);
+  display:flex; align-items:center; gap:6px; z-index:10;
+  background:rgba(255,255,255,.86); backdrop-filter:blur(14px);
+  border:1px solid var(--line); border-radius:999px; padding:5px 6px;
+  box-shadow:0 6px 22px rgba(0,0,0,.14);
+  transition:opacity .4s;
+}
+.nav button{
+  width:30px; height:30px; border-radius:50%; border:0; background:transparent;
+  color:var(--ink-70); cursor:pointer; display:grid; place-items:center; transition:.16s
+}
+.nav button:hover{background:var(--ink); color:#fff}
+.nav button:disabled{opacity:.25; cursor:default; background:transparent; color:var(--ink-70)}
+.nav .count{
+  font-size:11.5px; font-weight:600; color:var(--ink-70);
+  font-variant-numeric:tabular-nums; padding:0 9px; letter-spacing:.04em
+}
+.stage.idle .nav{opacity:0}
+
+.hint{
+  position:absolute; top:16px; right:18px; z-index:10;
+  font-size:10.5px; color:var(--ink-50); letter-spacing:.05em;
+  background:rgba(255,255,255,.8); padding:5px 11px; border-radius:999px;
+  border:1px solid var(--line); transition:opacity .4s
+}
+.stage:not(:fullscreen) .hint{display:none}
+.stage.idle .hint{opacity:0}
+
+/* ============================================================
+   DIAPOSITIVES — socle structurel
+   ============================================================ */
+/* La carte est une colonne : une tête de hauteur naturelle, un corps qui
+   occupe toute la hauteur restante. Sans cela, le contenu s'arrête où il
+   s'arrête et laisse une bande morte en bas — le déséquilibre le plus
+   visible d'un diaporama, et le plus fréquent aux faibles densités.
+
+   L'ÉCHELLE DE LA CARTE (--e) est le vrai remède à ce déséquilibre. Une carte
+   qui porte peu de matière ne se remplit pas en écartant ses blocs : elle se
+   remplit en s'écrivant plus grand. Toutes les tailles de la maquette doivent
+   donc s'exprimer en calc(Npx * var(--e)), et --e se pose carte par carte,
+   à la mesure — style="--e:1.4" sur la <section>.
+
+   Les grandes tailles suivent --ed, une échelle amortie : sans cela un titre
+   de carte rejoint la taille du titre de couverture et la hiérarchie
+   s'effondre. */
+.slide{
+  --e:1;
+  --ed:calc(1 + (var(--e) - 1) * .45);
+  position:absolute; inset:0; width:var(--W); height:var(--H);
+  padding:52px 66px 48px; background:var(--card);
+  opacity:0; visibility:hidden; z-index:1;
+  transition:opacity .5s ease;
+  display:flex; flex-direction:column;
+}
+.slide.active{opacity:1; visibility:visible; z-index:2}
+.thumb-scale .slide{opacity:0; visibility:hidden}
+.thumb-scale .slide.tvis{opacity:1; visibility:visible}
+
+/* Le titre reste en haut ; c'est le corps qui se répartit. */
+.top{flex:0 0 auto}
+.body{
+  flex:1 1 auto; min-height:0;
+  display:flex; flex-direction:column;
+  gap:15px; padding-top:17px;
+  justify-content:center;   /* le résidu se partage, il ne s'accumule pas */
+}
+/* Seules les FIGURES occupent la place qu'on leur donne : une frise, une
+   chaîne, une table, des barres grandissent honnêtement, leurs éléments
+   grandissant avec elles. Ajouter ici les figures propres à la maquette.
+
+   Une boîte de TEXTE, jamais. L'étirer n'ajoute pas un mot ; cela creuse un
+   vide au bas de la boîte, ou pire — avec space-between — entre l'énoncé et
+   son explication, à l'endroit exact où le lien de lecture doit tenir. */
+.body > .frise,
+.body > .chain,
+.body > .panelrow,
+.body > .stack{flex:1 1 auto}
+.stack{display:flex; flex-direction:column; gap:15px; justify-content:center}
+.stack > .frise,
+.stack > .chain{flex:1 1 auto}
+
+/* Fond plein foncé : couverture, intertitres, clôture.
+   Le titre y est centré — c'est une règle de forme, pas une maquette.
+   Le dégradé lui-même relève de la charte. */
+.slide.dark{
+  background:var(--dark-bg);
+  color:#fff;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  text-align:center;
+}
+
+/* Numéro de carte — uniquement sur fond clair, jamais sur .dark.
+   Position, taille et style constants d'une vue à l'autre. */
+.pageno{
+  position:absolute; right:40px; bottom:30px;
+  font-size:11.5px; font-weight:600; letter-spacing:.1em;
+  color:var(--ink-50); font-variant-numeric:tabular-nums;
+}
+.pageno b{color:var(--accent); font-weight:700}
+
+/* ============================================================
+   ANIMATIONS — rejouées à chaque arrivée sur la carte
+   ============================================================
+   Les règles sont portées par « .slide.active » : quitter puis revenir
+   sur une carte relance la cascade. C'est ce qui rend l'animation
+   cinématique plutôt que jouée une seule fois au chargement.
+   Régler le décalage par l'attribut style="--d:.35s". */
+@keyframes rise{from{opacity:0; transform:translateY(26px)}}
+@keyframes fade{from{opacity:0}}
+@keyframes slideIn{from{opacity:0; transform:translateX(-30px)}}
+@keyframes zoomIn{from{opacity:0; transform:scale(.9)}}
+@keyframes grow{from{transform:scaleX(0)}}
+@keyframes growY{from{transform:scaleY(0)}}
+@keyframes draw{from{stroke-dashoffset:var(--len)}}
+@keyframes pop{from{opacity:0; transform:scale(.3)}}
+@keyframes sweep{from{opacity:0; clip-path:inset(0 100% 0 0)}}
+
+.slide.active .a-rise {animation:rise .82s var(--d,0s) both cubic-bezier(.18,.75,.25,1)}
+.slide.active .a-fade {animation:fade 1.05s var(--d,0s) both ease}
+.slide.active .a-slide{animation:slideIn .8s var(--d,0s) both cubic-bezier(.18,.75,.25,1)}
+.slide.active .a-zoom {animation:zoomIn .85s var(--d,0s) both cubic-bezier(.18,.8,.25,1)}
+.slide.active .a-grow {animation:grow 1.05s var(--d,0s) both cubic-bezier(.2,.75,.25,1); transform-origin:left center}
+.slide.active .a-growy{animation:growY .95s var(--d,0s) both cubic-bezier(.2,.75,.25,1); transform-origin:bottom center}
+.slide.active .a-draw {animation:draw 1.5s var(--d,0s) both cubic-bezier(.3,.7,.3,1)}
+.slide.active .a-pop  {animation:pop .6s var(--d,0s) both cubic-bezier(.2,1.5,.4,1)}
+.slide.active .a-sweep{animation:sweep 1.1s var(--d,0s) both cubic-bezier(.2,.75,.25,1)}
+.a-draw{stroke-dasharray:var(--len); stroke-dashoffset:0}
+
+/* ============================================================
+   STYLES DE MAQUETTE — propres à ce diaporama
+   ============================================================
+   Échelle typographique, blocs graphiques, figures chiffrées,
+   planche de références, couverture. Écrits à chaque génération.
+   ============================================================ */
+/* ---------- Typographie ---------- */
+.ey{font-size:calc(11px * var(--e)); font-weight:700; letter-spacing:.22em; text-transform:uppercase; color:var(--accent)}
+h2{text-wrap:balance; margin:calc(8px * var(--e)) 0 0; max-width:calc(1060px * var(--e)); font-family:var(--serif); font-weight:400; font-size:calc(37px * var(--ed)); line-height:1.12; letter-spacing:-.01em; color:var(--ink)}
+.lede{text-wrap:pretty; margin:calc(9px * var(--e)) 0 0; max-width:calc(1000px * var(--e)); font-size:calc(15.5px * var(--e)); line-height:1.5; color:var(--ink-70)}
+.t{text-wrap:pretty; font-size:calc(15px * var(--e)); line-height:1.55; color:var(--ink-70)}
+.t b{color:var(--ink); font-weight:600}
+.t.em{font-family:var(--serif); font-size:calc(20px * var(--e)); line-height:1.35; color:var(--ink)}
+.src{font-size:calc(10.5px * var(--e)); line-height:1.45; color:var(--ink-50)}
+.top .tag{margin-top:calc(11px * var(--e))}
+
+/* ---------- Les deux voix ---------- */
+.tags{display:flex; flex-wrap:wrap; gap:calc(10px * var(--e)); align-items:center}
+.tag{display:inline-flex; align-items:center; gap:calc(7px * var(--e)); align-self:flex-start; padding:calc(4px * var(--e)) calc(11px * var(--e)); border-radius:calc(4px * var(--e)); font-size:calc(9.5px * var(--e)); font-weight:700; letter-spacing:.16em; text-transform:uppercase}
+.tag::before{content:''; width:calc(5px * var(--e)); height:calc(5px * var(--e)); background:currentColor}
+.tag.conf{color:var(--accent); background:var(--accent-wash)}
+.tag.cri{color:#fff; background:var(--ink)}
+
+/* ---------- Boîtes ---------- */
+.mod{display:flex; flex-direction:column; justify-content:flex-start; gap:calc(6px * var(--e)); padding:calc(15px * var(--e)) calc(17px * var(--e)); background:var(--paper); border:1px solid var(--line); border-top:calc(3px * var(--e)) solid var(--accent)}
+.mod.cer{border-top-color:var(--accent)}
+.mod.mac{border-top-color:var(--blue-soft)}
+.mod.cri{border-top-color:var(--ink)}
+.mod-k{font-size:calc(10px * var(--e)); font-weight:700; letter-spacing:.16em; text-transform:uppercase; color:var(--ink-50)}
+.mod-h{font-family:var(--serif); font-size:calc(19px * var(--e)); line-height:1.22; color:var(--ink)}
+.mod-p{text-wrap:pretty; font-size:calc(13.5px * var(--e)); line-height:1.5; color:var(--ink-70)}
+.mod-p b{color:var(--ink); font-weight:600}
+.g2{display:grid; grid-template-columns:1fr 1fr; gap:calc(15px * var(--e)); align-items:start}
+.g3{display:grid; grid-template-columns:repeat(3, 1fr); gap:calc(13px * var(--e)); align-items:start}
+.g4{display:grid; grid-template-columns:repeat(4, 1fr); gap:calc(11px * var(--e)); align-items:start}
+.split{position:relative; display:grid; grid-template-columns:1fr 1.1fr; gap:calc(30px * var(--e)); align-items:center}
+.split.rev{grid-template-columns:1.1fr 1fr}
+.col{display:flex; flex-direction:column; gap:calc(11px * var(--e))}
+.body > .viz{flex:1 1 auto}
+.viz{display:flex; flex-direction:column; justify-content:center; gap:calc(13px * var(--e)); min-height:0}
+.viz > *{flex-shrink:0}
+
+/* ---------- Le motif du diaporama : le cerveau et la machine, face à face ---------- */
+.duo{display:grid; grid-template-columns:1fr auto 1fr; gap:calc(22px * var(--e)); align-items:stretch}
+.duo-r{width:1px; background:var(--line)}
+.duo-c{display:flex; flex-direction:column; gap:calc(9px * var(--e))}
+.duo-t{display:flex; align-items:center; gap:calc(9px * var(--e)); font-size:calc(10px * var(--e)); font-weight:700; letter-spacing:.18em; text-transform:uppercase}
+.duo-t i{display:block; width:calc(18px * var(--e)); height:calc(2px * var(--e))}
+.duo-c.cer .duo-t{color:var(--accent)} .duo-c.cer .duo-t i{background:var(--accent)}
+.duo-c.mac .duo-t{color:var(--blue)} .duo-c.mac .duo-t i{background:var(--blue-soft)}
+.duo-h{font-family:var(--serif); font-size:calc(24px * var(--ed)); line-height:1.15; color:var(--ink)}
+.duo-p{font-size:calc(13.5px * var(--e)); line-height:1.5; color:var(--ink-70)}
+
+/* ---------- Chiffres ---------- */
+.kpi{font-family:var(--serif); font-weight:400; font-size:calc(60px * var(--ed)); line-height:.95; letter-spacing:-.02em; color:var(--ink)}
+.kpi.acc{color:var(--accent)} .kpi.blu{color:var(--blue)}
+.kpi-u{margin-left:.1em; font-size:.36em; letter-spacing:.02em; color:var(--ink-50)}
+.kpi-l{margin-top:calc(5px * var(--e)); font-size:calc(13px * var(--e)); line-height:1.45; color:var(--ink-70)}
+.chiffres{display:grid; grid-template-columns:repeat(3, 1fr); gap:calc(14px * var(--e))}
+.ch{display:flex; flex-direction:column; gap:calc(3px * var(--e)); padding-left:calc(14px * var(--e)); border-left:calc(2px * var(--e)) solid var(--accent)}
+.ch b{font-family:var(--serif); font-size:calc(32px * var(--ed)); font-weight:400; line-height:1; color:var(--ink)}
+.ch span{font-size:calc(12.5px * var(--e)); line-height:1.4; color:var(--ink-70)}
+
+/* ---------- Cartes foncées ---------- */
+.slide.dark{padding:calc(54px * var(--e)) calc(88px * var(--e))}
+.cv-k{font-size:calc(11px * var(--e)); font-weight:700; letter-spacing:.34em; text-transform:uppercase; color:var(--accent-2)}
+.cv-h{text-wrap:balance; margin:calc(18px * var(--e)) auto 0; max-width:calc(1000px * var(--e)); font-family:var(--serif); font-weight:400; font-size:calc(55px * var(--ed)); line-height:1.08; color:#fff}
+.cv-p{margin:calc(20px * var(--e)) auto 0; max-width:calc(760px * var(--e)); font-size:calc(16.5px * var(--e)); line-height:1.5; color:rgba(255,255,255,.76)}
+.cv-meta{margin-top:calc(24px * var(--e)); font-size:calc(11px * var(--e)); letter-spacing:.16em; text-transform:uppercase; color:rgba(255,255,255,.55)}
+.cv-onde{display:flex; justify-content:center; align-items:flex-end; gap:calc(6px * var(--e)); margin-top:calc(24px * var(--e)); height:calc(26px * var(--e))}
+.cv-onde i{display:block; width:calc(4px * var(--e)); background:var(--accent-2); opacity:.85; transform-origin:bottom center}
+.dk-n{font-family:var(--serif); font-size:calc(22px * var(--e)); letter-spacing:.16em; color:var(--accent-2)}
+.dk-h{text-wrap:balance; margin:calc(13px * var(--e)) auto 0; max-width:calc(980px * var(--e)); font-family:var(--serif); font-weight:400; font-size:calc(48px * var(--ed)); line-height:1.1; color:#fff}
+.dk-rule{width:calc(58px * var(--e)); height:calc(2px * var(--e)); margin:calc(20px * var(--e)) auto 0; background:var(--accent-2)}
+.dk-p{text-wrap:balance; margin:calc(16px * var(--e)) auto 0; max-width:calc(800px * var(--e)); font-size:calc(15.5px * var(--e)); line-height:1.5; letter-spacing:.03em; color:rgba(255,255,255,.68)}
+
+/* ---------- Ouverture ---------- */
+.obj{display:flex; flex-direction:column; justify-content:flex-start; gap:calc(5px * var(--e)); padding:calc(13px * var(--e)) calc(15px * var(--e)); background:var(--paper); border-left:calc(3px * var(--e)) solid var(--accent)}
+.obj-h{font-family:var(--serif); font-size:calc(20px * var(--e)); color:var(--ink)}
+.obj-p{font-size:calc(13px * var(--e)); line-height:1.45; color:var(--ink-70)}
+.etapes{display:grid; gap:calc(9px * var(--e))}
+.et{display:grid; grid-template-columns:calc(52px * var(--e)) 1fr; gap:calc(16px * var(--e)); align-items:baseline; padding-bottom:calc(9px * var(--e)); border-bottom:1px solid var(--line)}
+.et:last-child{border-bottom:0}
+.et-n{font-family:var(--serif); font-size:calc(26px * var(--e)); color:var(--accent); line-height:1}
+.et.cri .et-n{color:var(--ink)}
+.et-q{font-family:var(--serif); font-size:calc(21px * var(--e)); line-height:1.25; color:var(--ink)}
+.et-s{margin-top:calc(2px * var(--e)); font-size:calc(12.5px * var(--e)); color:var(--ink-50)}
+
+/* ---------- Fiche ---------- */
+.fiche{display:grid; gap:calc(9px * var(--e))}
+.fl{display:grid; grid-template-columns:calc(104px * var(--e)) 1fr; gap:calc(12px * var(--e)); align-items:baseline; padding-bottom:calc(9px * var(--e)); border-bottom:1px solid var(--line)}
+.fl-k{font-size:calc(10px * var(--e)); font-weight:700; letter-spacing:.16em; text-transform:uppercase; color:var(--ink-50)}
+.fl-v{font-size:calc(14.5px * var(--e)); line-height:1.4; color:var(--ink)}
+.phrase{font-family:var(--serif); font-size:calc(28px * var(--ed)); line-height:1.25; color:var(--ink)}
+.phrase em{font-style:italic; color:var(--accent)}
+
+/* ---------- La citation visée par la critique ---------- */
+.dit{display:flex; align-items:baseline; gap:calc(14px * var(--e)); padding:calc(11px * var(--e)) calc(17px * var(--e)); border-left:calc(3px * var(--e)) solid var(--blue-soft); background:var(--paper); font-family:var(--serif); font-size:calc(16.5px * var(--e)); font-style:italic; line-height:1.35; color:var(--ink)}
+.dit b{flex:0 0 auto; font-family:var(--sans); font-style:normal; font-size:calc(10.5px * var(--e)); font-weight:700; letter-spacing:.1em; color:var(--ink-50)}
+
+/* ---------- Couches d'un réseau, et hiérarchie du cortex ---------- */
+.couches{display:grid; grid-template-columns:repeat(4, 1fr); gap:calc(10px * var(--e)); align-items:end}
+.cch{display:flex; flex-direction:column; gap:calc(7px * var(--e))}
+.cch-b{width:100%; height:var(--h); opacity:.3}
+.cch-b rect{fill:var(--accent)}
+.cch.on .cch-b{opacity:1}
+.cch.on .cch-b rect{fill:var(--accent-2)}
+.cch-t{font-size:calc(12.5px * var(--e)); line-height:1.35; color:var(--ink-70)}
+.cch-t b{display:block; font-family:var(--serif); font-size:calc(16px * var(--e)); font-weight:400; color:var(--ink)}
+
+/* ---------- Nuage de points (F1, F3) ---------- */
+.nuage{width:100%; height:calc(290px * var(--e))}
+.nuage .axe{stroke:var(--ink-50); stroke-width:1}
+.nuage .gr{stroke:var(--line); stroke-width:1; stroke-dasharray:3 4}
+.nuage .pt{fill:var(--accent); opacity:.85}
+.nuage .pt.b{fill:var(--blue-soft)}
+.nuage .ln{fill:none; stroke-width:2.4; stroke-linecap:round}
+.nuage .ln.g{stroke:var(--accent)} .nuage .ln.d{stroke:var(--blue)}
+.nuage .seuil{stroke:var(--ink-2); stroke-width:1.6; stroke-dasharray:6 5}
+.nuage text{font-family:var(--sans); fill:var(--ink-50)}   /* taille en attribut SVG : elle suit la figure, pas l'échelle de la carte */
+.nuage text.v{font-family:var(--serif); fill:var(--ink)}
+.leg{display:flex; gap:calc(18px * var(--e)); font-size:calc(11.5px * var(--e)); color:var(--ink-70)}
+.leg i{display:inline-block; width:calc(12px * var(--e)); height:calc(3px * var(--e)); margin-right:calc(6px * var(--e)); vertical-align:middle}
+
+/* ---------- Double dissociation (F2) ---------- */
+.diss{display:grid; grid-template-columns:calc(150px * var(--e)) 1fr 1fr; gap:calc(10px * var(--e)) calc(14px * var(--e)); align-items:center}
+.diss-h{font-size:calc(11px * var(--e)); font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:var(--ink-50); text-align:center; padding-bottom:calc(6px * var(--e)); border-bottom:1px solid var(--line)}
+.diss-r{font-family:var(--serif); font-size:calc(19px * var(--e)); color:var(--ink)}
+.diss-r small{display:block; font-family:var(--sans); font-size:calc(11px * var(--e)); color:var(--ink-50)}
+.cel{position:relative; height:calc(52px * var(--e)); background:var(--paper); border:1px solid var(--line); display:flex; align-items:center; justify-content:center}
+.cel .bar{position:absolute; left:0; top:0; bottom:0; width:var(--w); background:rgba(14,149,148,.18)}
+.cel.b .bar{background:rgba(110,155,209,.26)}
+.cel span{position:relative; font-family:var(--serif); font-size:calc(21px * var(--e)); color:var(--ink)}
+.cel.no span{color:var(--ink-50); font-size:calc(14px * var(--e)); font-family:var(--sans)}
+
+/* ---------- Deux réseaux cérébraux (F4) ---------- */
+.res{display:grid; grid-template-columns:1fr 1fr; gap:calc(20px * var(--e))}
+.res svg{width:100%; height:calc(180px * var(--e))}
+.res .cort{fill:none; stroke:var(--line); stroke-width:2}
+.res .zone{opacity:.85}
+.res .zone.v{fill:var(--accent)} .res .zone.b{fill:var(--blue)}
+.res-t{margin-top:calc(6px * var(--e)); font-family:var(--serif); font-size:calc(19px * var(--e)); color:var(--ink)}
+.res-p{font-size:calc(12.5px * var(--e)); line-height:1.45; color:var(--ink-70)}
+
+/* ---------- L'échec des modèles (F5) ---------- */
+.echange{display:grid; gap:calc(10px * var(--e))}
+.bulle{padding:calc(12px * var(--e)) calc(16px * var(--e)); font-size:calc(14.5px * var(--e)); line-height:1.45}
+.bulle.q{justify-self:end; max-width:70%; background:var(--ink); color:#fff}
+.bulle.r{justify-self:start; max-width:82%; background:var(--paper); border:1px solid var(--line); color:var(--ink-70)}
+.bulle.r b{color:var(--ink)}
+.bulle-k{display:block; margin-bottom:calc(4px * var(--e)); font-size:calc(9.5px * var(--e)); font-weight:700; letter-spacing:.16em; text-transform:uppercase; opacity:.6}
+.verdict{font-family:var(--serif); font-size:calc(21px * var(--e)); line-height:1.35; color:var(--ink)}
+
+/* ---------- Les vingt watts ---------- */
+.watt{display:grid; grid-template-columns:1fr auto 1fr; gap:calc(24px * var(--e)); align-items:center}
+.watt-c{display:flex; flex-direction:column; align-items:center; gap:calc(6px * var(--e)); text-align:center}
+.watt-v{font-family:var(--serif); font-size:calc(52px * var(--ed)); line-height:1; color:var(--ink)}
+.watt-v.acc{color:var(--accent)}
+.watt-l{font-size:calc(12.5px * var(--e)); line-height:1.4; color:var(--ink-70)}
+.watt-eq{font-family:var(--serif); font-size:calc(26px * var(--e)); color:var(--ink-50)}
+.jauge{width:100%; height:calc(10px * var(--e)); background:rgba(11,37,69,.07)}
+.jauge i{display:block; height:100%; width:var(--w); background:var(--accent)}
+
+/* ---------- Frise du temps long ---------- */
+.temps{position:relative; display:grid; grid-template-columns:repeat(3, 1fr); gap:calc(16px * var(--e)); padding-top:calc(30px * var(--e))}
+.temps-l{position:absolute; left:0; right:0; top:calc(10px * var(--e)); height:calc(2px * var(--e)); background:linear-gradient(90deg, var(--blue-soft), var(--accent))}
+.tp{position:relative; display:flex; flex-direction:column; gap:calc(5px * var(--e))}
+.tp-d{position:absolute; top:calc(-28px * var(--e)); left:0; width:calc(12px * var(--e)); height:calc(12px * var(--e)); border-radius:50%; background:#fff; border:calc(3px * var(--e)) solid var(--accent)}
+.tp-k{font-size:calc(11.5px * var(--e)); font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--accent)}
+.tp-t{font-family:var(--serif); font-size:calc(17px * var(--e)); line-height:1.3; color:var(--ink)}
+.tp-s{font-size:calc(11.5px * var(--e)); color:var(--ink-50)}
+
+/* ---------- Questions de clôture ---------- */
+.qs{display:grid; gap:calc(11px * var(--e)); max-width:calc(920px * var(--e)); margin:calc(22px * var(--e)) auto 0; text-align:left}
+.q{display:flex; align-items:baseline; gap:calc(14px * var(--e)); font-family:var(--serif); font-size:calc(21px * var(--e)); line-height:1.32; color:#fff}
+.q b{min-width:calc(22px * var(--e)); font-family:var(--sans); font-size:calc(12px * var(--e)); font-weight:700; color:var(--accent-2)}
+
+/* ---------- Références ---------- */
+.refs{display:flex; flex-direction:column; gap:calc(11px * var(--e)); margin:auto 0}
+.spine{display:flex; align-items:baseline; gap:calc(13px * var(--e)); padding:calc(11px * var(--e)) calc(16px * var(--e)); background:var(--ink); color:#fff; font-size:calc(12.5px * var(--e)); line-height:1.45}
+.spine .ref-h{flex:0 0 auto; color:var(--accent-2)}
+.spine b{color:#fff; font-weight:600}
+.panel{display:flex; flex-direction:column; gap:calc(7px * var(--e)); padding:calc(13px * var(--e)) calc(16px * var(--e)); background:var(--paper); border:1px solid var(--line)}
+.panel.ctx{flex-direction:row; align-items:baseline; gap:calc(13px * var(--e))}
+.panel.ctx .ref-h{flex:0 0 auto}
+.cols2{column-count:2; column-gap:calc(24px * var(--e))}
+.cols2 .ref{break-inside:avoid; margin:0 0 calc(7px * var(--e))}
+.ref-h{font-size:calc(10px * var(--e)); font-weight:700; letter-spacing:.16em; text-transform:uppercase; color:var(--accent)}
+.ref{font-size:calc(11px * var(--e)); line-height:1.4; color:var(--ink-70)}
+.ref b{font-weight:600; color:var(--ink)}
+.ref i{font-style:italic}
+
+/* ---------- Les quadrilatères de l'expérience ---------- */
+.formes{display:grid; gap:calc(14px * var(--e))}
+.formes-r{display:grid; grid-template-columns:calc(190px * var(--e)) 1fr; gap:calc(16px * var(--e)); align-items:center}
+.formes-l{font-size:calc(13.5px * var(--e)); line-height:1.4; color:var(--ink-70)}
+.formes-l b{display:block; font-family:var(--serif); font-size:calc(18px * var(--e)); font-weight:400; color:var(--ink)}
+.formes-s{display:flex; gap:calc(9px * var(--e))}
+.formes-s svg{flex:1 1 0; height:calc(62px * var(--e)); background:var(--paper); border:1px solid var(--line)}
+.formes-s svg polygon{fill:none; stroke:var(--ink-2); stroke-width:3}
+.formes-s svg.intru{border-color:var(--accent)}
+.formes-s svg.intru polygon{stroke:var(--accent)}
+
+/* ---------- Importance des facteurs ---------- */
+.facteurs{display:grid; gap:calc(7px * var(--e))}
+.fac{display:grid; grid-template-columns:calc(120px * var(--e)) 1fr calc(44px * var(--e)); gap:calc(10px * var(--e)); align-items:center; font-size:calc(12px * var(--e)); color:var(--ink-70)}
+.fac b{text-align:right; font-family:var(--serif); font-size:calc(15px * var(--e)); font-weight:400; color:var(--ink)}
+
+/* ============================================================
+   IMPRESSION / EXPORT PDF
+   ============================================================ */
+@page{ size:1280px 720px; margin:0 }
+@media print{
+  html,body{overflow:visible; background:#fff; height:auto}
+  .rail,.nav,.hint{display:none !important}
+  .app{display:block; height:auto}
+  .stage{display:block; height:auto; background:#fff; overflow:visible}
+  .deck{
+    width:auto; height:auto; transform:none !important;
+    box-shadow:none; border-radius:0; position:static
+  }
+  .slide{
+    position:relative; inset:auto; display:block;
+    width:1280px; height:720px; opacity:1 !important; visibility:visible !important;
+    page-break-after:always; break-after:page; overflow:hidden;
+    -webkit-print-color-adjust:exact; print-color-adjust:exact;
+  }
+  .slide.dark{display:flex}
+  .slide:last-child{page-break-after:auto; break-after:auto}
+  .slide *{animation:none !important; transition:none !important}
+}
+</style>
+
+<div class="app" id="app">
+
+  <!-- ================= COLONNE MINIATURES ================= -->
+  <aside class="rail">
+    <div class="rail-head">
+      <a class="rail-back" href="index.html">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18 9 12l6-6"/></svg>
+        Retour au thème
+      </a>
+      <div class="rail-kicker">Réflexion critique · IA et Intelligences</div>
+      <div class="rail-title">Comment le cerveau humain se compare-t-il aux intelligences artificielles actuelles ? - S. Dehaene</div>
+      <div class="rail-meta">32 cartes · mode conférence</div>
+    </div>
+    <div class="thumbs" id="thumbs"></div>
+    <div class="rail-foot">
+      <button class="btn" id="btnFs">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M8 3H5a2 2 0 0 0-2 2v3M16 3h3a2 2 0 0 1 2 2v3M8 21H5a2 2 0 0 1-2-2v-3M16 21h3a2 2 0 0 0 2-2v-3"/></svg>
+        Plein écran <span class="k">F</span>
+      </button>
+      <button class="btn" id="btnPdf">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0 4-4m-4 4-4-4M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg>
+        Exporter en PDF <span class="k">P</span>
+      </button>
+    </div>
+  </aside>
+
+  <!-- ================= SCÈNE ================= -->
+  <main class="stage" id="stage">
+    <div class="hint">Échap pour quitter le plein écran</div>
+    <div class="deck" id="deck">
+
+
+      <!-- ===== 1 · COUVERTURE ===== -->
+      <section class="slide dark" data-label="Couverture" style="--e:1.15">
+        <div class="cv-k a-fade">Réflexion critique · IA et Intelligences</div>
+        <h1 class="cv-h a-rise" style="--d:.2s">Comment le cerveau humain se compare-t-il aux intelligences artificielles actuelles ?</h1>
+        <div class="cv-onde">
+          <i class="a-growy" style="height:34%; --d:.7s"></i><i class="a-growy" style="height:58%; --d:.78s"></i><i class="a-growy" style="height:86%; --d:.86s"></i><i class="a-growy" style="height:100%; --d:.94s"></i><i class="a-growy" style="height:72%; --d:1.02s"></i><i class="a-growy" style="height:46%; --d:1.1s"></i><i class="a-growy" style="height:28%; --d:1.18s"></i>
+        </div>
+        <p class="cv-p a-fade" style="--d:1.2s">Un kilo et demi de matière grise, vingt watts, et trois avantages que les machines n'ont pas encore pris.</p>
+        <div class="cv-meta a-fade" style="--d:1.5s">D'après la conférence de Stanislas Dehaene · Collège de France · 16 octobre 2025</div>
+      </section>
+
+      <!-- ===== 2 · OUVERTURE ===== -->
+      <section class="slide" data-label="Ouverture" style="--e:1.55">
+        <div class="top">
+          <div class="ey a-fade">Ouverture</div>
+          <h2 class="a-rise" style="--d:.1s">Suivre une conférence, puis la discuter</h2>
+          <p class="lede a-fade" style="--d:.3s">Ce parcours suit celui de Stanislas Dehaene au colloque de rentrée du Collège de France. Cette conférence ne renvoie à aucune source écrite : nous lui attribuons ce qu'elle avance, et nous apportons nos propres sources pour en discuter.</p>
+        </div>
+        <div class="body">
+          <div class="tags a-fade" style="--d:.55s"><span class="tag conf">Ce que montre la conférence</span><span class="tag cri">Regard critique</span></div>
+          <div class="g4">
+            <div class="obj a-rise" style="--d:.8s"><div class="obj-h">Expliquer</div><p class="obj-p">ce que les réseaux de neurones doivent aux neurosciences, et jusqu'où va la ressemblance.</p></div>
+            <div class="obj a-rise" style="--d:.95s"><div class="obj-h">Distinguer</div><p class="obj-p">deux manières d'apprendre : par statistique sur des milliards d'exemples, ou par hypothèses à partir de presque rien.</p></div>
+            <div class="obj a-rise" style="--d:1.1s"><div class="obj-h">Reconnaître</div><p class="obj-p">le type de tâche sur lequel les modèles échouent encore, et dire pourquoi.</p></div>
+            <div class="obj a-rise" style="--d:1.25s"><div class="obj-h">Situer</div><p class="obj-p">ce que comparer un cerveau et une machine exige de précautions.</p></div>
+          </div>
+        </div>
+        <div class="pageno">2<b>/32</b></div>
+      </section>
+
+      <!-- ===== 3 · PARCOURS ===== -->
+      <section class="slide" data-label="Le parcours" style="--e:1.7">
+        <div class="top">
+          <div class="ey a-fade">Ouverture · le parcours</div>
+          <h2 class="a-rise" style="--d:.1s">Quatre questions, dans l'ordre de la conférence</h2>
+        </div>
+        <div class="body">
+          <div class="etapes">
+            <div class="et a-slide" style="--d:.4s"><div class="et-n">1</div><div><div class="et-q">Que doit l'intelligence artificielle au cerveau ?</div><div class="et-s">De la plasticité synaptique à la lecture, et au langage</div></div></div>
+            <div class="et a-slide" style="--d:.6s"><div class="et-n">2</div><div><div class="et-q">Où la ressemblance s'arrête-t-elle ?</div><div class="et-s">L'ardoise qui n'est pas vierge, et la géométrie</div></div></div>
+            <div class="et a-slide" style="--d:.8s"><div class="et-n">3</div><div><div class="et-q">Que reste-t-il de proprement humain ?</div><div class="et-s">Les langages de la pensée, et les échecs des machines</div></div></div>
+            <div class="et cri a-slide" style="--d:1s"><div class="et-n">4</div><div><div class="et-q">Et ensuite ? Notre analyse critique</div><div class="et-s">Ce qui a changé depuis, et ce que la comparaison suppose</div></div></div>
+          </div>
+        </div>
+        <div class="pageno">3<b>/32</b></div>
+      </section>
+
+      <!-- ===== 4 · PARTIE I ===== -->
+      <section class="slide dark" data-label="I · Ce que l'IA doit au cerveau" style="--e:1.4">
+        <div class="dk-n a-fade">I</div>
+        <h2 class="dk-h a-rise" style="--d:.2s">Que doit l'intelligence artificielle au cerveau ?</h2>
+        <div class="dk-rule a-grow" style="--d:.6s"></div>
+        <p class="dk-p a-fade" style="--d:.8s">De la plasticité synaptique à la lecture, et au langage</p>
+      </section>
+
+      <!-- ===== 5 · LE CADRE ===== -->
+      <section class="slide" data-label="Le cadre" style="--e:1.6">
+        <div class="top">
+          <div class="ey a-fade">I · L'exposé et sa thèse</div>
+          <h2 class="a-rise" style="--d:.1s">« Le cerveau humain semble attaqué »</h2>
+        </div>
+        <div class="body">
+          <div class="split">
+            <div class="fiche">
+              <div class="fl a-rise" style="--d:.4s"><div class="fl-k">Orateur</div><div class="fl-v">Stanislas Dehaene, professeur au Collège de France</div></div>
+              <div class="fl a-rise" style="--d:.55s"><div class="fl-k">Cadre</div><div class="fl-v">Colloque de rentrée 2025, « Formes de l'intelligence »</div></div>
+              <div class="fl a-rise" style="--d:.7s"><div class="fl-k">Date</div><div class="fl-v">16 octobre 2025 — la date comptera</div></div>
+            </div>
+            <div class="col">
+              <p class="t a-fade" style="--d:1s">L'orateur vient défendre l'organe. Son exposé tient en deux mouvements : ce que l'IA a emprunté au cerveau, puis ce qui l'en sépare encore.</p>
+              <div class="mod cer a-rise" style="--d:1.3s"><div class="mod-k">Les trois terrains où le cerveau garde, dit-il, la dragée haute</div><p class="mod-p">Apprendre à partir de très peu d'exemples. Représenter les connaissances de façon compacte et symbolique. Et ne pas échouer là où l'on croit la question résolue.</p></div>
+            </div>
+          </div>
+          <div class="src a-fade" style="--d:1.6s">Conférence, 0:20-2:06.</div>
+        </div>
+        <div class="pageno">5<b>/32</b></div>
+      </section>
+
+      <!-- ===== 6 · LES TROIS EMPRUNTS ===== -->
+      <section class="slide" data-label="Trois emprunts" style="--e:1.45">
+        <div class="top">
+          <div class="ey a-fade">I · Ce que l'IA a emprunté</div>
+          <h2 class="a-rise" style="--d:.1s">Trois idées venues des neurosciences</h2>
+        </div>
+        <div class="body">
+          <div class="chiffres">
+            <div class="ch a-rise" style="--d:.4s"><b>86 milliards</b><span>de neurones : pas d'unité centrale, mais une foule de processeurs distribués</span></div>
+            <div class="ch a-rise" style="--d:.6s"><b>10 000</b><span>synapses par neurone pyramidal du cortex : l'apprentissage modifie leurs poids</span></div>
+            <div class="ch a-rise" style="--d:.8s"><b>La profondeur</b><span>des couches successives, où l'abstraction monte d'un étage à l'autre</span></div>
+          </div>
+          <div class="viz">
+            <div class="couches">
+              <div class="cch a-fade" style="--d:1.1s"><svg class="cch-b a-growy" viewBox="0 0 12 100" preserveAspectRatio="none" style="--h:calc(28px * var(--e)); --d:1.15s"><rect x="0" y="0" width="12" height="100"/></svg><div class="cch-t"><b>Traits</b>barres orientées</div></div>
+              <div class="cch a-fade" style="--d:1.3s"><svg class="cch-b a-growy" viewBox="0 0 12 100" preserveAspectRatio="none" style="--h:calc(46px * var(--e)); --d:1.35s"><rect x="0" y="0" width="12" height="100"/></svg><div class="cch-t"><b>Parties</b>une roue, une portière</div></div>
+              <div class="cch a-fade" style="--d:1.5s"><svg class="cch-b a-growy" viewBox="0 0 12 100" preserveAspectRatio="none" style="--h:calc(64px * var(--e)); --d:1.55s"><rect x="0" y="0" width="12" height="100"/></svg><div class="cch-t"><b>Objets</b>la voiture entière</div></div>
+              <div class="cch on a-fade" style="--d:1.7s"><svg class="cch-b a-growy" viewBox="0 0 12 100" preserveAspectRatio="none" style="--h:calc(82px * var(--e)); --d:1.75s"><rect x="0" y="0" width="12" height="100"/></svg><div class="cch-t"><b>Scènes</b>un lieu, un visage</div></div>
+            </div>
+          </div>
+          <p class="t a-fade" style="--d:1.9s">Ces trois idées suffisent à faire un réseau profond. Elles ne suffisent pas à faire un cerveau : c'est tout l'objet de la seconde partie de l'exposé.</p>
+          <div class="src a-fade" style="--d:2.1s">Conférence, 2:06-5:00.</div>
+        </div>
+        <div class="pageno">6<b>/32</b></div>
+      </section>
+
+      <!-- ===== 7 · LA CORRESPONDANCE ===== -->
+      <section class="slide" data-label="La correspondance" style="--e:1.4">
+        <div class="top">
+          <div class="ey a-fade">I · Ce que l'IA a emprunté</div>
+          <h2 class="a-rise" style="--d:.1s">Une correspondance que rien n'obligeait</h2>
+          <span class="tag conf a-fade" style="--d:.3s">Ce que montre la conférence</span>
+        </div>
+        <div class="body">
+          <div class="duo">
+            <div class="duo-c cer a-rise" style="--d:.5s">
+              <div class="duo-t"><i></i>Le cerveau</div>
+              <div class="duo-h">Un système hiérarchique</div>
+              <p class="duo-p">Détecteurs d'orientation dans les aires les plus précoces, depuis Hubel et Wiesel ; réponses aux visages dans les aires inférotemporales.</p>
+              <p class="duo-p">Le cortex du singe range les images animées et inanimées selon une topographie stable.</p>
+            </div>
+            <div class="duo-r a-growy" style="--d:.7s"></div>
+            <div class="duo-c mac a-rise" style="--d:.9s">
+              <div class="duo-t"><i></i>Le réseau</div>
+              <div class="duo-h">Des couches successives</div>
+              <p class="duo-p">Les couches d'un réseau s'alignent sur les aires cérébrales — travaux de Bertrand Thirion, à NeuroSpin et à l'Inria.</p>
+              <p class="duo-p">Le réseau organise les mêmes catégories d'images de façon comparable.</p>
+            </div>
+          </div>
+          <p class="t em a-fade" style="--d:1.3s">Rien n'obligeait l'ingénierie à retrouver les solutions du vivant.</p>
+          <div class="src a-fade" style="--d:1.5s">Conférence, 4:36-5:55.</div>
+        </div>
+        <div class="pageno">7<b>/32</b></div>
+      </section>
+
+      <!-- ===== 8 · LA LECTURE ===== -->
+      <section class="slide" data-label="La lecture" style="--e:1.3">
+        <div class="top">
+          <div class="ey a-fade">I · La lecture</div>
+          <h2 class="a-rise" style="--d:.1s">Un réseau recyclé, et une hypothèse en retour</h2>
+          <p class="lede a-fade" style="--d:.3s">L'évolution n'a pas pu prévoir la lecture. Nous réutilisons donc des circuits anciens — c'est le recyclage neuronal.</p>
+        </div>
+        <div class="body">
+          <div class="etapes">
+            <div class="et a-slide" style="--d:.6s"><div class="et-n">1</div><div><div class="et-q">Un réseau entraîné à reconnaître un millier d'objets</div><div class="et-s">le point de départ, comme le système visuel de l'enfant</div></div></div>
+            <div class="et a-slide" style="--d:.85s"><div class="et-n">2</div><div><div class="et-q">Réentraîné sur des mots écrits</div><div class="et-s">exactement le geste de l'apprentissage de la lecture</div></div></div>
+            <div class="et a-slide" style="--d:1.1s"><div class="et-n">3</div><div><div class="et-q">Un groupe d'unités dédiées aux lettres apparaît</div><div class="et-s">la « boîte aux lettres du cerveau », l'aire de la forme visuelle des mots</div></div></div>
+            <div class="et a-slide" style="--d:1.35s"><div class="et-n">4</div><div><div class="et-q">Des unités sensibles à la lettre <i>et</i> à sa position</div><div class="et-s">une hypothèse née du modèle, rapportée ensuite au cerveau humain</div></div></div>
+          </div>
+          <p class="t a-fade" style="--d:1.6s">Le modèle n'imite pas seulement le cerveau : il lui fournit une hypothèse testable. Reconnaître les lettres d'un mot prend environ <b>200 millisecondes</b>.</p>
+          <div class="src a-fade" style="--d:1.8s">Conférence, 5:55-7:42.</div>
+        </div>
+        <div class="pageno">8<b>/32</b></div>
+      </section>
+
+      <!-- ===== 9 · LE LANGAGE ===== -->
+      <section class="slide" data-label="Le langage" style="--e:1.7">
+        <div class="top">
+          <div class="ey a-fade">I · Le langage</div>
+          <h2 class="a-rise" style="--d:.1s">Prédire le son suivant, et voir naître la syntaxe</h2>
+        </div>
+        <div class="body">
+          <div class="split rev">
+            <div class="viz">
+              <div class="couches">
+                <div class="cch a-fade" style="--d:.5s"><svg class="cch-b a-growy" viewBox="0 0 12 100" preserveAspectRatio="none" style="--h:calc(34px * var(--e)); --d:.55s"><rect x="0" y="0" width="12" height="100"/></svg><div class="cch-t"><b>Phonème</b>aires auditives</div></div>
+                <div class="cch a-fade" style="--d:.7s"><svg class="cch-b a-growy" viewBox="0 0 12 100" preserveAspectRatio="none" style="--h:calc(58px * var(--e)); --d:.75s"><rect x="0" y="0" width="12" height="100"/></svg><div class="cch-t"><b>Syllabe</b>puis le mot</div></div>
+                <div class="cch a-fade" style="--d:.9s"><svg class="cch-b a-growy" viewBox="0 0 12 100" preserveAspectRatio="none" style="--h:calc(82px * var(--e)); --d:.95s"><rect x="0" y="0" width="12" height="100"/></svg><div class="cch-t"><b>Syntagme</b>hémisphère gauche</div></div>
+                <div class="cch on a-fade" style="--d:1.1s"><svg class="cch-b a-growy" viewBox="0 0 12 100" preserveAspectRatio="none" style="--h:calc(106px * var(--e)); --d:1.15s"><rect x="0" y="0" width="12" height="100"/></svg><div class="cch-t"><b>Phrase</b>région de Broca</div></div>
+              </div>
+            </div>
+            <div class="col">
+              <p class="t a-fade" style="--d:1.3s">Le réseau wav2vec part d'une représentation strictement acoustique. Sa seule tâche est de prédire ce qui vient ensuite.</p>
+              <p class="t a-fade" style="--d:1.5s">De cette tâche unique émergent des représentations de plus en plus abstraites — et elles se mettent en correspondance avec les niveaux du cerveau.</p>
+            </div>
+          </div>
+          <div class="src a-fade" style="--d:1.8s">Conférence, 7:42-8:45.</div>
+        </div>
+        <div class="pageno">9<b>/32</b></div>
+      </section>
+
+      <!-- ===== 10 · LE PETIT PRINCE ===== -->
+      <section class="slide" data-label="Le Petit Prince" style="--e:1.45">
+        <div class="top">
+          <div class="ey a-fade">I · Le langage</div>
+          <h2 class="a-rise" style="--d:.1s">Un livre entier, trois techniques, trois langues</h2>
+        </div>
+        <div class="body">
+          <div class="split">
+            <div class="fiche">
+              <div class="fl a-rise" style="--d:.4s"><div class="fl-k">Matière</div><div class="fl-v">Le Petit Prince, en entier</div></div>
+              <div class="fl a-rise" style="--d:.55s"><div class="fl-k">Mesures</div><div class="fl-v">IRM fonctionnelle, magnétoencéphalographie, enregistrements intracrâniens</div></div>
+              <div class="fl a-rise" style="--d:.7s"><div class="fl-k">Langues</div><div class="fl-v">anglais, français, chinois</div></div>
+            </div>
+            <div class="col a-zoom" style="--d:1s">
+              <div class="kpi acc">50 %</div>
+              <p class="kpi-l">de la variance des activations cérébrales prédite par les activations internes d'un réseau. « Ça marche pas mal », dit l'orateur — il en reste donc la moitié.</p>
+            </div>
+          </div>
+          <p class="t a-fade" style="--d:1.3s">L'expérience est lourde à dessein : trois techniques de mesure, trois langues, un texte que tout le monde connaît. C'est ce qui permet de comparer un réseau et un cerveau sur la même matière, phrase après phrase.</p>
+          <p class="t a-fade" style="--d:1.5s">Et le résultat vaut autant par ce qu'il laisse de côté : la moitié de la variance reste inexpliquée.</p>
+          <div class="src a-fade" style="--d:1.7s">Conférence, 8:45-9:40. Projet conduit par Christophe Pallier.</div>
+        </div>
+        <div class="pageno">10<b>/32</b></div>
+      </section>
+
+      <!-- ===== 11 · F1 · LE NUAGE ===== -->
+      <section class="slide" data-label="Plus grands, plus proches" style="--e:1.2">
+        <div class="top">
+          <div class="ey a-fade">I · Le langage</div>
+          <h2 class="a-rise" style="--d:.1s">Plus les modèles grandissent, mieux ils prédisent le cerveau</h2>
+        </div>
+        <div class="body">
+          <div class="viz">
+            <svg class="nuage" viewBox="0 0 900 300" preserveAspectRatio="xMidYMid meet">
+              <line class="gr" x1="80" y1="50" x2="870" y2="50"/><line class="gr" x1="80" y1="150" x2="870" y2="150"/>
+              <line class="axe" x1="80" y1="250" x2="870" y2="250"/><line class="axe" x1="80" y1="20" x2="80" y2="250"/>
+              <text font-size="11" x="60" y="255" text-anchor="end">0,40</text><text font-size="11" x="60" y="55" text-anchor="end">0,47</text>
+              <text font-size="11" x="120" y="275">10⁸</text><text font-size="11" x="460" y="275">10⁹</text><text font-size="11" x="800" y="275">10¹⁰</text>
+              <text font-size="11" x="475" y="296" text-anchor="middle">nombre de paramètres du modèle</text>
+              <path class="ln g a-draw" style="--len:740; --d:.6s" d="M120,214 C320,178 560,120 810,62"/>
+              <path class="ln d a-draw" style="--len:740; --d:1.1s" d="M120,238 C320,212 560,168 810,118"/>
+              <g class="a-fade" style="--d:1.5s">
+                <circle class="pt" cx="140" cy="220" r="6"/><circle class="pt" cx="235" cy="196" r="6"/><circle class="pt" cx="330" cy="188" r="6"/><circle class="pt" cx="430" cy="160" r="6"/><circle class="pt" cx="540" cy="139" r="6"/><circle class="pt" cx="640" cy="112" r="7"/><circle class="pt" cx="740" cy="86" r="8"/><circle class="pt" cx="820" cy="58" r="9"/>
+                <circle class="pt b" cx="140" cy="243" r="6"/><circle class="pt b" cx="235" cy="228" r="6"/><circle class="pt b" cx="330" cy="222" r="6"/><circle class="pt b" cx="430" cy="200" r="6"/><circle class="pt b" cx="540" cy="184" r="6"/><circle class="pt b" cx="640" cy="162" r="7"/><circle class="pt b" cx="740" cy="140" r="8"/><circle class="pt b" cx="820" cy="116" r="9"/>
+              </g>
+              <text class="v" font-size="17" x="838" y="52">L</text><text class="v" font-size="17" x="838" y="112">R</text>
+            </svg>
+            <div class="leg a-fade" style="--d:1.9s"><span><i style="background:var(--accent)"></i>hémisphère gauche</span><span><i style="background:var(--blue-soft)"></i>hémisphère droit</span><span>corrélation avec l'activité cérébrale, de 0,40 à 0,47</span></div>
+          </div>
+          <p class="t a-fade" style="--d:2.1s">Les modèles les plus avancés reproduisent même la latéralisation du langage à gauche, présente chez <b>96 % des droitiers</b>.</p>
+          <div class="src a-fade" style="--d:2.3s">Figure de la conférence, 10:25 ; valeurs lues à l'écran, diapositive créditée Christophe Pallier.</div>
+        </div>
+        <div class="pageno">11<b>/32</b></div>
+      </section>
+
+      <!-- ===== 12 · PARTIE II ===== -->
+      <section class="slide dark" data-label="II · Où la ressemblance s'arrête" style="--e:1.4">
+        <div class="dk-n a-fade">II</div>
+        <h2 class="dk-h a-rise" style="--d:.2s">Où la ressemblance s'arrête-t-elle ?</h2>
+        <div class="dk-rule a-grow" style="--d:.6s"></div>
+        <p class="dk-p a-fade" style="--d:.8s">L'ardoise qui n'est pas vierge, et la géométrie</p>
+      </section>
+
+      <!-- ===== 13 · L'ARDOISE ===== -->
+      <section class="slide" data-label="Pas une ardoise vierge" style="--e:1.65">
+        <div class="top">
+          <div class="ey a-fade">II · Le point de départ</div>
+          <h2 class="a-rise" style="--d:.1s">Le cerveau ne part pas de zéro</h2>
+          <p class="lede a-fade" style="--d:.3s">Un réseau commence sa vie à l'état neutre. Le bébé, lui, hérite de centaines de millions d'années d'évolution — et son cortex est déjà plissé, spécialisé, connecté.</p>
+        </div>
+        <div class="body">
+          <div class="g4">
+            <div class="mod cer a-rise" style="--d:.6s"><div class="mod-h">À deux mois</div><p class="mod-p">entendre des phrases active déjà des aires spécialisées du langage.</p></div>
+            <div class="mod cer a-rise" style="--d:.8s"><div class="mod-h">Avant l'école</div><p class="mod-p">des circuits codent déjà les lieux, les objets, les visages.</p></div>
+            <div class="mod cer a-rise" style="--d:1s"><div class="mod-h">Chez le nourrisson</div><p class="mod-p">arithmétique et probabilités se lisent au temps de regard.</p></div>
+            <div class="mod cer a-rise" style="--d:1.2s"><div class="mod-h">Chez la souris</div><p class="mod-p">les précurseurs des cellules de grille précèdent le moindre mouvement.</p></div>
+          </div>
+          <div class="src a-fade" style="--d:1.5s">Conférence, 11:05-14:25 ; travaux cités : Ghislaine Dehaene-Lambertz, Edvard Moser.</div>
+        </div>
+        <div class="pageno">13<b>/32</b></div>
+      </section>
+
+      <!-- ===== 14 · LES BÉBÉS ===== -->
+      <section class="slide" data-label="5 + 5" style="--e:1.6">
+        <div class="top">
+          <div class="ey a-fade">II · Le point de départ</div>
+          <h2 class="a-rise" style="--d:.1s">Ce que le regard d'un bébé mesure</h2>
+        </div>
+        <div class="body">
+          <div class="g2">
+            <div class="mod cer a-rise" style="--d:.5s"><div class="mod-k">Arithmétique</div><div class="mod-h">5 + 5 = 10, et tout va bien</div><p class="mod-p">Cinq objets se cachent, puis cinq autres. Si le rideau se lève sur dix, le regard ne s'attarde pas. S'il se lève sur cinq, le bébé marque sa surprise — et la surprise se mesure.</p></div>
+            <div class="mod cer a-rise" style="--d:.9s"><div class="mod-k">Probabilités</div><div class="mod-h">Trois bleus, un jaune</div><p class="mod-p">Quatre objets s'entrechoquent, puis se cachent. Si c'est le jaune qui ressort, la surprise est plus grande : c'était le moins probable. Le nourrisson utilise les nombres pour anticiper.</p></div>
+          </div>
+          <p class="t em a-fade" style="--d:1.3s">Ces calculs sont là dès les premiers mois : l'environnement ne les enseigne pas, il les sélectionne.</p>
+          <div class="src a-fade" style="--d:1.5s">Conférence, 12:38-14:00.</div>
+        </div>
+        <div class="pageno">14<b>/32</b></div>
+      </section>
+
+      <!-- ===== 15 · SÉLECTIONNISTE ===== -->
+      <section class="slide" data-label="Sélectionniste" style="--e:1.7">
+        <div class="top">
+          <div class="ey a-fade">II · Le point de départ</div>
+          <h2 class="a-rise" style="--d:.1s">Deux modèles de l'apprentissage, et un seul tient</h2>
+        </div>
+        <div class="body">
+          <div class="duo">
+            <div class="duo-c mac a-rise" style="--d:.5s">
+              <div class="duo-t"><i></i>Instructiviste</div>
+              <div class="duo-h">Un réseau neutre que l'environnement façonne</div>
+              <p class="duo-p">C'est la situation d'un modèle artificiel : tout vient des données, rien ne précède l'entraînement.</p>
+            </div>
+            <div class="duo-r a-growy" style="--d:.7s"></div>
+            <div class="duo-c cer a-rise" style="--d:.9s">
+              <div class="duo-t"><i></i>Sélectionniste</div>
+              <div class="duo-h">Un répertoire préexistant, que le monde trie</div>
+              <p class="duo-p">L'enfant est déjà structuré ; l'environnement sélectionne, parmi ses propositions, celles qui conviennent au monde extérieur.</p>
+            </div>
+          </div>
+          <p class="t a-fade" style="--d:1.3s">L'orateur choisit ce vocabulaire devant Jean-Pierre Changeux, présent dans la salle, qui a défendu cette idée toute sa vie.</p>
+          <div class="src a-fade" style="--d:1.5s">Conférence, 12:10-12:31.</div>
+        </div>
+        <div class="pageno">15<b>/32</b></div>
+      </section>
+
+      <!-- ===== 16 · LA RÉGULARITÉ ===== -->
+      <section class="slide" data-label="Cherchez l'intrus" style="--e:1.45">
+        <div class="top">
+          <div class="ey a-fade">II · La géométrie</div>
+          <h2 class="a-rise" style="--d:.1s">Cherchez l'intrus : le même écart, deux difficultés</h2>
+          <p class="lede a-fade" style="--d:.3s">Six quadrilatères, un intrus, et toujours le même sommet déplacé de la même quantité.</p>
+        </div>
+        <div class="body">
+          <div class="viz">
+            <div class="formes">
+              <div class="formes-r a-fade" style="--d:.6s">
+                <div class="formes-l"><b>Facile</b>la forme de base est régulière : angles droits, parallèles, côtés égaux</div>
+                <div class="formes-s">
+                  <svg viewBox="0 0 100 70"><polygon points="20,15 80,15 80,55 20,55"/></svg>
+                  <svg viewBox="0 0 100 70"><polygon points="20,15 80,15 80,55 20,55"/></svg>
+                  <svg class="intru" viewBox="0 0 100 70"><polygon points="20,15 80,15 68,55 20,55"/></svg>
+                  <svg viewBox="0 0 100 70"><polygon points="20,15 80,15 80,55 20,55"/></svg>
+                  <svg viewBox="0 0 100 70"><polygon points="20,15 80,15 80,55 20,55"/></svg>
+                  <svg viewBox="0 0 100 70"><polygon points="20,15 80,15 80,55 20,55"/></svg>
+                </div>
+              </div>
+              <div class="formes-r a-fade" style="--d:1.2s">
+                <div class="formes-l"><b>Difficile</b>la forme de base est irrégulière : aucune propriété à quoi se raccrocher</div>
+                <div class="formes-s">
+                  <svg viewBox="0 0 100 70"><polygon points="18,20 74,12 86,52 28,58"/></svg>
+                  <svg viewBox="0 0 100 70"><polygon points="18,20 74,12 86,52 28,58"/></svg>
+                  <svg viewBox="0 0 100 70"><polygon points="18,20 74,12 86,52 28,58"/></svg>
+                  <svg class="intru" viewBox="0 0 100 70"><polygon points="18,20 74,12 74,52 28,58"/></svg>
+                  <svg viewBox="0 0 100 70"><polygon points="18,20 74,12 86,52 28,58"/></svg>
+                  <svg viewBox="0 0 100 70"><polygon points="18,20 74,12 86,52 28,58"/></svg>
+                </div>
+              </div>
+            </div>
+          </div>
+          <p class="t a-fade" style="--d:1.8s">C'est l'<b>effet de régularité géométrique</b>. Il ne dit rien de l'acuité visuelle : il dit que nous encodons les formes par leurs propriétés, et non par leurs pixels.</p>
+          <div class="src a-fade" style="--d:2s">Conférence, 16:17-17:19 ; figures redessinées d'après la tâche décrite.</div>
+        </div>
+        <div class="pageno">16<b>/32</b></div>
+      </section>
+
+      <!-- ===== 17 · F2 · LA DOUBLE DISSOCIATION ===== -->
+      <section class="slide" data-label="Double dissociation" style="--e:1.65">
+        <div class="top">
+          <div class="ey a-fade">II · La géométrie</div>
+          <h2 class="a-rise" style="--d:.1s">Le réseau explique les babouins, le symbolique explique les humains</h2>
+        </div>
+        <div class="body">
+          <div class="viz">
+            <div class="diss">
+              <div></div>
+              <div class="diss-h a-fade" style="--d:.4s">Modèle symbolique</div>
+              <div class="diss-h a-fade" style="--d:.5s">Réseau à convolution</div>
+              <div class="diss-r a-fade" style="--d:.7s">Humains<small>Français, Himba, enfants d'âge préscolaire</small></div>
+              <div class="cel a-fade" style="--d:.9s"><div class="bar a-grow" style="--w:88%; --d:1s"></div><span>explique</span></div>
+              <div class="cel b no a-fade" style="--d:1.1s"><div class="bar a-grow" style="--w:14%; --d:1.2s"></div><span>n'explique pas</span></div>
+              <div class="diss-r a-fade" style="--d:1.4s">Babouins<small>onze individus, entraînement prolongé</small></div>
+              <div class="cel no a-fade" style="--d:1.6s"><div class="bar a-grow" style="--w:12%; --d:1.7s"></div><span>n'explique pas</span></div>
+              <div class="cel b a-fade" style="--d:1.8s"><div class="bar a-grow" style="--w:86%; --d:1.9s"></div><span>explique</span></div>
+            </div>
+          </div>
+          <p class="t a-fade" style="--d:2.1s">Le croisement est le résultat lui-même. Un réseau à convolution ordinaire n'explique pas même notre perception du carré : il y faut des <b>traits discrets</b> — un angle droit, ou pas.</p>
+          <div class="src a-fade" style="--d:2.3s">Figure de la conférence, 18:32 ; étude publiée : Sablé-Meyer et al., <i>PNAS</i>, 2021.</div>
+        </div>
+        <div class="pageno">17<b>/32</b></div>
+      </section>
+
+      <!-- ===== 18 · 200 MS ET BLOMBOS ===== -->
+      <section class="slide" data-label="La bascule" style="--e:1.7">
+        <div class="top">
+          <div class="ey a-fade">II · La géométrie</div>
+          <h2 class="a-rise" style="--d:.1s">Deux cents millisecondes, et cent mille ans</h2>
+        </div>
+        <div class="body">
+          <div class="g2">
+            <div class="mod mac a-rise" style="--d:.5s"><div class="mod-k">La bascule, en magnétoencéphalographie</div><div class="mod-h">Avant 200 ms, le réseau suffit</div><p class="mod-p">La première partie de la réponse cérébrale s'explique par un réseau à convolution. <b>Au-delà de 200 millisecondes</b>, il ne rend plus compte de rien : l'activité passe par les régions pariétales et frontales, celles du traitement symbolique.</p></div>
+            <div class="mod cer a-rise" style="--d:.9s"><div class="mod-k">Le temps long</div><div class="mod-h">Un ocre gravé, à Blombos</div><p class="mod-p">Des lignes parallèles qui s'entrecroisent en triangles, datées de <b>70 000 à 100 000 ans</b>. Parmi les plus anciennes traces de l'humanité — et déjà un langage de la géométrie.</p></div>
+          </div>
+          <div class="src a-fade" style="--d:1.3s">Conférence, 15:45-16:09 et 21:18-21:52.</div>
+        </div>
+        <div class="pageno">18<b>/32</b></div>
+      </section>
+
+      <!-- ===== 19 · PARTIE III ===== -->
+      <section class="slide dark" data-label="III · Ce qui reste humain" style="--e:1.4">
+        <div class="dk-n a-fade">III</div>
+        <h2 class="dk-h a-rise" style="--d:.2s">Que reste-t-il de proprement humain ?</h2>
+        <div class="dk-rule a-grow" style="--d:.6s"></div>
+        <p class="dk-p a-fade" style="--d:.8s">Les langages de la pensée, et les échecs des machines</p>
+      </section>
+
+      <!-- ===== 20 · LA LOI ===== -->
+      <section class="slide" data-label="La loi de l'IA" style="--e:1.7">
+        <div class="top">
+          <div class="ey a-fade">III · Une loi, appliquée à soi-même</div>
+          <h2 class="a-rise" style="--d:.1s">« Ce qu'on dit de l'IA est faux la semaine suivante »</h2>
+        </div>
+        <div class="body">
+          <div class="split">
+            <div class="col">
+              <p class="t a-fade" style="--d:.5s">L'orateur énonce cette loi en souriant — puis se l'applique aussitôt.</p>
+              <p class="t a-fade" style="--d:.8s">Quelques semaines après les travaux qu'il vient d'exposer, des réseaux plus avancés se sont révélés capables de capturer la perception des quadrilatères.</p>
+            </div>
+            <div class="mod cri a-rise" style="--d:1.1s"><div class="mod-k">Ce que le déplacement change</div><p class="mod-p">La question n'est plus <b>si</b> les machines y arrivent, mais <b>à quel prix</b>. C'est une thèse plus faible sur leurs capacités — et beaucoup plus forte sur l'économie de l'apprentissage.</p></div>
+          </div>
+          <div class="src a-fade" style="--d:1.5s">Conférence, 21:52-22:19.</div>
+        </div>
+        <div class="pageno">20<b>/32</b></div>
+      </section>
+
+      <!-- ===== 21 · F3 · LE CORPUS ===== -->
+      <section class="slide" data-label="Le corpus décide" style="--e:1.25">
+        <div class="top">
+          <div class="ey a-fade">III · Le prix à payer</div>
+          <h2 class="a-rise" style="--d:.1s">Ce qui fait progresser les modèles, c'est la taille du corpus</h2>
+        </div>
+        <div class="body">
+          <div class="split rev">
+            <div class="viz">
+              <svg class="nuage" viewBox="0 0 700 300" preserveAspectRatio="xMidYMid meet">
+                <line class="axe" x1="70" y1="255" x2="680" y2="255"/><line class="axe" x1="70" y1="20" x2="70" y2="255"/>
+                <line class="seuil" x1="70" y1="32" x2="680" y2="32"/><line class="seuil" x1="70" y1="108" x2="680" y2="108"/>
+                <text font-size="11" x="676" y="26" text-anchor="end">plafond de bruit</text>
+                <text font-size="11" x="676" y="102" text-anchor="end">niveau du modèle symbolique</text>
+                <text font-size="11" x="56" y="259" text-anchor="end">0</text><text font-size="11" x="56" y="36" text-anchor="end">1</text>
+                <text font-size="11" x="100" y="278">10⁶</text><text font-size="11" x="300" y="278">10⁸</text><text font-size="11" x="560" y="278">10¹⁰</text>
+                <text font-size="11" x="375" y="297" text-anchor="middle">taille du corpus d'entraînement, en images</text>
+                <g class="a-fade" style="--d:.6s">
+                  <circle class="pt b" cx="100" cy="228" r="7"/><circle class="pt b" cx="150" cy="200" r="7"/><circle class="pt b" cx="210" cy="176" r="8"/><circle class="pt b" cx="280" cy="150" r="9"/><circle class="pt b" cx="350" cy="120" r="10"/><circle class="pt b" cx="430" cy="96" r="11"/><circle class="pt b" cx="520" cy="72" r="13"/><circle class="pt b" cx="610" cy="56" r="14"/>
+                  <circle class="pt" cx="120" cy="244" r="6"/><circle class="pt" cx="190" cy="214" r="7"/><circle class="pt" cx="260" cy="192" r="7"/><circle class="pt" cx="340" cy="164" r="8"/><circle class="pt" cx="420" cy="132" r="9"/><circle class="pt" cx="500" cy="104" r="10"/><circle class="pt" cx="580" cy="82" r="11"/>
+                </g>
+                <path class="ln d a-draw" style="--len:620; --d:1.2s" d="M100,232 C260,196 420,120 615,58"/>
+              </svg>
+            </div>
+            <div class="col">
+              <div class="facteurs">
+                <div class="fac a-fade" style="--d:1.5s">Taille du corpus<div class="jauge"><i class="a-grow" style="--w:92%; --d:1.55s"></i></div><b>0,92</b></div>
+                <div class="fac a-fade" style="--d:1.7s">Architecture<div class="jauge"><i class="a-grow" style="--w:25%; --d:1.75s"></i></div><b>0,25</b></div>
+                <div class="fac a-fade" style="--d:1.9s">Méthode<div class="jauge"><i class="a-grow" style="--w:5%; --d:1.95s"></i></div><b>0,05</b></div>
+                <div class="fac a-fade" style="--d:2.1s">Nombre de paramètres<div class="jauge"><i class="a-grow" style="--w:2%; --d:2.15s"></i></div><b>0,02</b></div>
+              </div>
+              <p class="t a-fade" style="--d:2.3s">Il faut des <b>milliards d'images</b>, dont beaucoup d'objets fabriqués par nous. L'enfant, lui, se passe de cet entraînement.</p>
+            </div>
+          </div>
+          <div class="src a-fade" style="--d:2.5s">Figure de la conférence, 22:50 ; travail annoncé comme non publié (Pajot, Lakretz et al., 2025).</div>
+        </div>
+        <div class="pageno">21<b>/32</b></div>
+      </section>
+
+      <!-- ===== 22 · LE DESSIN D'ENFANT ===== -->
+      <section class="slide" data-label="Le dessin d'enfant" style="--e:1.5">
+        <div class="top">
+          <div class="ey a-fade">III · Le prix à payer</div>
+          <h2 class="a-rise" style="--d:.1s">Un poussin en quatre traits</h2>
+        </div>
+        <div class="body">
+          <div class="split">
+            <div class="col">
+              <p class="t a-fade" style="--d:.5s">Un poussin tracé par un enfant de trois ans n'est pas fidèle. Mais il va « au cœur de ce qui fait un poussin » : deux pattes palmées, un bec, quelques formes.</p>
+              <p class="t em a-fade" style="--d:.8s">Il ne faut pas se moquer des dessins d'enfants : ils révèlent une puissance d'abstraction.</p>
+            </div>
+            <div class="mod mac a-rise" style="--d:1.1s"><div class="mod-k">Soumis aux mêmes images</div><p class="mod-p">Les réseaux s'améliorent avec la taille du corpus, mais ne reconnaissent toujours pas l'objet au niveau d'un <b>enfant de trois ans</b>. Et chez nous, cela vient très tôt, avec très peu d'apprentissage.</p></div>
+          </div>
+          <div class="src a-fade" style="--d:1.4s">Conférence, 24:28-26:09.</div>
+        </div>
+        <div class="pageno">22<b>/32</b></div>
+      </section>
+
+      <!-- ===== 23 · F4 · DEUX RÉSEAUX ===== -->
+      <section class="slide" data-label="Deux réseaux" style="--e:1.2">
+        <div class="top">
+          <div class="ey a-fade">III · Les langages de la pensée</div>
+          <h2 class="a-rise" style="--d:.1s">Le langage et les mathématiques n'habitent pas le même réseau</h2>
+        </div>
+        <div class="body">
+          <div class="viz">
+            <div class="res">
+              <div class="a-rise" style="--d:.5s">
+                <svg viewBox="0 0 320 180"><path class="cort" d="M30,120 C30,50 90,20 160,20 C230,20 290,50 290,110 C290,150 250,165 200,162 C150,159 120,170 80,160 C45,151 30,145 30,120 Z"/>
+                  <ellipse class="zone v" cx="120" cy="70" rx="34" ry="22"/><ellipse class="zone v" cx="196" cy="60" rx="26" ry="17"/><ellipse class="zone v" cx="96" cy="118" rx="24" ry="16"/></svg>
+                <div class="res-t">Le réseau du langage</div>
+                <p class="res-p">Il répond aux phrases, à la syntaxe, au sens des mots. Les modèles de langage l'ajustent remarquablement bien.</p>
+              </div>
+              <div class="a-rise" style="--d:.9s">
+                <svg viewBox="0 0 320 180"><path class="cort" d="M30,120 C30,50 90,20 160,20 C230,20 290,50 290,110 C290,150 250,165 200,162 C150,159 120,170 80,160 C45,151 30,145 30,120 Z"/>
+                  <ellipse class="zone b" cx="160" cy="52" rx="30" ry="19"/><ellipse class="zone b" cx="232" cy="96" rx="28" ry="18"/><ellipse class="zone b" cx="108" cy="96" rx="22" ry="15"/></svg>
+                <div class="res-t">Le réseau mathématique</div>
+                <p class="res-p">Il s'allume dès « 2 + 2 = 4 », ou « un carré a quatre côtés, vrai ou faux ? ». Les modèles de langage, eux, ne l'ajustent pas.</p>
+              </div>
+            </div>
+          </div>
+          <p class="t a-fade" style="--d:1.3s">La dissociation tient jusqu'aux énoncés les plus simples. Il faudra, estime l'orateur, un traitement d'une autre nature — capable de détecter des régularités, des symétries, des répétitions.</p>
+          <div class="src a-fade" style="--d:1.5s">Figure de la conférence, 27:25 ; travaux cités : Marie Amalric, Jean-Rémi King, Charlotte Caucheteux, Alexandre Gramfort.</div>
+        </div>
+        <div class="pageno">23<b>/32</b></div>
+      </section>
+
+      <!-- ===== 24 · LES ÉCHECS ===== -->
+      <section class="slide" data-label="Les échecs" style="--e:1.6">
+        <div class="top">
+          <div class="ey a-fade">III · Les échecs</div>
+          <h2 class="a-rise" style="--d:.1s">Un cercle, trois tangentes, et beaucoup d'assurance</h2>
+        </div>
+        <div class="body">
+          <div class="g3">
+            <div class="mod mac a-rise" style="--d:.5s"><div class="mod-h">La figure</div><p class="mod-p">« Dessine un cercle et trois droites tangentes. » Deux tangentes seulement, aux mauvais angles — et le modèle est « très satisfait de lui-même ».</p></div>
+            <div class="mod mac a-rise" style="--d:.8s"><div class="mod-h">L'étendue</div><p class="mod-p">Deux articles de 2025 : comparaison d'angles, perpendiculaires, longueurs, lecture d'un graphique. Les modèles échouent la plupart du temps.</p></div>
+            <div class="mod mac a-rise" style="--d:1.1s"><div class="mod-h">L'espace</div><p class="mod-p">Un objet vu de dessus, la prise de perspective, la reconstruction à partir de projections : les performances « ne sont pas bonnes ».</p></div>
+          </div>
+          <p class="t a-fade" style="--d:1.4s">Le modèle sait pourtant <b>écrire le programme</b> qui trace la figure. La performance est réelle : elle ne voit simplement pas le problème.</p>
+          <div class="src a-fade" style="--d:1.6s">Conférence, 29:22-32:00.</div>
+        </div>
+        <div class="pageno">24<b>/32</b></div>
+      </section>
+
+      <!-- ===== 25 · F5 · L'ILLUSION DE L'ILLUSION ===== -->
+      <section class="slide" data-label="L'illusion de l'illusion" style="--e:1.3">
+        <div class="top">
+          <div class="ey a-fade">III · Les échecs</div>
+          <h2 class="a-rise" style="--d:.1s">Une illusion là où il n'y en a pas</h2>
+        </div>
+        <div class="body">
+          <div class="viz">
+            <div class="echange">
+              <div class="bulle q a-slide" style="--d:.5s"><span class="bulle-k">On montre une tête de canard, sans ambiguïté</span>Est-ce la tête d'un canard ou celle d'un lapin ?</div>
+              <div class="bulle r a-slide" style="--d:1s"><span class="bulle-k">Réponse du modèle</span>« C'est un exemple de l'<b>illusion canard-lapin</b>, une célèbre image ambiguë. Les deux interprétations sont correctes, et votre perception peut passer de l'une à l'autre. »</div>
+            </div>
+          </div>
+          <p class="verdict a-fade" style="--d:1.5s">« Elle a un langage parfait pour parler de ces choses-là, mais elle ne voit pas ce dont elle parle. »</p>
+          <p class="t a-fade" style="--d:1.7s">Même réponse sur une variante de l'illusion de Müller-Lyer dont les lignes sont réellement inégales. C'est un piège, concède l'orateur — « mais un piège dans lequel elle ne devrait pas tomber ».</p>
+          <div class="src a-fade" style="--d:1.9s">Figure de la conférence, 33:20 ; référence portée sur la diapositive : Ullman, <i>The Illusion-Illusion</i>, 2024.</div>
+        </div>
+        <div class="pageno">25<b>/32</b></div>
+      </section>
+
+      <!-- ===== 26 · LE BILAN DE L'ORATEUR ===== -->
+      <section class="slide" data-label="Le bilan de l'orateur" style="--e:1.25">
+        <div class="top">
+          <div class="ey a-fade">III · Le bilan de la conférence</div>
+          <h2 class="a-rise" style="--d:.1s">Ce que chacun sait faire, et ce que le cerveau garde</h2>
+        </div>
+        <div class="body">
+          <div class="duo">
+            <div class="duo-c mac a-rise" style="--d:.5s">
+              <div class="duo-t"><i></i>Au crédit des réseaux</div>
+              <p class="duo-p">Comprendre comment des changements synaptiques conduisent à un apprentissage sophistiqué.</p>
+              <p class="duo-p">Modéliser les premières étapes de la vision, la lecture comprise, et certains aspects du langage.</p>
+              <p class="duo-p">Servir de guide : ce qu'on comprend d'un réseau devient une hypothèse à porter sur le cerveau.</p>
+              <p class="duo-p">Offrir enfin des modèles de la syntaxe et de la sémantique au niveau neuronal, que l'on peut tester.</p>
+            </div>
+            <div class="duo-r a-growy" style="--d:.7s"></div>
+            <div class="duo-c cer a-rise" style="--d:.9s">
+              <div class="duo-t"><i></i>Au crédit du cerveau</div>
+              <p class="duo-p">Apprendre de très peu d'exemples, parce qu'il dispose de structures précoces.</p>
+              <p class="duo-p">Découvrir des expressions compactes et symboliques — « c'est comme ça que nous faisons dans la science ».</p>
+              <p class="duo-p">Rendre l'information <b>explicite</b>, donc partageable : nous pouvons nous éduquer mutuellement.</p>
+              <p class="duo-p">Là où les modèles actuels gardent ce qu'ils savent « sous une forme cryptique et cachée ».</p>
+            </div>
+          </div>
+          <p class="t em a-fade" style="--d:1.3s">Et tout ceci, rappelle l'orateur pour finir, « est fait actuellement avec 20 watts ».</p>
+          <div class="src a-fade" style="--d:1.5s">Conférence, 33:45-35:00.</div>
+        </div>
+        <div class="pageno">26<b>/32</b></div>
+      </section>
+
+      <!-- ===== 27 · ANALYSE CRITIQUE ===== -->
+      <section class="slide dark" data-label="Analyse critique" style="--e:1.4">
+        <div class="dk-n a-fade">Analyse critique</div>
+        <h2 class="dk-h a-rise" style="--d:.2s">Que faut-il y ajouter, onze mois plus tard ?</h2>
+        <div class="dk-rule a-grow" style="--d:.6s"></div>
+        <p class="dk-p a-fade" style="--d:.8s">La rigueur de l'exposé n'est pas en cause. Trois points, sources en main.</p>
+      </section>
+
+      <!-- ===== 28 · D.1 ===== -->
+      <section class="slide" data-label="Un argument daté" style="--e:1.15">
+        <div class="top">
+          <div class="ey a-fade">Analyse critique · 1</div>
+          <h2 class="a-rise" style="--d:.1s">L'argument le plus spectaculaire est celui qui vieillit le plus vite</h2>
+          <span class="tag cri a-fade" style="--d:.3s">Regard critique</span>
+        </div>
+        <div class="body">
+          <div class="dit a-rise" style="--d:.45s">Au-delà de 200 ms, « le réseau à convolution ne rend plus bien compte de ce qui se passe » : il faut un modèle symbolique<b>21:38</b></div>
+          <div class="split">
+            <div class="col">
+              <p class="t a-fade" style="--d:.8s">C'est l'orateur qui nous arme contre sa propre démonstration, en énonçant sa loi. Appliquons-la à la lettre.</p>
+              <p class="t a-fade" style="--d:1.1s">Le diagramme de la conférence le disait déjà : l'importance du corpus pèse <b>0,92</b>, l'architecture quatre fois moins.</p>
+            </div>
+            <div class="mod cri a-rise" style="--d:1.4s"><div class="mod-k">La version publiée, trois mois plus tard</div><p class="mod-p">Les signaux pariétaux et préfrontaux tardifs « ne pouvaient être capturés que par des traits géométriques discrets <b>ou par de plus gros modèles de vision</b> ». La disjonction change tout : le symbolique n'est plus la seule issue.</p></div>
+          </div>
+          <p class="t em a-fade" style="--d:1.7s">La bonne conclusion n'est pas « les machines ne savent pas voir un carré », mais : ce qu'il leur faut pour y parvenir n'est pas ce qu'il faut à un enfant.</p>
+          <div class="src a-fade" style="--d:1.9s">Source : Sablé-Meyer, Benjamin, Potier Watkins et al., « A geometric shape regularity effect in the human brain », <i>eLife</i>, 12 janvier 2026.</div>
+        </div>
+        <div class="pageno">28<b>/32</b></div>
+      </section>
+
+      <!-- ===== 29 · D.2 ===== -->
+      <section class="slide" data-label="La thèse confortée" style="--e:1.25">
+        <div class="top">
+          <div class="ey a-fade">Analyse critique · 2</div>
+          <h2 class="a-rise" style="--d:.1s">La thèse centrale a gagné une pièce, le lendemain même</h2>
+          <span class="tag cri a-fade" style="--d:.3s">Regard critique</span>
+        </div>
+        <div class="body">
+          <div class="dit a-rise" style="--d:.45s">L'effet de régularité géométrique révèle un langage de la pensée, symbolique, propre à l'espèce humaine<b>16:39-21:52</b></div>
+          <p class="t a-fade" style="--d:.7s">Une critique ne consiste pas seulement à contredire : elle peut apporter à une thèse la pièce qui lui manquait.</p>
+          <div class="g2">
+            <div class="mod mac a-rise" style="--d:.9s"><div class="mod-k">L'objection qu'un auditoire devait formuler</div><p class="mod-p">Et si cet effet n'était que le résidu d'une longue exposition à un monde d'objets fabriqués — enveloppes, fenêtres, pages de géométrie ? Les babouins ne vivent pas dans ce monde-là.</p></div>
+            <div class="mod cri a-rise" style="--d:1.1s"><div class="mod-k">La réponse, publiée le 17 octobre 2025</div><p class="mod-p">Version <b>tactile</b> de la tâche, passée par des adultes aveugles de naissance et des voyants aux yeux bandés. L'effet est présent dans les deux groupes — et chez les aveugles, le modèle symbolique prédit mieux qu'un réseau de vision.</p></div>
+          </div>
+          <p class="t em a-fade" style="--d:1.5s">L'effet se développe en l'absence de vision : l'objection tombe, et la thèse en sort renforcée.</p>
+          <div class="src a-fade" style="--d:1.7s">Source : Adriano, Sablé-Meyer, Ciccione, Zhan, Dehaene, « Sensitivity to Geometric Shape Regularity Emerges Independently of Vision », <i>Open Mind</i>, 17 octobre 2025.</div>
+        </div>
+        <div class="pageno">29<b>/32</b></div>
+      </section>
+
+      <!-- ===== 30 · D.3 ===== -->
+      <section class="slide" data-label="Vingt watts" style="--e:1.35">
+        <div class="top">
+          <div class="ey a-fade">Analyse critique · 3</div>
+          <h2 class="a-rise" style="--d:.1s">« Vingt watts » : un chiffre juste, une comparaison à compléter</h2>
+          <span class="tag cri a-fade" style="--d:.3s">Regard critique</span>
+        </div>
+        <div class="body">
+          <div class="viz">
+            <div class="watt">
+              <div class="watt-c a-rise" style="--d:.5s"><div class="watt-v acc">0,24 Wh</div><div class="jauge"><i class="a-grow" style="--w:100%; --d:.7s"></i></div><p class="watt-l">une requête textuelle médiane adressée à un assistant, mesurée par l'entreprise qui l'exploite</p></div>
+              <div class="watt-eq a-pop" style="--d:1.1s">=</div>
+              <div class="watt-c a-rise" style="--d:1.3s"><div class="watt-v">43 secondes</div><div class="jauge"><i class="a-grow" style="--w:100%; --d:1.5s"></i></div><p class="watt-l">de cerveau humain, à 20 watts : l'écart n'est pas celui que la formule suggère</p></div>
+            </div>
+          </div>
+          <div class="g2">
+            <div class="mod cri a-rise" style="--d:1.8s"><div class="mod-h">L'asymétrie est ailleurs</div><p class="mod-p">Elle est dans l'<b>entraînement</b>, qui ne se compare à rien chez l'humain — ou alors à vingt années d'apprentissage incarné, elles aussi à 20 watts.</p></div>
+            <div class="mod cri a-rise" style="--d:2.1s"><div class="mod-h">Et dans le volume</div><p class="mod-p">Le cerveau consomme ses 20 watts quoi qu'il fasse. Le coût d'un modèle, lui, se multiplie par le nombre de requêtes du monde entier.</p></div>
+          </div>
+          <div class="src a-fade" style="--d:2.4s">Source : Google, <i>Measuring the environmental impact of delivering AI at Google scale</i>, août 2025 — 0,24 Wh par requête médiane.</div>
+        </div>
+        <div class="pageno">30<b>/32</b></div>
+      </section>
+
+      <!-- ===== 31 · BILAN DE LA CRITIQUE ===== -->
+      <section class="slide" data-label="Ce que nous en retenons" style="--e:1.35">
+        <div class="top">
+          <div class="ey a-fade">Analyse critique · bilan</div>
+          <h2 class="a-rise" style="--d:.1s">Ce que nous en retenons</h2>
+          <span class="tag cri a-fade" style="--d:.3s">Regard critique</span>
+        </div>
+        <div class="body">
+          <div class="g3">
+            <div class="mod cer a-rise" style="--d:.5s"><div class="mod-h">Ce qui tient</div><p class="mod-p">La convergence entre modèles et cerveau, mesurée et non proclamée. L'ardoise qui n'est pas vierge. Et la thèse du langage de la pensée, que l'expérience tactile est venue soutenir.</p></div>
+            <div class="mod cri a-rise" style="--d:.8s"><div class="mod-h">Ce qui demande une mise à jour</div><p class="mod-p">L'argument par l'échec, le plus spectaculaire donc le plus fragile — et que la publication de l'équipe elle-même a déjà nuancé en janvier 2026.</p></div>
+            <div class="mod mac a-rise" style="--d:1.1s"><div class="mod-h">Ce qui demande un complément</div><p class="mod-p">La comparaison énergétique, qui ne dit rien tant qu'on ne précise pas ce qu'on rapporte à quoi.</p></div>
+          </div>
+          <p class="t em a-fade" style="--d:1.5s">« Elle a un langage parfait, mais elle ne voit pas ce dont elle parle » : onze mois plus tard, c'est encore la meilleure description du problème — à lire comme une description, non comme une limite de principe.</p>
+        </div>
+        <div class="pageno">31<b>/32</b></div>
+      </section>
+
+      <!-- ===== 32 · RÉFÉRENCES ===== -->
+      <section class="slide" data-label="Références" style="--e:1.25">
+        <div class="top">
+          <div class="ey a-fade">Références</div>
+          <h2 class="a-rise" style="--d:.1s">Sources</h2>
+        </div>
+        <div class="body">
+          <div class="refs">
+            <div class="spine a-fade" style="--d:.3s"><span class="ref-h">Colonne vertébrale</span><span><b>Collège de France</b>, <i>Comment le cerveau humain se compare-t-il aux intelligences artificielles actuelles ?</i>, conférence de Stanislas Dehaene, 16 octobre 2025.</span></div>
+            <div class="panel a-fade" style="--d:.6s">
+              <div class="ref-h">Sources primaires</div>
+              <div class="cols2">
+                <p class="ref"><b>La conférence elle-même</b>, en tant que l'orateur y rapporte les travaux de son laboratoire : recyclage neuronal, projet Petit Prince, effet de régularité géométrique, dissociation des réseaux.</p>
+                <p class="ref"><b>Sablé-Meyer, Fagot, Caparos, van Kerkoerle, Amalric, Dehaene</b>, « Sensitivity to geometric shape regularity in humans and baboons », <i>PNAS</i>, 118 (16), 2021.</p>
+                <p class="ref"><b>Ullman</b>, <i>The Illusion-Illusion: Vision Language Models See Illusions Where There Are None</i>, OSF, 2024.</p>
+              </div>
+            </div>
+            <div class="panel a-fade" style="--d:.85s">
+              <div class="ref-h">Sources de l'analyse critique</div>
+              <div class="cols2">
+                <p class="ref"><b>Sablé-Meyer, Benjamin, Potier Watkins, He, Pajot, Morfoisse, Al Roumi, Dehaene</b>, « A geometric shape regularity effect in the human brain », <i>eLife</i>, 14:RP106464, 12 janvier 2026.</p>
+                <p class="ref"><b>Adriano, Sablé-Meyer, Ciccione, Zhan, Dehaene</b>, « Sensitivity to Geometric Shape Regularity Emerges Independently of Vision », <i>Open Mind</i>, 9, 17 octobre 2025.</p>
+                <p class="ref"><b>Google</b>, <i>Measuring the environmental impact of delivering AI at Google scale</i>, rapport technique, août 2025.</p>
+              </div>
+            </div>
+            <div class="panel ctx a-fade" style="--d:1.05s"><span class="ref-h">Repère de contexte</span><p class="ref"><b>Collège de France</b>, colloque de rentrée 2025, « Formes de l'intelligence : IA, connaissance, déduction, apprentissage », session « IA et sciences, allers-retours ».</p></div>
+          </div>
+        </div>
+        <div class="pageno">32<b>/32</b></div>
+      </section>
+
+    </div>
+
+    <div class="nav" id="nav">
+      <button id="prev" title="Précédent (←)">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+      </button>
+      <span class="count" id="count">1 / 32</span>
+      <button id="next" title="Suivant (→)">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+      </button>
+    </div>
+  </main>
+</div>
+
+<script>
+(function(){
+  const deck   = document.getElementById('deck');
+  const stage  = document.getElementById('stage');
+  const slides = Array.from(deck.querySelectorAll('.slide'));
+  const thumbs = document.getElementById('thumbs');
+  const count  = document.getElementById('count');
+  const N = slides.length;
+  let cur = 0;
+
+  /* ---------- Miniatures : véritables clones à l'échelle ---------- */
+  slides.forEach((s, i) => {
+    const wrap = document.createElement('div');
+    wrap.className = 'thumb';
+    const clone = s.cloneNode(true);
+    clone.classList.remove('active');
+    clone.classList.add('tvis');
+    // Les animations ne s'appliquent que sous « .slide.active » : le clone,
+    // jamais actif, affiche donc d'emblée l'état final. Rien à neutraliser.
+    wrap.innerHTML =
+      '<div class="thumb-no">' + (i+1) + '</div>' +
+      '<div class="thumb-box"><div class="thumb-scale"></div></div>' +
+      '<div class="thumb-label">' + (s.dataset.label || ('Carte ' + (i+1))) + '</div>';
+    wrap.querySelector('.thumb-scale').appendChild(clone);
+    wrap.addEventListener('click', () => go(i));
+    thumbs.appendChild(wrap);
+  });
+  const thumbEls = Array.from(thumbs.querySelectorAll('.thumb'));
+
+  /* ---------- Navigation + relance des animations ---------- */
+  function go(i){
+    if(i < 0 || i > N-1) return;
+    const s = slides[i];
+    slides.forEach(x => x.classList.remove('active'));
+    void s.offsetWidth;              // reflow : rejoue les animations en cascade
+    s.classList.add('active');
+    cur = i;
+    thumbEls.forEach((t,k) => t.classList.toggle('on', k === i));
+    count.textContent = (i+1) + ' / ' + N;
+    document.getElementById('prev').disabled = (i === 0);
+    document.getElementById('next').disabled = (i === N-1);
+    thumbEls[i].scrollIntoView({block:'nearest', behavior:'smooth'});
+  }
+  document.getElementById('prev').onclick = () => go(cur-1);
+  document.getElementById('next').onclick = () => go(cur+1);
+
+  /* ---------- Mise à l'échelle de la carte ---------- */
+  function fit(){
+    const pad = document.fullscreenElement ? 0 : 56;
+    const r = stage.getBoundingClientRect();
+    const s = Math.min((r.width - pad) / 1280, (r.height - pad) / 720);
+    deck.style.transform = 'scale(' + s + ')';
+  }
+  window.addEventListener('resize', fit);
+
+  /* ---------- Plein écran (Échap pour sortir) ---------- */
+  function toggleFs(){
+    if(document.fullscreenElement) document.exitFullscreen();
+    else stage.requestFullscreen && stage.requestFullscreen();
+  }
+  document.getElementById('btnFs').onclick = toggleFs;
+  document.addEventListener('fullscreenchange', () => {
+    fit(); setTimeout(fit, 130);          // la scène n'a pas fini de se redimensionner
+    go(cur); wake();
+  });
+
+  /* ---------- Masquage de l'interface au repos (plein écran) ---------- */
+  let idleT;
+  function wake(){
+    stage.classList.remove('idle');
+    clearTimeout(idleT);
+    if(document.fullscreenElement) idleT = setTimeout(() => stage.classList.add('idle'), 2600);
+  }
+  stage.addEventListener('mousemove', wake);
+
+  /* ---------- Export PDF ---------- */
+  function toPdf(){
+    const wasFs = !!document.fullscreenElement;
+    const finish = () => window.print();
+    if(wasFs) document.exitFullscreen().then(() => setTimeout(finish, 260));
+    else finish();
+  }
+  document.getElementById('btnPdf').onclick = toPdf;
+
+  /* ---------- Clavier ---------- */
+  document.addEventListener('keydown', e => {
+    if(e.metaKey || e.ctrlKey || e.altKey) return;   // laisse passer Cmd+P natif
+    if(e.key === 'ArrowRight' || e.key === 'PageDown' || e.key === ' '){ e.preventDefault(); go(cur+1); }
+    else if(e.key === 'ArrowLeft' || e.key === 'PageUp'){ e.preventDefault(); go(cur-1); }
+    else if(e.key === 'Home'){ go(0); }
+    else if(e.key === 'End'){ go(N-1); }
+    else if(e.key === 'f' || e.key === 'F'){ toggleFs(); }
+    else if(e.key === 'p' || e.key === 'P'){ e.preventDefault(); toPdf(); }
+  });
+
+  fit();
+  go(0);
+})();
+</script>
