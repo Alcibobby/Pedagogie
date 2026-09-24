@@ -266,6 +266,108 @@ body{
 .pageno b{color:var(--accent); font-weight:700}
 
 /* ============================================================
+   ÉCLAIRAGES — explications à la demande
+   ============================================================
+   (Tailles écrites pour la toile de 1280 × 720 : porter-export.py les met
+   à l'échelle quand la toile est plus grande.)
+
+   Une notion difficile porte, juste après elle, une petite icône « ? »
+   (<button class="q-aide" data-ecl="e3">). Un clic ouvre la fenêtre
+   fugitive, qui vit DANS .deck : elle suit l'échelle de la carte et reste
+   visible en plein écran. La carte elle-même ne change pas : l'éclairage
+   n'est jamais écrit dessus.
+
+   L'icône se dimensionne en em : elle suit --e sans y être raccordée, avec
+   un plancher de 13 px pour se voir et se cliquer dans un surtitre, et un
+   plafond de 29 px pour rester discrète dans un grand titre (taille agrandie
+   d'un tiers à la demande de Bob, 2026-09-24).
+   Levée au-dessus de la ligne de base sans agrandir la ligne. Le dernier
+   mot de la notion et l'icône sont liés (.q-lie) : l'icône ne part jamais
+   seule à la ligne. */
+.q-lie{white-space:nowrap}
+/* Couleur de l'icône : l'accent de la charte (vert-sarcelle #0E9594 sur la
+   charte bleu-sarcelle), pleine opacité — choix de Bob du 2026-09-24, après
+   un essai en bleu #5378E9. La couleur du texte à demi transparente, elle,
+   passait inaperçue en projection. Une seule variable à changer. */
+:root{--aide:var(--accent)}
+.q-aide{
+  display:inline-grid; place-items:center;
+  width:1.12em; height:1.12em; margin:0 0 0 .2em; padding:0;
+  font-size:clamp(13px, .8em, 29px); line-height:1; vertical-align:.45em;
+  font-family:var(--sans); font-weight:700; font-style:normal;
+  text-transform:none; letter-spacing:0;
+  color:var(--aide); background:transparent;
+  border:1.5px solid currentColor; border-radius:50%;
+  cursor:pointer; opacity:1;
+  transition:opacity .18s, background .18s, color .18s;
+}
+.q-aide:hover, .q-aide.on{background:var(--aide); color:#fff; border-color:var(--aide)}
+.q-aide:focus-visible{outline:2px solid var(--aide); outline-offset:2px}
+/* Les miniatures gardent la place de l'icône mais ne la montrent pas. */
+.thumb-scale .q-aide{visibility:hidden}
+
+.ecl-voile{
+  position:absolute; inset:0; z-index:20;
+  background:rgba(12,22,34,.10);
+  opacity:0; visibility:hidden; transition:opacity .22s, visibility .22s;
+}
+/* La fenêtre s'ouvre toujours sur la moitié DROITE de la carte : à hauteur
+   de l'icône quand la notion est à gauche, au-dessus ou au-dessous de sa
+   ligne quand elle est à droite. Jamais à gauche. */
+.ecl{
+  position:absolute; right:44px; top:60px; width:500px; z-index:21;
+  max-height:calc(var(--H) - 48px); overflow:auto;
+  background:var(--paper, #fff); color:var(--ink);
+  border:1px solid var(--line); border-top:4px solid var(--accent);
+  border-radius:12px; padding:22px 26px 22px;
+  box-shadow:0 22px 60px rgba(0,0,0,.24), 0 2px 8px rgba(0,0,0,.08);
+  opacity:0; visibility:hidden; transform:translateY(8px);
+  transition:opacity .22s, transform .22s, visibility .22s;
+  text-align:left;
+}
+.ecl.on, .ecl-voile.on{opacity:1; visibility:visible; transform:none}
+.ecl-kicker{
+  font-size:11px; letter-spacing:.18em; text-transform:uppercase;
+  color:var(--accent); font-weight:700; margin-bottom:6px
+}
+.ecl-titre{
+  font-family:var(--serif); font-size:25px; line-height:1.2; font-weight:500;
+  margin:0 34px 12px 0; color:var(--ink)
+}
+.ecl-texte p{font-size:18.5px; line-height:1.5; margin:0 0 10px; color:var(--ink-70, var(--ink))}
+.ecl-texte p:last-child{margin-bottom:0}
+.ecl-x{
+  position:absolute; top:14px; right:14px; width:30px; height:30px;
+  border-radius:50%; border:1px solid var(--line); background:transparent;
+  color:var(--ink-50); font-size:18px; line-height:1; cursor:pointer;
+  display:grid; place-items:center; transition:.16s
+}
+.ecl-x:hover{background:var(--ink); color:#fff; border-color:var(--ink)}
+
+/* Choix de l'export PDF : avec ou sans l'annexe des éclairages. */
+.pdf-choix{display:none; gap:6px; grid-template-columns:1fr 1fr}
+.pdf-choix.on{display:grid}
+.pdf-choix .btn{justify-content:center; padding:8px 6px; font-size:11px}
+
+/* Annexe « Éclairages » : n'existe qu'à l'impression, et seulement si
+   l'export a été demandé « avec les éclairages ». */
+.ecl-annexe{display:none}
+.ecl-page{
+  width:1280px; height:720px; padding:52px 66px 48px;
+  background:var(--card, #fff); color:var(--ink);
+  display:flex; flex-direction:column; position:relative; overflow:hidden;
+}
+.ecl-page-kicker{font-size:11px; letter-spacing:.18em; text-transform:uppercase; color:var(--accent); font-weight:700}
+.ecl-page-titre{font-family:var(--serif); font-size:34px; font-weight:500; margin:6px 0 4px}
+.ecl-page-chapo{font-size:13px; color:var(--ink-50); margin:0 0 20px}
+.ecl-grille{flex:1 1 auto; min-height:0; column-count:2; column-gap:52px; column-fill:auto}
+.ecl-entree{break-inside:avoid; margin:0 0 15px}
+.ecl-entree b{display:block; font-size:13.5px; color:var(--ink); margin-bottom:3px}
+.ecl-entree b span{color:var(--accent); font-variant-numeric:tabular-nums; margin-right:6px}
+.ecl-entree p{font-size:12.5px; line-height:1.48; margin:0 0 5px; color:var(--ink-70, var(--ink))}
+.ecl-mesure{position:absolute; left:-99999px; top:0; visibility:hidden; display:block}
+
+/* ============================================================
    ANIMATIONS — rejouées à chaque arrivée sur la carte
    ============================================================
    Les règles sont portées par « .slide.active » : quitter puis revenir
@@ -591,7 +693,11 @@ h2{text-wrap:balance; margin:calc(8px * var(--e)) 0 0; max-width:calc(1060px * v
 @page{ size:1280px 720px; margin:0 }
 @media print{
   html,body{overflow:visible; background:#fff; height:auto}
-  .rail,.nav,.hint{display:none !important}
+  .rail,.nav,.hint,.ecl,.ecl-voile,.ecl-mesure{display:none !important}
+  .q-aide{display:none !important}      /* ni icône ni trou : la carte imprimée est celle d'origine */
+  body.pdf-ecl .ecl-annexe{display:block}
+  .ecl-page{break-before:page; page-break-before:always;
+    -webkit-print-color-adjust:exact; print-color-adjust:exact}
   .app{display:block; height:auto}
   .stage{display:block; height:auto; background:#fff; overflow:visible}
   .deck{
@@ -633,6 +739,11 @@ h2{text-wrap:balance; margin:calc(8px * var(--e)) 0 0; max-width:calc(1060px * v
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0 4-4m-4 4-4-4M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg>
         Exporter en PDF <span class="k">P</span>
       </button>
+      <!-- N'apparaît que si le diaporama porte des éclairages. -->
+      <div class="pdf-choix" id="pdfChoix">
+        <button class="btn" id="pdfAvec" title="Annexe « Éclairages » en fin de PDF (A)">Avec éclairages</button>
+        <button class="btn" id="pdfSans" title="Les cartes seules (S)">Sans</button>
+      </div>
     </div>
   </aside>
 
@@ -693,7 +804,7 @@ h2{text-wrap:balance; margin:calc(8px * var(--e)) 0 0; max-width:calc(1060px * v
             <div class="etapes">
               <div class="et a-slide" style="--d:.4s"><div class="et-n">1</div><div><div class="et-q">Que doit l'IA au cerveau ?</div><div class="et-s">trois idées empruntées aux neurosciences, puis leur mise à l'épreuve sur la vision, la lecture et le langage</div></div></div>
               <div class="et a-slide" style="--d:.6s"><div class="et-n">2</div><div><div class="et-q">Où la ressemblance s'arrête-t-elle ?</div><div class="et-s">l'ardoise qui n'est pas vierge, et le carré — un objet anodin sur lequel les réseaux achoppent</div></div></div>
-              <div class="et a-slide" style="--d:.8s"><div class="et-n">3</div><div><div class="et-q">Que reste-t-il de proprement humain ?</div><div class="et-s">les langages de la pensée, et des échecs qui ne sont pas ceux qu'on attendrait</div></div></div>
+              <div class="et a-slide" style="--d:.8s"><div class="et-n">3</div><div><div class="et-q">Que reste-t-il de proprement humain ?</div><div class="et-s">les langages de la <span class="q-lie">pensée<button class="q-aide" data-ecl="e12" aria-label="Éclairage : Langage de la pensée">?</button></span>, et des échecs qui ne sont pas ceux qu'on attendrait</div></div></div>
               <div class="et cri a-slide" style="--d:1s"><div class="et-n">4</div><div><div class="et-q">Et ensuite ?</div><div class="et-s">notre analyse critique : ce qui a changé depuis, ce que la thèse a gagné, ce que la comparaison suppose</div></div></div>
             </div>
             <div class="col">
@@ -731,7 +842,7 @@ h2{text-wrap:balance; margin:calc(8px * var(--e)) 0 0; max-width:calc(1060px * v
               <div class="mod-k">Premier mouvement</div>
               <div class="mod-h">Un hommage</div>
               <p class="mod-p">Certains aspects de l'IA ont été directement inspirés du cerveau — et pas par analogie vague : par <b>emprunt de mécanismes précis</b>.</p>
-              <p class="mod-p">Les réseaux modélisent aujourd'hui assez bien les premières étapes de la vision, la lecture comprise, et certains aspects du traitement du langage.</p>
+              <p class="mod-p">Les <span class="q-lie">réseaux<button class="q-aide" data-ecl="e1" aria-label="Éclairage : Réseau de neurones artificiel">?</button></span> modélisent aujourd'hui assez bien les premières étapes de la vision, la lecture comprise, et certains aspects du traitement du langage.</p>
             </div>
             <div class="mod mac a-rise" style="--d:.8s">
               <div class="mod-k">Second mouvement</div>
@@ -776,7 +887,7 @@ h2{text-wrap:balance; margin:calc(8px * var(--e)) 0 0; max-width:calc(1060px * v
             <div class="mod a-rise" style="--d:.5s">
               <div class="mod-k">Emprunt 1</div>
               <div class="mod-h">L'architecture distribuée</div>
-              <p class="mod-p">Aucun calcul n'est confié à une unité centrale. Le travail est réparti sur une foule de processeurs élémentaires, les neurones — probablement <b>86 milliards</b> chez l'humain, reliés par des synapses, environ <b>10 000</b> par neurone pyramidal du cortex.</p>
+              <p class="mod-p">Aucun calcul n'est confié à une unité centrale. Le travail est réparti sur une foule de processeurs élémentaires, les neurones — probablement <b>86 milliards</b> chez l'humain, reliés par des <span class="q-lie">synapses<button class="q-aide" data-ecl="e2" aria-label="Éclairage : Synapse">?</button></span>, environ <b>10 000</b> par neurone pyramidal du cortex.</p>
             </div>
             <div class="mod a-rise" style="--d:.7s">
               <div class="mod-k">Emprunt 2</div>
@@ -833,7 +944,7 @@ h2{text-wrap:balance; margin:calc(8px * var(--e)) 0 0; max-width:calc(1060px * v
           <div class="ey a-fade">I · Ce que l'IA a emprunté</div>
           <h2 class="a-rise" style="--d:.1s">Une correspondance que rien n'obligeait</h2>
           <span class="tag conf a-fade" style="--d:.3s">Ce que montre la conférence</span>
-          <p class="lede a-fade" style="--d:.4s">Depuis une dizaine d'années, on compare terme à terme les couches d'un réseau entraîné à voir et les aires du cortex visuel. Le réseau retrouve-t-il, seul, la même organisation ?</p>
+          <p class="lede a-fade" style="--d:.4s">Depuis une dizaine d'années, on compare terme à terme les couches d'un réseau entraîné à voir et les aires du cortex <span class="q-lie">visuel<button class="q-aide" data-ecl="e3" aria-label="Éclairage : Cortex et aires cérébrales">?</button></span>. Le réseau retrouve-t-il, seul, la même organisation ?</p>
         </div>
         <div class="body">
           <div class="duo">
@@ -871,7 +982,7 @@ h2{text-wrap:balance; margin:calc(8px * var(--e)) 0 0; max-width:calc(1060px * v
             <p class="mod-p">Quand nous apprenons à l'école une capacité nouvelle, nous <b>réutilisons des circuits anciens</b> dont la fonction était proche. Pour le tester, l'équipe procède par analogie — et l'analogie est construite pas à pas.</p>
           </div>
           <div class="etapes">
-            <div class="et a-slide" style="--d:.8s"><div class="et-n">1</div><div><div class="et-q">Un réseau déjà entraîné sur un millier de catégories d'objets</div><div class="et-s">la base <b>ImageNet</b> — l'équivalent du système visuel d'un enfant avant l'école : compétent pour les objets, ignorant des lettres</div></div></div>
+            <div class="et a-slide" style="--d:.8s"><div class="et-n">1</div><div><div class="et-q">Un réseau déjà entraîné sur un millier de catégories d'objets</div><div class="et-s">la base <b><span class="q-lie">ImageNet<button class="q-aide" data-ecl="e4" aria-label="Éclairage : ImageNet">?</button></span></b> — l'équivalent du système visuel d'un enfant avant l'école : compétent pour les objets, ignorant des lettres</div></div></div>
             <div class="et a-slide" style="--d:1s"><div class="et-n">2</div><div><div class="et-q">On le réentraîne sur des mots écrits</div><div class="et-s">c'est exactement le geste de l'apprentissage de la lecture : ne pas construire un organe neuf, mais détourner un organe existant</div></div></div>
             <div class="et a-slide" style="--d:1.2s"><div class="et-n">3</div><div><div class="et-q">Un groupe d'unités dédiées aux lettres apparaît</div><div class="et-s">il ressemble à la région que l'orateur a baptisée la <b>boîte aux lettres du cerveau</b>, l'aire de la forme visuelle des mots</div></div></div>
           </div>
@@ -954,12 +1065,12 @@ h2{text-wrap:balance; margin:calc(8px * var(--e)) 0 0; max-width:calc(1060px * v
           <div class="split">
             <div class="fiche">
               <div class="fl a-rise" style="--d:.5s"><div class="fl-k">Matière</div><div class="fl-v">Le Petit Prince, de Saint-Exupéry, intégralement</div></div>
-              <div class="fl a-rise" style="--d:.65s"><div class="fl-k">Mesures</div><div class="fl-v">IRM fonctionnelle, magnétoencéphalographie, enregistrements intracrâniens chez des patients — trois techniques qui n'ont ni la même précision spatiale ni la même précision temporelle</div></div>
+              <div class="fl a-rise" style="--d:.65s"><div class="fl-k">Mesures</div><div class="fl-v">IRM fonctionnelle, <span class="q-lie">magnétoencéphalographie<button class="q-aide" data-ecl="e5" aria-label="Éclairage : IRM fonctionnelle et magnétoencéphalographie">?</button></span>, enregistrements intracrâniens chez des patients — trois techniques qui n'ont ni la même précision spatiale ni la même précision temporelle</div></div>
               <div class="fl a-rise" style="--d:.8s"><div class="fl-k">Langues</div><div class="fl-v">anglais, français, chinois</div></div>
             </div>
             <div class="col a-zoom" style="--d:1.05s">
               <div class="kpi acc">50 %</div>
-              <p class="kpi-l">de la variance des activations cérébrales est capturée par les activations internes du réseau.</p>
+              <p class="kpi-l">de la <span class="q-lie">variance<button class="q-aide" data-ecl="e6" aria-label="Éclairage : Part de variance expliquée">?</button></span> des activations cérébrales est capturée par les activations internes du réseau.</p>
             </div>
           </div>
           <p class="t a-fade" style="--d:1.3s"><b>Comment se mesure un tel chiffre.</b> Le même texte est présenté au cerveau et au réseau. On relève d'un côté l'activité cérébrale, de l'autre les activations internes du modèle, puis on demande aux secondes de <b>prédire</b> la première, au moyen d'un grand modèle de régression. La part de variation cérébrale ainsi expliquée est d'environ la moitié.</p>
@@ -996,7 +1107,7 @@ h2{text-wrap:balance; margin:calc(8px * var(--e)) 0 0; max-width:calc(1060px * v
             </svg>
           </div>
           <div class="cles">
-            <div class="cle a-rise" style="--d:1.9s"><b>En abscisse</b>la taille du modèle, en nombre de paramètres, sur une échelle logarithmique : de 10⁸ à 10¹⁰, soit un facteur cent.</div>
+            <div class="cle a-rise" style="--d:1.9s"><b>En abscisse</b>la taille du modèle, en nombre de <span class="q-lie">paramètres<button class="q-aide" data-ecl="e7" aria-label="Éclairage : Paramètres d&#x27;un modèle">?</button></span>, sur une échelle logarithmique : de 10⁸ à 10¹⁰, soit un facteur cent.</div>
             <div class="cle a-rise" style="--d:2.05s"><b>En ordonnée</b>la corrélation entre les activations du modèle et l'activité cérébrale mesurée : elle passe de 0,40 à 0,47.</div>
             <div class="cle a-rise" style="--d:2.2s"><b>Les deux courbes</b><i class="pu acc"></i> l'hémisphère gauche reste au-dessus du <i class="pu blu"></i> droit, et l'écart se creuse à mesure que les modèles grandissent.</div>
           </div>
@@ -1080,7 +1191,7 @@ h2{text-wrap:balance; margin:calc(8px * var(--e)) 0 0; max-width:calc(1060px * v
             </div>
             <div class="mod cer a-rise" style="--d:1.1s">
               <div class="mod-k">Ce qu'il est</div>
-              <div class="mod-h">Sélectionniste</div>
+              <div class="mod-h"><span class="q-lie">Sélectionniste<button class="q-aide" data-ecl="e8" aria-label="Éclairage : Sélectionnisme">?</button></span></div>
               <p class="mod-p">L'enfant est déjà structuré ; l'environnement <b>sélectionne</b>, parmi les propositions de cet état initial, celles qui conviennent au monde extérieur. Le monde ne dicte pas la forme : il arbitre entre des formes déjà disponibles.</p>
             </div>
           </div>
@@ -1168,7 +1279,7 @@ h2{text-wrap:balance; margin:calc(8px * var(--e)) 0 0; max-width:calc(1060px * v
             <div class="diss">
               <div></div>
               <div class="diss-h a-fade" style="--d:.5s">Modèle symbolique</div>
-              <div class="diss-h a-fade" style="--d:.6s">Réseau à convolution</div>
+              <div class="diss-h a-fade" style="--d:.6s">Réseau à <span class="q-lie">convolution<button class="q-aide" data-ecl="e9" aria-label="Éclairage : Réseau à convolution">?</button></span></div>
               <div class="diss-r a-slide" style="--d:.7s">Humains<small>Français, Himba, enfants d'âge préscolaire</small></div>
               <div class="cel a-fade" style="--d:.8s"><div class="bar a-grow" style="--w:88%; --d:.85s"></div><span>explique</span></div>
               <div class="cel b no a-fade" style="--d:.9s"><div class="bar a-grow" style="--w:22%; --d:.95s"></div><span>n'explique pas</span></div>
@@ -1276,7 +1387,7 @@ h2{text-wrap:balance; margin:calc(8px * var(--e)) 0 0; max-width:calc(1060px * v
         <div class="top">
           <div class="ey a-fade">III · Une loi, appliquée à soi-même</div>
           <h2 class="a-rise" style="--d:.1s">Ce n'est ni l'architecture ni la taille : c'est le corpus</h2>
-          <p class="lede a-fade" style="--d:.3s">Chaque cercle du diagramme est un modèle publié dans la littérature, placé selon la taille de son corpus d'entraînement ; en vertical se lit l'accord avec les performances humaines.</p>
+          <p class="lede a-fade" style="--d:.3s">Chaque cercle du diagramme est un modèle publié dans la littérature, placé selon la taille de son corpus <span class="q-lie">d'entraînement<button class="q-aide" data-ecl="e11" aria-label="Éclairage : Corpus d&#x27;entraînement">?</button></span> ; en vertical se lit l'accord avec les performances humaines.</p>
         </div>
         <div class="body">
           <div class="viz fixe">
@@ -1292,7 +1403,7 @@ h2{text-wrap:balance; margin:calc(8px * var(--e)) 0 0; max-width:calc(1060px * v
             <div class="cle a-rise" style="--d:1.55s"><b>Le plafond de bruit</b>le niveau au-delà duquel aucun modèle ne peut monter, les données humaines comportant une variabilité irréductible. Il est ici très élevé : les données sont de bonne qualité.</div>
             <div class="cle a-rise" style="--d:1.7s"><b>Ce que franchissent les gros modèles</b>de 10⁶ à 10¹⁰ images d'entraînement, l'accord monte jusqu'à atteindre puis dépasser le niveau du modèle symbolique.</div>
           </div>
-          <p class="t a-fade" style="--d:1.9s">L'architecture joue « un petit peu » : certains transformeurs sont un peu plus favorables à l'apparition de propriétés géométriques. Mais le résultat est là — <b>ce qui décide, c'est ce qu'on a montré au modèle</b>, pas la façon dont il est bâti.</p>
+          <p class="t a-fade" style="--d:1.9s">L'architecture joue « un petit peu » : certains <span class="q-lie">transformeurs<button class="q-aide" data-ecl="e10" aria-label="Éclairage : Transformeur">?</button></span> sont un peu plus favorables à l'apparition de propriétés géométriques. Mais le résultat est là — <b>ce qui décide, c'est ce qu'on a montré au modèle</b>, pas la façon dont il est bâti.</p>
           <div class="src a-fade" style="--d:2.1s">Figure de la conférence ; valeurs lues à l'écran, travail annoncé comme non publié (Pajot, Lakretz et al., 2025, en préparation).</div>
         </div>
         <div class="pageno">26<b>/41</b></div>
@@ -1448,7 +1559,7 @@ h2{text-wrap:balance; margin:calc(8px * var(--e)) 0 0; max-width:calc(1060px * v
             <div class="bulle dem a-slide" style="--d:.4s"><span class="bulle-k">Premier temps — une vraie illusion de Müller-Lyer</span>Deux segments de même longueur, que les flèches aux extrémités font paraître inégaux. Quelle est la ligne la plus longue ?</div>
             <div class="bulle rep a-slide" style="--d:.65s"><span class="bulle-k">La réponse du modèle</span>Il nomme l'illusion, explique qu'elle trompe, précise que <b>les longueurs sont égales</b>. La réponse est parfaite. On est impressionné.</div>
             <div class="bulle dem a-slide" style="--d:.9s"><span class="bulle-k">Second temps — une variante, et une tête de canard</span>Des lignes <b>réellement</b> de longueurs différentes. Puis une tête de canard <b>sans aucune ambiguïté</b>.</div>
-            <div class="bulle rep a-slide" style="--d:1.15s"><span class="bulle-k">La réponse du modèle</span>« C'est l'illusion de Müller-Lyer, les longueurs sont les mêmes. » « C'est l'illusion canard-lapin, les deux interprétations sont correctes. »</div>
+            <div class="bulle rep a-slide" style="--d:1.15s"><span class="bulle-k">La réponse du modèle</span>« C'est l'illusion de Müller-Lyer, les longueurs sont les mêmes. » « C'est l'illusion <span class="q-lie">canard-lapin<button class="q-aide" data-ecl="e13" aria-label="Éclairage : Illusion canard-lapin">?</button></span>, les deux interprétations sont correctes. »</div>
           </div>
           <p class="verdict a-fade" style="--d:1.45s">Tomer Ullman appelle cela <b>l'illusion de l'illusion</b> : le modèle raisonne à l'illusion même quand il n'y en a pas.</p>
           <p class="t a-fade" style="--d:1.6s">La démonstration est forte parce qu'elle sépare deux choses que la première réponse confondait. Le modèle possède <b>le discours</b> sur l'illusion ; il n'a pas <b>le regard</b> qui la constate. Et l'orateur en tire la leçon générale : nous projetons beaucoup sur ces machines — c'est notre projection que la première réponse récompensait.</p>
@@ -1480,7 +1591,7 @@ h2{text-wrap:balance; margin:calc(8px * var(--e)) 0 0; max-width:calc(1060px * v
             <div class="mod a-rise" style="--d:1.2s">
               <div class="mod-k">Au crédit des réseaux · 3</div>
               <div class="mod-h">Des modèles enfin testables</div>
-              <p class="mod-p">Disposer de modèles de la syntaxe et de la sémantique <b>au niveau neuronal</b> est « très excitant » : c'est la première fois qu'on peut confronter une hypothèse sur le code du langage à autre chose qu'une intuition.</p>
+              <p class="mod-p">Disposer de modèles de la syntaxe et de la <span class="q-lie">sémantique<button class="q-aide" data-ecl="e14" aria-label="Éclairage : Syntaxe et sémantique">?</button></span> <b>au niveau neuronal</b> est « très excitant » : c'est la première fois qu'on peut confronter une hypothèse sur le code du langage à autre chose qu'une intuition.</p>
             </div>
           </div>
         </div>
@@ -1608,7 +1719,7 @@ h2{text-wrap:balance; margin:calc(8px * var(--e)) 0 0; max-width:calc(1060px * v
           <p class="t a-fade" style="--d:.6s">La pointe est belle et le chiffre est exact. Mais elle appelle une comparaison que la conférence ne fait pas — et sans laquelle l'auditoire la complétera lui-même, probablement de travers. Mesurons.</p>
           <div class="watt">
             <div class="watt-c a-zoom" style="--d:.9s">
-              <div class="watt-v blu">0,24<span class="kpi-u">Wh</span></div>
+              <div class="watt-v blu">0,24<span class="kpi-u"><span class="q-lie">Wh<button class="q-aide" data-ecl="e15" aria-label="Éclairage : Watt et wattheure">?</button></span></span></div>
               <div class="watt-l">une requête textuelle médiane adressée à Gemini — mesure instrumentée publiée par Google en août 2025, l'entreprise mesurant ici son propre produit</div>
             </div>
             <div class="watt-eq a-fade" style="--d:1.05s">=</div>
@@ -1689,6 +1800,15 @@ h2{text-wrap:balance; margin:calc(8px * var(--e)) 0 0; max-width:calc(1060px * v
         <div class="pageno">41<b>/41</b></div>
       </section>
 
+      <!-- Éclairages : voile et fenêtre fugitive, communs à toutes les cartes. -->
+      <div class="ecl-voile" id="eclVoile"></div>
+      <div class="ecl" id="ecl" role="dialog" aria-labelledby="eclTitre">
+        <button class="ecl-x" id="eclX" aria-label="Fermer">×</button>
+        <div class="ecl-kicker">Éclairage</div>
+        <div class="ecl-titre" id="eclTitre"></div>
+        <div class="ecl-texte" id="eclTexte"></div>
+      </div>
+
     </div>
 
     <div class="nav" id="nav">
@@ -1702,6 +1822,71 @@ h2{text-wrap:balance; margin:calc(8px * var(--e)) 0 0; max-width:calc(1060px * v
     </div>
   </main>
 </div>
+
+<!-- Éclairages : { "e1": {"notion": "…", "texte": "…"} } — {} s'il n'y en a pas.
+     Texte brut ; une ligne vide sépare deux paragraphes. -->
+<script type="application/json" id="eclairages">{
+ "e1": {
+  "notion": "Réseau de neurones artificiel",
+  "texte": "Un réseau de neurones artificiel est un programme composé d'un très grand nombre d'unités de calcul très simples, reliées les unes aux autres. Chaque unité reçoit des nombres, les combine et transmet le résultat aux suivantes ; chaque liaison porte un poids, qui règle l'importance du signal transmis. Le réseau n'est pas programmé règle par règle : on lui montre des exemples, et il ajuste ses poids jusqu'à donner la bonne réponse. C'est un peu comme apprendre à reconnaître un visage à force d'en voir, sans pouvoir énoncer la règle. Toute la conférence compare ces réseaux au cerveau, dont ils se sont inspirés."
+ },
+ "e2": {
+  "notion": "Synapse",
+  "texte": "La synapse est le point de contact entre deux neurones : c'est là que le signal passe de l'un à l'autre. Elle ne se contente pas de le transmettre, elle le module : une synapse forte le transmet avec vigueur, une synapse faible à peine. Apprendre, pour le cerveau, c'est en grande partie modifier la force de ces contacts, en renforcer certains et en supprimer d'autres. On peut se la représenter comme un robinet réglable entre deux tuyaux. C'est exactement ce mécanisme que les réseaux artificiels ont repris, sous le nom de poids."
+ },
+ "e3": {
+  "notion": "Cortex et aires cérébrales",
+  "texte": "Le cortex est la couche plissée qui recouvre le cerveau ; c'est là que se font les traitements les plus élaborés. On le découpe en aires, des territoires spécialisés chacun dans une tâche. Le cortex visuel regroupe celles qui traitent ce que voient les yeux, organisées comme une chaîne : les premières repèrent des traits simples, comme l'orientation d'une ligne ; les suivantes assemblent ces traits en formes, puis en objets ou en visages. C'est cette organisation en étages que l'orateur compare aux couches successives d'un réseau artificiel."
+ },
+ "e4": {
+  "notion": "ImageNet",
+  "texte": "ImageNet est une vaste collection de photographies, chacune étiquetée par le nom de ce qu'elle montre : un chien, une tasse, une voiture. Elle sert à entraîner les réseaux de reconnaissance d'images : on leur présente l'image, on compare leur réponse à l'étiquette, et l'on corrige leurs poids à chaque erreur. À force de corrections, le réseau finit par reconnaître des images qu'il n'a jamais vues. Ici, un réseau entraîné sur un millier de catégories d'objets joue le rôle du système visuel d'un enfant avant l'école : compétent pour les objets, ignorant des lettres."
+ },
+ "e5": {
+  "notion": "IRM fonctionnelle et magnétoencéphalographie",
+  "texte": "Ce sont deux manières d'observer le cerveau au travail sans l'ouvrir. L'IRM fonctionnelle repère les régions qui consomment davantage d'oxygène pendant une tâche : elle dit précisément où l'activité a lieu, mais avec retard. La magnétoencéphalographie capte les infimes champs magnétiques produits par les neurones en activité : elle dit quand l'activité a lieu, à la milliseconde près, mais situe moins bien d'où elle vient. L'une est une photographie nette mais lente, l'autre un chronomètre précis mais flou. Les combiner, comme le fait le projet Petit Prince, donne à la fois le lieu et le moment."
+ },
+ "e6": {
+  "notion": "Part de variance expliquée",
+  "texte": "Pendant l'écoute du texte, l'activité du cerveau varie sans cesse d'un instant à l'autre. La variance mesure l'ampleur de ces variations. Dire qu'un modèle « capture 50 % de la variance », c'est dire qu'à partir de ce qu'il calcule, on prédit la moitié de ces variations ; l'autre moitié lui échappe. On peut penser à la météo : un modèle qui expliquerait la moitié des écarts de température d'un jour à l'autre serait utile, sans être complet. Le chiffre est donc à la fois un succès réel et la mesure de ce qui reste à comprendre."
+ },
+ "e7": {
+  "notion": "Paramètres d'un modèle",
+  "texte": "Les paramètres d'un modèle d'intelligence artificielle sont les nombres réglables qu'il ajuste pendant son entraînement : ses poids, pour l'essentiel. Leur nombre donne la taille du modèle. Sur la figure, les plus petits en comptent une centaine de millions, les plus grands plus de dix milliards. On peut se les représenter comme les boutons d'une immense table de mixage, tous réglés à force d'exemples. La figure montre que plus ce nombre augmente, mieux les activations du modèle prédisent l'activité du cerveau — ce que rien, dans la conception de ces modèles, n'imposait."
+ },
+ "e8": {
+  "notion": "Sélectionnisme",
+  "texte": "Le sélectionnisme est une manière de concevoir le développement du cerveau, défendue toute sa vie par Jean-Pierre Changeux. Le cerveau du nouveau-né n'est pas une page blanche que l'expérience viendrait remplir : il arrive déjà riche de connexions et de possibilités, et l'expérience vient trier, en conservant ce qui sert et en éliminant le reste. On peut penser à un sculpteur qui dégage une statue d'un bloc, plutôt qu'à un maçon qui l'élève pierre à pierre. C'est pourquoi l'état initial compte autant : l'environnement choisit parmi ce qui est déjà là."
+ },
+ "e9": {
+  "notion": "Réseau à convolution",
+  "texte": "Un réseau à convolution est un réseau de neurones conçu pour reconnaître des images. Il examine l'image par petites fenêtres, qu'il fait glisser sur toute sa surface en y cherchant partout les mêmes motifs : un bord, une courbe, une texture. Couche après couche, il assemble ces motifs en formes de plus en plus complexes — un peu comme on parcourrait un tableau à la loupe avant d'en reconstituer l'ensemble. Il excelle à juger des ressemblances visuelles ; il ne raisonne pas en propriétés tranchées, comme « a un angle droit ». C'est pourquoi il rend compte des babouins, et non des humains."
+ },
+ "e10": {
+  "notion": "Transformeur",
+  "texte": "Le transformeur est l'architecture sur laquelle reposent les grands modèles d'intelligence artificielle actuels, dont ceux qui produisent du texte. Sa particularité : pour traiter chaque élément — un mot, un fragment d'image —, il pèse l'importance de tous les autres en même temps, grâce à un mécanisme appelé l'attention. Là où l'on lirait mot après mot, il voit toute la page d'un coup et relie ce qui se répond. L'orateur note que certains transformeurs favorisent un peu l'apparition de propriétés géométriques : l'architecture joue, mais bien moins que le corpus."
+ },
+ "e11": {
+  "notion": "Corpus d'entraînement",
+  "texte": "Le corpus d'entraînement est l'ensemble des données qu'on montre à un modèle pour qu'il apprenne : des textes ou, ici, des images. Sa taille se compte en nombre d'exemples. Le diagramme montre que c'est elle, bien plus que la taille du modèle ou sa méthode d'apprentissage, qui décide de sa ressemblance avec la perception humaine. Or ces corpus rassemblent des milliards d'images prises sur internet, dont beaucoup montrent des objets fabriqués par l'homme. Un enfant n'a pas besoin de cette masse : c'est cet écart qui intéresse l'orateur, moins celui des capacités que celui du prix à payer pour les acquérir."
+ },
+ "e12": {
+  "notion": "Langage de la pensée",
+  "texte": "L'idée d'un langage de la pensée est que nous ne pensons pas seulement en images ou avec les mots de notre langue, mais aussi avec un code intérieur, abstrait, fait de symboles que l'on combine selon des règles. Ce code permettrait de saisir d'un coup la structure d'une situation nouvelle : « c'est un zigzag », « c'est un carré ». L'orateur en distingue plusieurs — mathématique, géométrique, musical — à côté de la langue parlée. Ce langage intérieur, compact et symbolique, est ce qui manquerait aux réseaux actuels : c'est la thèse de toute la conférence."
+ },
+ "e13": {
+  "notion": "Illusion canard-lapin",
+  "texte": "L'illusion canard-lapin est un dessin ambigu célèbre : selon la manière dont on le regarde, on y voit une tête de canard, bec tourné d'un côté, ou une tête de lapin, oreilles tournées de l'autre. Le dessin ne change pas ; c'est notre interprétation qui bascule. D'où la formule selon laquelle « les deux interprétations sont correctes ». L'expérience rapportée ici montre au modèle une tête de canard sans aucune ambiguïté : en répondant tout de même par l'illusion, il récite ce qu'il sait des illusions au lieu de regarder l'image."
+ },
+ "e14": {
+  "notion": "Syntaxe et sémantique",
+  "texte": "La syntaxe est la manière dont les mots s'agencent dans une phrase : qui fait quoi, ce qui dépend de quoi. La sémantique est le sens que la phrase porte. Dans « le chien mord le facteur », la syntaxe dit qui mord et qui est mordu ; la sémantique dit ce que cela signifie — et que ce n'est pas une bonne nouvelle pour le facteur. Nous ignorons encore comment le cerveau code l'une et l'autre. Disposer de réseaux qui les codent, et que l'on peut disséquer unité par unité, permet enfin de formuler des hypothèses précises et de les tester sur le cerveau."
+ },
+ "e15": {
+  "notion": "Watt et wattheure",
+  "texte": "Le watt mesure une puissance : ce qu'un appareil consomme à chaque instant. Le wattheure, noté Wh, mesure une énergie : ce qu'il a consommé au total, en fonctionnant pendant un certain temps. Une ampoule de 20 watts allumée une heure consomme 20 wattheures. Le cerveau fonctionne en continu à 20 watts ; une requête adressée à un modèle consomme, une fois, 0,24 Wh. Pour comparer les deux, il faut donc ramener la puissance du cerveau à une durée : 0,24 Wh, ce sont 43 secondes de fonctionnement cérébral. C'est ce calcul que l'analyse critique demande de faire."
+ }
+}</script>
 
 <script>
 (function(){
@@ -1735,6 +1920,7 @@ h2{text-wrap:balance; margin:calc(8px * var(--e)) 0 0; max-width:calc(1060px * v
   /* ---------- Navigation + relance des animations ---------- */
   function go(i){
     if(i < 0 || i > N-1) return;
+    fermerEcl();
     const s = slides[i];
     slides.forEach(x => x.classList.remove('active'));
     void s.offsetWidth;              // reflow : rejoue les animations en cascade
@@ -1778,18 +1964,157 @@ h2{text-wrap:balance; margin:calc(8px * var(--e)) 0 0; max-width:calc(1060px * v
   }
   stage.addEventListener('mousemove', wake);
 
+  /* ---------- Éclairages : fenêtre fugitive ---------- */
+  let ECL = {};
+  try { ECL = JSON.parse(document.getElementById('eclairages').textContent.trim() || '{}'); }
+  catch(err){ ECL = {}; }
+  const aEcl  = Object.keys(ECL).length > 0;
+  const ecl   = document.getElementById('ecl');
+  const voile = document.getElementById('eclVoile');
+  let eclBtn  = null, eclLarg = 0;
+
+  function paragraphes(cible, texte){
+    cible.textContent = '';
+    String(texte || '').split(/\n\s*\n/).forEach(t => {
+      if(!t.trim()) return;
+      const p = document.createElement('p');
+      p.textContent = t.trim();              // texte brut : rien ne s'interprète
+      cible.appendChild(p);
+    });
+  }
+  function fermerEcl(){
+    if(!ecl) return;
+    ecl.classList.remove('on'); voile.classList.remove('on');
+    if(eclBtn) eclBtn.classList.remove('on');
+    eclBtn = null;
+  }
+  function ouvrirEcl(btn){
+    const d = ECL[btn.dataset.ecl];
+    if(!d) return;
+    if(eclBtn === btn){ fermerEcl(); return; }
+    fermerEcl();
+    document.getElementById('eclTitre').textContent = d.notion || '';
+    paragraphes(document.getElementById('eclTexte'), d.texte);
+    // Position en coordonnées de la toile (1280 × 720), quelle que soit l'échelle.
+    const dr = deck.getBoundingClientRect(), br = btn.getBoundingClientRect();
+    const k  = dr.width / 1280;
+    const bx = (br.left - dr.left) / k, by = (br.top - dr.top) / k, bh = br.height / k;
+    ecl.style.top = '0px'; ecl.style.width = '';
+    ecl.classList.add('on'); voile.classList.add('on');
+    // Toujours calée à droite. Si elle ne tient ni à côté de la notion, ni
+    // sous sa ligne, ni au-dessus, elle s'élargit — donc raccourcit — jusqu'à
+    // trouver sa place : la notion ne doit jamais être recouverte.
+    const W = 1280, H = 720, cs = getComputedStyle(ecl);
+    const marge = parseFloat(cs.right), m = Math.round(marge * .55);
+    const base = eclLarg || (eclLarg = ecl.offsetWidth);
+    const bd = bx + br.width / k + 16;       // bord droit de l'icône, avec une marge
+    let top = null;
+    for(const f of [1, 1.24, 1.52]){
+      ecl.style.width = Math.round(base * f) + 'px';
+      const h = ecl.offsetHeight, gauche = W - marge - base * f;
+      if(bd < gauche){ top = by + bh / 2 - h / 2; break; }          // à côté de la notion
+      if(by + bh + 14 + h <= H - m){ top = by + bh + 14; break; }    // sous sa ligne
+      if(by - 14 - h >= m){ top = by - 14 - h; break; }              // au-dessus
+    }
+    if(top === null){ ecl.style.width = ''; top = by + bh + 14; }    // dernier recours
+    const h = ecl.offsetHeight;
+    ecl.style.top = Math.max(m, Math.min(top, H - m - h)) + 'px';
+    btn.classList.add('on'); eclBtn = btn;
+    btn.blur();                              // sinon Espace rouvrirait en avançant
+    wake();
+  }
+  deck.addEventListener('click', e => {
+    const b = e.target.closest('.q-aide');
+    if(b){ e.preventDefault(); e.stopPropagation(); ouvrirEcl(b); }
+  });
+  if(voile) voile.addEventListener('click', fermerEcl);
+  document.getElementById('eclX').addEventListener('click', fermerEcl);
+
+  /* ---------- Annexe « Éclairages » de l'export PDF ---------- */
+  function carteDe(id){
+    const b = deck.querySelector('.slide .q-aide[data-ecl="' + id + '"]');
+    return b ? slides.indexOf(b.closest('.slide')) + 1 : 0;
+  }
+  function construireAnnexe(){
+    let annexe = document.getElementById('eclAnnexe');
+    if(annexe) annexe.remove();
+    if(!aEcl) return;
+    annexe = document.createElement('div');
+    annexe.className = 'ecl-annexe'; annexe.id = 'eclAnnexe';
+    const mesure = document.createElement('div');
+    mesure.className = 'ecl-mesure';
+    document.body.appendChild(mesure);
+    const ids = Object.keys(ECL).sort((a, b) => (carteDe(a) || 1e9) - (carteDe(b) || 1e9));
+    const titre = (document.querySelector('meta[name="pedago:titre"]') || {}).content || '';
+    let page, grille;
+    function nouvellePage(){
+      page = document.createElement('section');
+      page.className = 'ecl-page';
+      page.innerHTML = '<div class="ecl-page-kicker">Annexe</div>' +
+        '<div class="ecl-page-titre">Éclairages</div>' +
+        '<p class="ecl-page-chapo"></p><div class="ecl-grille"></div>';
+      page.querySelector('.ecl-page-chapo').textContent =
+        'Les notions signalées par « ? » dans ' + (titre ? '« ' + titre + ' »' : 'le diaporama') +
+        ', dans l’ordre des cartes.';
+      grille = page.querySelector('.ecl-grille');
+      mesure.appendChild(page);
+    }
+    nouvellePage();
+    ids.forEach(id => {
+      const d = ECL[id], n = carteDe(id);
+      const art = document.createElement('div');
+      art.className = 'ecl-entree';
+      const b = document.createElement('b');
+      if(n){ const s = document.createElement('span'); s.textContent = 'Carte ' + n; b.appendChild(s); }
+      b.appendChild(document.createTextNode(d.notion || ''));
+      art.appendChild(b);
+      paragraphes(art, d.texte); art.insertBefore(b, art.firstChild);
+      grille.appendChild(art);
+      // Les colonnes débordent en largeur : c'est ce qui dit que la page est pleine.
+      if(grille.scrollWidth > grille.clientWidth + 2 && grille.children.length > 1){
+        grille.removeChild(art);
+        nouvellePage(); grille.appendChild(art);
+      }
+    });
+    Array.from(mesure.children).forEach(p => annexe.appendChild(p));
+    mesure.remove();
+    document.body.appendChild(annexe);
+  }
+  if(aEcl){
+    if(document.fonts && document.fonts.ready) document.fonts.ready.then(construireAnnexe);
+    else construireAnnexe();
+  }
+  window.addEventListener('afterprint', () => document.body.classList.remove('pdf-ecl'));
+
   /* ---------- Export PDF ---------- */
+  const choix = document.getElementById('pdfChoix');
+  function imprimer(avec){
+    choix.classList.remove('on');
+    fermerEcl();
+    if(avec){ construireAnnexe(); document.body.classList.add('pdf-ecl'); }
+    else document.body.classList.remove('pdf-ecl');
+    window.print();
+  }
   function toPdf(){
     const wasFs = !!document.fullscreenElement;
-    const finish = () => window.print();
+    // Avec des éclairages, l'export se choisit : avec ou sans leur annexe.
+    const finish = () => aEcl ? choix.classList.add('on') : imprimer(false);
     if(wasFs) document.exitFullscreen().then(() => setTimeout(finish, 260));
     else finish();
   }
   document.getElementById('btnPdf').onclick = toPdf;
+  document.getElementById('pdfAvec').onclick = () => imprimer(true);
+  document.getElementById('pdfSans').onclick = () => imprimer(false);
 
   /* ---------- Clavier ---------- */
   document.addEventListener('keydown', e => {
-    if(e.metaKey || e.ctrlKey || e.altKey) return;   // laisse passer Cmd+P natif
+    if(e.metaKey || e.ctrlKey || e.altKey) return;   // laisse passer Cmd+P natif (sans annexe)
+    if(choix.classList.contains('on')){
+      if(e.key === 'a' || e.key === 'A'){ e.preventDefault(); imprimer(true); return; }
+      if(e.key === 's' || e.key === 'S'){ e.preventDefault(); imprimer(false); return; }
+      if(e.key === 'Escape'){ choix.classList.remove('on'); return; }
+    }
+    if(e.key === 'Escape' && eclBtn){ fermerEcl(); return; }
     if(e.key === 'ArrowRight' || e.key === 'PageDown' || e.key === ' '){ e.preventDefault(); go(cur+1); }
     else if(e.key === 'ArrowLeft' || e.key === 'PageUp'){ e.preventDefault(); go(cur-1); }
     else if(e.key === 'Home'){ go(0); }
