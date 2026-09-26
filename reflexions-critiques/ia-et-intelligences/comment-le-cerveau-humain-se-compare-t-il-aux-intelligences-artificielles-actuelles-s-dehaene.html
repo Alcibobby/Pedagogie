@@ -13,7 +13,7 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,600&display=swap" rel="stylesheet">
 
 <style>
 /* ============================================================
@@ -318,7 +318,9 @@ body{
   position:absolute; right:44px; top:60px; width:500px; z-index:21;
   max-height:calc(var(--H) - 48px); overflow:auto;
   background:var(--paper, #fff); color:var(--ink);
-  border:1px solid var(--line); border-top:4px solid var(--accent);
+  /* Liseré d'accent sur les quatre bords — plus épais en haut — : la fenêtre
+     se détache de la carte au premier regard, sans ombre supplémentaire. */
+  border:2px solid var(--accent); border-top-width:4px;
   border-radius:12px; padding:22px 26px 22px;
   box-shadow:0 22px 60px rgba(0,0,0,.24), 0 2px 8px rgba(0,0,0,.08);
   opacity:0; visibility:hidden; transform:translateY(8px);
@@ -334,7 +336,9 @@ body{
   font-family:var(--serif); font-size:25px; line-height:1.2; font-weight:500;
   margin:0 34px 12px 0; color:var(--ink)
 }
-.ecl-texte p{font-size:18.5px; line-height:1.5; margin:0 0 10px; color:var(--ink-70, var(--ink))}
+/* Plus petit que le texte des cartes, et en italique : l'éclairage se lit
+   comme une note, jamais comme un paragraphe de plus de la carte. */
+.ecl-texte p{font-size:16.5px; font-style:italic; line-height:1.5; margin:0 0 10px; color:var(--ink-70, var(--ink))}
 .ecl-texte p:last-child{margin-bottom:0}
 .ecl-x{
   position:absolute; top:14px; right:14px; width:30px; height:30px;
